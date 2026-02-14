@@ -21,7 +21,7 @@ interface RemindersPanelProps {
   onOpenReportModal?: () => void
 }
 
-export function RemindersPanel({ onOpenAppointmentModal, onOpenReportModal }: RemindersPanelProps) {
+export function RemindersPanel(_props?: RemindersPanelProps) {
   const router = useRouter()
   const { tasks: reminders } = useTasks({ type: "reminder" })
   const { tasks: allTasks } = useTasks({})
@@ -208,108 +208,49 @@ export function RemindersPanel({ onOpenAppointmentModal, onOpenReportModal }: Re
       .sort((a, b) => a.priority - b.priority)
   }, [todayAppts, weekAppts, patients, pendingReports, reminders, allTasks, dismissed])
 
-  const handleAction = (s: AISuggestion) => {
-    if (s.actionHref) {
-      router.push(s.actionHref)
-    } else if (s.actionType === "appointment") {
-      onOpenAppointmentModal?.()
-    } else if (s.actionType === "report") {
-      onOpenReportModal?.()
-    }
-    setDismissed((prev) => new Set(prev).add(s.id))
-  }
-
-  const handleDismiss = (id: string) => {
-    setDismissed((prev) => new Set(prev).add(id))
-  }
-
   const visible = suggestions.slice(0, 3)
 
   return (
-    <div className="mb-6">
-      <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2 text-lg">
-        <div className="p-1.5 bg-yellow-100 rounded-lg">
-          <span className="material-symbols-outlined text-yellow-600 text-sm">notifications_active</span>
+    <div className="flex-1 flex flex-col">
+      <div className="flex justify-between items-center mb-5">
+        <div className="flex items-center gap-2">
+          <span className="bg-red-100 text-red-500 p-1.5 rounded-lg material-symbols-outlined text-sm">notifications_active</span>
+          <h3 className="font-bold text-gray-800">Meus Lembretes</h3>
         </div>
-        Lembretes
-      </h3>
+      </div>
 
       {visible.length === 0 ? (
-        <div className="text-center py-6">
-          <div className="p-3 rounded-2xl bg-linear-to-br from-[#8A05BE] to-[#4B0082] text-white shadow-lg shadow-[rgba(138,5,190,0.2)] relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-2 opacity-10">
-              <span className="material-symbols-outlined text-5xl">auto_awesome</span>
-            </div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="material-symbols-outlined text-yellow-300 text-sm">lightbulb</span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-purple-200">Sugestão IA</span>
-            </div>
-            <p className="text-xs font-medium leading-relaxed opacity-95">
-              Tudo em dia! Continue com o ótimo trabalho. Sua organização faz a diferença para seus pacientes.
-            </p>
-          </div>
+        <div className="text-center py-6 text-gray-400">
+          <span className="material-symbols-outlined text-3xl mb-1 block">check_circle</span>
+          <p className="text-sm">Tudo em dia!</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {visible.map((s, i) => (
-            <div
-              key={s.id}
-              className={`p-4 rounded-2xl relative overflow-hidden ${
-                i === 0
-                  ? "bg-linear-to-br from-[#8A05BE] to-[#4B0082] text-white shadow-lg shadow-[rgba(138,5,190,0.2)]"
-                  : "bg-white/60 border border-white hover:border-[rgba(138,5,190,0.2)] transition-all hover:shadow-sm"
-              }`}
-            >
-              {i === 0 && (
-                <div className="absolute top-0 right-0 p-2 opacity-10">
-                  <span className="material-symbols-outlined text-5xl">auto_awesome</span>
+        <div className="flex flex-col gap-4 flex-1 overflow-y-auto pr-2">
+          {visible.map((s, i) => {
+            const dotColor = i === 0 ? "bg-red-500" : i === 1 ? "bg-amber-500" : "bg-gray-300"
+            return (
+              <div key={s.id} className="flex gap-3 group cursor-pointer">
+                <div className={`w-1.5 h-1.5 mt-2 rounded-full ${dotColor} shrink-0`} />
+                <div>
+                  <p className="text-sm font-semibold text-gray-800 group-hover:text-[#8A05BE] transition-colors">
+                    {s.message.split(".")[0]}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {s.priority <= 2 ? "Urgente • Há 30 min" : s.priority <= 4 ? "Vence em 3 horas" : "Vence amanhã"}
+                  </p>
                 </div>
-              )}
-
-              <div className="flex items-center gap-2 mb-2 relative z-10">
-                {i === 0 ? (
-                  <>
-                    <span className="material-symbols-outlined text-yellow-300 text-sm">lightbulb</span>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-purple-200">Sugestão IA</span>
-                  </>
-                ) : (
-                  <>
-                    <span className={`material-symbols-outlined text-sm ${s.iconColor}`}>{s.icon}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{s.label}</span>
-                  </>
-                )}
               </div>
-
-              <p className={`text-xs font-medium leading-relaxed relative z-10 mb-3 ${i === 0 ? "opacity-95" : "text-gray-700"}`}>
-                {s.message}
-              </p>
-
-              <div className="flex gap-2 relative z-10">
-                <button
-                  onClick={() => handleAction(s)}
-                  className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors flex-1 ${
-                    i === 0
-                      ? "bg-white text-[#8A05BE] hover:bg-gray-100"
-                      : "bg-[#8A05BE] text-white hover:bg-[#7A04AA]"
-                  }`}
-                >
-                  {s.actionLabel}
-                </button>
-                <button
-                  onClick={() => handleDismiss(s.id)}
-                  className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors ${
-                    i === 0
-                      ? "bg-white/20 hover:bg-white/30"
-                      : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-                  }`}
-                >
-                  Agora não
-                </button>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
+
+      <button
+        onClick={() => router.push("/dashboard/tarefas")}
+        className="w-full mt-4 text-xs font-bold text-[#8A05BE] tracking-wide hover:underline text-center uppercase py-2"
+      >
+        Gerenciar Lembretes
+      </button>
     </div>
   )
 }

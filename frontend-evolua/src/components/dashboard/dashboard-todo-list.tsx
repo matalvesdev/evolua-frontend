@@ -50,20 +50,17 @@ export function DashboardTodoList() {
     <>
       <div className="flex-1 flex flex-col">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-bold text-gray-800 flex items-center gap-2 text-lg">
-            <div className="p-1.5 bg-green-100 rounded-lg">
-              <span className="material-symbols-outlined text-green-600 text-sm">check_circle</span>
-            </div>
-            Minha To-Do List
+          <h3 className="font-bold text-gray-800">
+            Tarefas Pessoais
           </h3>
           <button
             onClick={() => setIsFormOpen(true)}
-            className="text-xs font-bold text-[#8A05BE] hover:bg-[#8A05BE]/5 px-2 py-1 rounded-md transition-colors"
+            className="text-gray-400 hover:text-[#8A05BE] transition-colors"
           >
-            + Add
+            <span className="material-symbols-outlined">add</span>
           </button>
         </div>
-        <div className="space-y-1.5 mb-4">
+        <div className="space-y-3 mb-4">
           {loading ? (
             <p className="text-sm text-gray-400 text-center py-4">Carregando...</p>
           ) : pendingTasks.length === 0 && completedTasks.length === 0 ? (
@@ -81,15 +78,16 @@ export function DashboardTodoList() {
               {/* Pending tasks */}
               {pendingTasks.map((task) => {
                 const isToggling = togglingIds.has(task.id)
+                const isOverdue = task.dueDate && new Date(task.dueDate) < new Date()
                 return (
                   <label
                     key={task.id}
-                    className="flex items-start gap-3 p-2 hover:bg-white/40 rounded-lg cursor-pointer transition-all group"
+                    className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/50 cursor-pointer transition-colors"
                   >
                     <div className="relative mt-0.5">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-[#8A05BE] focus:ring-[#8A05BE] w-4 h-4 cursor-pointer"
+                        className="w-5 h-5 rounded border-gray-300 text-[#8A05BE] focus:ring-[#8A05BE]"
                         checked={false}
                         disabled={isToggling}
                         onChange={() => toggleTask(task.id, "pending")}
@@ -101,14 +99,14 @@ export function DashboardTodoList() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors block truncate">
+                      <span className="text-sm font-medium text-gray-700 block">
                         {task.title}
                       </span>
                       {task.dueDate && (
-                        <span className={`text-[10px] font-medium ${
-                          new Date(task.dueDate) < new Date() ? "text-red-500" : "text-gray-400"
+                        <span className={`text-xs block mt-1 ${
+                          isOverdue ? "text-red-400" : "text-gray-400"
                         }`}>
-                          {new Date(task.dueDate).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}
+                          Prazo: {new Date(task.dueDate).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}, {new Date(task.dueDate).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                         </span>
                       )}
                     </div>
@@ -131,12 +129,12 @@ export function DashboardTodoList() {
                     return (
                       <label
                         key={task.id}
-                        className="flex items-start gap-3 p-2 hover:bg-white/40 rounded-lg cursor-pointer transition-all group opacity-60"
+                        className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/50 cursor-pointer transition-colors opacity-60"
                       >
                         <div className="relative mt-0.5">
                           <input
                             type="checkbox"
-                            className="rounded border-gray-300 text-green-500 focus:ring-green-500 w-4 h-4 cursor-pointer"
+                            className="w-5 h-5 rounded border-gray-300 text-[#8A05BE] focus:ring-[#8A05BE]"
                             checked={true}
                             disabled={isToggling}
                             onChange={() => toggleTask(task.id, "completed")}

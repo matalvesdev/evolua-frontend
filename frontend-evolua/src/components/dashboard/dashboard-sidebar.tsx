@@ -9,7 +9,7 @@ const navItems = [
   { href: "/dashboard/agendamentos", icon: "calendar_month", label: "Agenda" },
   { href: "/dashboard/financeiro", icon: "payments", label: "Financeiro" },
   { href: "/dashboard/relatorios", icon: "description", label: "Relatórios" },
-  { href: "/dashboard/tarefas", icon: "check_circle", label: "Tarefas" },
+  { href: "/dashboard/configuracoes", icon: "settings", label: "Configurações" },
 ]
 
 export function DashboardSidebar() {

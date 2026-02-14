@@ -1,7 +1,13 @@
-// Dashboard components
+// Dashboard components — barrel export
 export { DashboardSidebar } from "./dashboard-sidebar"
 export { DashboardHeader } from "./dashboard-header"
 export { WelcomeSection } from "./welcome-section"
+export { StatsCards } from "./stats-cards"
+export { QuickActionsSidebar } from "./quick-actions-sidebar"
+export { WeeklyAgenda } from "./weekly-agenda"
+export { AIAssistantPanel } from "./ai-assistant-panel"
+export { QuickNotes } from "./quick-notes"
+export { RecentDocuments } from "./recent-documents"
 export { ScheduleCard } from "./schedule-card"
 export { QuickActionsBar } from "./quick-actions-bar"
 export { DashboardMiniCalendar } from "./dashboard-mini-calendar"

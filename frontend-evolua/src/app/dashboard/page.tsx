@@ -1,99 +1,113 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useCallback, useState } from "react"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { WelcomeSection } from "@/components/dashboard/welcome-section"
-import { ScheduleCard } from "@/components/dashboard/schedule-card"
-import { QuickActionsBar } from "@/components/dashboard/quick-actions-bar"
-import type { ModalType } from "@/components/dashboard/quick-actions-bar"
-import { DashboardMiniCalendar } from "@/components/dashboard/dashboard-mini-calendar"
-import { RecentPatients } from "@/components/dashboard/recent-patients"
+import { StatsCards } from "@/components/dashboard/stats-cards"
+import { QuickActionsSidebar, type SidebarAction } from "@/components/dashboard/quick-actions-sidebar"
+import { WeeklyAgenda } from "@/components/dashboard/weekly-agenda"
 import { RemindersPanel } from "@/components/dashboard/reminders-panel"
 import { DashboardTodoList } from "@/components/dashboard/dashboard-todo-list"
-import { useTodayAppointments } from "@/hooks"
+import { AIAssistantPanel } from "@/components/dashboard/ai-assistant-panel"
+import { QuickNotes } from "@/components/dashboard/quick-notes"
+import { RecentDocuments } from "@/components/dashboard/recent-documents"
+import { Portal } from "@/components/ui/portal"
+import { NewPatientModal } from "@/components/dashboard/modals/new-patient-modal"
+import { NewAppointmentModal } from "@/components/dashboard/modals/new-appointment-modal"
+import { NewReportModal } from "@/components/dashboard/modals/new-report-modal"
+
+type ModalType = "patient" | "appointment" | "report" | null
 
 export default function DashboardPage() {
-  const router = useRouter()
-  const { appointments, loading } = useTodayAppointments()
-  const [externalModal, setExternalModal] = useState<ModalType>(null)
+  const [modal, setModal] = useState<ModalType>(null)
+  const closeModal = useCallback(() => setModal(null), [])
+
+  const handleSidebarAction = useCallback((action: SidebarAction) => {
+    if (action === "financial") return
+    setModal(action)
+  }, [])
 
   return (
     <>
       <DashboardHeader />
+
+      {/* Navigation tabs */}
+      <nav className="px-6 lg:px-10 bg-transparent mb-8 hidden md:block">
+        <div className="flex items-center justify-center gap-8">
+          {[
+            { href: "/dashboard", label: "Dashboard" },
+            { href: "/dashboard/pacientes", label: "Pacientes" },
+            { href: "/dashboard/agendamentos", label: "Agenda" },
+            { href: "/dashboard/financeiro", label: "Financeiro" },
+            { href: "/dashboard/relatorios", label: "Relatórios" },
+            { href: "/dashboard/configuracoes", label: "Configurações" },
+          ].map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                item.href === "/dashboard"
+                  ? "border-[#8A05BE] text-gray-900"
+                  : "border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30"
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </nav>
+
       <main className="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth pb-24">
-        <WelcomeSection />
+        {/* Row 1: Welcome greeting + Stats cards */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+          <WelcomeSection />
+          <StatsCards />
+        </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          {/* Main column (2/3) */}
-          <div className="xl:col-span-2 flex flex-col gap-6">
-            {/* Schedule */}
-            <div>
-              <div className="flex items-center justify-between px-1 mb-3">
-                <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#8A05BE]">event_available</span>
-                  Sua Agenda de Hoje
-                </h3>
-                {!loading && appointments.length > 0 && (
-                  <span className="text-xs font-bold text-[#8A05BE] bg-[#8A05BE]/5 px-3 py-1 rounded-full">
-                    {appointments.filter(a => a.status === "scheduled" || a.status === "confirmed").length} consultas pendentes
-                  </span>
-                )}
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                {loading ? (
-                  <div className="col-span-2 text-center py-8 text-gray-500">Carregando agendamentos...</div>
-                ) : appointments.length === 0 ? (
-                  <div className="col-span-2 glass-card-item rounded-2xl p-8 text-center">
-                    <span className="material-symbols-outlined text-4xl text-gray-300 mb-2 block">event_busy</span>
-                    <p className="text-gray-500 font-medium">Nenhum agendamento para hoje</p>
-                    <p className="text-sm text-gray-400 mt-1">Aproveite para organizar sua agenda</p>
-                  </div>
-                ) : (
-                  appointments.slice(0, 2).map((appointment) => (
-                    <ScheduleCard
-                      key={appointment.id}
-                      time={new Date(appointment.dateTime).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
-                      duration={`${appointment.duration}min`}
-                      patientName={"Paciente"}
-                      sessionType={appointment.type === "regular" ? "Terapia" : appointment.type === "evaluation" ? "Avaliação" : "Sessão"}
-                      sessionTypeColor={appointment.type === "regular" ? "bg-green-500" : "bg-orange-400"}
-                      badge={appointment.status === "confirmed" ? "Confirmado" : appointment.status === "scheduled" ? "Agendado" : "Em andamento"}
-                      badgeColor={appointment.status === "confirmed" ? "bg-green-100 text-green-700" : "bg-[#8A05BE]/10 text-[#8A05BE]"}
-                      location="Presencial"
-                      locationIcon="location_on"
-                      locationColor="text-gray-600"
-                      isPrimary={new Date(appointment.dateTime).getHours() === new Date().getHours()}
-                      onViewDetails={() => router.push(`/dashboard/agendamentos/${appointment.id}`)}
-                      onStartSession={() => router.push(`/dashboard/agendamentos/${appointment.id}`)}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-
-            <QuickActionsBar externalModal={externalModal} onCloseExternal={() => setExternalModal(null)} />
-            <DashboardMiniCalendar />
-            <RecentPatients />
+        {/* Row 2: Quick Actions | Reminders | Weekly Agenda */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <QuickActionsSidebar onAction={handleSidebarAction} />
           </div>
 
-          {/* Sidebar column (1/3) */}
-          <div className="xl:col-span-1 flex flex-col h-full">
-            <div className="glass-panel p-6 rounded-3xl flex-1 flex flex-col relative overflow-hidden border border-white/60">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-100/30 rounded-bl-full -z-10"></div>
-
-              <RemindersPanel
-                onOpenAppointmentModal={() => setExternalModal("appointment")}
-                onOpenReportModal={() => setExternalModal("report")}
-              />
-
-              <div className="h-px bg-gray-200/50 w-full mb-6"></div>
-
-              <DashboardTodoList />
+          <div className="lg:col-span-3">
+            <div className="glass-panel rounded-2xl p-6 shadow-[0_4px_30px_rgba(0,0,0,0.05)] h-full flex flex-col">
+              <RemindersPanel />
             </div>
+          </div>
+
+          <div className="lg:col-span-7">
+            <WeeklyAgenda />
           </div>
         </div>
+
+        {/* Row 3: Tasks | AI Assistant | Quick Notes | Recent Documents */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <DashboardTodoList />
+          <AIAssistantPanel />
+          <QuickNotes />
+          <RecentDocuments />
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-12 border-t border-gray-200 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 gap-4">
+            <p>© {new Date().getFullYear()} Evolua Premium. Uso exclusivo.</p>
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-[#8A05BE] transition-colors">Suporte Prioritário</a>
+              <a href="#" className="hover:text-[#8A05BE] transition-colors">Privacidade</a>
+              <a href="#" className="hover:text-[#8A05BE] transition-colors">Termos</a>
+            </div>
+          </div>
+        </footer>
       </main>
+
+      {/* Modals — rendered via portal to avoid z-index issues */}
+      <Portal>
+        <NewPatientModal open={modal === "patient"} onClose={closeModal} />
+        <NewAppointmentModal open={modal === "appointment"} onClose={closeModal} />
+        <NewReportModal open={modal === "report"} onClose={closeModal} />
+      </Portal>
     </>
   )
 }

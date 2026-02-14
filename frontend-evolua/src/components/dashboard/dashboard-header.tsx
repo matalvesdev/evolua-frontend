@@ -124,33 +124,43 @@ export function DashboardHeader() {
   }
 
   return (
-    <header className="glass-panel h-20 px-6 lg:px-10 flex items-center justify-between sticky top-0 z-40 rounded-none border-t-0 border-x-0">
+    <header className="w-full px-6 lg:px-10 py-5 flex items-center justify-between sticky top-0 z-50 bg-[#F5F6FA]/95 backdrop-blur-md">
+      {/* Logo */}
+      <div className="flex items-center gap-3">
+        <div className="bg-[#8A05BE] text-white p-2 rounded-xl">
+          <span className="material-symbols-outlined text-2xl">graphic_eq</span>
+        </div>
+        <span className="font-bold text-xl tracking-tight text-[#8A05BE] hidden md:block">Evolua</span>
+      </div>
+
       {/* Mobile menu */}
       <div className="flex items-center gap-3 md:hidden">
         <button className="p-2 -ml-2 text-gray-600 hover:text-[#8A05BE] transition-colors">
           <span className="material-symbols-outlined">menu</span>
         </button>
-        <span className="text-lg font-bold text-[#8A05BE]">Evolua</span>
       </div>
 
       {/* Search */}
-      <div ref={searchRef} className="hidden md:flex items-center max-w-md w-full relative">
-        <div className="relative w-full group">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <div ref={searchRef} className="hidden md:flex flex-1 max-w-xl mx-8 relative">
+        <div className="relative w-full">
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
             {searching ? (
               <span className="material-symbols-outlined text-[#8A05BE] animate-spin text-lg">progress_activity</span>
             ) : (
-              <span className="material-symbols-outlined text-gray-400 group-focus-within:text-[#8A05BE] transition-colors">search</span>
+              <span className="material-symbols-outlined text-gray-400">search</span>
             )}
           </div>
           <input
-            className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 bg-white backdrop-blur-sm rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(138,5,190,0.25)] focus:border-[#8A05BE]/30 transition-all duration-300 font-(--font-sans) text-sm shadow-sm"
-            placeholder="Pesquisar pacientes, relatórios..."
+            className="w-full pl-12 pr-12 py-2.5 rounded-full bg-white border border-gray-100 focus:border-[#8A05BE] focus:ring-[#8A05BE] shadow-sm text-sm transition-all"
+            placeholder="Buscar pacientes, sessões ou relatórios..."
             type="text"
             value={query}
             onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => { if (query.trim().length >= 2) setShowResults(true) }}
           />
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1 px-2 py-1 rounded-md bg-gray-100 text-xs text-gray-500 font-medium border border-gray-200">
+            ⌘ K
+          </div>
         </div>
 
         {/* Search results dropdown */}
@@ -191,18 +201,16 @@ export function DashboardHeader() {
       </div>
 
       {/* Right side: notifications + profile */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-6">
         {/* Notification bell */}
         <div className="relative">
           <button
             onClick={() => setNotifOpen(!notifOpen)}
-            className="relative p-2.5 rounded-xl hover:bg-white/60 transition-colors"
+            className="relative p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
           >
-            <span className="material-symbols-outlined text-gray-600">notifications</span>
+            <span className="material-symbols-outlined">notifications</span>
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white" />
             )}
           </button>
           <NotificationPanel isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
@@ -212,18 +220,15 @@ export function DashboardHeader() {
         <div ref={profileRef} className="relative">
           <button
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex items-center gap-2.5 p-1.5 pr-3 rounded-xl hover:bg-white/60 transition-colors"
+            className="flex items-center gap-3 group cursor-pointer"
           >
-            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-[#8A05BE] to-[#6B04A0] flex items-center justify-center text-white font-bold text-sm shadow-sm">
+            <div className="text-right hidden sm:block">
+              <p className="text-sm font-bold text-gray-900 group-hover:text-[#8A05BE] transition-colors">{userName}</p>
+              <p className="text-xs text-gray-500">{userRole}</p>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-[#E9CEF5] flex items-center justify-center text-[#8A05BE] font-bold border-2 border-white shadow-sm overflow-hidden">
               {userInitial}
             </div>
-            <div className="hidden lg:block text-left">
-              <p className="text-sm font-bold text-gray-900 leading-tight">{userName}</p>
-              <p className="text-[10px] text-gray-500 uppercase tracking-wider">{userRole}</p>
-            </div>
-            <span className={`material-symbols-outlined text-gray-400 text-lg hidden lg:block transition-transform duration-200 ${profileOpen ? "rotate-180" : ""}`}>
-              expand_more
-            </span>
           </button>
 
           {/* Profile dropdown */}

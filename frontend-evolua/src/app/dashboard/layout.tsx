@@ -2,9 +2,10 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
-import { AiChatFab } from "@/components/dashboard/ai-chat-fab"
 import { useRequireAuth } from "@/hooks/use-auth"
+import { RouteGuard } from "@/components/auth/route-guard"
+import { SessionWarning } from "@/components/auth/session-warning"
+import { SecureErrorBoundary } from "@/components/auth/secure-error-boundary"
 
 const mobileNavItems = [
   { href: "/dashboard", icon: "dashboard", label: "Dashboard" },
@@ -66,34 +67,33 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-bg-page">
+      <div className="h-screen w-screen flex items-center justify-center" style={{ background: 'radial-gradient(circle at 10% 20%, rgba(240, 228, 249, 0.6) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(232, 218, 255, 0.4) 0%, transparent 50%), #F5F6FA' }}>
         <div className="animate-pulse text-gray-400">Carregando...</div>
       </div>
     )
   }
 
   if (!user) {
-    return null // useRequireAuth will redirect to login
+    return null
   }
 
   return (
-    <div className="bg-bg-page font-display text-gray-800 overflow-hidden h-screen w-screen flex relative">
-      {/* Orbes de fundo */}
-      <div className="w-96 h-96 rounded-full blur-[80px] absolute" style={{ top: '-100px', left: '-100px', background: 'rgba(138, 5, 190, 0.15)' }} />
-      <div className="rounded-full blur-[80px] absolute" style={{ width: '500px', height: '500px', bottom: '-100px', right: '-100px', background: 'rgba(168, 85, 247, 0.12)' }} />
-      <div className="w-64 h-64 rounded-full blur-[80px] absolute" style={{ top: '20%', right: '30%', background: 'rgba(109, 8, 175, 0.1)' }} />
-      
-      <DashboardSidebar />
-      
-      <div className="flex-1 flex flex-col h-full relative z-10 overflow-hidden pb-16 md:pb-0">
-        {children}
+    <div
+      className="min-h-screen font-display text-gray-800 pb-16 md:pb-0"
+      style={{
+        background: 'radial-gradient(circle at 10% 20%, rgba(240, 228, 249, 0.6) 0%, transparent 50%), radial-gradient(circle at 90% 80%, rgba(232, 218, 255, 0.4) 0%, transparent 50%), #F5F6FA',
+      }}
+    >
+      <div className="max-w-[1400px] mx-auto">
+        <SecureErrorBoundary>
+          <RouteGuard>
+            {children}
+          </RouteGuard>
+        </SecureErrorBoundary>
       </div>
 
-      {/* Mobile bottom navigation - visible only below md breakpoint */}
+      <SessionWarning />
       <MobileBottomNav />
-
-      {/* AI Chat floating button */}
-      <AiChatFab />
     </div>
   );
 }

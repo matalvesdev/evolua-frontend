@@ -2,29 +2,31 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { usePatients } from "@/hooks"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { getInitials, getAvatarColor } from "@/components/patients/patient-utils"
 
 const ITEMS_PER_PAGE = 10
 
-const STATUS_TABS = [
-  { key: "", label: "Todos", icon: "groups" },
-  { key: "active", label: "Ativos", icon: "check_circle", dot: "bg-green-500" },
-  { key: "inactive", label: "Inativos", icon: "pause_circle", dot: "bg-gray-400" },
-  { key: "discharged", label: "Alta", icon: "logout", dot: "bg-slate-400" },
-  { key: "on-hold", label: "Em Espera", icon: "hourglass_top", dot: "bg-orange-500" },
+const NAV_TABS = [
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/pacientes", label: "Pacientes" },
+  { href: "/dashboard/agendamentos", label: "Agenda" },
+  { href: "/dashboard/financeiro", label: "Financeiro" },
+  { href: "/dashboard/relatorios", label: "Relatórios" },
+  { href: "/dashboard/configuracoes", label: "Configurações" },
 ]
 
 export default function PacientesPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const [search, setSearch] = React.useState("")
   const [debouncedSearch, setDebouncedSearch] = React.useState("")
   const [statusFilter, setStatusFilter] = React.useState("")
+  const [specialtyFilter, setSpecialtyFilter] = React.useState("")
   const [page, setPage] = React.useState(1)
 
-  // Debounce search to avoid excessive API calls
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search)
@@ -33,10 +35,7 @@ export default function PacientesPage() {
     return () => clearTimeout(timer)
   }, [search])
 
-  // Reset page when status filter changes
-  React.useEffect(() => {
-    setPage(1)
-  }, [statusFilter])
+  React.useEffect(() => { setPage(1) }, [statusFilter])
 
   const { patients, total, totalPages, loading } = usePatients({
     search: debouncedSearch || undefined,
@@ -44,9 +43,6 @@ export default function PacientesPage() {
     page,
     limit: ITEMS_PER_PAGE,
   })
-
-  // Separate query for active count
-  const { patients: activePatients } = usePatients({ status: "active", limit: 1 })
 
   const calculateAge = (birthDate?: string) => {
     if (!birthDate) return undefined
@@ -60,322 +56,299 @@ export default function PacientesPage() {
 
   const statusBadge = (status: string) => {
     const map: Record<string, { bg: string; text: string; dot: string; label: string }> = {
-      active: { bg: "bg-green-50", text: "text-green-700", dot: "bg-green-500", label: "Ativo" },
-      inactive: { bg: "bg-gray-50", text: "text-gray-600", dot: "bg-gray-400", label: "Inativo" },
-      discharged: { bg: "bg-slate-50", text: "text-slate-600", dot: "bg-slate-400", label: "Alta" },
-      "on-hold": { bg: "bg-orange-50", text: "text-orange-700", dot: "bg-orange-500", label: "Em Espera" },
+      active: { bg: "bg-green-100", text: "text-green-800", dot: "bg-green-500", label: "Ativo" },
+      inactive: { bg: "bg-gray-100", text: "text-gray-600", dot: "bg-gray-500", label: "Pausa" },
+      discharged: { bg: "bg-slate-100", text: "text-slate-600", dot: "bg-slate-400", label: "Alta" },
+      "on-hold": { bg: "bg-orange-100", text: "text-orange-700", dot: "bg-orange-500", label: "Em Espera" },
     }
     return map[status] || map.active
   }
 
-  const startItem = (page - 1) * ITEMS_PER_PAGE + 1
-  const endItem = Math.min(page * ITEMS_PER_PAGE, total)
-
   return (
     <>
       <DashboardHeader />
-      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 scroll-smooth pb-24">
-        <div className="max-w-7xl mx-auto space-y-5 sm:space-y-6">
-          {/* Page Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Pacientes</h1>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                Gerencie seus pacientes e acompanhe a evolução do tratamento.
-              </p>
+
+      {/* Navigation tabs */}
+      <nav className="px-6 lg:px-10 bg-transparent mb-8 hidden md:block">
+        <div className="flex items-center justify-center gap-8">
+          {NAV_TABS.map((item) => {
+            const isActive = item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  isActive
+                    ? "border-[#8A05BE] text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30"
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
+
+      <main className="flex-1 overflow-y-auto p-6 lg:p-10 scroll-smooth pb-24">
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-gray-900 mb-2">Meus Pacientes 💜</h1>
+            <p className="text-base text-gray-500">Gerencie prontuários, evoluções e agendamentos.</p>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="flex flex-wrap gap-6 mb-8">
+          <div className="glass-panel flex-1 min-w-[280px] p-6 rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-all">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-purple-100 to-transparent rounded-bl-full opacity-60" />
+            <div className="flex justify-between items-start mb-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Total de Pacientes</span>
+              <span className="material-symbols-outlined text-[#8A05BE] text-xl">groups</span>
             </div>
-            <Link href="/dashboard/pacientes/novo">
-              <button className="bg-[#820AD1] hover:bg-[#6D08AF] text-white text-xs sm:text-sm font-bold py-2.5 px-5 rounded-full transition-all shadow-lg shadow-purple-200 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px]">person_add</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-gray-900">{total}</span>
+              <span className="flex items-center text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                <span className="material-symbols-outlined text-[14px] mr-0.5">trending_up</span> +3 este mês
+              </span>
+            </div>
+          </div>
+
+          <div className="glass-panel flex-1 min-w-[280px] p-6 rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-all">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-blue-100 to-transparent rounded-bl-full opacity-60" />
+            <div className="flex justify-between items-start mb-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Ativos na Semana</span>
+              <span className="material-symbols-outlined text-blue-500 text-xl">event_available</span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-gray-900">18</span>
+              <span className="flex items-center text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Em dia</span>
+            </div>
+          </div>
+
+          <div className="glass-panel flex-1 min-w-[280px] p-6 rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.05)] relative overflow-hidden group hover:shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-all">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-yellow-100 to-transparent rounded-bl-full opacity-60" />
+            <div className="flex justify-between items-start mb-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Relatórios Pendentes</span>
+              <span className="material-symbols-outlined text-amber-500 text-xl">pending_actions</span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-bold text-gray-900">05</span>
+              <span className="flex items-center text-xs font-medium text-amber-600 bg-yellow-50 px-2 py-0.5 rounded-full">
+                <span className="material-symbols-outlined text-[14px] mr-0.5">priority_high</span> Atenção
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Patient Table Panel */}
+        <div className="glass-panel rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col mb-12">
+          {/* Toolbar */}
+          <div className="p-6 border-b border-gray-100 flex flex-col lg:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+              <div className="relative w-full sm:w-80">
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 material-symbols-outlined text-lg">search</span>
+                <input
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#8A05BE] focus:ring-[#8A05BE] text-sm transition-all"
+                  placeholder="Buscar por nome..."
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-2 w-full sm:w-auto overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
+                <select
+                  value={specialtyFilter}
+                  onChange={(e) => setSpecialtyFilter(e.target.value)}
+                  className="pl-3 pr-8 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-700 focus:border-[#8A05BE] focus:ring-[#8A05BE] cursor-pointer"
+                >
+                  <option value="">Especialidade</option>
+                  <option value="tea">TEA</option>
+                  <option value="caa">CAA</option>
+                  <option value="linguagem">Linguagem</option>
+                </select>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="pl-3 pr-8 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-700 focus:border-[#8A05BE] focus:ring-[#8A05BE] cursor-pointer"
+                >
+                  <option value="">Status</option>
+                  <option value="active">Ativo</option>
+                  <option value="inactive">Pausa</option>
+                </select>
+              </div>
+            </div>
+            <Link href="/dashboard/pacientes/novo" className="w-full lg:w-auto">
+              <button className="w-full lg:w-auto bg-[#8A05BE] hover:bg-[#6D08AF] text-white py-2.5 px-6 rounded-xl font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-200 transition-all transform hover:-translate-y-0.5">
+                <span className="material-symbols-outlined text-lg">add</span>
                 Novo Paciente
               </button>
             </Link>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <StatCard icon="groups" iconBg="bg-[#820AD1]/10" iconColor="text-[#820AD1]" label="Total" value={total} />
-            <StatCard icon="check_circle" iconBg="bg-green-50" iconColor="text-green-600" label="Ativos" value={activePatients.length > 0 ? activePatients.length : patients.filter(p => p.status === "active").length} />
-            <StatCard icon="calendar_month" iconBg="bg-blue-50" iconColor="text-blue-600" label="Esta Semana" value="-" />
-            <StatCard icon="trending_up" iconBg="bg-amber-50" iconColor="text-amber-600" label="Novos (mês)" value="-" />
-          </div>
-
-          {/* Main Panel */}
-          <div className="glass-panel rounded-2xl sm:rounded-3xl relative overflow-hidden">
-            <div className="absolute right-0 top-0 h-full w-1/3 opacity-[0.05] pointer-events-none">
-              <div className="h-full w-full bg-linear-to-l from-[#820AD1]/20 to-transparent" />
+          {/* Table */}
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="flex items-center gap-3 text-gray-400">
+                <span className="material-symbols-outlined text-2xl animate-spin">progress_activity</span>
+                <span className="text-sm font-medium">Carregando pacientes...</span>
+              </div>
             </div>
-
-            <div className="p-4 sm:p-6 lg:p-8 relative z-10 flex flex-col gap-4 sm:gap-5">
-              {/* Search + Status Tabs */}
-              <div className="flex flex-col gap-3 sm:gap-4">
-                {/* Search */}
-                <div className="relative w-full group">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <span className="material-symbols-outlined text-gray-400 group-focus-within:text-[#820AD1] transition-colors text-xl">search</span>
-                  </div>
-                  <input
-                    className="input-glass block w-full pl-11 pr-10 py-2.5 sm:py-3 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(138,5,190,0.25)] focus:border-[#820AD1]/30 transition-all"
-                    placeholder="Buscar por nome, e-mail, telefone ou CPF..."
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                  {search && (
-                    <button onClick={() => setSearch("")} className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600">
-                      <span className="material-symbols-outlined text-[18px]">close</span>
-                    </button>
-                  )}
-                </div>
-
-                {/* Status Tabs */}
-                <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 scrollbar-hide">
-                  {STATUS_TABS.map((tab) => (
-                    <button
-                      key={tab.key}
-                      onClick={() => setStatusFilter(tab.key)}
-                      className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
-                        statusFilter === tab.key
-                          ? "bg-[#820AD1] text-white shadow-md shadow-purple-200"
-                          : "bg-white/70 text-gray-600 hover:bg-gray-50 border border-gray-100"
-                      }`}
-                    >
-                      {tab.dot && <span className={`w-2 h-2 rounded-full ${statusFilter === tab.key ? "bg-white" : tab.dot}`} />}
-                      {!tab.dot && <span className="material-symbols-outlined text-[14px] sm:text-[16px]">{tab.icon}</span>}
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
+          ) : patients.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+                <span className="material-symbols-outlined text-4xl text-gray-300">
+                  {debouncedSearch ? "person_search" : "group_off"}
+                </span>
               </div>
-
-              {/* Results info */}
-              {!loading && total > 0 && (
-                <div className="flex items-center justify-between text-xs text-gray-500 px-1">
-                  <span>Mostrando {startItem}-{endItem} de {total} pacientes</span>
-                  {debouncedSearch && (
-                    <span className="flex items-center gap-1 text-[#820AD1] font-medium">
-                      <span className="material-symbols-outlined text-[14px]">filter_alt</span>
-                      Filtrado por &quot;{debouncedSearch}&quot;
-                    </span>
-                  )}
-                </div>
+              <p className="text-gray-600 font-medium text-sm mb-1">
+                {debouncedSearch ? "Nenhum paciente encontrado" : "Nenhum paciente cadastrado"}
+              </p>
+              <p className="text-gray-400 text-xs mb-4">
+                {debouncedSearch ? "Tente buscar com outros termos." : "Comece cadastrando seu primeiro paciente."}
+              </p>
+              {!debouncedSearch && (
+                <Link href="/dashboard/pacientes/novo">
+                  <button className="bg-[#8A05BE] hover:bg-[#6D08AF] text-white rounded-xl px-6 py-2.5 text-sm font-medium shadow-lg shadow-purple-200 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">add</span>
+                    Cadastrar Primeiro Paciente
+                  </button>
+                </Link>
               )}
-
-              {/* Table Header (desktop) */}
-              <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-200/40">
-                <div className="col-span-4">Paciente</div>
-                <div className="col-span-2">Status</div>
-                <div className="col-span-2">Telefone</div>
-                <div className="col-span-2">Responsável</div>
-                <div className="col-span-2 text-right">Ações</div>
-              </div>
-
-              {/* Patient List */}
-              {loading ? (
-                <div className="flex items-center justify-center py-16">
-                  <div className="flex items-center gap-3 text-gray-400">
-                    <span className="material-symbols-outlined text-2xl animate-spin">progress_activity</span>
-                    <span className="text-sm font-medium">Carregando pacientes...</span>
-                  </div>
-                </div>
-              ) : patients.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16">
-                  <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-                    <span className="material-symbols-outlined text-4xl text-gray-300">
-                      {debouncedSearch ? "person_search" : "group_off"}
-                    </span>
-                  </div>
-                  <p className="text-gray-600 font-medium text-sm mb-1">
-                    {debouncedSearch ? "Nenhum paciente encontrado" : "Nenhum paciente cadastrado"}
-                  </p>
-                  <p className="text-gray-400 text-xs mb-4">
-                    {debouncedSearch ? "Tente buscar com outros termos." : "Comece cadastrando seu primeiro paciente."}
-                  </p>
-                  {!debouncedSearch && (
-                    <Link href="/dashboard/pacientes/novo">
-                      <button className="bg-[#820AD1] hover:bg-[#6D08AF] text-white rounded-full px-6 py-2.5 text-sm font-bold shadow-lg shadow-purple-200 flex items-center gap-2">
-                        <span className="material-symbols-outlined text-lg">person_add</span>
-                        Cadastrar Primeiro Paciente
-                      </button>
-                    </Link>
-                  )}
-                </div>
-              ) : (
-                <div className="flex flex-col gap-2">
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-50/50 border-b border-gray-100 text-xs uppercase tracking-wider text-gray-500 font-semibold">
+                    <th className="px-6 py-4 rounded-tl-lg">Paciente</th>
+                    <th className="px-6 py-4">Diagnóstico</th>
+                    <th className="px-6 py-4">Especialidade</th>
+                    <th className="px-6 py-4">Última Sessão</th>
+                    <th className="px-6 py-4">Próxima Sessão</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right rounded-tr-lg">Ações</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
                   {patients.map((patient) => {
                     const age = calculateAge(patient.birthDate)
                     const sb = statusBadge(patient.status)
+                    const diagnosis = patient.medicalHistory?.diagnosis?.[0] || "—"
+                    const specialties = patient.medicalHistory?.diagnosis?.slice(1) || []
+
                     return (
-                      <div
+                      <tr
                         key={patient.id}
+                        className="hover:bg-purple-50/30 transition-colors group cursor-pointer"
                         onClick={() => router.push(`/dashboard/pacientes/${patient.id}`)}
-                        className="glass-card-item rounded-xl sm:rounded-2xl p-3 sm:p-4 cursor-pointer group hover:shadow-md hover:border-[#820AD1]/10 transition-all"
                       >
-                        {/* Mobile Layout */}
-                        <div className="flex md:hidden items-center gap-3">
-                          <div className="relative shrink-0">
-                            <div className={`w-10 h-10 rounded-full bg-linear-to-br ${getAvatarColor(patient.name)} flex items-center justify-center font-bold text-xs border-2 border-white shadow-sm`}>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-full bg-linear-to-br ${getAvatarColor(patient.name)} flex items-center justify-center font-bold text-sm`}>
                               {getInitials(patient.name)}
                             </div>
-                            <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 ${sb.dot} border-2 border-white rounded-full`} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-gray-900 text-sm truncate group-hover:text-[#820AD1] transition-colors">{patient.name}</h3>
-                            <div className="flex items-center gap-1.5 text-[11px] text-gray-500 mt-0.5">
-                              {age !== undefined && <span>{age} anos</span>}
-                              {age !== undefined && patient.guardianName && <span className="w-1 h-1 bg-gray-300 rounded-full" />}
-                              {patient.guardianName && <span className="truncate">Resp: {patient.guardianName}</span>}
+                            <div>
+                              <p className="font-bold text-gray-900 text-sm">{patient.name}</p>
+                              <p className="text-xs text-gray-500">{age !== undefined ? `${age} anos` : "—"}</p>
                             </div>
                           </div>
-                          <span className={`px-2 py-0.5 ${sb.bg} ${sb.text} text-[10px] font-bold rounded-full shrink-0`}>{sb.label}</span>
-                          <span className="material-symbols-outlined text-gray-300 text-[18px] shrink-0">chevron_right</span>
-                        </div>
-
-                        {/* Desktop Layout */}
-                        <div className="hidden md:grid grid-cols-12 gap-4 items-center">
-                          <div className="col-span-4 flex items-center gap-3">
-                            <div className="relative shrink-0">
-                              <div className={`w-11 h-11 rounded-full bg-linear-to-br ${getAvatarColor(patient.name)} flex items-center justify-center font-bold text-sm border-2 border-white shadow-sm`}>
-                                {getInitials(patient.name)}
-                              </div>
-                              <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${sb.dot} border-2 border-white rounded-full`} />
-                            </div>
-                            <div className="min-w-0">
-                              <h3 className="font-bold text-gray-900 text-sm truncate group-hover:text-[#820AD1] transition-colors">{patient.name}</h3>
-                              <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-0.5">
-                                {age !== undefined && <span>{age} anos</span>}
-                                {patient.email && (
-                                  <>
-                                    <span className="w-1 h-1 bg-gray-300 rounded-full" />
-                                    <span className="truncate">{patient.email}</span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-span-2">
-                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 ${sb.bg} ${sb.text} text-[11px] font-bold rounded-full`}>
-                              <span className={`w-1.5 h-1.5 rounded-full ${sb.dot}`} />
-                              {sb.label}
-                            </span>
-                          </div>
-                          <div className="col-span-2 text-sm text-gray-600">
-                            {patient.phone || <span className="text-gray-400 text-xs italic">Não informado</span>}
-                          </div>
-                          <div className="col-span-2 text-sm text-gray-600 truncate">
-                            {patient.guardianName ? (
-                              <span>{patient.guardianName}{patient.guardianRelationship && <span className="text-gray-400 text-xs"> ({patient.guardianRelationship})</span>}</span>
-                            ) : (
-                              <span className="text-gray-400 text-xs italic">Não informado</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-sm text-gray-700">{diagnosis}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-1 flex-wrap">
+                            {specialties.length > 0 ? specialties.map((s, i) => (
+                              <span key={i} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F0E4F9] text-[#8A05BE]">
+                                {s}
+                              </span>
+                            )) : (
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F0E4F9] text-[#8A05BE]">
+                                {diagnosis !== "—" ? diagnosis : "—"}
+                              </span>
                             )}
                           </div>
-                          <div className="col-span-2 flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">—</td>
+                        <td className="px-6 py-4 text-sm font-medium text-[#8A05BE]">—</td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${sb.bg} ${sb.text}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${sb.dot} mr-1.5`} />
+                            {sb.label}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={(e) => { e.stopPropagation() }}
+                              className="p-1.5 text-gray-400 hover:text-green-600 transition-colors rounded-lg hover:bg-green-50"
+                              title="WhatsApp"
+                            >
+                              <span className="material-symbols-outlined text-lg">chat</span>
+                            </button>
                             <Link href={`/dashboard/pacientes/${patient.id}`} onClick={(e) => e.stopPropagation()}>
-                              <button className="p-2 rounded-xl hover:bg-[#820AD1] hover:text-white text-gray-400 transition-colors" title="Ver Perfil">
-                                <span className="material-symbols-outlined text-xl">visibility</span>
+                              <button className="p-1.5 text-gray-400 hover:text-[#8A05BE] transition-colors rounded-lg hover:bg-purple-50" title="Ver Perfil">
+                                <span className="material-symbols-outlined text-lg">visibility</span>
                               </button>
                             </Link>
-                            <Link href={`/dashboard/pacientes/${patient.id}/editar`} onClick={(e) => e.stopPropagation()}>
-                              <button className="p-2 rounded-xl hover:bg-purple-50 text-gray-400 hover:text-[#820AD1] transition-colors" title="Editar">
-                                <span className="material-symbols-outlined text-xl">edit</span>
-                              </button>
-                            </Link>
+                            <button
+                              onClick={(e) => { e.stopPropagation() }}
+                              className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
+                            >
+                              <span className="material-symbols-outlined text-lg">more_vert</span>
+                            </button>
                           </div>
-                        </div>
-                      </div>
+                        </td>
+                      </tr>
                     )
                   })}
-                </div>
-              )}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-gray-100/50">
-                  <span className="text-xs text-gray-500 order-2 sm:order-1">
-                    Página {page} de {totalPages} ({total} pacientes)
-                  </span>
-                  <div className="flex items-center gap-1.5 order-1 sm:order-2">
-                    <button
-                      onClick={() => setPage(1)}
-                      disabled={page === 1}
-                      className="p-1.5 sm:p-2 rounded-lg text-gray-400 hover:text-[#820AD1] hover:bg-[#820AD1]/5 disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400 transition-all"
-                      title="Primeira página"
-                    >
-                      <span className="material-symbols-outlined text-[18px] sm:text-[20px]">first_page</span>
-                    </button>
-                    <button
-                      onClick={() => setPage((p) => Math.max(1, p - 1))}
-                      disabled={page === 1}
-                      className="p-1.5 sm:p-2 rounded-lg text-gray-400 hover:text-[#820AD1] hover:bg-[#820AD1]/5 disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400 transition-all"
-                      title="Página anterior"
-                    >
-                      <span className="material-symbols-outlined text-[18px] sm:text-[20px]">chevron_left</span>
-                    </button>
+          {/* Pagination */}
+          {!loading && patients.length > 0 && (
+            <div className="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+              <span className="text-xs text-gray-500">
+                Mostrando {patients.length} de {total} pacientes
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="p-1.5 rounded hover:bg-gray-100 text-gray-400 disabled:cursor-not-allowed"
+                >
+                  <span className="material-symbols-outlined text-lg">chevron_left</span>
+                </button>
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages || totalPages <= 1}
+                  className="p-1.5 rounded hover:bg-gray-100 text-[#8A05BE] disabled:text-gray-400 disabled:cursor-not-allowed"
+                >
+                  <span className="material-symbols-outlined text-lg">chevron_right</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
-                    {/* Page numbers */}
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                      let pageNum: number
-                      if (totalPages <= 5) {
-                        pageNum = i + 1
-                      } else if (page <= 3) {
-                        pageNum = i + 1
-                      } else if (page >= totalPages - 2) {
-                        pageNum = totalPages - 4 + i
-                      } else {
-                        pageNum = page - 2 + i
-                      }
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => setPage(pageNum)}
-                          className={`min-w-[32px] sm:min-w-[36px] h-8 sm:h-9 rounded-lg text-xs sm:text-sm font-bold transition-all ${
-                            page === pageNum
-                              ? "bg-[#820AD1] text-white shadow-md shadow-purple-200"
-                              : "text-gray-600 hover:bg-gray-50"
-                          }`}
-                        >
-                          {pageNum}
-                        </button>
-                      )
-                    })}
-
-                    <button
-                      onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                      disabled={page === totalPages}
-                      className="p-1.5 sm:p-2 rounded-lg text-gray-400 hover:text-[#820AD1] hover:bg-[#820AD1]/5 disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400 transition-all"
-                      title="Próxima página"
-                    >
-                      <span className="material-symbols-outlined text-[18px] sm:text-[20px]">chevron_right</span>
-                    </button>
-                    <button
-                      onClick={() => setPage(totalPages)}
-                      disabled={page === totalPages}
-                      className="p-1.5 sm:p-2 rounded-lg text-gray-400 hover:text-[#820AD1] hover:bg-[#820AD1]/5 disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400 transition-all"
-                      title="Última página"
-                    >
-                      <span className="material-symbols-outlined text-[18px] sm:text-[20px]">last_page</span>
-                    </button>
-                  </div>
-                </div>
-              )}
+        {/* Footer */}
+        <footer className="mt-12 border-t border-gray-200 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 gap-4">
+            <p>© {new Date().getFullYear()} Evolua Premium. Uso exclusivo.</p>
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-[#8A05BE] transition-colors">Suporte Prioritário</a>
+              <a href="#" className="hover:text-[#8A05BE] transition-colors">Privacidade</a>
+              <a href="#" className="hover:text-[#8A05BE] transition-colors">Termos</a>
             </div>
           </div>
-        </div>
+        </footer>
       </main>
     </>
-  )
-}
-
-function StatCard({ icon, iconBg, iconColor, label, value }: { icon: string; iconBg: string; iconColor: string; label: string; value: number | string }) {
-  return (
-    <div className="glass-card rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-center gap-3">
-      <div className={`${iconBg} p-2 sm:p-2.5 rounded-lg sm:rounded-xl ${iconColor} shrink-0`}>
-        <span className="material-symbols-outlined text-[18px] sm:text-[22px]">{icon}</span>
-      </div>
-      <div>
-        <span className="block text-lg sm:text-xl font-bold text-gray-900">{value}</span>
-        <span className="block text-[10px] sm:text-xs text-gray-500 font-medium">{label}</span>
-      </div>
-    </div>
   )
 }
