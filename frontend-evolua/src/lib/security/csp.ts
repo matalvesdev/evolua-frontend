@@ -29,8 +29,8 @@ export function buildCSP({ nonce, isDev }: CSPConfig): string {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
 
   const scriptSrc = isDev
-    ? `'self' 'nonce-${nonce}' 'unsafe-eval'`
-    : `'self' 'nonce-${nonce}'`
+    ? `'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline'`
+    : `'self' 'nonce-${nonce}' 'unsafe-inline'`
 
   const connectSources = ["'self'", "*.supabase.co"]
   if (supabaseUrl) connectSources.push(supabaseUrl)
@@ -39,7 +39,8 @@ export function buildCSP({ nonce, isDev }: CSPConfig): string {
   const directives: Record<string, string> = {
     "default-src": "'self'",
     "script-src": scriptSrc,
-    "style-src": "'self' 'unsafe-inline'",
+    "style-src": "'self' 'unsafe-inline' fonts.googleapis.com",
+    "style-src-elem": "'self' 'unsafe-inline' fonts.googleapis.com",
     "img-src": "'self' data: blob: *.supabase.co lh3.googleusercontent.com",
     "connect-src": connectSources.join(" "),
     "frame-ancestors": "'none'",
