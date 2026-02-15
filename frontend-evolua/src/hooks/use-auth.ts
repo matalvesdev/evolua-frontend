@@ -39,8 +39,8 @@ export function useAuth() {
   const logout = React.useCallback(async () => {
     await authApi.logout()
     setUser(null)
-    router.push("/auth/login")
-  }, [router])
+    window.location.href = "https://useevolua.com"
+  }, [])
 
   return { user, loading, login, register, logout }
 }
