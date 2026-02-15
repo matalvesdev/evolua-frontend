@@ -29,8 +29,8 @@ export function buildCSP({ nonce, isDev }: CSPConfig): string {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
 
   const scriptSrc = isDev
-    ? `'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline'`
-    : `'self' 'nonce-${nonce}' 'unsafe-inline'`
+    ? `'self' 'unsafe-eval' 'unsafe-inline'`
+    : `'self' 'unsafe-inline'`
 
   const connectSources = ["'self'", "*.supabase.co"]
   if (supabaseUrl) connectSources.push(supabaseUrl)
