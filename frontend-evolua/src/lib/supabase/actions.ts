@@ -33,7 +33,7 @@ export async function signUpAction(formData: FormData) {
 export async function signOutAction() {
   const supabase = await createClient()
   await supabase.auth.signOut()
-  redirect("/auth/login")
+  redirect("https://useevolua.com")
 }
 
 

@@ -65,7 +65,7 @@ export function useSessionManager(
     } catch {
       // Force redirect even if signOut fails
     }
-    window.location.href = "/auth/login"
+    window.location.href = "https://useevolua.com"
   }, [clearAllTimers])
 
   const startWarningCountdown = useCallback(() => {
@@ -150,7 +150,7 @@ export function useSessionManager(
         warningActiveRef.current = false
         setIsIdle(false)
         setShowWarning(false)
-        window.location.href = "/auth/login"
+        window.location.href = "https://useevolua.com"
       }
       // TOKEN_REFRESHED: silently update — no visible action needed
     })
