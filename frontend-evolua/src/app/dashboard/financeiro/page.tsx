@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   TrendingUp,
   TrendingDown,
@@ -8,9 +10,20 @@ import {
   Calendar,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { useFinancialStats, useTransactions } from '@/hooks';
 
+const NAV_TABS = [
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/dashboard/pacientes', label: 'Pacientes' },
+  { href: '/dashboard/agendamentos', label: 'Agenda' },
+  { href: '/dashboard/financeiro', label: 'Financeiro' },
+  { href: '/dashboard/relatorios', label: 'Relatórios' },
+  { href: '/dashboard/configuracoes', label: 'Configurações' },
+];
+
 export default function FinanceiroPage() {
+  const pathname = usePathname();
   const { stats, loading: statsLoading } = useFinancialStats();
   const { transactions, loading: transactionsLoading } = useTransactions();
 
@@ -52,7 +65,34 @@ export default function FinanceiroPage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#f6f8fb] via-[#e8edf5] to-[#dce5f0] p-6">
+    <>
+      <DashboardHeader />
+
+      {/* Navigation tabs */}
+      <nav className="px-6 lg:px-10 bg-transparent mb-8 hidden md:block">
+        <div className="flex items-center justify-center gap-8">
+          {NAV_TABS.map((item) => {
+            const isActive = item.href === '/dashboard'
+              ? pathname === '/dashboard'
+              : pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  isActive
+                    ? 'border-[#8A05BE] text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30'
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      <div className="p-6">
       <div className="max-w-[1400px] mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -205,5 +245,6 @@ export default function FinanceiroPage() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

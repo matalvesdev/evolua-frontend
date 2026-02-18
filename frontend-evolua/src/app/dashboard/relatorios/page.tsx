@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useReports, useReportMutations, usePatient, useCreateMessage, useAppointments, useUser } from "@/hooks"
 import { formatPhoneForWhatsApp, buildWhatsAppUrl } from "@/lib/utils/whatsapp-utils"
 import { createClient } from "@/lib/supabase/client"
@@ -882,9 +883,19 @@ function ReportDetailModal({ report, onClose, onSend }: { report: Report; onClos
   )
 }
 
+const NAV_TABS = [
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/pacientes", label: "Pacientes" },
+  { href: "/dashboard/agendamentos", label: "Agenda" },
+  { href: "/dashboard/financeiro", label: "Financeiro" },
+  { href: "/dashboard/relatorios", label: "Relatórios" },
+  { href: "/dashboard/configuracoes", label: "Configurações" },
+]
+
 /* ─── Main Page ─── */
 export default function RelatoriosPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const [search, setSearch] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState("")
@@ -923,7 +934,34 @@ export default function RelatoriosPage() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <>
+      <DashboardHeader />
+
+      {/* Navigation tabs */}
+      <nav className="px-6 lg:px-10 bg-transparent mb-8 hidden md:block">
+        <div className="flex items-center justify-center gap-8">
+          {NAV_TABS.map((item) => {
+            const isActive = item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  isActive
+                    ? "border-[#8A05BE] text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30"
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
+
+      <div className="flex-1 overflow-y-auto">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col gap-5 sm:gap-6">
 
         {/* Header */}
@@ -1109,5 +1147,6 @@ export default function RelatoriosPage() {
         onCancel={() => setDeleteTarget(null)}
       />
     </div>
+    </>
   )
 }

@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useRef, useEffect } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { useAppointments, useTodayAppointments, useAppointmentMutations } from "@/hooks"
 import type { Appointment } from "@/lib/api/appointments"
 
@@ -90,8 +91,18 @@ function getAppointmentPosition(apt: Appointment, startHour: number) {
   return { top, height }
 }
 
+const NAV_TABS = [
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/pacientes", label: "Pacientes" },
+  { href: "/dashboard/agendamentos", label: "Agenda" },
+  { href: "/dashboard/financeiro", label: "Financeiro" },
+  { href: "/dashboard/relatorios", label: "Relatórios" },
+  { href: "/dashboard/configuracoes", label: "Configurações" },
+]
+
 export default function AgendamentosPage() {
   const router = useRouter()
+  const pathname = usePathname()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [viewMode, setViewMode] = useState<ViewMode>("week")
@@ -206,8 +217,35 @@ export default function AgendamentosPage() {
   void completeAppointment
 
   return (
-    <div className="flex-1 overflow-hidden pb-16 md:pb-0">
-      <div className="flex h-[calc(100vh-64px)] max-w-[1400px] mx-auto">
+    <>
+      <DashboardHeader />
+
+      {/* Navigation tabs */}
+      <nav className="px-6 lg:px-10 bg-transparent mb-0 hidden md:block">
+        <div className="flex items-center justify-center gap-8">
+          {NAV_TABS.map((item) => {
+            const isActive = item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname.startsWith(item.href)
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  isActive
+                    ? "border-[#8A05BE] text-gray-900"
+                    : "border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30"
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
+
+      <div className="flex-1 overflow-hidden pb-16 md:pb-0">
+        <div className="flex h-[calc(100vh-140px)] max-w-[1400px] mx-auto">
 
         {/* ===== LEFT SIDEBAR ===== */}
         <aside className="hidden lg:flex flex-col w-[300px] shrink-0 border-r border-gray-200/60 bg-white/40 backdrop-blur-sm overflow-y-auto">
@@ -521,5 +559,6 @@ export default function AgendamentosPage() {
         </main>
       </div>
     </div>
+    </>
   )
 }
