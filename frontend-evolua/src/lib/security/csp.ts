@@ -32,9 +32,18 @@ export function buildCSP({ nonce, isDev }: CSPConfig): string {
     ? `'self' 'unsafe-eval' 'unsafe-inline'`
     : `'self' 'unsafe-inline'`
 
-  const connectSources = ["'self'", "*.supabase.co"]
+  const connectSources = ["'self'", "*.supabase.co", "https://app.himetrica.com"]
   if (supabaseUrl) connectSources.push(supabaseUrl)
-  if (apiUrl) connectSources.push(apiUrl)
+  if (apiUrl) {
+    // Add both the full API URL and its origin to ensure subpath requests are allowed
+    connectSources.push(apiUrl)
+    try {
+      const apiOrigin = new URL(apiUrl).origin
+      if (apiOrigin !== apiUrl) connectSources.push(apiOrigin)
+    } catch {
+      // If URL parsing fails, just use the raw value
+    }
+  }
 
   const directives: Record<string, string> = {
     "default-src": "'self'",
