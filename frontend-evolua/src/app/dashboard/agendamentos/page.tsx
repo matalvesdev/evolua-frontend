@@ -221,7 +221,7 @@ export default function AgendamentosPage() {
       <DashboardHeader />
 
       {/* Navigation tabs */}
-      <nav className="px-6 lg:px-10 bg-transparent mb-0 hidden md:block">
+      <nav className="px-6 lg:px-10 bg-transparent mb-6 hidden md:block">
         <div className="flex items-center justify-center gap-8">
           {NAV_TABS.map((item) => {
             const isActive = item.href === "/dashboard"
