@@ -32,3 +32,23 @@ next-env.d.ts
 
 # coverage
 coverage/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# SSH Keys
+*.pem
+*.key
+*.ppk

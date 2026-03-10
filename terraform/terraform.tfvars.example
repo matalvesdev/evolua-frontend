@@ -1,0 +1,148 @@
+# Evolua CRM - Terraform Variables
+# Copie este arquivo para terraform.tfvars e preencha com seus valores
+
+# ============================================================================
+# AWS Configuration
+# ============================================================================
+
+# Região AWS
+# Recomendado para Brasil: sa-east-1 (São Paulo) - menor latência
+# Alternativa mais barata: us-east-1 (N. Virginia)
+aws_region = "sa-east-1"
+
+# Ambiente (production, staging, development)
+environment = "production"
+
+# ============================================================================
+# Domínios
+# ============================================================================
+
+# Domínio da landing page
+landing_domain = "useevolua.com"
+
+# Domínio da aplicação
+app_domain = "app.evolua.com"
+
+# ============================================================================
+# EC2 Configuration
+# ============================================================================
+
+# Tipo de instância EC2
+# t2.micro: Free tier (1 vCPU, 1GB RAM) - Recomendado para início
+# t3.small: 2 vCPU, 2GB RAM (~$15/mês) - Para tráfego moderado
+# t3.medium: 2 vCPU, 4GB RAM (~$30/mês) - Para alto tráfego
+instance_type = "t2.micro"
+
+# Nome da chave SSH (deve existir na AWS)
+# Criar com: aws ec2 create-key-pair --key-name evolua-key --query 'KeyMaterial' --output text > evolua-key.pem
+key_name = "evolua-key"
+
+# CIDR do seu IP para acesso SSH (formato: 123.456.789.012/32)
+# Obter seu IP: curl https://ifconfig.me
+# IMPORTANTE: Adicione /32 no final!
+allowed_ssh_cidr = "SEU_IP_AQUI/32"
+
+# ============================================================================
+# Supabase Configuration
+# ============================================================================
+
+# URL do projeto Supabase
+# Exemplo: https://xxxxxxxxxxxxx.supabase.co
+# Obter em: Supabase Dashboard → Settings → API → Project URL
+supabase_url = "https://xxxxxxxxxxxxx.supabase.co"
+
+# Chave anônima do Supabase
+# Exemplo: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+# Obter em: Supabase Dashboard → Settings → API → anon public
+supabase_anon_key = "eyJhbGc..."
+
+# ============================================================================
+# GitHub Repository
+# ============================================================================
+
+# URL do repositório GitHub (HTTPS)
+# Exemplo: https://github.com/seu-usuario/evolua-crm.git
+# IMPORTANTE: Use HTTPS, não SSH
+github_repo = "https://github.com/seu-usuario/evolua-crm.git"
+
+# ============================================================================
+# Monitoring
+# ============================================================================
+
+# Email para receber alertas do CloudWatch
+# Você receberá um email de confirmação da AWS SNS
+alert_email = "seu@email.com"
+
+# ============================================================================
+# Tags Adicionais (Opcional)
+# ============================================================================
+
+# Tags personalizadas para recursos AWS
+tags = {
+  # Owner       = "Seu Nome"
+  # CostCenter  = "TI"
+  # Backup      = "Daily"
+}
+
+# ============================================================================
+# INSTRUÇÕES
+# ============================================================================
+
+# 1. Copie este arquivo:
+#    cp terraform.tfvars.example terraform.tfvars
+#
+# 2. Edite terraform.tfvars e preencha TODOS os valores acima
+#
+# 3. Valores obrigatórios:
+#    - allowed_ssh_cidr (seu IP + /32)
+#    - supabase_url
+#    - supabase_anon_key
+#    - github_repo
+#    - alert_email
+#    - key_name
+#
+# 4. NUNCA commite terraform.tfvars no Git!
+#    (já está no .gitignore)
+#
+# 5. Para obter seu IP:
+#    curl https://ifconfig.me
+#    Adicione /32 no final: 123.456.789.012/32
+#
+# 6. Para criar chave SSH:
+#    aws ec2 create-key-pair --key-name evolua-key --query 'KeyMaterial' --output text > evolua-key.pem
+#    chmod 400 evolua-key.pem (Linux/macOS)
+#
+# 7. Região recomendada:
+#    - Brasil: sa-east-1 (menor latência, ~10-20% mais caro)
+#    - Global: us-east-1 (mais barato, maior latência)
+#
+# 8. Após preencher:
+#    terraform init
+#    terraform plan
+#    terraform apply
+
+# ============================================================================
+# CUSTOS ESTIMADOS
+# ============================================================================
+
+# Primeiros 12 meses (Free Tier):
+# - EC2 t2.micro: $0 (750h/mês)
+# - EBS 30GB: $0
+# - Data Transfer: $0 (15GB/mês)
+# - Route53: ~$0.50/mês
+# - CloudWatch: $0 (free tier)
+# - Total: ~$0.50/mês
+
+# Após Free Tier (sa-east-1):
+# - EC2 t2.micro: ~$10/mês
+# - EBS 30GB: ~$3/mês
+# - Data Transfer: ~$1-5/mês
+# - Route53: ~$0.50/mês
+# - Total: ~$15-20/mês
+
+# Após Free Tier (us-east-1):
+# - EC2 t2.micro: ~$8.50/mês
+# - EBS 30GB: ~$2.40/mês
+# - Data Transfer: ~$1-5/mês
+# - Route53: ~$0.50/mês
+# - Total: ~$12-17/mês
