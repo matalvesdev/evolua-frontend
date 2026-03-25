@@ -1,6 +1,8 @@
 {
   "version": "0.2.0",
   "configurations": [
+
+
     {
       "name": "Frontend Dev",
       "type": "node",
@@ -60,13 +62,15 @@
         "webpack:///*": "${workspaceFolder}/frontend-evolua/*"
       }
     }
-  ],
-  "compounds": [
-    {
-      "name": "Full Stack",
-      "configurations": ["Frontend Dev", "Backend Debug"],
-      "stopOnEntry": false,
-      "preLaunchTask": "start-docker"
-    }
   ]
+  // TODO: "compounds" quebrado - task "start-docker" não existe
+  // Descomentar quando Docker tasks forem implementadas
+  // "compounds": [
+  //   {
+  //     "name": "Full Stack",
+  //     "configurations": ["Frontend Dev", "Backend Debug"],
+  //     "stopOnEntry": false,
+  //     "preLaunchTask": "start-docker"
+  //   }
+  // ]
 }

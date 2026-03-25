@@ -56,11 +56,12 @@ chown -R ubuntu:ubuntu /home/ubuntu
 
 # Clonar backend
 echo "Clonando backend..."
-su - ubuntu -c "git clone https://github.com/matalvesdev/evolua-backend.git /home/ubuntu/evolua-backend || true"
+su - ubuntu -c "git clone --depth=1 https://github.com/matalvesdev/evolua-backend.git /home/ubuntu/evolua-backend 2>/dev/null || echo '⚠️ GitHub repo nao encontrado - aguardando push'"
 
 # Se o repo nao existir ainda, criar estrutura minima para o NestJS subir
 if [ ! -f /home/ubuntu/evolua-backend/package.json ]; then
-  echo "Repositorio nao encontrado - aguardando deploy manual"
+  echo "⚠️  Repositorio nao encontrado - aguardando deploy manual via ./deploy.sh"
+  echo "App sera inicializado apos receber codigo"
 fi
 
 # Arquivo .env de producao
@@ -114,17 +115,26 @@ PMCONF
 fi
 
 # Nginx - proxy reverso para o NestJS na porta 8080
+# Configuracao TEMPORARIA (HTTP) - Certbot vai converter para HTTPS+SSL
 cat > /etc/nginx/sites-available/evolua-backend << NGINXCONF
 server {
     listen 80;
     server_name $BACKEND_DOMAIN;
 
-    # Health check sem log
+    # Permitir renovacao de certificado Let's Encrypt
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    # Health check sem log (importante para monitoramento)
     location /api/health {
         proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
         access_log off;
     }
 
+    # Redirecionar todo tráfico HTTP para HTTPS (apos Certbot)
     location / {
         proxy_pass http://localhost:8080;
         proxy_http_version 1.1;
@@ -135,6 +145,7 @@ server {
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
         proxy_read_timeout 60s;
+        proxy_connect_timeout 60s;
     }
 }
 NGINXCONF
@@ -142,6 +153,112 @@ NGINXCONF
 ln -sf /etc/nginx/sites-available/evolua-backend /etc/nginx/sites-enabled/
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl restart nginx && systemctl enable nginx
+
+# Criar diretorio para certificado
+mkdir -p /var/www/certbot
+
+# ====================================================
+# SSL/TLS Setup via Certbot + Let's Encrypt
+# ====================================================
+echo "Configurando SSL/TLS..."
+
+# Aguardar que health check esteja respondendo (máximo 30s)
+HEALTH_MAX_WAIT=30
+HEALTH_COUNT=0
+until curl -f http://localhost:8080/api/health 2>/dev/null || [ $HEALTH_COUNT -ge $HEALTH_MAX_WAIT ]; do
+  echo "Aguardando health check responder... ($HEALTH_COUNT/$HEALTH_MAX_WAIT)"
+  sleep 1
+  HEALTH_COUNT=$((HEALTH_COUNT + 1))
+done
+
+if [ $HEALTH_COUNT -lt $HEALTH_MAX_WAIT ]; then
+  echo "✅ Health check respondendo - configurando SSL"
+  
+  # Non-interactive Certbot setup
+  certbot certonly --webroot \
+    -w /var/www/certbot \
+    -d "$BACKEND_DOMAIN" \
+    --email admin@useevolua.com \
+    --non-interactive \
+    --agree-tos \
+    --preferred-challenges http \
+    2>&1 | tee /var/log/certbot-setup.log || echo "⚠️ Certbot falhou (normal se ja tiver cert)"
+    
+  # Se obteve certificado, criar configuracao HTTPS
+  if [ -f "/etc/letsencrypt/live/$BACKEND_DOMAIN/fullchain.pem" ]; then
+    echo "Ativando HTTPS..."
+    cat > /etc/nginx/sites-available/evolua-backend-https << NGINXHTTPS
+# HTTPS com redirecionamento automatico
+server {
+    listen 80;
+    server_name $BACKEND_DOMAIN;
+    
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+    
+    # Redirecionar HTTP para HTTPS
+    location / {
+        return 301 https://\$server_name\$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    server_name $BACKEND_DOMAIN;
+
+    # Certificados SSL
+    ssl_certificate /etc/letsencrypt/live/$BACKEND_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$BACKEND_DOMAIN/privkey.pem;
+
+    # Segurança SSL/TLS
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Health check
+    location /api/health {
+        proxy_pass http://localhost:8080;
+        access_log off;
+    }
+
+    # Proxy para backend
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_read_timeout 60s;
+        proxy_connect_timeout 60s;
+    }
+}
+NGINXHTTPS
+
+    # Ativar config HTTPS e desativar HTTP
+    ln -sf /etc/nginx/sites-available/evolua-backend-https /etc/nginx/sites-enabled/evolua-backend-https
+    rm -f /etc/nginx/sites-enabled/evolua-backend
+    
+    nginx -t && systemctl restart nginx
+    echo "✅ HTTPS ativado para $BACKEND_DOMAIN"
+  else
+    echo "⚠️ Certificado nao obtido - Nginx funcionando em HTTP (inseguro!)"
+  fi
+else
+  echo "⚠️ Health check nao respondeu - SSL nao configurado (retentar apos deploy)"
+fi
+
+# Agendar renovacao de certificado
+# Cron job: renewall a cada 12 horas
+if ! crontab -u ubuntu -l 2>/dev/null | grep -q "certbot renew"; then
+  (crontab -u ubuntu -l 2>/dev/null; echo "0 */12 * * * certbot renew --quiet && systemctl reload nginx") | crontab -u ubuntu -
+  echo "✅ Auto-renovacao de certificados agendada"
+fi
 
 # Script de deploy para atualizacoes futuras
 cat > /home/ubuntu/deploy.sh << 'DEPLOY'
