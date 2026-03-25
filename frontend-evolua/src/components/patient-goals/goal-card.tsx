@@ -1,10 +1,16 @@
+"use client"
+
+import { useState } from 'react'
+
 interface GoalCardProps {
+  id: string
   title: string
   description: string
   progress: number
   status: "in-progress" | "attention" | "started"
   iconName: string
   colorScheme: "purple" | "blue" | "pink"
+  patientId: string
 }
 
 const statusConfig = {
@@ -41,42 +47,73 @@ const colorSchemes = {
 }
 
 export function GoalCard({
+  id,
   title,
   description,
   progress,
   status,
   iconName,
   colorScheme,
+  patientId
 }: GoalCardProps) {
+  const [showHistory, setShowHistory] = useState(false)
   const statusInfo = statusConfig[status]
   const colors = colorSchemes[colorScheme]
 
   return (
-    <div className="glass-card rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white group">
-      <div className="flex justify-between items-start mb-5">
-        <div className={`${colors.iconBg} ${colors.iconText} p-3 rounded-xl ${colors.iconHoverBg} group-hover:text-white transition-colors shadow-sm`}>
-          <span className="material-symbols-outlined text-[26px]">{iconName}</span>
+    <>
+      <div className="glass-card rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white group relative">
+        {/* Botão Ver Histórico */}
+        <button
+          onClick={() => setShowHistory(true)}
+          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+          title="Ver Histórico"
+        >
+          <span className="material-symbols-outlined text-[20px] text-gray-600">
+            history
+          </span>
+        </button>
+
+        <div className="flex justify-between items-start mb-5">
+          <div className={`${colors.iconBg} ${colors.iconText} p-3 rounded-xl ${colors.iconHoverBg} group-hover:text-white transition-colors shadow-sm`}>
+            <span className="material-symbols-outlined text-[26px]">{iconName}</span>
+          </div>
+          <span className={`bg-${statusInfo.color}-100 text-${statusInfo.color}-700 text-[11px] font-bold px-2.5 py-1 rounded-full border border-${statusInfo.color}-200`}>
+            {statusInfo.label}
+          </span>
         </div>
-        <span className={`bg-${statusInfo.color}-100 text-${statusInfo.color}-700 text-[11px] font-bold px-2.5 py-1 rounded-full border border-${statusInfo.color}-200`}>
-          {statusInfo.label}
-        </span>
+
+        <h4 className="text-lg font-bold text-gray-900 mb-2">{title}</h4>
+        <p className="text-sm text-gray-600 mb-6 line-clamp-2 h-10">{description}</p>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between text-xs font-bold">
+            <span className={colors.progressText}>{progress}%</span>
+            <span className="text-gray-600">Meta: 100%</span>
+          </div>
+          <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div
+              className={`h-full ${colors.progressBar} rounded-full relative shadow-lg ${colors.progressShadow}`}
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
       </div>
 
-      <h4 className="text-lg font-bold text-gray-900 mb-2">{title}</h4>
-      <p className="text-sm text-gray-600 mb-6 line-clamp-2 h-10">{description}</p>
-
-      <div className="flex flex-col gap-2">
-        <div className="flex justify-between text-xs font-bold">
-          <span className={colors.progressText}>{progress}%</span>
-          <span className="text-gray-600">Meta: 100%</span>
-        </div>
-        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className={`h-full ${colors.progressBar} rounded-full relative shadow-lg ${colors.progressShadow}`}
-            style={{ width: `${progress}%` }}
+      {/* Evolution History Panel */}
+      {showHistory && (
+        <div className="fixed inset-0 z-50">
+          <EvolutionHistoryPanel
+            goalId={id}
+            patientId={patientId}
+            isOpen={showHistory}
+            onClose={() => setShowHistory(false)}
           />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
+
+// Importar o painel de histórico
+import { EvolutionHistoryPanel } from '@/components/evolution-history'

@@ -1,6 +1,6 @@
-# Route53 DNS Configuration
+# Route53 DNS para useevolua.com
+# Custo: $0.50/mes pela hosted zone
 
-# Hosted Zone para useevolua.com
 resource "aws_route53_zone" "main" {
   name = var.landing_domain
 
@@ -9,63 +9,29 @@ resource "aws_route53_zone" "main" {
   }
 }
 
-# A Record para Landing Page (useevolua.com)
-resource "aws_route53_record" "landing" {
+# useevolua.com -> Vercel (IP principal do Vercel: 76.76.21.21)
+resource "aws_route53_record" "root" {
   zone_id = aws_route53_zone.main.zone_id
   name    = var.landing_domain
   type    = "A"
   ttl     = 300
-  records = [aws_eip.app.public_ip] # Usando mesmo IP por enquanto
-
-  # Se tiver EC2 separado para landing, use:
-  # records = [aws_eip.landing.public_ip]
+  records = ["76.76.21.21"]
 }
 
-# A Record para www.useevolua.com
-resource "aws_route53_record" "landing_www" {
+# www.useevolua.com -> Vercel
+resource "aws_route53_record" "www" {
   zone_id = aws_route53_zone.main.zone_id
   name    = "www.${var.landing_domain}"
-  type    = "A"
+  type    = "CNAME"
   ttl     = 300
-  records = [aws_eip.app.public_ip]
+  records = ["cname.vercel-dns.com"]
 }
 
-# A Record para App (app.evolua.com)
-resource "aws_route53_record" "app" {
+# api.useevolua.com -> EC2 backend NestJS
+resource "aws_route53_record" "api" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = var.app_domain
+  name    = "api.${var.landing_domain}"
   type    = "A"
   ttl     = 300
-  records = [aws_eip.app.public_ip]
+  records = [aws_eip.backend.public_ip]
 }
-
-# CNAME para evolua.com -> useevolua.com (se necessário)
-# resource "aws_route53_record" "root_redirect" {
-#   zone_id = aws_route53_zone.main.zone_id
-#   name    = "evolua.com"
-#   type    = "CNAME"
-#   ttl     = 300
-#   records = [var.landing_domain]
-# }
-
-# MX Records para email (opcional)
-# resource "aws_route53_record" "mx" {
-#   zone_id = aws_route53_zone.main.zone_id
-#   name    = var.landing_domain
-#   type    = "MX"
-#   ttl     = 300
-#   records = [
-#     "10 mail.${var.landing_domain}"
-#   ]
-# }
-
-# TXT Record para SPF (opcional)
-# resource "aws_route53_record" "spf" {
-#   zone_id = aws_route53_zone.main.zone_id
-#   name    = var.landing_domain
-#   type    = "TXT"
-#   ttl     = 300
-#   records = [
-#     "v=spf1 include:_spf.google.com ~all"
-#   ]
-# }

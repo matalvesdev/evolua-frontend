@@ -1,23 +1,14 @@
-version: 1
-applications:
-  - appRoot: frontend-evolua
-    frontend:
-      phases:
-        preBuild:
-          commands:
-            - npm ci
-        build:
-          commands:
-            - echo "NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL" >> .env.production
-            - echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY" >> .env.production
-            - echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env.production
-            - echo "NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL" >> .env.production
-            - npm run build
-      artifacts:
-        baseDirectory: .next
-        files:
-          - '**/*'
-      cache:
-        paths:
-          - node_modules/**/*
-          - .next/cache/**/*
+# DEPRECATED - Frontend migrado para Vercel (gratuito)
+# Este arquivo nao e mais utilizado.
+#
+# Deploy do frontend:
+#   1. Acesse https://vercel.com
+#   2. Importe o repositorio frontend-evolua
+#   3. Configure as variaveis de ambiente:
+#      NEXT_PUBLIC_SUPABASE_URL
+#      NEXT_PUBLIC_SUPABASE_ANON_KEY
+#      NEXT_PUBLIC_API_URL=https://api.useevolua.com/api
+#      NEXT_PUBLIC_APP_URL=https://useevolua.com
+#   4. Configure o dominio useevolua.com no painel do Vercel
+#
+# O DNS ja esta configurado no Route53 apontando para o Vercel.

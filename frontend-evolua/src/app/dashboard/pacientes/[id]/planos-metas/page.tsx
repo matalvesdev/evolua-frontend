@@ -46,6 +46,7 @@ export default function GoalsPage({ params }: GoalsPageProps) {
       status: "in-progress" as const,
       iconName: "graphic_eq",
       colorScheme: "purple" as const,
+      patientId: id
     },
     {
       id: "2",
@@ -56,6 +57,7 @@ export default function GoalsPage({ params }: GoalsPageProps) {
       status: "attention" as const,
       iconName: "record_voice_over",
       colorScheme: "blue" as const,
+      patientId: id
     },
     {
       id: "3",
@@ -66,6 +68,7 @@ export default function GoalsPage({ params }: GoalsPageProps) {
       status: "started" as const,
       iconName: "psychology",
       colorScheme: "pink" as const,
+      patientId: id
     },
   ]
 
@@ -132,6 +135,7 @@ export default function GoalsPage({ params }: GoalsPageProps) {
         <div className="flex flex-col gap-6">
           {/* Patient Header */}
           <PatientGoalHeader
+            patientId={id}
             patientName={patient.name}
             patientImage={patient.image}
             status={patient.status}
@@ -173,6 +177,7 @@ export default function GoalsPage({ params }: GoalsPageProps) {
 
           {/* Weekly Activities Plan */}
           <WeeklyActivitiesPlan
+            patientId={id}
             activities={weeklyActivities}
             onAddActivity={handleAddActivity}
             onActivityToggle={handleActivityToggle}

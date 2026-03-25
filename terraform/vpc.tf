@@ -1,11 +1,9 @@
-# VPC Configuration (usando default VPC para free tier)
+# VPC - usa a default VPC (sem custo adicional)
 
-# Default VPC
 data "aws_vpc" "default" {
   default = true
 }
 
-# Default Subnets
 data "aws_subnets" "default" {
   filter {
     name   = "vpc-id"
@@ -13,24 +11,24 @@ data "aws_subnets" "default" {
   }
 }
 
-# Security Group para EC2 (App)
-resource "aws_security_group" "app_sg" {
-  name        = "${var.project_name}-app-sg"
-  description = "Security group for Evolua CRM application"
+# Security Group para o backend NestJS
+resource "aws_security_group" "backend_sg" {
+  name        = "${var.project_name}-backend-sg"
+  description = "Backend NestJS - permite HTTP, HTTPS e SSH"
   vpc_id      = data.aws_vpc.default.id
 
-  # SSH (apenas do seu IP)
+  # SSH restrito ao seu IP
   ingress {
-    description = "SSH from allowed IP"
+    description = "SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.allowed_ssh_cidr]
   }
 
-  # HTTP
+  # HTTP (Nginx → redireciona para HTTPS)
   ingress {
-    description = "HTTP from anywhere"
+    description = "HTTP"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -39,16 +37,15 @@ resource "aws_security_group" "app_sg" {
 
   # HTTPS
   ingress {
-    description = "HTTPS from anywhere"
+    description = "HTTPS"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Outbound - permitir tudo
   egress {
-    description = "Allow all outbound traffic"
+    description = "Outbound irrestrito"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -56,44 +53,6 @@ resource "aws_security_group" "app_sg" {
   }
 
   tags = {
-    Name = "${var.project_name}-app-sg"
-  }
-}
-
-# Security Group para Landing Page (se usar EC2 separado)
-resource "aws_security_group" "landing_sg" {
-  name        = "${var.project_name}-landing-sg"
-  description = "Security group for Evolua landing page"
-  vpc_id      = data.aws_vpc.default.id
-
-  # HTTP
-  ingress {
-    description = "HTTP from anywhere"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # HTTPS
-  ingress {
-    description = "HTTPS from anywhere"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Outbound
-  egress {
-    description = "Allow all outbound traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.project_name}-landing-sg"
+    Name = "${var.project_name}-backend-sg"
   }
 }

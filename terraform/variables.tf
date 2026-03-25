@@ -1,9 +1,9 @@
-# Variables - Evolua CRM Infrastructure
+# Variables - Evolua CRM (custo mínimo)
 
 variable "aws_region" {
-  description = "AWS region"
+  description = "AWS region (sa-east-1 = São Paulo)"
   type        = string
-  default     = "us-east-1"
+  default     = "sa-east-1"
 }
 
 variable "environment" {
@@ -18,24 +18,16 @@ variable "project_name" {
   default     = "evolua-crm"
 }
 
-# Domínios
 variable "landing_domain" {
-  description = "Landing page domain"
+  description = "Domínio principal"
   type        = string
   default     = "useevolua.com"
 }
 
-variable "app_domain" {
-  description = "Application domain"
-  type        = string
-  default     = "app.evolua.com"
-}
-
-# EC2 Configuration
 variable "instance_type" {
-  description = "EC2 instance type"
+  description = "EC2 instance type (t2.micro = free tier)"
   type        = string
-  default     = "t2.micro" # Free tier eligible
+  default     = "t2.micro"
 }
 
 variable "key_name" {
@@ -44,11 +36,10 @@ variable "key_name" {
 }
 
 variable "allowed_ssh_cidr" {
-  description = "CIDR block allowed to SSH (your IP)"
+  description = "CIDR do seu IP para acesso SSH"
   type        = string
 }
 
-# Application Configuration
 variable "supabase_url" {
   description = "Supabase project URL"
   type        = string
@@ -61,21 +52,28 @@ variable "supabase_anon_key" {
   sensitive   = true
 }
 
-variable "github_repo" {
-  description = "GitHub repository URL"
+variable "supabase_service_role_key" {
+  description = "Supabase service role key"
   type        = string
-  default     = "https://github.com/seu-usuario/evolua-crm.git"
+  sensitive   = true
+  default     = ""
 }
 
-# Monitoring
-variable "alert_email" {
-  description = "Email for CloudWatch alarms"
+variable "database_url" {
+  description = "Supabase PostgreSQL connection string (pooler)"
   type        = string
+  sensitive   = true
+  default     = ""
 }
 
-# Tags
-variable "tags" {
-  description = "Additional tags"
-  type        = map(string)
-  default     = {}
+variable "cors_origins" {
+  description = "CORS origins permitidas (URL do Vercel)"
+  type        = string
+  default     = "https://useevolua.com"
+}
+
+variable "frontend_url" {
+  description = "URL do frontend no Vercel"
+  type        = string
+  default     = "https://useevolua.com"
 }

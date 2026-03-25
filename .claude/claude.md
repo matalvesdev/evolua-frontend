@@ -1,8 +1,21 @@
-# Manual Operacional da IA - Evolua CRM
+# 🤖 Manual Operacional - GitHub Copilot | Evolua CRM
 
-## Visão Geral do Projeto
+**Última atualização**: 25 de março de 2026  
+**Agente**: GitHub Copilot (Claude Haiku 4.5)  
+**Foco**: Desenvolvimento full-stack TypeScript/Next.js + NestJS
 
-O **Evolua** é um CRM para fonoaudiólogos que simplifica gestão de pacientes, agendamentos, relatórios clínicos e controle financeiro. Construído com Next.js 16, React 19, TypeScript, Supabase e AWS.
+---
+
+## 📌 Visão Geral do Projeto
+
+**Evolua CRM** é uma plataforma de gestão clínica para fonoaudiólogos com suporte a:
+- 👥 Gestão de pacientes multitenant
+- 📅 Agendamentos com integração WhatsApp
+- 📊 Relatórios clínicos avançados
+- 💰 Controle financeiro e faturamento
+- 🔐 Autenticação SSO (Supabase Auth)
+
+**Stack**: Next.js 16, React 19, TypeScript 5.9, NestJS, Supabase PostgreSQL, AWS (Amplify + App Runner)
 
 ## Stack Tecnológica
 
@@ -364,10 +377,80 @@ npm run db:seed          # Popular banco com dados de teste (futuro)
 - Verificar se React Query está cacheando corretamente
 - Verificar se imagens estão otimizadas
 
-## Recursos Adicionais
+## 🚀 Guia Rápido de Desenvolvimento
 
-- **Documentação Next.js**: https://nextjs.org/docs
-- **Documentação React Query**: https://tanstack.com/query/latest
-- **Documentação Supabase**: https://supabase.com/docs
-- **Documentação Tailwind**: https://tailwindcss.com/docs
-- **Documentação shadcn/ui**: https://ui.shadcn.com
+### Setup Inicial Frontend
+```bash
+cd frontend-evolua
+npm install
+cp .env.example .env.local
+npm run dev  # http://localhost:3000
+```
+
+### Setup Inicial Backend
+```bash
+cd backend-evolua/backend-evolua
+npm install
+cp .env.example .env
+npm run start:dev  # http://localhost:3333
+```
+
+### Estrutura Crítica
+- **Frontend routes**: `frontend-evolua/src/app/`
+- **Backend modules**: `backend-evolua/backend-evolua/src/`
+- **Prisma schema**: `backend-evolua/backend-evolua/prisma/schema.prisma`
+- **Supabase config**: `.env.local` (frontend), `.env` (backend)
+
+---
+
+## ⚡ Instruções Críticas para Copilot
+
+### 1. Sempre Fazer Primeiro
+- ✅ Ler arquivo(s) relevante antes de editar
+- ✅ Verificar tipos TypeScript com precisão
+- ✅ Mantém convenções de nomenclatura (kebab-case arquivos, PascalCase componentes)
+- ✅ Inclui JSDoc para funções públicas
+- ✅ Testa mudanças em ramos antes de merge
+
+### 2. Padrões Obrigatórios
+- **API Calls**: Usar método `api.{method}()` em `lib/api/client.ts`
+- **Estado**: React Query para server state, `useState` apenas para UI
+- **Forms**: React Hook Form + Zod validation
+- **Componentes**: Functional components com TypeScript strict
+- **Erros**: Sanitizar antes de exibir ao usuário
+
+### 3. Estrutura de PR
+1. Criar branch: `git checkout -b feature/descricao-breve`
+2. Fazer mudanças incrementais
+3. Testar localmente: `npm run test`, `npm run lint`
+4. Commit com mensagem clara: `feat: descrição` / `fix: descrição`
+5. Push e criar PR contra `develop`
+
+### 4. Problemas Comuns & Soluções
+| Problema | Solução |
+|----------|---------|
+| JWT ausente em requests | Verificar middleware de auth em `lib/api/client.ts` |
+| Componente não renderiza | Verificar key prop, useQuery cache, ou efeitos |
+| Tipo TS não encontrado | Rodar `npm run type-check`, limpar `.next/` ou `dist/` |
+| Query N+1 no backend | Adicionar `.include()` ou `.select()` no Prisma |
+| CORS failed | Verificar `connect-src` em CSP e CORS policy do backend |
+
+---
+
+## 📚 Recursos Essenciais
+
+- **Next.js App Router**: https://nextjs.org/docs/app
+- **React Query**: https://tanstack.com/query/latest/docs
+- **Supabase**: https://supabase.com/docs
+- **NestJS**: https://docs.nestjs.com
+- **Prisma**: https://www.prisma.io/docs
+- **shadcn/ui**: https://ui.shadcn.com
+- **Zod Validation**: https://zod.dev
+
+---
+
+## 🔗 Referências Rápidas
+
+**Arquivo de Configuração**: [.claude/config.json](.claude/config.json)  
+**Estrutura de Pastas**: Ver `PROJECT-STRUCTURE.md` na raiz  
+**Stack Details**: Ver `README.md` na raiz

@@ -1,97 +1,59 @@
 # Outputs
 
-output "app_instance_id" {
-  description = "ID da instância EC2 da aplicação"
-  value       = aws_instance.app.id
+output "backend_public_ip" {
+  description = "IP publico do backend (Elastic IP)"
+  value       = aws_eip.backend.public_ip
 }
 
-output "app_public_ip" {
-  description = "IP público da aplicação"
-  value       = aws_eip.app.public_ip
+output "backend_instance_id" {
+  description = "ID da instancia EC2"
+  value       = aws_instance.backend.id
 }
 
-output "app_domain" {
-  description = "Domínio da aplicação"
-  value       = var.app_domain
+output "api_url" {
+  description = "URL da API backend"
+  value       = "https://api.${var.landing_domain}"
 }
 
-output "landing_domain" {
-  description = "Domínio da landing page"
-  value       = var.landing_domain
+output "frontend_url" {
+  description = "URL do frontend (Vercel)"
+  value       = "https://${var.landing_domain}"
 }
 
 output "route53_nameservers" {
-  description = "Name servers do Route53 (configure no seu registrador de domínio)"
+  description = "Name servers do Route53 - configure no registrador do dominio"
   value       = aws_route53_zone.main.name_servers
 }
 
 output "ssh_command" {
-  description = "Comando SSH para conectar ao servidor"
-  value       = "ssh -i ${var.key_name}.pem ubuntu@${aws_eip.app.public_ip}"
+  description = "Comando SSH para conectar ao backend"
+  value       = "ssh -i ${var.key_name}.pem ubuntu@${aws_eip.backend.public_ip}"
 }
 
-output "app_url" {
-  description = "URL da aplicação"
-  value       = "https://${var.app_domain}"
-}
-
-output "landing_url" {
-  description = "URL da landing page"
-  value       = "https://${var.landing_domain}"
-}
-
-output "cloudwatch_dashboard_url" {
-  description = "URL do dashboard CloudWatch"
-  value       = "https://console.aws.amazon.com/cloudwatch/home?region=${var.aws_region}#dashboards:name=${aws_cloudwatch_dashboard.main.dashboard_name}"
-}
-
-output "sns_topic_arn" {
-  description = "ARN do tópico SNS para alertas"
-  value       = aws_sns_topic.alerts.arn
-}
-
-output "security_group_id" {
-  description = "ID do Security Group da aplicação"
-  value       = aws_security_group.app_sg.id
-}
-
-# Instruções pós-deploy
 output "next_steps" {
-  description = "Próximos passos após o deploy"
-  value = <<-EOT
-  
-  ✅ Infraestrutura criada com sucesso!
-  
-  📋 PRÓXIMOS PASSOS:
-  
-  1. Configure os Name Servers no seu registrador de domínio:
+  description = "Proximos passos apos o deploy"
+  value       = <<-EOT
+
+  Infraestrutura criada!
+
+  1. Configure os Name Servers no registrador do dominio useevolua.com:
      ${join("\n     ", aws_route53_zone.main.name_servers)}
-  
-  2. Conecte ao servidor via SSH:
-     ssh -i ${var.key_name}.pem ubuntu@${aws_eip.app.public_ip}
-  
-  3. Aguarde o user-data completar (5-10 minutos):
-     tail -f /var/log/cloud-init-output.log
-  
-  4. Configure SSL para os domínios:
-     sudo certbot --nginx -d ${var.app_domain}
-     sudo certbot --nginx -d ${var.landing_domain}
-     sudo certbot --nginx -d www.${var.landing_domain}
-  
-  5. Verifique a aplicação:
-     https://${var.app_domain}
-     https://${var.landing_domain}
-  
-  6. Confirme a inscrição no SNS (verifique seu email):
-     ${var.alert_email}
-  
-  📊 Monitoramento:
-     CloudWatch Dashboard: ${aws_cloudwatch_dashboard.main.dashboard_name}
-  
-  🔐 Segurança:
-     - SSH permitido apenas de: ${var.allowed_ssh_cidr}
-     - HTTPS configurado com Let's Encrypt
-     - Security Groups configurados
-  
+
+  2. Configure o dominio no Vercel:
+     - Adicione useevolua.com no painel do Vercel
+     - O DNS ja aponta para o Vercel (76.76.21.21)
+
+  3. Conecte ao backend via SSH:
+     ssh -i ${var.key_name}.pem ubuntu@${aws_eip.backend.public_ip}
+
+  4. Aguarde o setup completar (~5 min):
+     tail -f /var/log/user-data.log
+
+  5. Configure SSL no backend:
+     sudo certbot --nginx -d api.${var.landing_domain}
+
+  6. Configure NEXT_PUBLIC_API_URL no Vercel:
+     https://api.${var.landing_domain}/api
+
   EOT
 }

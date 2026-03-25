@@ -1,37 +1,37 @@
-# EC2 Instances
+# EC2 t2.micro - Backend NestJS (free tier: 750h/mês)
+# Sem Elastic IP para evitar cobrança quando parado
+# IP público automático é suficiente (Route53 atualizado via script se mudar)
 
-# EC2 para Aplicação (app.evolua.com)
-resource "aws_instance" "app" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.instance_type
-  key_name      = var.key_name
+resource "aws_instance" "backend" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.instance_type
+  key_name                    = var.key_name
+  vpc_security_group_ids      = [aws_security_group.backend_sg.id]
+  subnet_id                   = data.aws_subnets.default.ids[0]
+  associate_public_ip_address = true
 
-  vpc_security_group_ids = [aws_security_group.app_sg.id]
-  
-  # Usar primeira subnet disponível
-  subnet_id = data.aws_subnets.default.ids[0]
-
-  # Storage
   root_block_device {
-    volume_size           = 30 # GB (free tier: 30GB)
-    volume_type           = "gp3"
+    volume_size           = 20 # GB (free tier: até 30GB gp2)
+    volume_type           = "gp2"
     delete_on_termination = true
     encrypted             = true
 
     tags = {
-      Name = "${var.project_name}-app-root-volume"
+      Name = "${var.project_name}-backend-volume"
     }
   }
 
-  # User data para setup inicial
-  user_data = templatefile("${path.module}/user-data/app-init.sh", {
-    supabase_url      = var.supabase_url
-    supabase_anon_key = var.supabase_anon_key
-    app_domain        = var.app_domain
-    github_repo       = var.github_repo
+  user_data = templatefile("${path.module}/user-data/backend-init.sh", {
+    supabase_url              = var.supabase_url
+    supabase_anon_key         = var.supabase_anon_key
+    supabase_service_role_key = var.supabase_service_role_key
+    database_url              = var.database_url
+    cors_origins              = var.cors_origins
+    frontend_url              = var.frontend_url
+    backend_domain            = "api.${var.landing_domain}"
   })
 
-  # Metadata options (IMDSv2)
+  # IMDSv2 obrigatório (segurança)
   metadata_options {
     http_endpoint               = "enabled"
     http_tokens                 = "required"
@@ -39,9 +39,8 @@ resource "aws_instance" "app" {
   }
 
   tags = {
-    Name        = "${var.project_name}-app"
-    Domain      = var.app_domain
-    Application = "CRM"
+    Name = "${var.project_name}-backend"
+    Role = "backend-api"
   }
 
   lifecycle {
@@ -49,54 +48,15 @@ resource "aws_instance" "app" {
   }
 }
 
-# EC2 para Landing Page (useevolua.com) - Opcional
-# Descomente se quiser EC2 separado para landing
-# resource "aws_instance" "landing" {
-#   ami           = data.aws_ami.ubuntu.id
-#   instance_type = "t2.micro"
-#   key_name      = var.key_name
-#
-#   vpc_security_group_ids = [aws_security_group.landing_sg.id]
-#   subnet_id              = data.aws_subnets.default.ids[0]
-#
-#   root_block_device {
-#     volume_size           = 20
-#     volume_type           = "gp3"
-#     delete_on_termination = true
-#     encrypted             = true
-#   }
-#
-#   user_data = file("${path.module}/user-data/landing-init.sh")
-#
-#   tags = {
-#     Name        = "${var.project_name}-landing"
-#     Domain      = var.landing_domain
-#     Application = "Landing Page"
-#   }
-# }
-
-# Elastic IP para App
-resource "aws_eip" "app" {
-  instance = aws_instance.app.id
+# Elastic IP associado à instância (sem custo enquanto associado)
+# Necessário para o DNS do Route53 não mudar a cada restart
+resource "aws_eip" "backend" {
+  instance = aws_instance.backend.id
   domain   = "vpc"
 
   tags = {
-    Name   = "${var.project_name}-app-eip"
-    Domain = var.app_domain
+    Name = "${var.project_name}-backend-eip"
   }
 
-  depends_on = [aws_instance.app]
+  depends_on = [aws_instance.backend]
 }
-
-# Elastic IP para Landing (se usar EC2 separado)
-# resource "aws_eip" "landing" {
-#   instance = aws_instance.landing.id
-#   domain   = "vpc"
-#
-#   tags = {
-#     Name   = "${var.project_name}-landing-eip"
-#     Domain = var.landing_domain
-#   }
-#
-#   depends_on = [aws_instance.landing]
-# }

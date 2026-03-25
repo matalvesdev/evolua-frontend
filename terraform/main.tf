@@ -1,28 +1,22 @@
-# Evolua CRM - Infraestrutura AWS com Terraform
-# Domínios: useevolua.com (landing) e app.evolua.com (sistema)
+# Evolua CRM - Infraestrutura AWS (custo mínimo)
+# Backend NestJS no EC2 t2.micro (free tier)
+# DNS Route53 para useevolua.com ($0.50/mês)
+# Frontend → Vercel (gratuito, fora da AWS)
 
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
-  
-  # Backend S3 para armazenar o state (descomentar após criar bucket)
-  # backend "s3" {
-  #   bucket = "evolua-terraform-state"
-  #   key    = "production/terraform.tfstate"
-  #   region = "us-east-1"
-  #   encrypt = true
-  # }
 }
 
 provider "aws" {
   region = var.aws_region
-  
+
   default_tags {
     tags = {
       Project     = "Evolua CRM"
@@ -32,7 +26,6 @@ provider "aws" {
   }
 }
 
-# Data sources
 data "aws_availability_zones" "available" {
   state = "available"
 }
