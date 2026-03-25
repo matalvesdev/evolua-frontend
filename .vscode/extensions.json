@@ -1,0 +1,31 @@
+{
+  "recommendations": [
+    "GitHub.copilot",
+    "GitHub.copilot-chat",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "PKief.material-icon-theme",
+    "ms-vscode.makefile-tools",
+    "bradlc.vscode-tailwindcss",
+    "usernamehw.errorlens",
+    "eamodio.gitlens",
+    "gimenete.github-theme",
+    "ms-vscode.remote-explorer",
+    "ms-azuretools.vscode-docker",
+    "redhat.vscode-xml",
+    "DotJoshJohnson.xml",
+    "ms-vscode-remote.remote-wsl",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode.vscode-typescript-next",
+    "Orta.vscode-jest",
+    "arjun.swagger-viewer",
+    "GitHub.vscode-pull-request-github",
+    "eamodio.gitlens",
+    "ms-vscode.sublime-keybindings",
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "ms-vscode.cpptools",
+    "ms-python.python",
+    "ms-vscode-docker.remote-containers",
+    "wakatime.vscode-wakatime"
+  ]
+}

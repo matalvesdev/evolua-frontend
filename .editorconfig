@@ -1,0 +1,43 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Code files
+[*.{js,jsx,ts,tsx,py,rb,go,java,c,cpp,cs,css,scss,sass,less,html,xml,json,yaml,yml}]
+indent_style = space
+indent_size = 2
+
+# YAML files
+[*.{yaml,yml}]
+indent_size = 2
+
+# Markdown
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Shell scripts
+[*.{sh,bash,zsh}]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+
+# Windows batch/PowerShell
+[*.{bat,cmd,ps1}]
+end_of_line = crlf
+
+# Makefiles
+[Makefile]
+indent_style = tab
+
+# Package manager lockfiles
+[package-lock.json,yarn.lock,pnpm-lock.yaml]
+indent_style = space
+indent_size = 2

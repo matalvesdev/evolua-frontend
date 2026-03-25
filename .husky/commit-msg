@@ -1,0 +1,46 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Validate commit message format
+# Expected format: type(scope): subject
+# Example: feat(auth): add login page
+
+COMMIT_MSG=$(cat "$1")
+
+# Check if commit message follows conventional commits
+if ! echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|chore|ci|revert)(\(.+\))?!?: .{1,}'; then
+  echo "❌ Commit message does not follow Conventional Commits format"
+  echo ""
+  echo "Expected format: type(scope): subject"
+  echo ""
+  echo "Types:"
+  echo "  - feat:     A new feature"
+  echo "  - fix:      A bug fix"
+  echo "  - docs:     Documentation only changes"
+  echo "  - style:    Changes that don't affect code meaning"
+  echo "  - refactor: Code change that doesn't fix a bug or add a feature"
+  echo "  - perf:     Code change that improves performance"
+  echo "  - test:     Adding missing tests"
+  echo "  - chore:    Changes to build process, dependencies, etc"
+  echo "  - ci:       Changes to CI configuration"
+  echo "  - revert:   Reverts a previous commit"
+  echo ""
+  echo "Example: feat(auth): add login functionality"
+  exit 1
+fi
+
+# Check minimum length
+SUBJECT=$(echo "$COMMIT_MSG" | head -1)
+SUBJECT_LENGTH=${#SUBJECT}
+
+if [ $SUBJECT_LENGTH -lt 10 ]; then
+  echo "❌ Commit subject is too short (minimum 10 characters)"
+  exit 1
+fi
+
+if [ $SUBJECT_LENGTH -gt 100 ]; then
+  echo "❌ Commit subject is too long (maximum 100 characters)"
+  exit 1
+fi
+
+echo "✅ Commit message is valid"

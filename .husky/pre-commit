@@ -1,0 +1,67 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Pre-commit checks..."
+
+# Get staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$STAGED_FILES" ]; then
+  echo "✅ No files to check"
+  exit 0
+fi
+
+# Check TypeScript files
+TS_FILES=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx)$' || true)
+if [ ! -z "$TS_FILES" ]; then
+  echo "📝 TypeScript files detected - running type-check..."
+  
+  # Frontend type-check
+  if grep -q "\"typescript\"" ./frontend-evolua/package.json 2>/dev/null; then
+    cd frontend-evolua
+    npm run type-check 2>&1 | grep -E "error|ERROR" && {
+      echo "❌ TypeScript errors found in frontend"
+      cd ..
+      exit 1
+    }
+    cd ..
+  fi
+  
+  # Backend type-check  
+  if grep -q "\"typescript\"" ./backend-evolua/backend-evolua/package.json 2>/dev/null; then
+    cd backend-evolua/backend-evolua
+    npx tsc --noEmit 2>&1 | grep -E "error|ERROR" && {
+      echo "❌ TypeScript errors found in backend"
+      cd ../..
+      exit 1
+    }
+    cd ../..
+  fi
+fi
+
+# Check lint
+LINT_FILES=$(echo "$STAGED_FILES" | grep -E '\.(js|jsx|ts|tsx)$' || true)
+if [ ! -z "$LINT_FILES" ]; then
+  echo "🎨 Running ESLint..."
+  
+  # Frontend lint
+  if [ -f "frontend-evolua/eslint.config.mjs" ]; then
+    cd frontend-evolua
+    npm run lint 2>&1 | grep -E "error|ERROR" && {
+      echo "❌ Lint errors found in frontend"
+      cd ..
+      exit 1
+    }
+    cd ..
+  fi
+fi
+
+# Format with prettier
+PRETTIER_FILES=$(echo "$STAGED_FILES" | grep -E '\.(js|jsx|ts|tsx|json|md|css|scss|yaml|yml)$' || true)
+if [ ! -z "$PRETTIER_FILES" ]; then
+  echo "✨ Formatting with Prettier..."
+  npx prettier --write $PRETTIER_FILES
+  git add $PRETTIER_FILES
+fi
+
+echo "✅ Pre-commit checks passed!"

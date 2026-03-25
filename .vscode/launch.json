@@ -1,0 +1,72 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Frontend Dev",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/frontend-evolua/node_modules/.bin/next",
+      "args": ["dev"],
+      "cwd": "${workspaceFolder}/frontend-evolua",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "npm-install-frontend"
+    },
+    {
+      "name": "Backend Debug",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend-evolua/backend-evolua/node_modules/@nestjs/cli/bin/nest.js",
+      "args": ["start", "--debug", "--watch"],
+      "cwd": "${workspaceFolder}/backend-evolua/backend-evolua",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "npm-install-backend"
+    },
+    {
+      "name": "Backend Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend-evolua/backend-evolua/node_modules/.bin/jest",
+      "args": [
+        "--runInBand",
+        "--no-coverage"
+      ],
+      "cwd": "${workspaceFolder}/backend-evolua/backend-evolua",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Frontend Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/frontend-evolua/node_modules/.bin/jest",
+      "args": [
+        "--runInBand",
+        "--no-coverage"
+      ],
+      "cwd": "${workspaceFolder}/frontend-evolua",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/frontend-evolua",
+      "sourceMaps": true,
+      "sourceMapPathOverride": {
+        "webpack:///*": "${workspaceFolder}/frontend-evolua/*"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack",
+      "configurations": ["Frontend Dev", "Backend Debug"],
+      "stopOnEntry": false,
+      "preLaunchTask": "start-docker"
+    }
+  ]
+}
