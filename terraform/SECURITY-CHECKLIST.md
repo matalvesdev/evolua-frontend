@@ -12,26 +12,71 @@
 **Severidade**: 🔴 CRÍTICA
 
 **Problema**:
-- Access key `AKIAQ3EGUNNKS2STUC5N` tem EC2 access bloqueado
-- Terraform apply vai falhar com `AuthFailure`
+- Access key atual (final `NDFN`) está REVOGADA
+- AWS rejeita com: `AuthFailure` / `SignatureDoesNotMatch`
 
-**Solução Rápida (5 min)**:
-```bash
-# 1. Acessar IAM Console
-https://console.aws.amazon.com/iam/
+---
 
-# 2. Users → Deletar TODAS as old keys
-# Seguir: CRITICAL-FIX-NOW.md
+## ⚡ SOLUÇÃO IMMEDIATA (5 minutos)
 
-# 3. Gerar nova access key
-aws iam create-access-key --user-name admin
+### **Passo 1: Acessar AWS Console**
 
-# 4. Configurar localmente
-aws configure  # usar as novas credenciais
-
-# 5. Verificar acesso
-aws ec2 describe-instances
+Abra no navegador:
 ```
+https://console.aws.amazon.com/iam/
+```
+
+### **Passo 2: Deletar Keys Antigas**
+
+1. Clique em **Users** (esquerda)
+2. Selecione seu usuário (`admin`)
+3. Vá para aba **Security credentials**
+4. Procure por **Access keys** - deve ver a key revogada (final `NDFN`)
+5. Clique no ⚙️ (Actions) → **Delete**
+6. Confirmar deletar
+
+### **Passo 3: Criar Nova Access Key**
+
+1. Em **Access keys**, clique **Create access key**
+2. Selecione: **Command Line Interface (CLI)**
+3. ✅ Marque: "I understand the above recommendation"
+4. Clique **Next**
+5. (Opcional) Add description: "Evolua Terraform CLI"
+6. Clique **Create access key**
+
+**⚠️ COPIAR AGORA** (aparece só 1 vez):
+```
+Access Key ID:     AKIA...
+Secret Access Key: ...
+```
+
+### **Passo 4: Configurar Localmente**
+
+Em seu terminal, rode:
+
+```bash
+aws configure
+
+# Quando pedir, cole:
+# AWS Access Key ID: [CTRL+V - access key]
+# AWS Secret Access Key: [CTRL+V - secret key]
+# Default region: sa-east-1
+# Default output format: json
+```
+
+### **Passo 5: Validar**
+
+```bash
+# Testar se funcionou
+aws ec2 describe-instances --region sa-east-1
+
+# Deve retornar lista vazia (sem erros):
+# {
+#   "Reservations": []
+# }
+```
+
+---
 
 **Prevention**: Rotacionar keys a cada 90 dias
 
