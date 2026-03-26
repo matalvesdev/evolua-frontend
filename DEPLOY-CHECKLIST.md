@@ -9,19 +9,39 @@
 
 ### 1️⃣ Infraestrutura AWS (PRONTO)
 ```
-✅ EC2 Instance              i-0fe65fd681f4e7baf (t2.micro free tier)
-✅ Public IP                 18.228.183.188
-✅ Security Group            sg-02fb2b8c427146e1b (SSH, HTTP, HTTPS aberto)
-✅ Elastic IP                eipalloc-0a68d3620256a32b2
-✅ Route53 Zone              Z07198801FOI7MV7LJJPN
-✅ DNS Records Criados        
-   • useevolua.com → 76.76.21.21 (Vercel)
-   • api.useevolua.com → 18.228.183.188 (EC2) ✅
-   • www.useevolua.com → CNAME (Vercel)
-✅ Nginx Rodando             Port 80/443
-✅ Certbot Instalado         Pronto para SSL
-✅ Firewall Ativado          UFW configured
-✅ Auto-renovação Certificado Cron 12h
+✅ EC2 Instance                   i-0fe65fd681f4e7baf (t2.micro free tier)
+✅ Public IP                      18.228.183.188
+✅ Security Group                 sg-02fb2b8c427146e1b (SSH, HTTP, HTTPS aberto)
+✅ Elastic IP                     eipalloc-0a68d3620256a32b2
+✅ Route53 Zonas                  2 zonas criadas ✨
+
+   📍 useevolua.com.br
+   ├── Zone ID:  Z055214127WUF4PMEM0Z0
+   ├── Nameservers:
+   │   • ns-1272.awsdns-31.org
+   │   • ns-90.awsdns-11.com
+   │   • ns-745.awsdns-29.net
+   │   • ns-1552.awsdns-02.co.uk
+   └── A records:
+       • useevolua.com.br → 18.228.183.188 ✅
+       • api.useevolua.com.br → 18.228.183.188 ✅
+
+   📍 useevolua.online
+   ├── Zone ID:  Z070703822S3KAFGINJGW
+   ├── Nameservers:
+   │   • ns-1458.awsdns-54.org
+   │   • ns-337.awsdns-42.com
+   │   • ns-1827.awsdns-36.co.uk
+   │   • ns-585.awsdns-09.net
+   └── A records:
+       • useevolua.online → 18.228.183.188 ✅
+       • api.useevolua.online → 18.228.183.188 ✅
+
+✅ Nginx Rodando                 Port 80/443
+✅ Certbot Instalado            Pronto para SSL
+✅ Monitor SSL Multi-Domain      Aguardando DNS propagar
+✅ Firewall Ativado             UFW configured
+✅ Auto-renovação Certificado   Cron 12h
 ```
 
 ### 2️⃣ Monitor SSL Automático (ATIVADO)
@@ -47,64 +67,88 @@
 
 ## ⏳ O Que Você PRECISA Fazer
 
-### 📋 Checklist Obrigatório (30 min)
+### 📋 Checklist Obrigatório (30 min total)
 
-#### [1] Atualizar Nameservers no Registrador
-**URGENTE**: Sem isso, nada funciona globalmente
+#### [1] Atualizar Nameservers no Registrador (CRÍTICO)
 
+Você tem **2 domínios** para configurar nos seus registradores:
+
+##### 📍 useevolua.com.br
 ```
-Seu registrador: ???
 Novo nameservers (COPIAR EXATAMENTE):
-  ns-1188.awsdns-20.org
-  ns-154.awsdns-19.com
-  ns-1997.awsdns-57.co.uk
-  ns-700.awsdns-23.net
+  ns-1272.awsdns-31.org
+  ns-90.awsdns-11.com
+  ns-745.awsdns-29.net
+  ns-1552.awsdns-02.co.uk
 ```
 
-**Como:**
-- GoDaddy → Domain Settings → Nameservers → Change to Custom
-- Namecheap → Domain → Nameserver → Custom
-- RegistroBR → DNS → Nameserver
-- Outro → Procure por "DNS" ou "Nameserver"
+Onde atualizar?
+- Se em RegistroBR.br: Serviços → Meu domínio → DNS → Nameserver
+- Se em GoDaddy: Domain Settings → Nameservers → Change to Custom
+- Se em outro: procure por "Nameserver" ou "DNS"
 
-⏱️ Propaga em 5-30 min
+##### 📍 useevolua.online
+```
+Novo nameservers (COPIAR EXATAMENTE):
+  ns-1458.awsdns-54.org
+  ns-337.awsdns-42.com
+  ns-1827.awsdns-36.co.uk
+  ns-585.awsdns-09.net
+```
+
+Onde atualizar?
+- Se em Namecheap: Domain → Nameserver → Custom
+- Se em GoDaddy: Domain Settings → Nameservers
+- Se em outro: procure por "Nameserver" ou "DNS"
+
+⏱️ **Propagação**: 5-30 min após atualizar
 
 ---
 
 #### [2] Validar DNS (após 10 min)
 
-Execute na sua máquina:
-```bash
-nslookup api.useevolua.com
+Execute na sua máquina para **cada domínio**:
 
-# Esperado:
-# Server: 8.8.8.8
-# Name:   api.useevolua.com
+```bash
+# Para useevolua.com.br
+nslookup api.useevolua.com.br
+
+# Para useevolua.online  
+nslookup api.useevolua.online
+
+# Esperado em ambos:
 # Address: 18.228.183.188
 ```
 
+Se resolver para 18.228.183.188, DNS está OK ✅
+
 ---
 
-#### [3] Monitorar SSL (automático)
+#### [3] SSL ativa Automaticamente (Quando DNS propagar)
 
-Quando DNS propagar, o monitor no EC2 vai:
-1. Detectar DNS correto
+Monitor no EC2 vai:
+1. Detectar DNS correto para AMBOS os domínios
 2. Executar Certbot automaticamente
-3. Instalar SSL Let's Encrypt
-4. Testar HTTPS
+3. Instalar SSL Let's Encrypt em:
+   - api.useevolua.com.br ✅
+   - api.useevolua.online ✅
+4. Ativar HTTPS em ambos
 
 ```bash
 # Ver progresso (opcional):
 ssh -i ~/.ssh/evolua-key.pem ubuntu@18.228.183.188 \
-  "sudo journalctl -u setup-ssl.service -f"
+  "sudo journalctl -u setup-ssl-multi.service -f"
 ```
 
 Esperado ver:
 ```
-[...] ⏳ Aguardando DNS... (1/60)
-[...] ✅ DNS detectado! IP correto.
-[...] Configurando SSL com Certbot...
-[...] ✅ SSL INSTALADO COM SUCESSO!
+[...] ⏳ Aguardando api.useevolua.com.br...
+[...] ⏳ Aguardando api.useevolua.online...
+[...] ✅ DNS api.useevolua.com.br OK
+[...] ✅ DNS api.useevolua.online OK
+[...] Instalando SSL para api.useevolua.com.br...
+[...] Instalando SSL para api.useevolua.online...
+[...] ✅ SSL INSTALADO!
 ```
 
 ---
@@ -152,30 +196,27 @@ Supabase Dashboard → Settings → API → Regenerate
 ## 📊 Timeline Esperada
 
 ```
-Agora (00:10):
+Agora (00:16):
   ✅ Infrastructure deployed
-  ✅ Monitor DNS+SSL ativo
+  ✅ 2 Route53 zones criadas
+  ✅ Monitor DNS+SSL ativo para ambos domínios
 
-+5 min (00:15):
-  ⏳ Atualizar nameservers no registrador
++5 min (00:21):
+  ⏳ Atualizar nameservers nos 2 registradores
 
-+10 min (00:20):
++15 min (00:31):
   ⏳ DNS propagando
 
-+15 min (00:25):
-  ⏳ Validar DNS com nslookup
++20 min (00:36):
+  ⏳ Monitor detecta DNS ambos domínios → Executa Certbot
 
-+20 min (00:30):
-  ⏳ Monitor detecta DNS → Executa Certbot
-  ⏳ SSL sendo instalado
++25 min (00:41):
+  ✅ HTTPS ATIVADO em ambos!
+  ✅ https://api.useevolua.com.br respondendo
+  ✅ https://api.useevolua.online respondendo
 
-+23 min (00:33):
-  ✅ HTTPS ATIVADO!
-  ✅ https://api.useevolua.com respondendo
-
-+30 min (00:40):
++30 min (00:46):
   ✅ Backend pronto para deploy de código
-  ✅ Frontend pode ser configurado
 ```
 
 ---
@@ -261,13 +302,16 @@ curl -I https://api.useevolua.com/api/health
 
 ```bash
 # 1. DNS Global (após propagar)
-nslookup api.useevolua.com
+nslookup api.useevolua.com.br
+nslookup api.useevolua.online
 
-# 2. SSL Certificate
-curl -I https://api.useevolua.com
+# 2. SSL Certificates
+curl -I https://api.useevolua.com.br
+curl -I https://api.useevolua.online
 
 # 3. Health Check
-curl https://api.useevolua.com/api/health
+curl https://api.useevolua.com.br/api/health
+curl https://api.useevolua.online/api/health
 
 # 4. EC2 Status
 aws ec2 describe-instances --instance-ids i-0fe65fd681f4e7baf \
