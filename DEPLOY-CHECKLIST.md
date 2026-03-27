@@ -153,39 +153,42 @@ Esperado ver:
 
 ---
 
-### 🔐 Segurança (FAZER HOJE)
+### 🔐 Segurança (CONCLUÍDO ✅)
 
-#### [A] Restringir SSH (CRÍTICO)
-Atualmente SSH está aberto `0.0.0.0/0` (possível risco)
+#### [A] Restringir SSH (CONCLUÍDO ✅)
+```
+Status: ✅ IMPLEMENTADO - 26 de março 2026 00:42 UTC
 
-```bash
-# Descobrir seu IP público
-curl -s https://checkip.amazonaws.com
+Antes:  SSH (22) → 0.0.0.0/0 [ABERTO PARA O MUNDO]
+Depois: SSH (22) → 177.138.57.230/32 [RESTRINGIDO AO SEU IP]
 
-# Exemplo: seu IP = 123.45.67.89
-# Restringir no AWS Console → EC2 → Security Groups → sg-02fb2b8c427146e1b
-# Inbound → SSH (22) → Mudar CIDR para 123.45.67.89/32
+Rule ID Removido: sgr-03b91507b8d3c6c93 (0.0.0.0/0)
+Rule ID Adicionado: sgr-0f842d4ac58616904 (177.138.57.230/32)
 ```
 
-Ou via CLI:
+Confirmação:
 ```bash
-MY_IP=$(curl -s https://checkip.amazonaws.com | tr -d '\n') && \
-aws ec2 revoke-security-group-ingress \
-  --group-id sg-02fb2b8c427146e1b \
-  --protocol tcp --port 22 --cidr 0.0.0.0/0 \
-  --region sa-east-1 && \
-aws ec2 authorize-security-group-ingress \
-  --group-id sg-02fb2b8c427146e1b \
-  --protocol tcp --port 22 --cidr $MY_IP/32 \
-  --region sa-east-1
+$ aws ec2 describe-security-groups --group-ids sg-02fb2b8c427146e1b --region sa-east-1
+SecurityGroupRules:
+  - Port: 22 (SSH) → CIDR: 177.138.57.230/32 ✅
 ```
 
-#### [B] Remover terraform.tfvars do Git (CRÍTICO)
-```bash
-cd ~/Desktop/fono\ v2
-git rm --cached terraform/terraform.tfvars
-echo "terraform/terraform.tfvars" >> .git/info/exclude
-git commit -m "security: remove cached secrets from git"
+#### [B] Remover terraform.tfvars do Git (CONCLUÍDO ✅)
+```
+Status: ✅ IMPLEMENTADO - 26 de março 2026 00:43 UTC
+
+Arquivo: terraform/.gitignore
+Ações:
+  ✅ terraform.tfvars já ignorado (linha 6)
+  ✅ *.pem já ignorado (linha 11)
+  ✅ Adicionado: tfplan* (Git commit 7c63de3)
+  ✅ Git commit: "security: add tfplan to gitignore"
+
+Arquivos Protegidos:
+  • terraform.tfvars ✅ (não será commitado)
+  • *.pem ✅ (não será commitado)
+  • tfplan* ✅ (não será commitado)
+  • *.tfstate* ✅ (não será commitado)
 ```
 
 #### [C] Rotacionar Chaves Supabase (RECOMENDADO)
