@@ -10,19 +10,34 @@ output "backend_instance_id" {
   value       = aws_instance.backend.id
 }
 
-output "api_url" {
-  description = "URL da API backend"
-  value       = "https://api.${var.landing_domain}"
+output "api_url_br" {
+  description = "URL da API backend (.com.br)"
+  value       = "https://api.useevolua.com.br"
 }
 
-output "frontend_url" {
-  description = "URL do frontend (Vercel)"
-  value       = "https://${var.landing_domain}"
+output "api_url_online" {
+  description = "URL da API backend (.online)"
+  value       = "https://api.useevolua.online"
 }
 
-output "route53_nameservers" {
-  description = "Name servers do Route53 - configure no registrador do dominio"
-  value       = aws_route53_zone.main.name_servers
+output "frontend_url_br" {
+  description = "URL do frontend (Vercel) .com.br"
+  value       = "https://useevolua.com.br"
+}
+
+output "frontend_url_online" {
+  description = "URL do frontend (Vercel) .online"
+  value       = "https://useevolua.online"
+}
+
+output "route53_nameservers_br" {
+  description = "Name servers do Route53 (.com.br) - configure no registrador"
+  value       = aws_route53_zone.main_br.name_servers
+}
+
+output "route53_nameservers_online" {
+  description = "Name servers do Route53 (.online) - configure no registrador"
+  value       = aws_route53_zone.main_online.name_servers
 }
 
 output "ssh_command" {
@@ -34,26 +49,34 @@ output "next_steps" {
   description = "Proximos passos apos o deploy"
   value       = <<-EOT
 
-  Infraestrutura criada!
+  ✅ Infraestrutura criada!
 
-  1. Configure os Name Servers no registrador do dominio useevolua.com:
-     ${join("\n     ", aws_route53_zone.main.name_servers)}
+  DOMÍNIOS CONFIGURADOS:
+    • Frontend: useevolua.com.br + useevolua.online (Vercel)
+    • Backend: api.useevolua.com.br + api.useevolua.online (EC2)
 
-  2. Configure o dominio no Vercel:
-     - Adicione useevolua.com no painel do Vercel
-     - O DNS ja aponta para o Vercel (76.76.21.21)
+  1. Configure Name Servers (.com.br) no registrador:
+     ${join("\n     ", aws_route53_zone.main_br.name_servers)}
 
-  3. Conecte ao backend via SSH:
+  2. Configure Name Servers (.online) no registrador:
+     ${join("\n     ", aws_route53_zone.main_online.name_servers)}
+
+  3. Configure domínios no Vercel:
+     - Adicione: useevolua.com.br, www.useevolua.com.br
+     - Adicione: useevolua.online, www.useevolua.online
+     - DNS já aponta para Vercel (76.76.21.21)
+
+  4. Conecte ao backend via SSH:
      ssh -i ${var.key_name}.pem ubuntu@${aws_eip.backend.public_ip}
 
-  4. Aguarde o setup completar (~5 min):
+  5. Aguarde setup completar (~5 min):
      tail -f /var/log/user-data.log
 
-  5. Configure SSL no backend:
-     sudo certbot --nginx -d api.${var.landing_domain}
+  6. Configure SSL no backend (ambos domínios):
+     sudo certbot --nginx -d api.useevolua.com.br -d api.useevolua.online
 
-  6. Configure NEXT_PUBLIC_API_URL no Vercel:
-     https://api.${var.landing_domain}/api
+  7. Configure NEXT_PUBLIC_API_URL no Vercel:
+     https://api.useevolua.com.br/api
 
   EOT
 }

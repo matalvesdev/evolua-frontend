@@ -14,14 +14,15 @@ aws_region = "sa-east-1"
 environment = "production"
 
 # ============================================================================
-# Domínios
+# Domínios (ATUALIZADO: useevolua.com.br + useevolua.online)
 # ============================================================================
 
-# Domínio da landing page
-landing_domain = "useevolua.com"
+# Domínio da landing page (LEGADO - mantido para compatibilidade)
+# NOTA: Route53 foi migrado para useevolua.com.br + useevolua.online
+landing_domain = "useevolua.com.br"
 
 # Domínio da aplicação
-app_domain = "app.evolua.com"
+app_domain = "app.useevolua.com.br"
 
 # ============================================================================
 # EC2 Configuration
