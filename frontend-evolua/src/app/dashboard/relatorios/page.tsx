@@ -707,7 +707,7 @@ function SendReportModal({ report, onClose, onSent }: { report: Report; onClose:
 /* ─── Report Detail Modal ─── */
 function ReportDetailModal({ report, onClose, onSend }: { report: Report; onClose: () => void; onSend: () => void }) {
   const router = useRouter()
-  const { deleteReport, submitForReview, approveReport, updateReport, isDeleting, isUpdating } = useReportMutations()
+  const { deleteReport, submitForReview, approveReport, isDeleting, isUpdating } = useReportMutations()
   const { user } = useUser()
   const [confirm, setConfirm] = useState<{ action: string; title: string; message: string; label: string; color: string } | null>(null)
   const [generatingPdf, setGeneratingPdf] = useState(false)

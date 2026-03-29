@@ -16,12 +16,7 @@ interface AISuggestion {
   priority: number // lower = higher priority
 }
 
-interface RemindersPanelProps {
-  onOpenAppointmentModal?: () => void
-  onOpenReportModal?: () => void
-}
-
-export function RemindersPanel(_props?: RemindersPanelProps) {
+export function RemindersPanel() {
   const router = useRouter()
   const { tasks: reminders } = useTasks({ type: "reminder" })
   const { tasks: allTasks } = useTasks({})
@@ -29,7 +24,7 @@ export function RemindersPanel(_props?: RemindersPanelProps) {
   const { appointments: todayAppts } = useTodayAppointments()
   const { patients } = usePatients({ limit: 100, status: "active" })
   const { reports: pendingReports } = usePendingReports()
-  const [dismissed, setDismissed] = useState<Set<string>>(new Set())
+  const [dismissed] = useState<Set<string>>(new Set())
 
   const suggestions = useMemo<AISuggestion[]>(() => {
     const items: AISuggestion[] = []

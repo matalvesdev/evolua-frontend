@@ -105,7 +105,7 @@ export default function NovoPatientePage() {
   })
 
   // ViaCEP auto-fill
-  const watchedCep = form.watch("address.zipCode")
+  const watchedCep = form.watch("address.zipCode") as string | undefined
   React.useEffect(() => {
     if (!watchedCep) return
     const digits = watchedCep.replace(/\D/g, "")

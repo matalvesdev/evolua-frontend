@@ -49,7 +49,11 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   }
 
   // 3. Create Supabase server client and check session
-  let supabaseResponse = NextResponse.next({ request })
+  let supabaseResponse = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -60,18 +64,17 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
+          // Update both request cookies for getUser and response cookies for client
+          cookiesToSet.forEach(({ name, value, options }) => {
             request.cookies.set(name, value)
-          )
-          supabaseResponse = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
-          )
+          })
         },
       },
     }
   )
 
+  // This will refresh tokens if needed via middleware interceptor
   const {
     data: { user },
   } = await supabase.auth.getUser()

@@ -36,7 +36,6 @@ const statusConfig = {
 };
 
 export function AppointmentCard({
-  id,
   patientName,
   patientAvatar,
   startTime,

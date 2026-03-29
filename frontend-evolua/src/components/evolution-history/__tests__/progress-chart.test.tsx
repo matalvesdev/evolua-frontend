@@ -19,10 +19,10 @@ jest.mock('recharts', () => {
   const MockResponsiveContainer = ({ children }: { children: React.ReactNode }) => (
     <div data-testid="responsive-container">{children}</div>
   )
-  const MockLineChart = ({ children, data }: { children: React.ReactNode; data: any[] }) => (
+  const MockLineChart = ({ children, data }: { children: React.ReactNode; data: Record<string, unknown>[] }) => (
     <div data-testid="line-chart" data-points={data?.length}>{children}</div>
   )
-  const MockLine = ({ dot }: { dot?: any }) => <div data-testid="chart-line" />
+  const MockLine = ({ dot }: { dot?: React.ReactNode }) => <div data-testid="chart-line" />
   const MockXAxis = () => <div data-testid="x-axis" />
   const MockYAxis = () => <div data-testid="y-axis" />
   const MockCartesianGrid = () => <div data-testid="cartesian-grid" />
@@ -70,10 +70,10 @@ const mockFormatTooltipData = jest.fn((snapshot: GoalProgressSnapshot) => ({
 
 jest.mock('@/services/goal-history', () => ({
   chartDataFormatter: {
-    shouldGroupByWeek: (...args: any[]) => mockShouldGroupByWeek(...args),
-    groupByWeek: (...args: any[]) => mockGroupByWeek(...args),
-    format: (...args: any[]) => mockFormat(...args),
-    formatTooltipData: (...args: any[]) => mockFormatTooltipData(...args),
+    shouldGroupByWeek: (...args: Array<GoalProgressSnapshot[] | Milestone[]>) => mockShouldGroupByWeek(...args),
+    groupByWeek: (...args: Array<GoalProgressSnapshot[] | Milestone[]>) => mockGroupByWeek(...args),
+    format: (...args: Array<GoalProgressSnapshot[] | Milestone[]>) => mockFormat(...args),
+    formatTooltipData: (arg: GoalProgressSnapshot) => mockFormatTooltipData(arg),
   },
 }))
 

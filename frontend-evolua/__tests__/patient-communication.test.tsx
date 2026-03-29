@@ -19,8 +19,6 @@ import {
   getKnownCommunicationStatuses,
   sortTimelineGroupsByDate,
   isTimelineOrderedDescending,
-  channelTypeConfig,
-  communicationStatusConfig,
   channelColorFamilies,
   type ChannelType,
   type CommunicationStatus,
