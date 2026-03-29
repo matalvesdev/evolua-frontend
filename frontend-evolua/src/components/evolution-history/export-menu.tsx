@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import { GoalProgressSnapshot, Milestone, ExportFormat } from "@/types/evolution-history"
-import { ExportService } from "@/services/goal-history"
+import { exportService } from "@/services/goal-history"
 
 /** Props do componente ExportMenu */
 interface ExportMenuProps {
@@ -46,17 +46,21 @@ export function ExportMenu({ patientName, snapshots, milestones, chartRef }: Exp
     setLoading(format)
     try {
       if (format === "pdf") {
-        await ExportService.exportToPDF({
+        await exportService.exportToPDF({
           format: "pdf",
+          patientName,
+          snapshots,
+          milestones,
+          chartElement: chartRef.current || undefined,
           includeCharts: true,
           includeTimeline: true,
           includeTrendAnalysis: true,
         })
       } else if (format === "csv") {
-        ExportService.exportToCSV(snapshots)
+        exportService.exportToCSV(snapshots)
       } else if (format === "png") {
         if (chartRef.current) {
-          await ExportService.exportChartToPNG(chartRef.current)
+          await exportService.exportChartToPNG(chartRef.current)
         }
       }
       showToast("success", `Exportação em ${format.toUpperCase()} concluída.`)

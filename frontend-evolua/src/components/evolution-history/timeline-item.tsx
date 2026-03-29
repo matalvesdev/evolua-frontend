@@ -8,7 +8,7 @@ import { milestoneConfig } from '@/types/evolution-history'
  * Exibe ícone, data, descrição e progresso do milestone com cores baseadas no tipo.
  */
 export function TimelineItem({ milestone, isHighlighted, onClick }: TimelineItemProps) {
-  const config = milestoneConfig[milestone.type]
+  const config = milestoneConfig[milestone.type as keyof typeof milestoneConfig]
 
   const colorClasses = {
     green: {
@@ -37,7 +37,7 @@ export function TimelineItem({ milestone, isHighlighted, onClick }: TimelineItem
     }
   }
 
-  const colors = colorClasses[config.color]
+  const colors = colorClasses[config.color as keyof typeof colorClasses]
   const dateStr = format(milestone.date, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })
 
   return (

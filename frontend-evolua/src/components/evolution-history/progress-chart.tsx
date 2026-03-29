@@ -80,11 +80,12 @@ export function ProgressChart({
   }
 
   // Dot customizado para milestones
-  const CustomDot = (props: any) => {
-    const { cx, cy, payload } = props
+  const CustomDot = (props: Record<string, unknown>) => {
+    const { cx, cy, payload } = props as { cx: number; cy: number; payload: Record<string, unknown> & { date: Date; isMilestone?: boolean; milestoneType?: string } }
 
-    if (payload.isMilestone) {
-      const config = milestoneConfig[payload.milestoneType]
+    if (payload && payload.isMilestone) {
+      const milestoneType = payload.milestoneType as string
+      const config = milestoneConfig[milestoneType as keyof typeof milestoneConfig]
       const colorMap: Record<string, string> = {
         green: '#10b981',
         blue: '#3b82f6',

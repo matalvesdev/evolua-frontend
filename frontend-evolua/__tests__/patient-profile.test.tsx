@@ -13,13 +13,9 @@ import { test as fcTest } from "@fast-check/jest"
 import fc from "fast-check"
 import {
   getPatientStatusConfig,
-  getKnownPatientStatuses,
   getAppointmentStatusConfig,
-  getKnownAppointmentStatuses,
   getReportStatusConfig,
-  getKnownReportStatuses,
   formatReportType,
-  getKnownReportTypes,
   formatAppointmentDate,
   formatAppointmentTime,
   formatReportDate,

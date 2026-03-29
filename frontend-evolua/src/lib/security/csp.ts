@@ -50,7 +50,7 @@ export function buildCSP({ nonce, isDev }: CSPConfig): string {
     "script-src": scriptSrc,
     "style-src": "'self' 'unsafe-inline' fonts.googleapis.com",
     "style-src-elem": "'self' 'unsafe-inline' fonts.googleapis.com",
-    "img-src": "'self' data: blob: *.supabase.co lh3.googleusercontent.com",
+    "img-src": "'self' data: blob: *.supabase.co lh3.googleusercontent.com images.unsplash.com",
     "connect-src": connectSources.join(" "),
     "frame-ancestors": "'none'",
     "font-src": "'self' fonts.googleapis.com fonts.gstatic.com",

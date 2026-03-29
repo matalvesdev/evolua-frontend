@@ -192,7 +192,7 @@ export default function EditPatientPage({ params }: EditPatientPageProps) {
     )
   }
 
-  const patientName = form.watch("name")
+  const patientName = form.watch("name") as string | undefined
   const initials = getInitials(patientName || "?")
 
   return (

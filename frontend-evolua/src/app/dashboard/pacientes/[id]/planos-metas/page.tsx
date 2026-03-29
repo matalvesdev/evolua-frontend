@@ -2,12 +2,15 @@
 
 import { use } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   PatientGoalHeader,
   TherapeuticObjective,
   GoalCard,
   WeeklyActivitiesPlan,
 } from "@/components/patient-goals"
+import { usePatient } from "@/hooks/use-patients"
+import { useGoals } from "@/hooks/use-goals"
 
 interface GoalsPageProps {
   params: Promise<{ id: string }>
@@ -15,93 +18,34 @@ interface GoalsPageProps {
 
 export default function GoalsPage({ params }: GoalsPageProps) {
   const { id } = use(params)
+  const router = useRouter()
+  const { patient, loading: patientLoading } = usePatient(id)
+  const { goals, isLoading: goalsLoading } = useGoals(id)
 
-  // Mock data - substituir por dados reais do Supabase
-  const patient = {
-    name: "Ana Clara Souza",
-    image: "",
-    status: "active" as const,
-    age: 5,
-    birthDate: "12/05/2019",
-    specialty: "Terapia de Linguagem",
-    schooling: "Pré-escola",
-    startDate: "15 Ago '23",
-    overallProgress: 65,
-  }
+  // Calcular progresso geral
+  const overallProgress = goals.length > 0 ? Math.round(goals.reduce((sum, g) => sum + g.progress, 0) / goals.length) : 0
 
+  // Mock dados terapêuticos (substituir por API quando disponível)
   const therapeuticObjective = {
-    title: "Desenvolver a inteligibilidade da fala e a competência comunicativa",
-    description:
-      "O foco desta etapa do tratamento é aprimorar a articulação dos fonemas fricativos e vibrantes (/s/, /z/, /r/), permitindo que Ana Clara participe de conversas na escola e em casa com maior confiança e clareza, reduzindo episódios de frustração comunicativa.",
-    definedDate: "15/08/2023",
+    title: "Objetivo Terapêutico Principal",
+    description: "Acompanhe as metas do paciente selecionado para gerenciar o plano terapêutico.",
+    definedDate: new Date().toLocaleDateString("pt-BR"),
   }
 
-  const shortTermGoals = [
-    {
-      id: "1",
-      title: "Aquisição do Fonema /r/",
-      description:
-        "Produção correta do /r/ em encontros consonantais (ex: prato, braço) em frases simples.",
-      progress: 70,
-      status: "in-progress" as const,
-      iconName: "graphic_eq",
-      colorScheme: "purple" as const,
-      patientId: id
-    },
-    {
-      id: "2",
-      title: "Expansão de Vocabulário",
-      description:
-        "Incorporar 10 novos verbos de ação no discurso espontâneo durante as sessões lúdicas.",
-      progress: 45,
-      status: "attention" as const,
-      iconName: "record_voice_over",
-      colorScheme: "blue" as const,
-      patientId: id
-    },
-    {
-      id: "3",
-      title: "Consciência Fonológica",
-      description:
-        "Identificar rimas e aliterações em canções infantis sem auxílio visual.",
-      progress: 20,
-      status: "started" as const,
-      iconName: "psychology",
-      colorScheme: "pink" as const,
-      patientId: id
-    },
-  ]
-
+  // Atividades semanais (mock por enquanto)
   const weeklyActivities = [
     {
       id: "1",
-      title: "Jogo da Memória dos Sons",
-      description:
-        "Utilizar cartas com imagens que contenham o fonema /r/ em posição inicial. Focar na repetição da palavra ao virar a carta.",
-      location: "home" as const,
+      title: "Atividade 1",
+      description: "Descrição da atividade",
+      location: "office" as const,
       duration: "15 min",
       completed: false,
-    },
-    {
-      id: "2",
-      title: "Repetição de Frases com Apoio Visual",
-      description:
-        'Ler o livro "O Rato Roeu" e pedir para a criança completar as frases finais de cada página.',
-      location: "office" as const,
-      completed: false,
-    },
-    {
-      id: "3",
-      title: "Exercício de Sopro e Respiração",
-      description:
-        "Soprar bolinhas de algodão com canudo em labirinto desenhado no papel.",
-      location: "completed" as const,
-      completed: true,
     },
   ]
 
   const handleAddGoal = () => {
-    console.log("Adicionar nova meta")
+    router.push(`/dashboard/pacientes/${id}/planos-metas/novo`)
   }
 
   const handleAddActivity = () => {
@@ -110,6 +54,35 @@ export default function GoalsPage({ params }: GoalsPageProps) {
 
   const handleActivityToggle = (activityId: string, checked: boolean) => {
     console.log(`Atividade ${activityId} marcada como ${checked ? "concluída" : "pendente"}`)
+  }
+
+  if (patientLoading || goalsLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <span className="material-symbols-outlined animate-spin text-[#8A05BE] text-3xl">
+            progress_activity
+          </span>
+          <p className="text-gray-500 mt-3">Carregando plano terapêutico...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!patient) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="glass-panel p-8 text-center max-w-md rounded-2xl">
+          <span className="material-symbols-outlined text-5xl text-gray-300 mb-4">person_off</span>
+          <p className="text-red-600 mb-4">Paciente não encontrado</p>
+          <Link href="/dashboard/pacientes">
+            <button className="px-6 py-2 bg-[#8A05BE] text-white rounded-lg hover:bg-[#6D08AF]">
+              Voltar
+            </button>
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -137,14 +110,14 @@ export default function GoalsPage({ params }: GoalsPageProps) {
           <PatientGoalHeader
             patientId={id}
             patientName={patient.name}
-            patientImage={patient.image}
-            status={patient.status}
-            age={patient.age}
-            birthDate={patient.birthDate}
-            specialty={patient.specialty}
-            schooling={patient.schooling}
-            startDate={patient.startDate}
-            overallProgress={patient.overallProgress}
+            patientImage=""
+            status={patient.status === "on-hold" ? "inactive" : (patient.status as "active" | "inactive" | "discharged")}
+            age={patient.birthDate ? Math.floor((new Date().getTime() - new Date(patient.birthDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000)) : 0}
+            birthDate={patient.birthDate ? new Date(patient.birthDate).toLocaleDateString("pt-BR") : "—"}
+            specialty={patient.medicalHistory?.diagnosis?.[0] || "Terapia"}
+            schooling={patient.address?.city || "—"}
+            startDate={patient.createdAt ? new Date(patient.createdAt).toLocaleDateString("pt-BR") : "—"}
+            overallProgress={overallProgress}
           />
 
           {/* Therapeutic Objective */}
@@ -164,15 +137,42 @@ export default function GoalsPage({ params }: GoalsPageProps) {
                 <h3 className="text-xl font-bold text-gray-900">Metas de Curto Prazo</h3>
               </div>
               <span className="text-sm font-medium px-3 py-1 bg-white/50 rounded-full text-gray-600 border border-white/50 shadow-sm">
-                {shortTermGoals.length} metas ativas
+                {goals.length} {goals.length === 1 ? "meta ativa" : "metas ativas"}
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {shortTermGoals.map((goal) => (
-                <GoalCard key={goal.id} {...goal} />
-              ))}
-            </div>
+            {goals.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {goals.map((goal) => (
+                  <GoalCard
+                    key={goal.id}
+                    id={goal.id}
+                    title={goal.title}
+                    description={goal.description}
+                    progress={goal.progress}
+                    status={goal.status === "completed" ? "in-progress" : (goal.status as "in-progress" | "attention" | "started")}
+                    iconName="graphic_eq"
+                    colorScheme="purple"
+                    patientId={id}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                  <span className="material-symbols-outlined text-2xl text-gray-400">inbox</span>
+                </div>
+                <p className="text-gray-600 font-medium mb-2">Nenhuma meta criada ainda</p>
+                <p className="text-gray-500 text-sm mb-4">Comece adicionando uma nova meta terapêutica</p>
+                <button
+                  onClick={handleAddGoal}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#8A05BE] text-white rounded-lg hover:bg-[#6D08AF] transition-colors"
+                >
+                  <span className="material-symbols-outlined text-base">add</span>
+                  Adicionar Primeira Meta
+                </button>
+              </div>
+            )}
           </section>
 
           {/* Weekly Activities Plan */}

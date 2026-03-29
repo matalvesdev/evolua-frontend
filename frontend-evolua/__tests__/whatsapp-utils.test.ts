@@ -3,9 +3,7 @@ import {
   formatPhoneForWhatsApp,
   buildWhatsAppUrl,
   applyTemplate,
-  MESSAGE_TEMPLATES,
   type MessageTemplateType,
-  type TemplateContext,
 } from '@/lib/utils/whatsapp-utils'
 
 // ============================================================================

@@ -6,7 +6,7 @@ import { trendConfig } from '@/types/evolution-history'
  * Mostra ícone, label e taxa média de progresso semanal com cores correspondentes.
  */
 export function TrendBadge({ trend, averageWeeklyRate }: TrendBadgeProps) {
-  const config = trendConfig[trend]
+  const config = trendConfig[trend as keyof typeof trendConfig]
 
   const colorClasses = {
     green: 'bg-green-100 text-green-700 border-green-200',
@@ -16,7 +16,7 @@ export function TrendBadge({ trend, averageWeeklyRate }: TrendBadgeProps) {
 
   return (
     <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border backdrop-blur-sm">
-      <div className={`flex items-center gap-2 ${colorClasses[config.color]}`}>
+      <div className={`flex items-center gap-2 ${colorClasses[config.color as keyof typeof colorClasses]}`}>
         <span className="material-symbols-outlined text-[20px]">
           {config.icon}
         </span>
