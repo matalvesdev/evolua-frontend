@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Rocket,
   ArrowLeft,
@@ -13,117 +13,136 @@ import {
   Megaphone,
   CheckCircle,
   LayoutDashboard,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   OnboardingLayout,
   OnboardingProgress,
   OnboardingHeader,
   OnboardingMobileProgress,
   GlassCard,
-} from "@/components/onboarding"
-import { OnboardingFormField } from "@/components/onboarding/onboarding-form-field"
-import { OnboardingRadioChipWithIcon } from "@/components/onboarding/onboarding-radio-chip-with-icon"
-import { OnboardingTermsCheckbox } from "@/components/onboarding/onboarding-terms-checkbox"
-import * as authApi from "@/lib/api/auth"
+} from '@/components/onboarding';
+import { OnboardingFormField } from '@/components/onboarding/onboarding-form-field';
+import { OnboardingRadioChipWithIcon } from '@/components/onboarding/onboarding-radio-chip-with-icon';
+import { OnboardingTermsCheckbox } from '@/components/onboarding/onboarding-terms-checkbox';
+import * as authApi from '@/lib/api/auth';
 
-const CURRENT_STEP = 6
-const TOTAL_STEPS = 6
+const CURRENT_STEP = 6;
+const TOTAL_STEPS = 6;
 
 const REFERRAL_OPTIONS = [
   {
-    id: "instagram",
+    id: 'instagram',
     icon: <Camera className="size-5" />,
-    label: "Instagram / Facebook",
+    label: 'Instagram / Facebook',
   },
   {
-    id: "google",
+    id: 'google',
     icon: <Search className="size-5" />,
-    label: "Google / Pesquisa",
+    label: 'Google / Pesquisa',
   },
   {
-    id: "indicacao",
+    id: 'indicacao',
     icon: <Users className="size-5" />,
-    label: "Indicação de Colega",
+    label: 'Indicação de Colega',
   },
   {
-    id: "evento",
+    id: 'evento',
     icon: <Mic className="size-5" />,
-    label: "Evento / Congresso",
+    label: 'Evento / Congresso',
   },
   {
-    id: "outro",
+    id: 'outro',
     icon: <MoreHorizontal className="size-5" />,
-    label: "Outro",
+    label: 'Outro',
     fullWidth: true,
   },
-]
+];
 
 export default function ConclusaoPage() {
-  const router = useRouter()
-  const [referral, setReferral] = useState<string | null>(null)
-  const [termsAccepted, setTermsAccepted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [referral, setReferral] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleBack = () => {
-    router.push("/auth/cadastro/objetivos")
-  }
+    router.push('/auth/cadastro/objetivos');
+  };
 
   const handleFinish = async () => {
     if (!termsAccepted) {
-      setError("Você precisa aceitar os termos de uso para continuar")
-      return
+      setError('Você precisa aceitar os termos de uso para continuar');
+      return;
     }
 
-    setError(null)
-    setIsLoading(true)
+    setError(null);
+    setIsLoading(true);
 
     try {
       // Recuperar dados do localStorage
-      const onboardingDataStr = localStorage.getItem("onboarding_data")
-      
+      const onboardingDataStr = localStorage.getItem('onboarding_data');
+
       if (!onboardingDataStr) {
-        setError("Dados do cadastro não encontrados. Por favor, volte e preencha os dados pessoais.")
-        setIsLoading(false)
-        return
+        setError(
+          'Dados do cadastro não encontrados. Por favor, volte e preencha os dados pessoais.'
+        );
+        setIsLoading(false);
+        return;
       }
 
-      const onboardingData = JSON.parse(onboardingDataStr)
+      const onboardingData = JSON.parse(onboardingDataStr);
 
       // Validar dados obrigatórios
       if (!onboardingData.email || !onboardingData.password || !onboardingData.full_name) {
-        setError("Dados obrigatórios não foram preenchidos. Por favor, volte e complete o cadastro.")
-        setIsLoading(false)
-        return
+        setError(
+          'Dados obrigatórios não foram preenchidos. Por favor, volte e complete o cadastro.'
+        );
+        setIsLoading(false);
+        return;
       }
 
-      console.log("Criando conta com os dados:", {
+      console.log('Criando conta com os dados:', {
         name: onboardingData.full_name,
         email: onboardingData.email,
         phone: onboardingData.phone,
-      })
+      });
 
       // Criar conta no Supabase
       await authApi.register(
         onboardingData.email,
         onboardingData.password,
-        onboardingData.full_name,
-      )
+        onboardingData.full_name
+      );
 
-      console.log("Conta criada com sucesso")
+      // Persistir dados de onboarding no perfil do usuário
+      const areasAtuacao: string[] = onboardingData.specialties ?? [];
+      const objetivos: string[] = [
+        ...(onboardingData.challenge ? [onboardingData.challenge] : []),
+        ...(onboardingData.priorities ?? []),
+      ];
+
+      await authApi.updateProfile({
+        phone: onboardingData.phone,
+        areasAtuacao,
+        objetivos,
+        onboardingCompleted: true,
+        onboardingStep: 6,
+      });
+
+      console.log('Conta criada com sucesso');
 
       // Limpar localStorage
-      localStorage.removeItem("onboarding_data")
+      localStorage.removeItem('onboarding_data');
 
       // Redirecionar para o dashboard
-      window.location.href = "/dashboard"
+      window.location.href = '/dashboard';
     } catch (err) {
-      console.error("Erro ao criar conta:", err)
-      setError("Erro ao criar conta. Por favor, tente novamente.")
-      setIsLoading(false)
+      console.error('Erro ao criar conta:', err);
+      setError('Erro ao criar conta. Por favor, tente novamente.');
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <OnboardingLayout
@@ -140,18 +159,18 @@ export default function ConclusaoPage() {
       floatingBadges={[
         {
           icon: <CheckCircle className="size-3.5 text-green-600" />,
-          label: "100% Configurado",
-          iconBgClassName: "bg-green-100",
-          className: "absolute top-[25%] right-[20%]",
-          animationDuration: "4.5s",
+          label: '100% Configurado',
+          iconBgClassName: 'bg-green-100',
+          className: 'absolute top-[25%] right-[20%]',
+          animationDuration: '4.5s',
         },
         {
           icon: <LayoutDashboard className="size-3.5 text-[#8A05BE]" />,
-          label: "Seu Espaço Pronto",
-          iconBgClassName: "bg-[#8A05BE]/10",
-          className: "absolute bottom-[25%] left-[20%]",
-          animationDuration: "5.5s",
-          animationDelay: "1.5s",
+          label: 'Seu Espaço Pronto',
+          iconBgClassName: 'bg-[#8A05BE]/10',
+          className: 'absolute bottom-[25%] left-[20%]',
+          animationDuration: '5.5s',
+          animationDelay: '1.5s',
         },
       ]}
     >
@@ -186,7 +205,7 @@ export default function ConclusaoPage() {
                 label={option.label}
                 selected={referral === option.id}
                 onClick={() => setReferral(option.id)}
-                className={option.fullWidth ? "sm:col-span-2" : ""}
+                className={option.fullWidth ? 'sm:col-span-2' : ''}
               />
             ))}
           </div>
@@ -194,24 +213,21 @@ export default function ConclusaoPage() {
 
         {/* Terms Checkbox */}
         <div className="pt-2 border-t border-slate-100">
-          <OnboardingTermsCheckbox
-            checked={termsAccepted}
-            onChange={setTermsAccepted}
-          >
-            Li e concordo com os{" "}
+          <OnboardingTermsCheckbox checked={termsAccepted} onChange={setTermsAccepted}>
+            Li e concordo com os{' '}
             <a
               href="#"
               className="text-[#8A05BE] font-bold hover:underline decoration-2 underline-offset-2"
             >
               Termos de Uso
-            </a>{" "}
-            e{" "}
+            </a>{' '}
+            e{' '}
             <a
               href="#"
               className="text-[#8A05BE] font-bold hover:underline decoration-2 underline-offset-2"
             >
               Política de Privacidade
-            </a>{" "}
+            </a>{' '}
             da Evolua.
           </OnboardingTermsCheckbox>
         </div>
@@ -234,16 +250,13 @@ export default function ConclusaoPage() {
           size="lg"
           className="w-full md:w-auto bg-[#8A05BE] hover:bg-[#8A05BE]/90 text-white font-bold py-4 px-8 md:px-10 rounded-full shadow-[0_8px_25px_rgba(138,5,190,0.3)] hover:shadow-[0_10px_30px_rgba(138,5,190,0.5)] transform hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-3 text-lg h-auto justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
         >
-          {isLoading ? "Criando sua conta..." : "Acessar Meu Dashboard Personalizado"}
+          {isLoading ? 'Criando sua conta...' : 'Acessar Meu Dashboard Personalizado'}
           <Rocket className="size-5" />
         </Button>
       </div>
 
       {/* Mobile Progress Dots */}
-      <OnboardingMobileProgress
-        currentStep={CURRENT_STEP}
-        totalSteps={TOTAL_STEPS}
-      />
+      <OnboardingMobileProgress currentStep={CURRENT_STEP} totalSteps={TOTAL_STEPS} />
     </OnboardingLayout>
-  )
+  );
 }

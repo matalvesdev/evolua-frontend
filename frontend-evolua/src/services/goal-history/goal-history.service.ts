@@ -1,17 +1,46 @@
-import { createClient } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/client';
 import type {
   GoalProgressSnapshot,
   Milestone,
   CreateSnapshotDTO,
-  CreateMilestoneDTO
-} from '@/types/evolution-history'
+  CreateMilestoneDTO,
+} from '@/types/evolution-history';
+
+interface SnapshotRpcRow {
+  snapshot_id: string;
+  progress: number;
+  created_at: string;
+  therapist_id: string;
+  notes?: string;
+  variation?: number;
+  days_since_last?: number;
+}
+
+interface SnapshotDbRow {
+  id: string;
+  goal_id: string;
+  progress: number;
+  created_at: string;
+  therapist_id: string;
+  notes?: string;
+}
+
+interface MilestoneDbRow {
+  id: string;
+  goal_id: string;
+  type: string;
+  date: string;
+  progress: number;
+  description: string;
+  created_at: string;
+}
 
 /**
  * Serviço para gerenciar histórico de progresso de metas terapêuticas
  * Responsável por toda comunicação com backend Supabase
  */
 export class GoalHistoryService {
-  private supabase = createClient()
+  private supabase = createClient();
 
   /**
    * Busca histórico de snapshots de uma meta específica
@@ -29,24 +58,23 @@ export class GoalHistoryService {
       const { data, error } = await this.supabase.rpc('get_goal_history_with_stats', {
         p_goal_id: goalId,
         p_start_date: startDate?.toISOString() || null,
-        p_end_date: endDate?.toISOString() || null
-      })
+        p_end_date: endDate?.toISOString() || null,
+      });
 
-      if (error) throw error
+      if (error) throw error;
 
-      return (data || []).map((row: any) => ({
-        id: row.snapshot_id,
+      return (data || []).map((row: SnapshotRpcRow) => ({
         goalId,
         progress: row.progress,
         createdAt: new Date(row.created_at),
         therapistId: row.therapist_id,
         notes: row.notes,
         variation: row.variation,
-        daysSinceLast: row.days_since_last
-      }))
+        daysSinceLast: row.days_since_last,
+      }));
     } catch (error) {
-      console.error('Error fetching goal history:', error)
-      throw new Error('Não foi possível carregar o histórico da meta')
+      console.error('Error fetching goal history:', error);
+      throw new Error('Não foi possível carregar o histórico da meta');
     }
   }
 
@@ -61,36 +89,36 @@ export class GoalHistoryService {
       const { data: goals, error: goalsError } = await this.supabase
         .from('patient_goals')
         .select('id')
-        .eq('patient_id', patientId)
+        .eq('patient_id', patientId);
 
-      if (goalsError) throw goalsError
+      if (goalsError) throw goalsError;
 
       if (!goals || goals.length === 0) {
-        return []
+        return [];
       }
 
-      const goalIds = goals.map(g => g.id)
+      const goalIds = goals.map((g) => g.id);
 
       // Buscar snapshots de todas as metas
       const { data, error } = await this.supabase
         .from('goal_progress_history')
         .select('*')
         .in('goal_id', goalIds)
-        .order('created_at', { ascending: false })
+        .order('created_at', { ascending: false });
 
-      if (error) throw error
+      if (error) throw error;
 
-      return (data || []).map((row: any) => ({
+      return (data || []).map((row: SnapshotDbRow) => ({
         id: row.id,
         goalId: row.goal_id,
         progress: row.progress,
         createdAt: new Date(row.created_at),
         therapistId: row.therapist_id,
-        notes: row.notes
-      }))
+        notes: row.notes,
+      }));
     } catch (error) {
-      console.error('Error fetching patient history:', error)
-      throw new Error('Não foi possível carregar o histórico do paciente')
+      console.error('Error fetching patient history:', error);
+      throw new Error('Não foi possível carregar o histórico do paciente');
     }
   }
 
@@ -105,22 +133,22 @@ export class GoalHistoryService {
         .from('goal_milestones')
         .select('*')
         .eq('goal_id', goalId)
-        .order('date', { ascending: false })
+        .order('date', { ascending: false });
 
-      if (error) throw error
+      if (error) throw error;
 
-      return (data || []).map((row: any) => ({
+      return (data || []).map((row: MilestoneDbRow) => ({
         id: row.id,
         goalId: row.goal_id,
         type: row.type,
         date: new Date(row.date),
         progress: row.progress,
         description: row.description,
-        createdAt: new Date(row.created_at)
-      }))
+        createdAt: new Date(row.created_at),
+      }));
     } catch (error) {
-      console.error('Error fetching milestones:', error)
-      throw new Error('Não foi possível carregar os marcos da meta')
+      console.error('Error fetching milestones:', error);
+      throw new Error('Não foi possível carregar os marcos da meta');
     }
   }
 
@@ -137,12 +165,12 @@ export class GoalHistoryService {
           goal_id: dto.goalId,
           progress: dto.progress,
           therapist_id: dto.therapistId,
-          notes: dto.notes
+          notes: dto.notes,
         })
         .select()
-        .single()
+        .single();
 
-      if (error) throw error
+      if (error) throw error;
 
       return {
         id: data.id,
@@ -150,11 +178,11 @@ export class GoalHistoryService {
         progress: data.progress,
         createdAt: new Date(data.created_at),
         therapistId: data.therapist_id,
-        notes: data.notes
-      }
+        notes: data.notes,
+      };
     } catch (error) {
-      console.error('Error creating snapshot:', error)
-      throw new Error('Não foi possível criar o snapshot de progresso')
+      console.error('Error creating snapshot:', error);
+      throw new Error('Não foi possível criar o snapshot de progresso');
     }
   }
 
@@ -172,12 +200,12 @@ export class GoalHistoryService {
           type: dto.type,
           date: dto.date.toISOString(),
           progress: dto.progress,
-          description: dto.description
+          description: dto.description,
         })
         .select()
-        .single()
+        .single();
 
-      if (error) throw error
+      if (error) throw error;
 
       return {
         id: data.id,
@@ -186,14 +214,14 @@ export class GoalHistoryService {
         date: new Date(data.date),
         progress: data.progress,
         description: data.description,
-        createdAt: new Date(data.created_at)
-      }
+        createdAt: new Date(data.created_at),
+      };
     } catch (error) {
-      console.error('Error creating milestone:', error)
-      throw new Error('Não foi possível criar o marco')
+      console.error('Error creating milestone:', error);
+      throw new Error('Não foi possível criar o marco');
     }
   }
 }
 
 // Exportar instância singleton
-export const goalHistoryService = new GoalHistoryService()
+export const goalHistoryService = new GoalHistoryService();

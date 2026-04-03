@@ -1,8 +1,11 @@
 /**
  * Tests for ExportService
  */
-import { ExportService } from '../export.service'
-import type { GoalProgressSnapshot, Milestone, ExportOptions } from '@/types/evolution-history'
+import { ExportService } from '../export.service';
+import type { GoalProgressSnapshot, Milestone, ExportOptions } from '@/types/evolution-history';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import Papa from 'papaparse';
 
 // ============================================================================
 // Mocks
@@ -16,8 +19,8 @@ jest.mock('jspdf', () => {
     text: jest.fn(),
     setFontSize: jest.fn(),
     output: jest.fn().mockReturnValue(new Blob(['pdf'], { type: 'application/pdf' })),
-  }))
-})
+  }));
+});
 
 // Mock html2canvas
 jest.mock('html2canvas', () =>
@@ -25,12 +28,12 @@ jest.mock('html2canvas', () =>
     toDataURL: jest.fn().mockReturnValue('data:image/png;base64,abc123'),
     toBlob: jest.fn(),
   })
-)
+);
 
 // Mock papaparse
 jest.mock('papaparse', () => ({
   unparse: jest.fn().mockReturnValue('Data,Nome da Meta,Progresso,Variação,Observações\n'),
-}))
+}));
 
 // ============================================================================
 // Helpers
@@ -44,7 +47,7 @@ function makeSnapshot(
   notes?: string,
   variation?: number
 ): GoalProgressSnapshot {
-  return { id, goalId, progress, createdAt: date, therapistId: 'therapist-1', notes, variation }
+  return { id, goalId, progress, createdAt: date, therapistId: 'therapist-1', notes, variation };
 }
 
 function makeMilestone(id: string, goalId: string, progress: number, date: Date): Milestone {
@@ -56,7 +59,7 @@ function makeMilestone(id: string, goalId: string, progress: number, date: Date)
     progress,
     description: 'Meta iniciada',
     createdAt: date,
-  }
+  };
 }
 
 // ============================================================================
@@ -64,16 +67,12 @@ function makeMilestone(id: string, goalId: string, progress: number, date: Date)
 // ============================================================================
 
 describe('ExportService', () => {
-  let service: ExportService
+  let service: ExportService;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let jsPDFInstance: any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let html2canvas: any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let Papa: any
+  let jsPDFInstance: any;
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.clearAllMocks();
 
     // Re-setup jsPDF mock instance
     jsPDFInstance = {
@@ -82,23 +81,20 @@ describe('ExportService', () => {
       text: jest.fn(),
       setFontSize: jest.fn(),
       output: jest.fn().mockReturnValue(new Blob(['pdf content'], { type: 'application/pdf' })),
-    }
-    const jsPDF = require('jspdf')
-    jsPDF.mockImplementation(() => jsPDFInstance)
+    };
+    jest.mocked(jsPDF).mockImplementation(() => jsPDFInstance);
 
     // html2canvas mock
-    html2canvas = require('html2canvas')
-    html2canvas.mockResolvedValue({
+    jest.mocked(html2canvas).mockResolvedValue({
       toDataURL: jest.fn().mockReturnValue('data:image/png;base64,abc123'),
       toBlob: jest.fn(),
-    })
+    });
 
     // Papa mock
-    Papa = require('papaparse')
-    Papa.unparse.mockReturnValue('Data,Nome da Meta,Progresso,Variação,Observações\n')
+    jest.mocked(Papa).unparse.mockReturnValue('Data,Nome da Meta,Progresso,Variação,Observações\n');
 
-    service = new ExportService()
-  })
+    service = new ExportService();
+  });
 
   // ==========================================================================
   // exportToPDF
@@ -109,7 +105,7 @@ describe('ExportService', () => {
       includeCharts: false,
       includeTimeline: false,
       includeTrendAnalysis: false,
-    }
+    };
 
     it('retorna um Blob quando chamado com opções mínimas (Req 7.2)', async () => {
       const result = await service.exportToPDF({
@@ -117,10 +113,10 @@ describe('ExportService', () => {
         patientName: 'João Silva',
         snapshots: [],
         milestones: [],
-      })
+      });
 
-      expect(result).toBeInstanceOf(Blob)
-    })
+      expect(result).toBeInstanceOf(Blob);
+    });
 
     it('inclui nome do paciente no documento (Req 7.2)', async () => {
       await service.exportToPDF({
@@ -128,11 +124,13 @@ describe('ExportService', () => {
         patientName: 'Maria Souza',
         snapshots: [],
         milestones: [],
-      })
+      });
 
-      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0])
-      expect(textCalls.some((t: unknown) => typeof t === 'string' && t.includes('Maria Souza'))).toBe(true)
-    })
+      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0]);
+      expect(
+        textCalls.some((t: unknown) => typeof t === 'string' && t.includes('Maria Souza'))
+      ).toBe(true);
+    });
 
     it('inclui nome da meta quando goalName é fornecido (Req 7.2)', async () => {
       await service.exportToPDF({
@@ -141,15 +139,17 @@ describe('ExportService', () => {
         goalName: 'Comunicação verbal',
         snapshots: [],
         milestones: [],
-      })
+      });
 
-      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0])
-      expect(textCalls.some((t: unknown) => typeof t === 'string' && t.includes('Comunicação verbal'))).toBe(true)
-    })
+      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0]);
+      expect(
+        textCalls.some((t: unknown) => typeof t === 'string' && t.includes('Comunicação verbal'))
+      ).toBe(true);
+    });
 
     it('inclui período no documento quando dateRange é fornecido (Req 7.2)', async () => {
-      const start = new Date(2024, 0, 1)  // 1 Jan 2024 local time
-      const end = new Date(2024, 5, 30)   // 30 Jun 2024 local time
+      const start = new Date(2024, 0, 1); // 1 Jan 2024 local time
+      const end = new Date(2024, 5, 30); // 30 Jun 2024 local time
 
       await service.exportToPDF({
         ...baseOptions,
@@ -157,16 +157,16 @@ describe('ExportService', () => {
         snapshots: [],
         milestones: [],
         dateRange: { start, end },
-      })
+      });
 
-      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0])
+      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0]);
       // The period string should appear somewhere in the text calls
-      const allText = textCalls.filter((t: unknown) => typeof t === 'string').join(' ')
-      expect(allText).toContain('2024')
-    })
+      const allText = textCalls.filter((t: unknown) => typeof t === 'string').join(' ');
+      expect(allText).toContain('2024');
+    });
 
     it('captura gráfico quando includeCharts=true e chartElement é fornecido (Req 7.2)', async () => {
-      const chartElement = {} as HTMLElement
+      const chartElement = {} as HTMLElement;
 
       await service.exportToPDF({
         ...baseOptions,
@@ -175,14 +175,14 @@ describe('ExportService', () => {
         snapshots: [],
         milestones: [],
         chartElement,
-      })
+      });
 
-      expect(html2canvas).toHaveBeenCalledWith(chartElement)
-      expect(jsPDFInstance.addImage).toHaveBeenCalled()
-    })
+      expect(html2canvas).toHaveBeenCalledWith(chartElement);
+      expect(jsPDFInstance.addImage).toHaveBeenCalled();
+    });
 
     it('não captura gráfico quando includeCharts=false (Req 7.2)', async () => {
-      const chartElement = {} as HTMLElement
+      const chartElement = {} as HTMLElement;
 
       await service.exportToPDF({
         ...baseOptions,
@@ -191,15 +191,15 @@ describe('ExportService', () => {
         snapshots: [],
         milestones: [],
         chartElement,
-      })
+      });
 
-      expect(html2canvas).not.toHaveBeenCalled()
-      expect(jsPDFInstance.addImage).not.toHaveBeenCalled()
-    })
+      expect(html2canvas).not.toHaveBeenCalled();
+      expect(jsPDFInstance.addImage).not.toHaveBeenCalled();
+    });
 
     it('inclui timeline de marcos quando includeTimeline=true (Req 7.2)', async () => {
-      const date = new Date('2024-03-15')
-      const milestones = [makeMilestone('m1', 'goal-1', 0, date)]
+      const date = new Date('2024-03-15');
+      const milestones = [makeMilestone('m1', 'goal-1', 0, date)];
 
       await service.exportToPDF({
         ...baseOptions,
@@ -207,15 +207,17 @@ describe('ExportService', () => {
         patientName: 'João',
         snapshots: [],
         milestones,
-      })
+      });
 
-      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0])
-      expect(textCalls.some((t: unknown) => typeof t === 'string' && t.includes('Marcos Importantes'))).toBe(true)
-    })
+      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0]);
+      expect(
+        textCalls.some((t: unknown) => typeof t === 'string' && t.includes('Marcos Importantes'))
+      ).toBe(true);
+    });
 
     it('não inclui timeline quando includeTimeline=false (Req 7.2)', async () => {
-      const date = new Date('2024-03-15')
-      const milestones = [makeMilestone('m1', 'goal-1', 0, date)]
+      const date = new Date('2024-03-15');
+      const milestones = [makeMilestone('m1', 'goal-1', 0, date)];
 
       await service.exportToPDF({
         ...baseOptions,
@@ -223,33 +225,36 @@ describe('ExportService', () => {
         patientName: 'João',
         snapshots: [],
         milestones,
-      })
+      });
 
-      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0])
-      expect(textCalls.every((t: unknown) => typeof t !== 'string' || !t.includes('Marcos Importantes'))).toBe(true)
-    })
+      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0]);
+      expect(
+        textCalls.every((t: unknown) => typeof t !== 'string' || !t.includes('Marcos Importantes'))
+      ).toBe(true);
+    });
 
     it('inclui tabela de snapshots quando há dados (Req 7.2)', async () => {
-      const snapshots = [
-        makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01'), undefined, 10),
-      ]
+      const snapshots = [makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01'), undefined, 10)];
 
       await service.exportToPDF({
         ...baseOptions,
         patientName: 'João',
         snapshots,
         milestones: [],
-      })
+      });
 
-      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0])
-      expect(textCalls.some((t: unknown) => typeof t === 'string' && t.includes('Histórico de Progresso'))).toBe(true)
-    })
+      const textCalls = jsPDFInstance.text.mock.calls.map((c: unknown[]) => c[0]);
+      expect(
+        textCalls.some(
+          (t: unknown) => typeof t === 'string' && t.includes('Histórico de Progresso')
+        )
+      ).toBe(true);
+    });
 
     it('lança erro quando jsPDF falha', async () => {
-      const jsPDF = require('jspdf')
-      jsPDF.mockImplementationOnce(() => {
-        throw new Error('jsPDF error')
-      })
+      jest.mocked(jsPDF).mockImplementationOnce(() => {
+        throw new Error('jsPDF error');
+      });
       await expect(
         service.exportToPDF({
           ...baseOptions,
@@ -257,234 +262,231 @@ describe('ExportService', () => {
           snapshots: [],
           milestones: [],
         })
-      ).rejects.toThrow('Não foi possível gerar o PDF')
-    })
-  })
+      ).rejects.toThrow('Não foi possível gerar o PDF');
+    });
+  });
 
   // ==========================================================================
   // exportToCSV
   // ==========================================================================
   describe('exportToCSV', () => {
     it('retorna um Blob com tipo text/csv (Req 7.3)', async () => {
-      const snapshots = [
-        makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01')),
-      ]
+      const snapshots = [makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01'))];
 
-      const result = await service.exportToCSV(snapshots)
+      const result = await service.exportToCSV(snapshots);
 
-      expect(result).toBeInstanceOf(Blob)
-      expect(result.type).toContain('text/csv')
-    })
+      expect(result).toBeInstanceOf(Blob);
+      expect(result.type).toContain('text/csv');
+    });
 
     it('chama Papa.unparse com as colunas obrigatórias (Req 7.3)', async () => {
       const snapshots = [
         makeSnapshot('s1', 'goal-1', 75, new Date('2024-03-15'), 'Boa evolução', 5),
-      ]
+      ];
 
-      await service.exportToCSV(snapshots)
+      await service.exportToCSV(snapshots);
 
-      expect(Papa.unparse).toHaveBeenCalledTimes(1)
-      const [data] = Papa.unparse.mock.calls[0]
-      expect(data).toHaveLength(1)
+      expect(Papa.unparse).toHaveBeenCalledTimes(1);
+      const [data] = Papa.unparse.mock.calls[0];
+      expect(data).toHaveLength(1);
 
-      const row = data[0]
-      expect(row).toHaveProperty('Data')
-      expect(row).toHaveProperty('Nome da Meta')
-      expect(row).toHaveProperty('Progresso')
-      expect(row).toHaveProperty('Variação')
-      expect(row).toHaveProperty('Observações')
-    })
+      const row = data[0];
+      expect(row).toHaveProperty('Data');
+      expect(row).toHaveProperty('Nome da Meta');
+      expect(row).toHaveProperty('Progresso');
+      expect(row).toHaveProperty('Variação');
+      expect(row).toHaveProperty('Observações');
+    });
 
     it('mapeia progresso corretamente (Req 7.3)', async () => {
-      const snapshots = [
-        makeSnapshot('s1', 'goal-1', 80, new Date('2024-03-01')),
-      ]
+      const snapshots = [makeSnapshot('s1', 'goal-1', 80, new Date('2024-03-01'))];
 
-      await service.exportToCSV(snapshots)
+      await service.exportToCSV(snapshots);
 
-      const [data] = Papa.unparse.mock.calls[0]
-      expect(data[0]['Progresso']).toBe(80)
-    })
+      const [data] = Papa.unparse.mock.calls[0];
+      expect(data[0]['Progresso']).toBe(80);
+    });
 
     it('mapeia variação como 0 quando não definida (Req 7.3)', async () => {
       const snapshots = [
         makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01'), undefined, undefined),
-      ]
+      ];
 
-      await service.exportToCSV(snapshots)
+      await service.exportToCSV(snapshots);
 
-      const [data] = Papa.unparse.mock.calls[0]
-      expect(data[0]['Variação']).toBe(0)
-    })
+      const [data] = Papa.unparse.mock.calls[0];
+      expect(data[0]['Variação']).toBe(0);
+    });
 
     it('mapeia observações como string vazia quando não definidas (Req 7.3)', async () => {
-      const snapshots = [
-        makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01'), undefined),
-      ]
+      const snapshots = [makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01'), undefined)];
 
-      await service.exportToCSV(snapshots)
+      await service.exportToCSV(snapshots);
 
-      const [data] = Papa.unparse.mock.calls[0]
-      expect(data[0]['Observações']).toBe('')
-    })
+      const [data] = Papa.unparse.mock.calls[0];
+      expect(data[0]['Observações']).toBe('');
+    });
 
     it('mapeia observações quando definidas (Req 7.3)', async () => {
       const snapshots = [
         makeSnapshot('s1', 'goal-1', 50, new Date('2024-03-01'), 'Progresso excelente'),
-      ]
+      ];
 
-      await service.exportToCSV(snapshots)
+      await service.exportToCSV(snapshots);
 
-      const [data] = Papa.unparse.mock.calls[0]
-      expect(data[0]['Observações']).toBe('Progresso excelente')
-    })
+      const [data] = Papa.unparse.mock.calls[0];
+      expect(data[0]['Observações']).toBe('Progresso excelente');
+    });
 
     it('processa múltiplos snapshots (Req 7.3)', async () => {
       const snapshots = [
         makeSnapshot('s1', 'goal-1', 20, new Date('2024-01-01')),
         makeSnapshot('s2', 'goal-1', 40, new Date('2024-02-01')),
         makeSnapshot('s3', 'goal-1', 60, new Date('2024-03-01')),
-      ]
+      ];
 
-      await service.exportToCSV(snapshots)
+      await service.exportToCSV(snapshots);
 
-      const [data] = Papa.unparse.mock.calls[0]
-      expect(data).toHaveLength(3)
-    })
+      const [data] = Papa.unparse.mock.calls[0];
+      expect(data).toHaveLength(3);
+    });
 
     it('retorna Blob vazio para array de snapshots vazio (Req 7.3)', async () => {
-      const result = await service.exportToCSV([])
+      const result = await service.exportToCSV([]);
 
-      expect(result).toBeInstanceOf(Blob)
-      expect(Papa.unparse).toHaveBeenCalledWith([], expect.any(Object))
-    })
+      expect(result).toBeInstanceOf(Blob);
+      expect(Papa.unparse).toHaveBeenCalledWith([], expect.any(Object));
+    });
 
     it('lança erro quando Papa.unparse falha', async () => {
       Papa.unparse.mockImplementationOnce(() => {
-        throw new Error('Papa error')
-      })
+        throw new Error('Papa error');
+      });
 
-      await expect(service.exportToCSV([makeSnapshot('s1', 'goal-1', 50, new Date())])).rejects.toThrow(
-        'Não foi possível gerar o CSV'
-      )
-    })
-  })
+      await expect(
+        service.exportToCSV([makeSnapshot('s1', 'goal-1', 50, new Date())])
+      ).rejects.toThrow('Não foi possível gerar o CSV');
+    });
+  });
 
   // ==========================================================================
   // exportChartToPNG
   // ==========================================================================
   describe('exportChartToPNG', () => {
     it('retorna um Blob quando html2canvas resolve (Req 7.4)', async () => {
-      const fakeBlob = new Blob(['png'], { type: 'image/png' })
+      const fakeBlob = new Blob(['png'], { type: 'image/png' });
       html2canvas.mockResolvedValue({
         toDataURL: jest.fn().mockReturnValue('data:image/png;base64,abc123'),
         toBlob: jest.fn().mockImplementation((cb: (b: Blob) => void) => cb(fakeBlob)),
-      })
+      });
 
-      const chartElement = {} as HTMLElement
-      const result = await service.exportChartToPNG(chartElement)
+      const chartElement = {} as HTMLElement;
+      const result = await service.exportChartToPNG(chartElement);
 
-      expect(result).toBeInstanceOf(Blob)
-    })
+      expect(result).toBeInstanceOf(Blob);
+    });
 
     it('chama html2canvas com scale=2 para alta resolução (Req 7.4)', async () => {
-      const fakeBlob = new Blob(['png'], { type: 'image/png' })
+      const fakeBlob = new Blob(['png'], { type: 'image/png' });
       html2canvas.mockResolvedValue({
         toDataURL: jest.fn(),
         toBlob: jest.fn().mockImplementation((cb: (b: Blob) => void) => cb(fakeBlob)),
-      })
+      });
 
-      const chartElement = {} as HTMLElement
-      await service.exportChartToPNG(chartElement)
+      const chartElement = {} as HTMLElement;
+      await service.exportChartToPNG(chartElement);
 
-      expect(html2canvas).toHaveBeenCalledWith(chartElement, expect.objectContaining({ scale: 2 }))
-    })
+      expect(html2canvas).toHaveBeenCalledWith(chartElement, expect.objectContaining({ scale: 2 }));
+    });
 
     it('lança erro quando html2canvas falha', async () => {
-      html2canvas.mockRejectedValueOnce(new Error('canvas error'))
+      html2canvas.mockRejectedValueOnce(new Error('canvas error'));
 
-      const chartElement = {} as HTMLElement
+      const chartElement = {} as HTMLElement;
       await expect(service.exportChartToPNG(chartElement)).rejects.toThrow(
         'Não foi possível capturar o gráfico'
-      )
-    })
+      );
+    });
 
     it('lança erro quando toBlob retorna null', async () => {
       html2canvas.mockResolvedValue({
         toDataURL: jest.fn(),
         toBlob: jest.fn().mockImplementation((cb: (b: Blob | null) => void) => cb(null)),
-      })
+      });
 
-      const chartElement = {} as HTMLElement
-      await expect(service.exportChartToPNG(chartElement)).rejects.toThrow()
-    })
-  })
+      const chartElement = {} as HTMLElement;
+      await expect(service.exportChartToPNG(chartElement)).rejects.toThrow();
+    });
+  });
 
   // ==========================================================================
   // generateFilename
   // ==========================================================================
   describe('generateFilename', () => {
     it('inclui nome do paciente no filename (Req 7.5)', () => {
-      const filename = service.generateFilename('João Silva', 'pdf')
-      expect(filename).toContain('jo_o_silva')
-    })
+      const filename = service.generateFilename('João Silva', 'pdf');
+      expect(filename).toContain('jo_o_silva');
+    });
 
     it('inclui extensão correta para PDF (Req 7.5)', () => {
-      const filename = service.generateFilename('Paciente', 'pdf')
-      expect(filename).toMatch(/\.pdf$/)
-    })
+      const filename = service.generateFilename('Paciente', 'pdf');
+      expect(filename).toMatch(/\.pdf$/);
+    });
 
     it('inclui extensão correta para CSV (Req 7.5)', () => {
-      const filename = service.generateFilename('Paciente', 'csv')
-      expect(filename).toMatch(/\.csv$/)
-    })
+      const filename = service.generateFilename('Paciente', 'csv');
+      expect(filename).toMatch(/\.csv$/);
+    });
 
     it('inclui extensão correta para PNG (Req 7.5)', () => {
-      const filename = service.generateFilename('Paciente', 'png')
-      expect(filename).toMatch(/\.png$/)
-    })
+      const filename = service.generateFilename('Paciente', 'png');
+      expect(filename).toMatch(/\.png$/);
+    });
 
     it('inclui período no filename quando dateRange é fornecido (Req 7.5)', () => {
-      const start = new Date(2024, 0, 15)  // 15 Jan 2024 local time
-      const end = new Date(2024, 5, 30)    // 30 Jun 2024 local time
+      const start = new Date(2024, 0, 15); // 15 Jan 2024 local time
+      const end = new Date(2024, 5, 30); // 30 Jun 2024 local time
 
-      const filename = service.generateFilename('Paciente', 'pdf', { start, end })
+      const filename = service.generateFilename('Paciente', 'pdf', { start, end });
 
-      expect(filename).toContain('20240115')
-      expect(filename).toContain('20240630')
-    })
+      expect(filename).toContain('20240115');
+      expect(filename).toContain('20240630');
+    });
 
     it('não inclui período quando dateRange não é fornecido (Req 7.5)', () => {
-      const filename = service.generateFilename('Paciente', 'pdf')
+      const filename = service.generateFilename('Paciente', 'pdf');
       // Sem dateRange, não deve ter padrão de data YYYYMMDD-YYYYMMDD
-      expect(filename).not.toMatch(/\d{8}-\d{8}/)
-    })
+      expect(filename).not.toMatch(/\d{8}-\d{8}/);
+    });
 
     it('sanitiza caracteres especiais do nome do paciente (Req 7.5)', () => {
-      const filename = service.generateFilename('Ana Lívia Ção', 'csv')
+      const filename = service.generateFilename('Ana Lívia Ção', 'csv');
       // Deve conter apenas letras, números e underscores
-      const namePart = filename.replace(/^historico_/, '').replace(/(_\d+)?\.csv$/, '').replace(/_\d{8}-\d{8}/, '')
-      expect(namePart).toMatch(/^[a-z0-9_]+$/)
-    })
+      const namePart = filename
+        .replace(/^historico_/, '')
+        .replace(/(_\d+)?\.csv$/, '')
+        .replace(/_\d{8}-\d{8}/, '');
+      expect(namePart).toMatch(/^[a-z0-9_]+$/);
+    });
 
     it('começa com prefixo "historico_" (Req 7.5)', () => {
-      const filename = service.generateFilename('Paciente', 'pdf')
-      expect(filename).toMatch(/^historico_/)
-    })
+      const filename = service.generateFilename('Paciente', 'pdf');
+      expect(filename).toMatch(/^historico_/);
+    });
 
     it('inclui timestamp para formatos não-PNG (Req 7.5)', () => {
-      const before = Date.now()
-      const filename = service.generateFilename('Paciente', 'pdf')
-      const after = Date.now()
+      const before = Date.now();
+      const filename = service.generateFilename('Paciente', 'pdf');
+      const after = Date.now();
 
       // Extrai o timestamp do filename
-      const match = filename.match(/_(\d+)\.pdf$/)
-      expect(match).not.toBeNull()
-      const ts = parseInt(match![1], 10)
-      expect(ts).toBeGreaterThanOrEqual(before)
-      expect(ts).toBeLessThanOrEqual(after)
-    })
-  })
+      const match = filename.match(/_(\d+)\.pdf$/);
+      expect(match).not.toBeNull();
+      const ts = parseInt(match![1], 10);
+      expect(ts).toBeGreaterThanOrEqual(before);
+      expect(ts).toBeLessThanOrEqual(after);
+    });
+  });
 
   // ==========================================================================
   // downloadBlob
@@ -495,15 +497,15 @@ describe('ExportService', () => {
         href: '',
         download: '',
         click: jest.fn(),
-      }
-      const mockCreateObjectURL = jest.fn().mockReturnValue('blob:http://localhost/fake')
-      const mockRevokeObjectURL = jest.fn()
-      const mockAppendChild = jest.fn()
-      const mockRemoveChild = jest.fn()
+      };
+      const mockCreateObjectURL = jest.fn().mockReturnValue('blob:http://localhost/fake');
+      const mockRevokeObjectURL = jest.fn();
+      const mockAppendChild = jest.fn();
+      const mockRemoveChild = jest.fn();
 
       // Mock global document and URL
-      const originalDocument = global.document
-      const originalURL = global.URL
+      const originalDocument = global.document;
+      const originalURL = global.URL;
 
       Object.defineProperty(global, 'document', {
         value: {
@@ -512,24 +514,32 @@ describe('ExportService', () => {
         },
         writable: true,
         configurable: true,
-      })
+      });
       Object.defineProperty(global, 'URL', {
         value: { createObjectURL: mockCreateObjectURL, revokeObjectURL: mockRevokeObjectURL },
         writable: true,
         configurable: true,
-      })
+      });
 
-      const blob = new Blob(['test'], { type: 'text/plain' })
-      service.downloadBlob(blob, 'test.txt')
+      const blob = new Blob(['test'], { type: 'text/plain' });
+      service.downloadBlob(blob, 'test.txt');
 
-      expect(mockCreateObjectURL).toHaveBeenCalledWith(blob)
-      expect(mockLink.download).toBe('test.txt')
-      expect(mockLink.click).toHaveBeenCalled()
-      expect(mockRevokeObjectURL).toHaveBeenCalled()
+      expect(mockCreateObjectURL).toHaveBeenCalledWith(blob);
+      expect(mockLink.download).toBe('test.txt');
+      expect(mockLink.click).toHaveBeenCalled();
+      expect(mockRevokeObjectURL).toHaveBeenCalled();
 
       // Restore
-      Object.defineProperty(global, 'document', { value: originalDocument, writable: true, configurable: true })
-      Object.defineProperty(global, 'URL', { value: originalURL, writable: true, configurable: true })
-    })
-  })
-})
+      Object.defineProperty(global, 'document', {
+        value: originalDocument,
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(global, 'URL', {
+        value: originalURL,
+        writable: true,
+        configurable: true,
+      });
+    });
+  });
+});
