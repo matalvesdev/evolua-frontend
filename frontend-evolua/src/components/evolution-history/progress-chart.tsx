@@ -10,8 +10,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import type { TooltipProps } from 'recharts';
-import type { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import type {
@@ -24,14 +22,16 @@ import { chartDataFormatter } from '@/services/goal-history';
 import { milestoneConfig } from '@/types/evolution-history';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
-interface CustomTooltipProps extends TooltipProps<ValueType, NameType> {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{ payload: Record<string, unknown> }>;
   snapshots: GoalProgressSnapshot[];
 }
 
 function CustomTooltip({ active, payload, snapshots }: CustomTooltipProps) {
   if (!active || !payload || !payload.length) return null;
 
-  const data = payload[0].payload;
+  const data = payload[0].payload as { date: Date; isMilestone?: boolean };
   const snapshot = snapshots.find(
     (s) => Math.abs(s.createdAt.getTime() - data.date.getTime()) < 60000
   );

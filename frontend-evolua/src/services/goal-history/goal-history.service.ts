@@ -140,7 +140,7 @@ export class GoalHistoryService {
       return (data || []).map((row: MilestoneDbRow) => ({
         id: row.id,
         goalId: row.goal_id,
-        type: row.type,
+        type: row.type as Milestone['type'],
         date: new Date(row.date),
         progress: row.progress,
         description: row.description,

@@ -14,7 +14,7 @@ import { useGoalMutations } from "@/hooks/use-goals"
 const createGoalSchema = z.object({
   title: z.string().min(5, "Título deve ter no mínimo 5 caracteres").max(100),
   description: z.string().min(10, "Descrição deve ter no mínimo 10 caracteres").max(500),
-  status: z.enum(["started", "in-progress", "completed"]),
+  priority: z.enum(["low", "medium", "high", "urgent"]),
 })
 
 type CreateGoalFormData = z.infer<typeof createGoalSchema>
@@ -35,7 +35,7 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
   } = useForm<CreateGoalFormData>({
     resolver: zodResolver(createGoalSchema),
     defaultValues: {
-      status: "started",
+      priority: "medium",
     },
   })
 
@@ -46,8 +46,7 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
         patientId,
         title: data.title,
         description: data.description,
-        status: data.status,
-        progress: 0,
+        priority: data.priority,
       })
 
       // Voltar para a página de metas após criar
@@ -89,19 +88,20 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
         {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>}
       </div>
 
-      {/* Status */}
+      {/* Prioridade */}
       <div>
-        <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
-          Status Inicial
+        <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-2">
+          Prioridade
         </label>
         <select
-          id="status"
-          {...register("status")}
+          id="priority"
+          {...register("priority")}
           className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8A05BE] focus:border-transparent transition-all"
         >
-          <option value="started">Iniciado</option>
-          <option value="in-progress">Em Progresso</option>
-          <option value="completed">Concluído</option>
+          <option value="low">Baixa</option>
+          <option value="medium">Média</option>
+          <option value="high">Alta</option>
+          <option value="urgent">Urgente</option>
         </select>
       </div>
 
