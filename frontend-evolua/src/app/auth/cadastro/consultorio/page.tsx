@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
   ArrowLeft,
@@ -12,26 +12,26 @@ import {
   Users,
   Video,
   MapPin,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   OnboardingLayout,
   OnboardingProgress,
   OnboardingHeader,
   OnboardingMobileProgress,
   GlassCard,
-} from "@/components/onboarding"
-import { OnboardingFormField } from "@/components/onboarding/onboarding-form-field"
-import { OnboardingRadioCard } from "@/components/onboarding/onboarding-radio-card"
-import { OnboardingChipRadio } from "@/components/onboarding/onboarding-chip-radio"
-import { OnboardingRadioOption } from "@/components/onboarding/onboarding-radio-option"
+} from '@/components/onboarding';
+import { OnboardingFormField } from '@/components/onboarding/onboarding-form-field';
+import { OnboardingRadioCard } from '@/components/onboarding/onboarding-radio-card';
+import { OnboardingChipRadio } from '@/components/onboarding/onboarding-chip-radio';
+import { OnboardingRadioOption } from '@/components/onboarding/onboarding-radio-option';
 
-const CURRENT_STEP = 4
-const TOTAL_STEPS = 6
+const CURRENT_STEP = 4;
+const TOTAL_STEPS = 6;
 
 const ROUTINE_OPTIONS = [
   {
-    id: "presencial",
+    id: 'presencial',
     icon: <Building2 className="size-7" />,
     label: (
       <>
@@ -42,7 +42,7 @@ const ROUTINE_OPTIONS = [
     ),
   },
   {
-    id: "hibrido",
+    id: 'hibrido',
     icon: <Network className="size-7" />,
     label: (
       <>
@@ -53,7 +53,7 @@ const ROUTINE_OPTIONS = [
     ),
   },
   {
-    id: "online",
+    id: 'online',
     icon: <Laptop className="size-7" />,
     label: (
       <>
@@ -63,32 +63,37 @@ const ROUTINE_OPTIONS = [
       </>
     ),
   },
-]
+];
 
 const PATIENT_COUNT_OPTIONS = [
-  { id: "1-10", label: "1 - 10 pacientes" },
-  { id: "11-30", label: "11 - 30 pacientes" },
-  { id: "30+", label: "30+ pacientes" },
-]
+  { id: '1-10', label: '1 - 10 pacientes' },
+  { id: '11-30', label: '11 - 30 pacientes' },
+  { id: '30+', label: '30+ pacientes' },
+];
 
 const TEAM_OPTIONS = [
-  { id: "sozinha", label: "Trabalho sozinha" },
-  { id: "equipe", label: "Tenho equipe/sócios" },
-]
+  { id: 'sozinha', label: 'Trabalho sozinha' },
+  { id: 'equipe', label: 'Tenho equipe/sócios' },
+];
 
 export default function ConsultorioPage() {
-  const router = useRouter()
-  const [routine, setRoutine] = useState("presencial")
-  const [patientCount, setPatientCount] = useState<string | null>(null)
-  const [team, setTeam] = useState("sozinha")
+  const router = useRouter();
+  const [routine, setRoutine] = useState('presencial');
+  const [patientCount, setPatientCount] = useState<string | null>(null);
+  const [team, setTeam] = useState('sozinha');
 
   const handleBack = () => {
-    router.push("/auth/cadastro/atuacao")
-  }
+    router.push('/auth/cadastro/atuacao');
+  };
 
   const handleContinue = () => {
-    router.push("/auth/cadastro/objetivos")
-  }
+    const existing = JSON.parse(localStorage.getItem('onboarding_data') || '{}');
+    localStorage.setItem(
+      'onboarding_data',
+      JSON.stringify({ ...existing, routine, patientCount, team })
+    );
+    router.push('/auth/cadastro/objetivos');
+  };
 
   return (
     <OnboardingLayout
@@ -105,18 +110,18 @@ export default function ConsultorioPage() {
       floatingBadges={[
         {
           icon: <Video className="size-3.5 text-green-600" />,
-          label: "Online",
-          iconBgClassName: "bg-green-100",
-          className: "absolute top-[28%] right-[18%]",
-          animationDuration: "4s",
+          label: 'Online',
+          iconBgClassName: 'bg-green-100',
+          className: 'absolute top-[28%] right-[18%]',
+          animationDuration: '4s',
         },
         {
           icon: <MapPin className="size-3.5 text-[#8A05BE]" />,
-          label: "Presencial",
-          iconBgClassName: "bg-[#8A05BE]/10",
-          className: "absolute bottom-[28%] left-[18%]",
-          animationDuration: "6s",
-          animationDelay: "2s",
+          label: 'Presencial',
+          iconBgClassName: 'bg-[#8A05BE]/10',
+          className: 'absolute bottom-[28%] left-[18%]',
+          animationDuration: '6s',
+          animationDelay: '2s',
         },
       ]}
     >
@@ -132,10 +137,7 @@ export default function ConsultorioPage() {
       {/* Form Card */}
       <GlassCard className="text-left items-stretch gap-8">
         {/* Routine Selection */}
-        <OnboardingFormField
-          label="Rotina de Atendimentos"
-          icon={<Clock className="size-4" />}
-        >
+        <OnboardingFormField label="Rotina de Atendimentos" icon={<Clock className="size-4" />}>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
             {ROUTINE_OPTIONS.map((option) => (
               <OnboardingRadioCard
@@ -150,10 +152,7 @@ export default function ConsultorioPage() {
         </OnboardingFormField>
 
         {/* Patient Count Selection */}
-        <OnboardingFormField
-          label="Pacientes por semana"
-          icon={<Users className="size-4" />}
-        >
+        <OnboardingFormField label="Pacientes por semana" icon={<Users className="size-4" />}>
           <div className="flex flex-wrap gap-3 mt-2">
             {PATIENT_COUNT_OPTIONS.map((option) => (
               <OnboardingChipRadio
@@ -167,10 +166,7 @@ export default function ConsultorioPage() {
         </OnboardingFormField>
 
         {/* Team Structure Selection */}
-        <OnboardingFormField
-          label="Estrutura"
-          icon={<Users className="size-4" />}
-        >
+        <OnboardingFormField label="Estrutura" icon={<Users className="size-4" />}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
             {TEAM_OPTIONS.map((option) => (
               <OnboardingRadioOption
@@ -206,10 +202,7 @@ export default function ConsultorioPage() {
       </div>
 
       {/* Mobile Progress Dots */}
-      <OnboardingMobileProgress
-        currentStep={CURRENT_STEP}
-        totalSteps={TOTAL_STEPS}
-      />
+      <OnboardingMobileProgress currentStep={CURRENT_STEP} totalSteps={TOTAL_STEPS} />
     </OnboardingLayout>
-  )
+  );
 }

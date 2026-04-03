@@ -14,12 +14,24 @@ import { createClient } from '@/lib/supabase/client'
 
 const mockCreateClient = createClient as jest.MockedFunction<typeof createClient>
 
+type MockClient = ReturnType<typeof createClient>
+
+function buildFromMock(fn: jest.Mock): MockClient {
+  return { from: fn } as unknown as MockClient
+}
+
+type MockClient = ReturnType<typeof createClient>
+
+function buildFromMock(fn: jest.Mock): MockClient {
+  return { from: fn } as unknown as MockClient
+}
+
 // Helpers para construir o mock do Supabase com encadeamento fluente
 function buildRpcMock(result: { data: unknown; error: unknown }) {
   return { rpc: jest.fn().mockResolvedValue(result) }
 }
 
-function buildChainMock(result: { data: unknown; error: unknown }) {
+function buildChainMock(result: { data: unknown; error: unknown }): MockClient {
   const chain: Record<string, jest.Mock> = {}
   const terminal = jest.fn().mockResolvedValue(result)
 
@@ -61,7 +73,7 @@ describe('GoalHistoryService.fetchGoalHistory', () => {
       }
     ]
 
-    mockCreateClient.mockReturnValue(buildRpcMock({ data: rpcData, error: null }) as any)
+    mockCreateClient.mockReturnValue(buildRpcMock({ data: rpcData, error: null }))
     service = new GoalHistoryService()
 
     const result = await service.fetchGoalHistory('goal-123')
@@ -80,7 +92,7 @@ describe('GoalHistoryService.fetchGoalHistory', () => {
   })
 
   it('retorna array vazio quando não há dados', async () => {
-    mockCreateClient.mockReturnValue(buildRpcMock({ data: null, error: null }) as any)
+    mockCreateClient.mockReturnValue(buildRpcMock({ data: null, error: null }))
     service = new GoalHistoryService()
 
     const result = await service.fetchGoalHistory('goal-empty')
@@ -90,7 +102,7 @@ describe('GoalHistoryService.fetchGoalHistory', () => {
 
   it('lança erro com mensagem amigável quando goalId é inválido (erro do Supabase)', async () => {
     mockCreateClient.mockReturnValue(
-      buildRpcMock({ data: null, error: { message: 'invalid goal id' } }) as any
+      buildRpcMock({ data: null, error: { message: 'invalid goal id' } })
     )
     service = new GoalHistoryService()
 
@@ -101,7 +113,7 @@ describe('GoalHistoryService.fetchGoalHistory', () => {
 
   it('passa startDate e endDate como ISO string para o RPC', async () => {
     const rpcMock = buildRpcMock({ data: [], error: null })
-    mockCreateClient.mockReturnValue(rpcMock as any)
+    mockCreateClient.mockReturnValue(rpcMock)
     service = new GoalHistoryService()
 
     const start = new Date('2024-01-01T00:00:00Z')
@@ -118,7 +130,7 @@ describe('GoalHistoryService.fetchGoalHistory', () => {
 
   it('passa null para datas quando não fornecidas', async () => {
     const rpcMock = buildRpcMock({ data: [], error: null })
-    mockCreateClient.mockReturnValue(rpcMock as any)
+    mockCreateClient.mockReturnValue(rpcMock)
     service = new GoalHistoryService()
 
     await service.fetchGoalHistory('goal-123')
@@ -179,7 +191,7 @@ describe('GoalHistoryService.fetchPatientHistory', () => {
         })
       })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const result = await service.fetchPatientHistory('patient-123')
@@ -197,7 +209,7 @@ describe('GoalHistoryService.fetchPatientHistory', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const result = await service.fetchPatientHistory('patient-sem-metas')
@@ -212,7 +224,7 @@ describe('GoalHistoryService.fetchPatientHistory', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const result = await service.fetchPatientHistory('patient-null')
@@ -227,7 +239,7 @@ describe('GoalHistoryService.fetchPatientHistory', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     await expect(service.fetchPatientHistory('patient-erro')).rejects.toThrow(
@@ -253,7 +265,7 @@ describe('GoalHistoryService.fetchPatientHistory', () => {
         })
       })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     await expect(service.fetchPatientHistory('patient-123')).rejects.toThrow(
@@ -290,7 +302,7 @@ describe('GoalHistoryService.createSnapshot', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const dto = {
@@ -329,7 +341,7 @@ describe('GoalHistoryService.createSnapshot', () => {
     })
     const fromMock = jest.fn().mockReturnValue({ insert: insertMock })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     await service.createSnapshot({ goalId: 'goal-abc', progress: 30, therapistId: 'therapist-2' })
@@ -354,7 +366,7 @@ describe('GoalHistoryService.createSnapshot', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     await expect(
@@ -380,7 +392,7 @@ describe('GoalHistoryService.createSnapshot', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const result = await service.createSnapshot({
@@ -434,7 +446,7 @@ describe('GoalHistoryService.fetchMilestones', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const result = await service.fetchMilestones('goal-123')
@@ -460,7 +472,7 @@ describe('GoalHistoryService.fetchMilestones', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const result = await service.fetchMilestones('goal-empty')
@@ -476,7 +488,7 @@ describe('GoalHistoryService.fetchMilestones', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     await expect(service.fetchMilestones('goal-erro')).rejects.toThrow(
@@ -514,7 +526,7 @@ describe('GoalHistoryService.createMilestone', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     const dto = {
@@ -556,7 +568,7 @@ describe('GoalHistoryService.createMilestone', () => {
     })
     const fromMock = jest.fn().mockReturnValue({ insert: insertMock })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     await service.createMilestone({
@@ -585,7 +597,7 @@ describe('GoalHistoryService.createMilestone', () => {
       })
     })
 
-    mockCreateClient.mockReturnValue({ from: fromMock } as any)
+    mockCreateClient.mockReturnValue(buildFromMock(fromMock))
     service = new GoalHistoryService()
 
     await expect(

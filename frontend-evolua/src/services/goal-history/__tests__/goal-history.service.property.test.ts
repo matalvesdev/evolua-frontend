@@ -20,6 +20,18 @@ import { createClient } from '@/lib/supabase/client'
 
 const mockCreateClient = createClient as jest.MockedFunction<typeof createClient>
 
+type MockClient = ReturnType<typeof createClient>
+
+function buildFromMock(fn: jest.Mock): MockClient {
+  return { from: fn } as unknown as MockClient
+}
+
+type MockClient = ReturnType<typeof createClient>
+
+function buildFromMock(fn: jest.Mock): MockClient {
+  return { from: fn } as unknown as MockClient
+}
+
 // ============================================================================
 // Geradores de dados aleatórios
 // ============================================================================
@@ -92,7 +104,7 @@ describe('Property 1: Persistência de Snapshots (Req 1.1, 1.2)', () => {
       const input = generateValidSnapshotInput()
       const { fromMock } = buildInsertMock(input)
 
-      mockCreateClient.mockReturnValue({ from: fromMock } as any)
+      mockCreateClient.mockReturnValue(buildFromMock(fromMock))
       const service = new GoalHistoryService()
 
       const snapshot = await service.createSnapshot(input)
@@ -128,7 +140,7 @@ describe('Property 1: Persistência de Snapshots (Req 1.1, 1.2)', () => {
       }
 
       const { fromMock } = buildInsertMock(input)
-      mockCreateClient.mockReturnValue({ from: fromMock } as any)
+      mockCreateClient.mockReturnValue(buildFromMock(fromMock))
       const service = new GoalHistoryService()
 
       const snapshot = await service.createSnapshot(input)
@@ -149,7 +161,7 @@ describe('Property 1: Persistência de Snapshots (Req 1.1, 1.2)', () => {
       }
 
       const { fromMock } = buildInsertMock(input)
-      mockCreateClient.mockReturnValue({ from: fromMock } as any)
+      mockCreateClient.mockReturnValue(buildFromMock(fromMock))
       const service = new GoalHistoryService()
 
       const snapshot = await service.createSnapshot(input)
@@ -168,7 +180,7 @@ describe('Property 1: Persistência de Snapshots (Req 1.1, 1.2)', () => {
       }
 
       const { fromMock } = buildInsertMock(input)
-      mockCreateClient.mockReturnValue({ from: fromMock } as any)
+      mockCreateClient.mockReturnValue(buildFromMock(fromMock))
       const service = new GoalHistoryService()
 
       const snapshot = await service.createSnapshot(input)
@@ -198,7 +210,7 @@ describe('Property 1: Persistência de Snapshots (Req 1.1, 1.2)', () => {
       })
       const fromMock = jest.fn().mockReturnValue({ insert: insertMock })
 
-      mockCreateClient.mockReturnValue({ from: fromMock } as any)
+      mockCreateClient.mockReturnValue(buildFromMock(fromMock))
       const service = new GoalHistoryService()
 
       await service.createSnapshot(input)

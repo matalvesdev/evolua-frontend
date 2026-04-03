@@ -66,7 +66,7 @@ function makeRawRows(count: number) {
 /** Configura o mock do Supabase para retornar os dados fornecidos */
 function setupRpcMock(data: unknown[] | null, error: unknown = null) {
   const mockRpc = jest.fn().mockResolvedValue({ data, error })
-  mockCreateClient.mockReturnValue({ rpc: mockRpc, from: jest.fn() } as any)
+  mockCreateClient.mockReturnValue({ rpc: mockRpc, from: jest.fn() } as unknown as ReturnType<typeof createClient>)
   return mockRpc
 }
 

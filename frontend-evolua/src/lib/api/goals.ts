@@ -3,60 +3,72 @@
  * Communicates with NestJS backend endpoints for patient goals management
  */
 
-import { api } from "./client"
+import { api } from './client';
+
+export type GoalStatus = 'in_progress' | 'completed' | 'on_hold' | 'abandoned';
+export type GoalPriority = 'low' | 'medium' | 'high' | 'urgent';
 
 export interface CreateGoalInput {
-  patientId: string
-  title: string
-  description: string
-  status?: "started" | "in-progress" | "completed"
-  progress?: number
+  patientId: string;
+  title: string;
+  description?: string;
+  targetDate?: string;
+  priority?: GoalPriority;
 }
 
 export interface UpdateGoalInput {
-  title?: string
-  description?: string
-  progress?: number
-  status?: "started" | "in-progress" | "completed"
+  title?: string;
+  description?: string;
+  targetDate?: string;
+  status?: GoalStatus;
+  priority?: GoalPriority;
 }
 
 export interface GoalResponse {
-  id: string
-  patientId: string
-  title: string
-  description: string
-  progress: number
-  status: "started" | "in-progress" | "completed"
-  createdAt: string
-  updatedAt: string
+  id: string;
+  clinicId: string;
+  patientId: string;
+  therapistId: string;
+  title: string;
+  description?: string;
+  status: GoalStatus;
+  priority: GoalPriority;
+  progress: number;
+  startDate: string;
+  targetDate?: string;
+  completedAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface GoalsListResponse {
-  data: GoalResponse[]
-  total: number
-  skip: number
-  take: number
+  data: GoalResponse[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 export interface ProgressEntry {
-  id: string
-  goalId: string
-  progress: number
-  note?: string
-  createdAt: string
+  id: string;
+  goalId: string;
+  therapistId: string;
+  progress: number;
+  notes?: string;
+  createdAt: string;
 }
 
 /**
  * Criar novo objetivo terapêutico (meta)
  */
 export async function createGoal(input: CreateGoalInput): Promise<GoalResponse> {
-  return api.post<GoalResponse>("/patient-goals", {
+  return api.post<GoalResponse>('/patient-goals', {
     patientId: input.patientId,
     title: input.title,
     description: input.description,
-    status: input.status || "started",
-    progress: input.progress || 0,
-  })
+    targetDate: input.targetDate,
+    priority: input.priority ?? 'medium',
+  });
 }
 
 /**
@@ -64,43 +76,43 @@ export async function createGoal(input: CreateGoalInput): Promise<GoalResponse> 
  */
 export async function listGoals(
   patientId: string,
-  options?: { status?: string; skip?: number; take?: number }
+  options?: { status?: string; page?: number; limit?: number }
 ): Promise<GoalsListResponse> {
-  const params = new URLSearchParams()
-  params.append("patientId", patientId)
-  if (options?.status) params.append("status", options.status)
-  if (options?.skip) params.append("skip", String(options.skip))
-  if (options?.take) params.append("take", String(options.take))
+  const params = new URLSearchParams();
+  params.append('patientId', patientId);
+  if (options?.status) params.append('status', options.status);
+  if (options?.page) params.append('page', String(options.page));
+  if (options?.limit) params.append('limit', String(options.limit));
 
-  return api.get<GoalsListResponse>(`/patient-goals?${params.toString()}`)
+  return api.get<GoalsListResponse>(`/patient-goals?${params.toString()}`);
 }
 
 /**
  * Buscar meta específica
  */
 export async function getGoal(goalId: string): Promise<GoalResponse> {
-  return api.get<GoalResponse>(`/patient-goals/${goalId}`)
+  return api.get<GoalResponse>(`/patient-goals/${goalId}`);
 }
 
 /**
  * Atualizar meta
  */
 export async function updateGoal(goalId: string, input: UpdateGoalInput): Promise<GoalResponse> {
-  return api.patch<GoalResponse>(`/patient-goals/${goalId}`, input)
+  return api.patch<GoalResponse>(`/patient-goals/${goalId}`, input);
 }
 
 /**
  * Deletar meta
  */
 export async function deleteGoal(goalId: string): Promise<void> {
-  await api.delete(`/patient-goals/${goalId}`)
+  await api.delete(`/patient-goals/${goalId}`);
 }
 
 /**
- * Completar meta
+ * Completar meta (endpoint dedicado)
  */
-export async function completeGoal(goalId: string): Promise<GoalResponse> {
-  return api.patch<GoalResponse>(`/patient-goals/${goalId}`, { status: "completed", progress: 100 })
+export async function completeGoal(goalId: string, notes?: string): Promise<GoalResponse> {
+  return api.patch<GoalResponse>(`/patient-goals/${goalId}/complete`, { notes });
 }
 
 /**
@@ -109,17 +121,17 @@ export async function completeGoal(goalId: string): Promise<GoalResponse> {
 export async function addGoalProgress(
   goalId: string,
   progress: number,
-  note?: string
+  notes?: string
 ): Promise<ProgressEntry> {
   return api.post<ProgressEntry>(`/patient-goals/${goalId}/progress`, {
     progress,
-    note,
-  })
+    notes,
+  });
 }
 
 /**
  * Obter histórico de progresso
  */
 export async function getGoalProgress(goalId: string): Promise<ProgressEntry[]> {
-  return api.get<ProgressEntry[]>(`/patient-goals/${goalId}/progress`)
+  return api.get<ProgressEntry[]>(`/patient-goals/${goalId}/progress`);
 }

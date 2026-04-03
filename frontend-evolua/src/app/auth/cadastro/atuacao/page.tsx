@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
   ArrowLeft,
@@ -13,25 +13,25 @@ import {
   UserRound,
   LayoutGrid,
   PenLine,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   OnboardingLayout,
   OnboardingProgress,
   OnboardingHeader,
   OnboardingMobileProgress,
   GlassCard,
-} from "@/components/onboarding"
-import { OnboardingFormField } from "@/components/onboarding/onboarding-form-field"
-import { OnboardingInput } from "@/components/onboarding/onboarding-input"
-import { OnboardingCheckboxCard } from "@/components/onboarding/onboarding-checkbox-card"
+} from '@/components/onboarding';
+import { OnboardingFormField } from '@/components/onboarding/onboarding-form-field';
+import { OnboardingInput } from '@/components/onboarding/onboarding-input';
+import { OnboardingCheckboxCard } from '@/components/onboarding/onboarding-checkbox-card';
 
-const CURRENT_STEP = 3
-const TOTAL_STEPS = 6
+const CURRENT_STEP = 3;
+const TOTAL_STEPS = 6;
 
 const SPECIALTIES = [
   {
-    id: "infantil",
+    id: 'infantil',
     icon: <Baby className="size-7" />,
     label: (
       <>
@@ -41,7 +41,7 @@ const SPECIALTIES = [
     ),
   },
   {
-    id: "neuro",
+    id: 'neuro',
     icon: <Brain className="size-7" />,
     label: (
       <>
@@ -51,7 +51,7 @@ const SPECIALTIES = [
     ),
   },
   {
-    id: "voz",
+    id: 'voz',
     icon: <Mic className="size-7" />,
     label: (
       <>
@@ -61,7 +61,7 @@ const SPECIALTIES = [
     ),
   },
   {
-    id: "audiologia",
+    id: 'audiologia',
     icon: <Ear className="size-7" />,
     label: (
       <>
@@ -72,7 +72,7 @@ const SPECIALTIES = [
     ),
   },
   {
-    id: "motricidade",
+    id: 'motricidade',
     icon: <Smile className="size-7" />,
     label: (
       <>
@@ -83,7 +83,7 @@ const SPECIALTIES = [
     ),
   },
   {
-    id: "adulto",
+    id: 'adulto',
     icon: <UserRound className="size-7" />,
     label: (
       <>
@@ -92,28 +92,29 @@ const SPECIALTIES = [
       </>
     ),
   },
-]
+];
 
 export default function AtuacaoPage() {
-  const router = useRouter()
-  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([
-    "infantil",
-  ])
-  const [otherSpecialty, setOtherSpecialty] = useState("")
+  const router = useRouter();
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>(['infantil']);
+  const [otherSpecialty, setOtherSpecialty] = useState('');
 
   const handleSpecialtyChange = (id: string, checked: boolean) => {
-    setSelectedSpecialties((prev) =>
-      checked ? [...prev, id] : prev.filter((s) => s !== id)
-    )
-  }
+    setSelectedSpecialties((prev) => (checked ? [...prev, id] : prev.filter((s) => s !== id)));
+  };
 
   const handleBack = () => {
-    router.push("/auth/cadastro/dados-pessoais")
-  }
+    router.push('/auth/cadastro/dados-pessoais');
+  };
 
   const handleContinue = () => {
-    router.push("/auth/cadastro/consultorio")
-  }
+    const existing = JSON.parse(localStorage.getItem('onboarding_data') || '{}');
+    const specialties = otherSpecialty.trim()
+      ? [...selectedSpecialties, otherSpecialty.trim()]
+      : selectedSpecialties;
+    localStorage.setItem('onboarding_data', JSON.stringify({ ...existing, specialties }));
+    router.push('/auth/cadastro/consultorio');
+  };
 
   return (
     <OnboardingLayout
@@ -130,26 +131,26 @@ export default function AtuacaoPage() {
       floatingBadges={[
         {
           icon: <Brain className="size-3.5 text-indigo-600" />,
-          label: "TEA / CAA",
-          iconBgClassName: "bg-indigo-100",
-          className: "absolute top-[28%] right-[20%]",
-          animationDuration: "4s",
+          label: 'TEA / CAA',
+          iconBgClassName: 'bg-indigo-100',
+          className: 'absolute top-[28%] right-[20%]',
+          animationDuration: '4s',
         },
         {
           icon: <Baby className="size-3.5 text-pink-500" />,
-          label: "Infantil",
-          iconBgClassName: "bg-pink-100",
-          className: "absolute bottom-[35%] left-[20%]",
-          animationDuration: "5s",
-          animationDelay: "1s",
+          label: 'Infantil',
+          iconBgClassName: 'bg-pink-100',
+          className: 'absolute bottom-[35%] left-[20%]',
+          animationDuration: '5s',
+          animationDelay: '1s',
         },
         {
           icon: <Ear className="size-3.5 text-amber-600" />,
-          label: "Audiologia",
-          iconBgClassName: "bg-amber-100",
-          className: "absolute top-[50%] left-[15%]",
-          animationDuration: "6s",
-          animationDelay: "0.5s",
+          label: 'Audiologia',
+          iconBgClassName: 'bg-amber-100',
+          className: 'absolute top-[50%] left-[15%]',
+          animationDuration: '6s',
+          animationDelay: '0.5s',
         },
       ]}
     >
@@ -177,19 +178,14 @@ export default function AtuacaoPage() {
                 icon={specialty.icon}
                 label={specialty.label}
                 checked={selectedSpecialties.includes(specialty.id)}
-                onChange={(checked) =>
-                  handleSpecialtyChange(specialty.id, checked)
-                }
+                onChange={(checked) => handleSpecialtyChange(specialty.id, checked)}
               />
             ))}
           </div>
         </OnboardingFormField>
 
         {/* Other Specialty Input */}
-        <OnboardingFormField
-          label="Outra ou foco específico"
-          icon={<PenLine className="size-4" />}
-        >
+        <OnboardingFormField label="Outra ou foco específico" icon={<PenLine className="size-4" />}>
           <OnboardingInput
             id="other-specialty"
             type="text"
@@ -222,10 +218,7 @@ export default function AtuacaoPage() {
       </div>
 
       {/* Mobile Progress Dots */}
-      <OnboardingMobileProgress
-        currentStep={CURRENT_STEP}
-        totalSteps={TOTAL_STEPS}
-      />
+      <OnboardingMobileProgress currentStep={CURRENT_STEP} totalSteps={TOTAL_STEPS} />
     </OnboardingLayout>
-  )
+  );
 }
