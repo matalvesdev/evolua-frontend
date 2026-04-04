@@ -38,6 +38,14 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  /* Landing page custom colors */
+  --color-primary-hover: #9333EA;
+  --color-primary-light: var(--primary-light);
+  --color-text-light: #111111;
+  --color-text-secondary-light: #767676;
+  --color-background-light: #F5F6FA;
+  --color-surface-light: #FFFFFF;
+  --color-surface-dark: #1F1F23;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -282,4 +290,94 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #6D08AF;
+}
+
+/* ============================================
+   Landing Page Styles
+   ============================================ */
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.conversational-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.section-fade {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+section[id] {
+  scroll-margin-top: 100px;
+}
+
+.hidden-step {
+  display: none;
+}
+
+/* iPad Pro Mockup */
+.ipad-mockup {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.ipad-mockup-frame {
+  position: relative;
+  width: 100%;
+}
+
+.ipad-mockup-frame > img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ipad-screen-area {
+  position: absolute;
+  top: 3.6%;
+  left: 3.4%;
+  width: 93.2%;
+  height: 93%;
+  overflow: hidden;
+  border-radius: 1.8%;
+  background: #000;
+}
+
+/* Landing skip-to-content link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #A855F7;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: bold;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+@keyframes pulseCustom {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(168, 85, 247, 0);
+  }
+}
+
+.animate-pulseCustom {
+  animation: pulseCustom 2s infinite;
 }
