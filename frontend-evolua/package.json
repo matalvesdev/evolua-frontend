@@ -14,7 +14,7 @@
     "@himetrica/tracker-js": "^0.1.6",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-tabs": "^1.1.13",
-    "@supabase/ssr": "^0.8.0",
+    "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.89.0",
     "@tabler/icons-react": "^3.36.1",
     "@tanstack/react-query": "^5.90.16",
