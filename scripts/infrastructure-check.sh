@@ -22,8 +22,10 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configurações
-DOMAIN_FRONTEND="useevolua.com"
-DOMAIN_API="api.useevolua.com"
+DOMAIN_FRONTEND="useevolua.com.br"
+DOMAIN_FRONTEND_ALT="useevolua.online"
+DOMAIN_API="api.useevolua.com.br"
+DOMAIN_API_ALT="api.useevolua.online"
 API_HEALTH_ENDPOINT="/api/health"
 TIMEOUT_SEC=10
 
@@ -72,6 +74,27 @@ else
   echo -e "${GREEN}✓ $WWW_CNAME${NC}"
 fi
 
+# Frontend alternativo (.online)
+echo -n "  Frontend DNS ($DOMAIN_FRONTEND_ALT): "
+FRONTEND_ALT_IP=$(dig +short $DOMAIN_FRONTEND_ALT A | head -1)
+if [ -z "$FRONTEND_ALT_IP" ]; then
+  echo -e "${RED}✗ NOT RESOLVED${NC}"
+else
+  if [ "$FRONTEND_ALT_IP" = "76.76.21.21" ]; then
+    echo -e "${GREEN}✓ $FRONTEND_ALT_IP${NC}"
+  else
+    echo -e "${YELLOW}⚠ $FRONTEND_ALT_IP (expected 76.76.21.21)${NC}"
+  fi
+fi
+
+echo -n "  Backend DNS ($DOMAIN_API_ALT): "
+BACKEND_ALT_IP=$(dig +short $DOMAIN_API_ALT A | head -1)
+if [ -z "$BACKEND_ALT_IP" ]; then
+  echo -e "${RED}✗ NOT RESOLVED${NC}"
+else
+  echo -e "${GREEN}✓ $BACKEND_ALT_IP${NC}"
+fi
+
 echo ""
 
 ###############################################################################
@@ -106,6 +129,15 @@ if [ "$WWW_CODE" = "200" ] || [ "$WWW_CODE" = "301" ] || [ "$WWW_CODE" = "302" ]
   echo -e "${GREEN}✓ $WWW_CODE${NC}"
 else
   echo -e "${RED}✗ $WWW_CODE${NC}"
+fi
+
+# Frontend alternativo (.online)
+echo -n "  HTTPS ($DOMAIN_FRONTEND_ALT): "
+HTTP_CODE_ALT=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 https://$DOMAIN_FRONTEND_ALT 2>/dev/null || echo "000")
+if [ "$HTTP_CODE_ALT" = "200" ] || [ "$HTTP_CODE_ALT" = "301" ] || [ "$HTTP_CODE_ALT" = "302" ]; then
+  echo -e "${GREEN}✓ $HTTP_CODE_ALT${NC}"
+else
+  echo -e "${RED}✗ $HTTP_CODE_ALT${NC}"
 fi
 
 echo ""
@@ -144,6 +176,16 @@ if [ "$RESPONSE_TIME" != "ERROR" ]; then
   echo -e "${GREEN}✓ ${RESPONSE_TIME}s${NC}"
 else
   echo -e "${RED}✗ No response${NC}"
+fi
+
+echo -n "  API Health alt ($DOMAIN_API_ALT$API_HEALTH_ENDPOINT): "
+HEALTH_CODE_ALT=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 https://$DOMAIN_API_ALT$API_HEALTH_ENDPOINT 2>/dev/null || echo "000")
+if [ "$HEALTH_CODE_ALT" = "200" ]; then
+  echo -e "${GREEN}✓ $HEALTH_CODE_ALT - Healthy${NC}"
+elif [ "$HEALTH_CODE_ALT" = "000" ]; then
+  echo -e "${RED}✗ Connection failed${NC}"
+else
+  echo -e "${YELLOW}⚠ $HEALTH_CODE_ALT (check backend logs)${NC}"
 fi
 
 echo ""
@@ -187,7 +229,7 @@ echo -e "${YELLOW}⚠️ NEXT STEPS${NC}"
 
 if [ -z "$FRONTEND_IP" ]; then
   echo "  1. Wait for DNS propagation (5-10 mins)"
-  echo "     → nslookup useevolua.com"
+  echo "     → nslookup useevolua.com.br"
 fi
 
 if [ "$HEALTH_CODE" != "200" ]; then
@@ -211,8 +253,10 @@ echo "    → App: sudo pm2 logs"
 echo "    → SSH: sudo systemctl status pm2 nginx"
 echo ""
 echo "  DNS Propagation:"
-echo "    → dig useevolua.com +short"
-echo "    → dig api.useevolua.com +short"
+echo "    → dig useevolua.com.br +short"
+echo "    → dig api.useevolua.com.br +short"
+echo "    → dig useevolua.online +short"
+echo "    → dig api.useevolua.online +short"
 echo ""
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
