@@ -17,6 +17,13 @@ DATABASE_URL="${database_url}"
 CORS_ORIGINS="${cors_origins}"
 FRONTEND_URL="${frontend_url}"
 BACKEND_DOMAIN="${backend_domain}"
+PRIMARY_BACKEND_DOMAIN="$(echo "$BACKEND_DOMAIN" | awk '{print $1}')"
+
+# Monta parâmetros -d para múltiplos domínios (ex: api.useevolua.com.br api.useevolua.online)
+CERTBOT_DOMAIN_ARGS=""
+for domain in $BACKEND_DOMAIN; do
+  CERTBOT_DOMAIN_ARGS="$CERTBOT_DOMAIN_ARGS -d $domain"
+done
 
 # Atualizar sistema
 apt-get update -y
@@ -177,7 +184,7 @@ if [ $HEALTH_COUNT -lt $HEALTH_MAX_WAIT ]; then
   # Non-interactive Certbot setup
   certbot certonly --webroot \
     -w /var/www/certbot \
-    -d "$BACKEND_DOMAIN" \
+    $CERTBOT_DOMAIN_ARGS \
     --email admin@useevolua.com \
     --non-interactive \
     --agree-tos \
@@ -185,7 +192,7 @@ if [ $HEALTH_COUNT -lt $HEALTH_MAX_WAIT ]; then
     2>&1 | tee /var/log/certbot-setup.log || echo "⚠️ Certbot falhou (normal se ja tiver cert)"
     
   # Se obteve certificado, criar configuracao HTTPS
-  if [ -f "/etc/letsencrypt/live/$BACKEND_DOMAIN/fullchain.pem" ]; then
+  if [ -f "/etc/letsencrypt/live/$PRIMARY_BACKEND_DOMAIN/fullchain.pem" ]; then
     echo "Ativando HTTPS..."
     cat > /etc/nginx/sites-available/evolua-backend-https << NGINXHTTPS
 # HTTPS com redirecionamento automatico
@@ -208,8 +215,8 @@ server {
     server_name $BACKEND_DOMAIN;
 
     # Certificados SSL
-    ssl_certificate /etc/letsencrypt/live/$BACKEND_DOMAIN/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/$BACKEND_DOMAIN/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/$PRIMARY_BACKEND_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$PRIMARY_BACKEND_DOMAIN/privkey.pem;
 
     # Segurança SSL/TLS
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -255,8 +262,8 @@ fi
 
 # Agendar renovacao de certificado
 # Cron job: renewall a cada 12 horas
-if ! crontab -u ubuntu -l 2>/dev/null | grep -q "certbot renew"; then
-  (crontab -u ubuntu -l 2>/dev/null; echo "0 */12 * * * certbot renew --quiet && systemctl reload nginx") | crontab -u ubuntu -
+if ! crontab -l 2>/dev/null | grep -q "certbot renew"; then
+  (crontab -l 2>/dev/null; echo "0 */12 * * * certbot renew --quiet && systemctl reload nginx") | crontab -
   echo "✅ Auto-renovacao de certificados agendada"
 fi
 

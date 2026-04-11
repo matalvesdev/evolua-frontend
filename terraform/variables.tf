@@ -21,7 +21,7 @@ variable "project_name" {
 variable "landing_domain" {
   description = "Domínio principal"
   type        = string
-  default     = "useevolua.com"
+  default     = "useevolua.com.br"
 }
 
 variable "instance_type" {
@@ -69,11 +69,11 @@ variable "database_url" {
 variable "cors_origins" {
   description = "CORS origins permitidas (URL do Vercel)"
   type        = string
-  default     = "https://useevolua.com"
+  default     = "https://useevolua.com.br,https://www.useevolua.com.br,https://useevolua.online,https://www.useevolua.online"
 }
 
 variable "frontend_url" {
   description = "URL do frontend no Vercel"
   type        = string
-  default     = "https://useevolua.com"
+  default     = "https://useevolua.com.br"
 }

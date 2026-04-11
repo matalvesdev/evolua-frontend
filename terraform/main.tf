@@ -1,7 +1,7 @@
 # Evolua CRM - Infraestrutura AWS (custo mínimo)
 # Backend NestJS no EC2 t2.micro (free tier)
-# DNS Route53 para useevolua.com ($0.50/mês)
-# Frontend → Vercel (gratuito, fora da AWS)
+# DNS gerenciado externamente (HostGator)
+# Frontend -> Vercel (gratuito, fora da AWS)
 
 terraform {
   required_version = ">= 1.0"

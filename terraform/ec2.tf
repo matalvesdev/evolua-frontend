@@ -1,6 +1,5 @@
 # EC2 t2.micro - Backend NestJS (free tier: 750h/mês)
-# Sem Elastic IP para evitar cobrança quando parado
-# IP público automático é suficiente (Route53 atualizado via script se mudar)
+# Elastic IP para manter endpoint estável da API no DNS da HostGator
 
 resource "aws_instance" "backend" {
   ami                         = data.aws_ami.ubuntu.id

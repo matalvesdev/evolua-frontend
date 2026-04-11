@@ -150,8 +150,8 @@ cost: ## Estimar custos (requer infracost)
 		echo "  - EC2 t2.micro: $$0/mês (12 meses free tier)"; \
 		echo "  - EBS 30GB: $$0/mês (30GB free tier)"; \
 		echo "  - Data Transfer: $$0/mês (15GB free tier)"; \
-		echo "  - Route53: ~$$0.50/mês (hosted zone)"; \
-		echo "  - Total: ~$$0.50/mês (primeiros 12 meses)"; \
+		echo "  - DNS: HostGator (fora da AWS)"; \
+		echo "  - Total AWS: ~$$0/mês (primeiros 12 meses, sem tráfego excedente)"; \
 	fi
 
 .DEFAULT_GOAL := help

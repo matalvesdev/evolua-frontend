@@ -14,11 +14,10 @@ aws_region = "sa-east-1"
 environment = "production"
 
 # ============================================================================
-# Domínios (ATUALIZADO: useevolua.com.br + useevolua.online)
+# Domínios (useevolua.com.br + useevolua.online)
 # ============================================================================
 
-# Domínio da landing page (LEGADO - mantido para compatibilidade)
-# NOTA: Route53 foi migrado para useevolua.com.br + useevolua.online
+# Domínio da landing page
 landing_domain = "useevolua.com.br"
 
 # Domínio da aplicação
@@ -130,20 +129,20 @@ tags = {
 # - EC2 t2.micro: $0 (750h/mês)
 # - EBS 30GB: $0
 # - Data Transfer: $0 (15GB/mês)
-# - Route53: ~$0.50/mês
+# - DNS na HostGator: fora da AWS
 # - CloudWatch: $0 (free tier)
-# - Total: ~$0.50/mês
+# - Total AWS: ~$0/mês (sem tráfego relevante)
 
 # Após Free Tier (sa-east-1):
 # - EC2 t2.micro: ~$10/mês
 # - EBS 30GB: ~$3/mês
 # - Data Transfer: ~$1-5/mês
-# - Route53: ~$0.50/mês
-# - Total: ~$15-20/mês
+# - DNS na HostGator: fora da AWS
+# - Total: ~$14-19/mês
 
 # Após Free Tier (us-east-1):
 # - EC2 t2.micro: ~$8.50/mês
 # - EBS 30GB: ~$2.40/mês
 # - Data Transfer: ~$1-5/mês
-# - Route53: ~$0.50/mês
-# - Total: ~$12-17/mês
+# - DNS na HostGator: fora da AWS
+# - Total: ~$11.5-16.5/mês

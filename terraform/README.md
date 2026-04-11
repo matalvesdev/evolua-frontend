@@ -2,17 +2,17 @@
 
 ## Arquitetura
 
-| Serviço | Plataforma | Custo |
-|---|---|---|
-| Frontend Next.js | Vercel (free tier) | $0 |
-| Backend NestJS | EC2 t2.micro (free tier) | $0* |
-| Banco de dados | Supabase (free tier) | $0 |
-| DNS | Route53 | $0.50/mês |
-| SSL | Let's Encrypt (Certbot) | $0 |
+| Serviço          | Plataforma                | Custo       |
+| ---------------- | ------------------------- | ----------- |
+| Frontend Next.js | Vercel (free tier)        | $0          |
+| Backend NestJS   | EC2 t2.micro (free tier)  | $0\*        |
+| Banco de dados   | Supabase (free tier)      | $0          |
+| DNS              | HostGator (já contratado) | fora da AWS |
+| SSL              | Let's Encrypt (Certbot)   | $0          |
 
-*Free tier: 750h/mês por 12 meses. Após isso: ~$8/mês.
+\*Free tier: 750h/mês por 12 meses. Após isso: ~$8/mês.
 
-**Custo total: $0.50/mês** (apenas Route53)
+**Custo total AWS: mínimo possível** (sem Route53)
 
 ---
 
@@ -41,6 +41,7 @@ chmod 400 evolua-key.pem
 ### 1. Preencher variáveis
 
 Edite `terraform.tfvars` e preencha:
+
 - `supabase_service_role_key` — painel Supabase > Settings > API
 - `database_url` — painel Supabase > Settings > Database > Connection string (pooler, porta 6543)
 - `allowed_ssh_cidr` — seu IP atual + `/32`
@@ -54,9 +55,16 @@ terraform plan
 terraform apply
 ```
 
-### 3. Configurar DNS
+### 3. Configurar DNS na HostGator
 
-Após o `apply`, copie os name servers exibidos no output `route53_nameservers` e configure no registrador do domínio `useevolua.com`.
+Após o `apply`, configure os registros no painel DNS da HostGator:
+
+- `A` `useevolua.com.br` -> `76.76.21.21`
+- `CNAME` `www.useevolua.com.br` -> `cname.vercel-dns.com`
+- `A` `api.useevolua.com.br` -> IP do output `backend_public_ip`
+- `A` `useevolua.online` -> `76.76.21.21`
+- `CNAME` `www.useevolua.online` -> `cname.vercel-dns.com`
+- `A` `api.useevolua.online` -> IP do output `backend_public_ip`
 
 ### 4. Aguardar setup do EC2
 
@@ -68,7 +76,7 @@ tail -f /var/log/user-data.log
 ### 5. Configurar SSL
 
 ```bash
-sudo certbot --nginx -d api.useevolua.com
+sudo certbot --nginx -d api.useevolua.com.br -d api.useevolua.online
 ```
 
 ### 6. Configurar Vercel
@@ -77,9 +85,11 @@ sudo certbot --nginx -d api.useevolua.com
 2. Configure as variáveis de ambiente:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `NEXT_PUBLIC_API_URL=https://api.useevolua.com/api`
-   - `NEXT_PUBLIC_APP_URL=https://useevolua.com`
-3. Adicione o domínio `useevolua.com` no painel do Vercel
+
+- `NEXT_PUBLIC_API_URL=https://api.useevolua.com.br/api`
+- `NEXT_PUBLIC_APP_URL=https://useevolua.com.br`
+
+3. Adicione os domínios `useevolua.com.br` e `useevolua.online` no painel do Vercel
 
 ---
 
@@ -94,12 +104,12 @@ ssh -i evolua-key.pem ubuntu@<IP_EC2>
 
 ## O que foi removido (economia)
 
-| Recurso removido | Economia |
-|---|---|
-| AWS App Runner | ~$5-25/mês |
-| CloudWatch Alarms + SNS | ~$1-3/mês |
-| CloudWatch Dashboard | ~$3/mês |
-| AWS Amplify (frontend) | ~$0-15/mês |
+| Recurso removido           | Economia                  |
+| -------------------------- | ------------------------- |
+| AWS App Runner             | ~$5-25/mês                |
+| CloudWatch Alarms + SNS    | ~$1-3/mês                 |
+| CloudWatch Dashboard       | ~$3/mês                   |
+| AWS Amplify (frontend)     | ~$0-15/mês                |
 | Elastic IP extra (landing) | $3.65/mês se desassociado |
 
 ---
@@ -107,11 +117,13 @@ ssh -i evolua-key.pem ubuntu@<IP_EC2>
 ## Histórico de Evolução do Plano Terapêutico
 
 As migrations do banco de dados para esta feature estão em:
+
 ```
 fono v2 - back/backend-evolua/prisma/migrations/
 ```
 
 Para aplicar em produção:
+
 ```bash
 ssh -i evolua-key.pem ubuntu@<IP_EC2>
 cd /home/ubuntu/evolua-backend
