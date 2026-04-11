@@ -32,7 +32,7 @@ export default function PricingCard({
           ))}
         </ul>
         <a
-          href="https://app.useevolua.com.br/auth/cadastro"
+          href="/auth/cadastro"
           className="block w-full py-3 px-6 bg-white hover:bg-gray-50 text-primary font-bold rounded-xl transition-colors text-center shadow-lg"
         >
           {ctaLabel}
@@ -58,7 +58,7 @@ export default function PricingCard({
         ))}
       </ul>
       <a
-        href="https://app.useevolua.com.br/auth/cadastro"
+        href="/auth/cadastro"
         className="block w-full py-3 px-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-colors text-center"
       >
         {ctaLabel}

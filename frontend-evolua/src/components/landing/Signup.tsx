@@ -100,7 +100,10 @@ export default function Signup() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="signup-specialty" className="block text-sm font-bold text-gray-700 mb-2">
+                  <label
+                    htmlFor="signup-specialty"
+                    className="block text-sm font-bold text-gray-700 mb-2"
+                  >
                     Sua especialidade
                   </label>
                   <select
@@ -120,7 +123,10 @@ export default function Signup() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="signup-phone" className="block text-sm font-bold text-gray-700 mb-2">
+                  <label
+                    htmlFor="signup-phone"
+                    className="block text-sm font-bold text-gray-700 mb-2"
+                  >
                     WhatsApp
                   </label>
                   <input
@@ -138,7 +144,7 @@ export default function Signup() {
 
           <div className="pt-4">
             <a
-              href="https://app.useevolua.com.br/auth/cadastro"
+              href="/auth/cadastro"
               className="w-full py-5 px-8 bg-primary hover:bg-primary-hover text-white text-lg font-bold rounded-2xl shadow-xl shadow-primary/30 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group"
             >
               Quero meu teste grátis agora

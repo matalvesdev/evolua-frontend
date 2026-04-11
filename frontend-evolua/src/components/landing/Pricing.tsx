@@ -77,7 +77,7 @@ export default function Pricing() {
         className="mt-12 flex justify-end"
       >
         <a
-          href="https://app.useevolua.com.br/auth/cadastro"
+          href="/auth/cadastro"
           className="text-primary font-bold flex items-center gap-1 hover:underline"
         >
           Vamos começar? <span className="material-symbols-outlined text-sm">arrow_forward</span>
