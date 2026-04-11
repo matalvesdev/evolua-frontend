@@ -27,7 +27,7 @@ resource "aws_instance" "backend" {
     database_url              = var.database_url
     cors_origins              = var.cors_origins
     frontend_url              = var.frontend_url
-    backend_domain            = "api.useevolua.com.br api.useevolua.online"
+    backend_domain            = "api.useevolua.online"
   })
 
   # IMDSv2 obrigatório (segurança)

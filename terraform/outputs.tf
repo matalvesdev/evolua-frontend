@@ -10,11 +10,6 @@ output "backend_instance_id" {
   value       = aws_instance.backend.id
 }
 
-output "api_url_br" {
-  description = "URL da API backend (.com.br)"
-  value       = "https://api.useevolua.com.br"
-}
-
 output "api_url_online" {
   description = "URL da API backend (.online)"
   value       = "https://api.useevolua.online"
@@ -43,7 +38,7 @@ output "next_steps" {
 
   DOMÍNIOS CONFIGURADOS:
     • Frontend: useevolua.com.br + useevolua.online (Vercel)
-    • Backend: api.useevolua.com.br + api.useevolua.online (EC2)
+    • Backend: api.useevolua.online (EC2)
 
     1. Configure domínios no Vercel:
      - Adicione: useevolua.com.br, www.useevolua.com.br
@@ -53,7 +48,6 @@ output "next_steps" {
     2. Configure DNS na HostGator:
       - A useevolua.com.br      -> 76.76.21.21
       - CNAME www.useevolua.com.br -> cname.vercel-dns.com
-      - A api.useevolua.com.br  -> ${aws_eip.backend.public_ip}
       - A useevolua.online      -> 76.76.21.21
       - CNAME www.useevolua.online -> cname.vercel-dns.com
       - A api.useevolua.online  -> ${aws_eip.backend.public_ip}
@@ -65,10 +59,10 @@ output "next_steps" {
      tail -f /var/log/user-data.log
 
     5. Configure SSL no backend (ambos domínios):
-     sudo certbot --nginx -d api.useevolua.com.br -d api.useevolua.online
+     sudo certbot --nginx -d api.useevolua.online
 
     6. Configure NEXT_PUBLIC_API_URL no Vercel:
-     https://api.useevolua.com.br/api
+     https://api.useevolua.online/api
 
   EOT
 }

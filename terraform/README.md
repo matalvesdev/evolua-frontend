@@ -61,7 +61,6 @@ Após o `apply`, configure os registros no painel DNS da HostGator:
 
 - `A` `useevolua.com.br` -> `76.76.21.21`
 - `CNAME` `www.useevolua.com.br` -> `cname.vercel-dns.com`
-- `A` `api.useevolua.com.br` -> IP do output `backend_public_ip`
 - `A` `useevolua.online` -> `76.76.21.21`
 - `CNAME` `www.useevolua.online` -> `cname.vercel-dns.com`
 - `A` `api.useevolua.online` -> IP do output `backend_public_ip`
@@ -76,7 +75,7 @@ tail -f /var/log/user-data.log
 ### 5. Configurar SSL
 
 ```bash
-sudo certbot --nginx -d api.useevolua.com.br -d api.useevolua.online
+sudo certbot --nginx -d api.useevolua.online
 ```
 
 ### 6. Configurar Vercel
@@ -86,7 +85,7 @@ sudo certbot --nginx -d api.useevolua.com.br -d api.useevolua.online
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-- `NEXT_PUBLIC_API_URL=https://api.useevolua.com.br/api`
+- `NEXT_PUBLIC_API_URL=https://api.useevolua.online/api`
 - `NEXT_PUBLIC_APP_URL=https://useevolua.com.br`
 
 3. Adicione os domínios `useevolua.com.br` e `useevolua.online` no painel do Vercel

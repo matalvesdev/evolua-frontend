@@ -19,7 +19,7 @@ FRONTEND_URL="${frontend_url}"
 BACKEND_DOMAIN="${backend_domain}"
 PRIMARY_BACKEND_DOMAIN="$(echo "$BACKEND_DOMAIN" | awk '{print $1}')"
 
-# Monta parâmetros -d para múltiplos domínios (ex: api.useevolua.com.br api.useevolua.online)
+# Monta parâmetros -d para domínio(s) do backend (ex: api.useevolua.online)
 CERTBOT_DOMAIN_ARGS=""
 for domain in $BACKEND_DOMAIN; do
   CERTBOT_DOMAIN_ARGS="$CERTBOT_DOMAIN_ARGS -d $domain"
