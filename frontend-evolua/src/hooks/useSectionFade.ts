@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 export function useSectionFade<T extends HTMLElement = HTMLElement>() {
   const ref = useRef<T>(null);
@@ -12,7 +12,7 @@ export function useSectionFade<T extends HTMLElement = HTMLElement>() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
+          entry.target.classList.add('visible');
           observer.unobserve(entry.target);
         }
       },

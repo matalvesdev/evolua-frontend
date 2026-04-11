@@ -1,6 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -39,13 +38,13 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   /* Landing page custom colors */
-  --color-primary-hover: #9333EA;
+  --color-primary-hover: #9333ea;
   --color-primary-light: var(--primary-light);
   --color-text-light: #111111;
   --color-text-secondary-light: #767676;
-  --color-background-light: #F5F6FA;
-  --color-surface-light: #FFFFFF;
-  --color-surface-dark: #1F1F23;
+  --color-background-light: #f5f6fa;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1f1f23;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -58,8 +57,8 @@
 :root {
   /* Primary color: #8A05BE */
   --primary: oklch(0.42 0.24 303);
-  --primary-light: #A855F7;
-  --primary-dark: #6D08AF;
+  --primary-light: #a855f7;
+  --primary-dark: #6d08af;
   --primary-glow: rgba(138, 5, 190, 0.25);
   --primary-foreground: oklch(1 0 0);
 
@@ -225,7 +224,7 @@
 
 /* Gradient Left Panel for split layouts */
 .gradient-left-panel {
-  background: linear-gradient(135deg, #8A05BE 0%, #6D08AF 40%, #A855F7 100%);
+  background: linear-gradient(135deg, #8a05be 0%, #6d08af 40%, #a855f7 100%);
   position: relative;
   overflow: hidden;
 }
@@ -237,8 +236,9 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at 30% 50%, rgba(168, 85, 247, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 70% 30%, rgba(138, 5, 190, 0.2) 0%, transparent 40%);
+  background:
+    radial-gradient(circle at 30% 50%, rgba(168, 85, 247, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(138, 5, 190, 0.2) 0%, transparent 40%);
   pointer-events: none;
 }
 
@@ -284,12 +284,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8A05BE;
+  background: #8a05be;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6D08AF;
+  background: #6d08af;
 }
 
 /* ============================================
@@ -297,7 +297,11 @@
    ============================================ */
 
 .material-symbols-outlined {
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
 }
 
 .conversational-container {
@@ -354,7 +358,7 @@ section[id] {
   top: -100%;
   left: 50%;
   transform: translateX(-50%);
-  background: #A855F7;
+  background: #a855f7;
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0 0 0.5rem 0.5rem;
@@ -368,7 +372,8 @@ section[id] {
 }
 
 @keyframes pulseCustom {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
   }

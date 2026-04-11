@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { motion, fadeInUp, fadeIn, smoothTransition, viewportConfig } from "./motion";
+import { motion, fadeInUp, fadeIn, smoothTransition, viewportConfig } from './motion';
 
 export default function FeatureSchedule() {
   return (
@@ -19,9 +19,8 @@ export default function FeatureSchedule() {
           Sua agenda trabalha para você, ou você para ela?
         </h2>
         <p className="text-lg text-text-secondary-light leading-relaxed">
-          Gerenciar faltas, remarcações e lembretes de WhatsApp não deveria ser
-          sua tarefa principal. Nossa Agenda Inteligente cuida da logística para
-          que você cuide dos pacientes.
+          Gerenciar faltas, remarcações e lembretes de WhatsApp não deveria ser sua tarefa
+          principal. Nossa Agenda Inteligente cuida da logística para que você cuide dos pacientes.
         </p>
       </motion.div>
 
@@ -48,8 +47,8 @@ export default function FeatureSchedule() {
 
           <div className="bg-white border border-gray-100 p-4 rounded-2xl mb-4 shadow-sm">
             <p className="text-sm text-gray-800">
-              &quot;Dra. Helena, notei que o Lucas completou 10 sessões. Deseja
-              gerar um relatório de progresso automaticamente?&quot;
+              &quot;Dra. Helena, notei que o Lucas completou 10 sessões. Deseja gerar um relatório
+              de progresso automaticamente?&quot;
             </p>
           </div>
 
@@ -75,10 +74,7 @@ export default function FeatureSchedule() {
           href="#pergunta-3"
           className="text-primary font-bold flex items-center gap-1 hover:underline"
         >
-          E a segurança?{" "}
-          <span className="material-symbols-outlined text-sm">
-            arrow_forward
-          </span>
+          E a segurança? <span className="material-symbols-outlined text-sm">arrow_forward</span>
         </a>
       </motion.div>
     </section>

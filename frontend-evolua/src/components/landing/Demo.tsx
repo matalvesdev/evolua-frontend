@@ -1,18 +1,25 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
-import { motion, fadeInUp, scaleIn, staggerContainer, smoothTransition, viewportConfig } from "./motion";
+import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import {
+  motion,
+  fadeInUp,
+  scaleIn,
+  staggerContainer,
+  smoothTransition,
+  viewportConfig,
+} from './motion';
 
 const slides = [
-  { src: "/screenshots/dashboard.png", alt: "Dashboard - Visão geral da clínica" },
-  { src: "/screenshots/relatorios.png", alt: "Relatórios e Evoluções com IA" },
-  { src: "/screenshots/gravando.png", alt: "Gravação de evolução por voz" },
-  { src: "/screenshots/evolucao.png", alt: "Revisão de evolução gerada por IA" },
-  { src: "/screenshots/pacientes.png", alt: "Gestão de pacientes" },
-  { src: "/screenshots/prontuario.png", alt: "Prontuário do paciente" },
-  { src: "/screenshots/agenda.png", alt: "Agenda inteligente" },
-  { src: "/screenshots/tarefas.png", alt: "Gerenciamento de tarefas" },
+  { src: '/screenshots/dashboard.png', alt: 'Dashboard - Visão geral da clínica' },
+  { src: '/screenshots/relatorios.png', alt: 'Relatórios e Evoluções com IA' },
+  { src: '/screenshots/gravando.png', alt: 'Gravação de evolução por voz' },
+  { src: '/screenshots/evolucao.png', alt: 'Revisão de evolução gerada por IA' },
+  { src: '/screenshots/pacientes.png', alt: 'Gestão de pacientes' },
+  { src: '/screenshots/prontuario.png', alt: 'Prontuário do paciente' },
+  { src: '/screenshots/agenda.png', alt: 'Agenda inteligente' },
+  { src: '/screenshots/tarefas.png', alt: 'Gerenciamento de tarefas' },
 ];
 
 export default function Demo() {
@@ -34,7 +41,10 @@ export default function Demo() {
   }, [isHovered, next]);
 
   return (
-    <section className="min-h-[calc(100vh-80px)] flex flex-col justify-center py-24 px-6" id="demo-section">
+    <section
+      className="min-h-[calc(100vh-80px)] flex flex-col justify-center py-24 px-6"
+      id="demo-section"
+    >
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={fadeInUp.hidden}
@@ -43,12 +53,10 @@ export default function Demo() {
           transition={smoothTransition}
           className="mb-16 text-center"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Veja a Evolua em ação
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Veja a Evolua em ação</h2>
           <p className="text-lg text-text-secondary-light leading-relaxed max-w-xl mx-auto">
-            Uma interface desenhada para clareza mental. Tudo o que você precisa,
-            onde você espera encontrar.
+            Uma interface desenhada para clareza mental. Tudo o que você precisa, onde você espera
+            encontrar.
           </p>
         </motion.div>
 
@@ -89,7 +97,12 @@ export default function Demo() {
                 style={{ opacity: isHovered ? 1 : 0 }}
                 aria-label={`Slide anterior. Atualmente exibindo slide ${current + 1} de ${slides.length}`}
               >
-                <span className="material-symbols-outlined text-gray-700 text-sm" aria-hidden="true">chevron_left</span>
+                <span
+                  className="material-symbols-outlined text-gray-700 text-sm"
+                  aria-hidden="true"
+                >
+                  chevron_left
+                </span>
               </button>
               <button
                 onClick={next}
@@ -97,11 +110,20 @@ export default function Demo() {
                 style={{ opacity: isHovered ? 1 : 0 }}
                 aria-label={`Próximo slide. Atualmente exibindo slide ${current + 1} de ${slides.length}`}
               >
-                <span className="material-symbols-outlined text-gray-700 text-sm" aria-hidden="true">chevron_right</span>
+                <span
+                  className="material-symbols-outlined text-gray-700 text-sm"
+                  aria-hidden="true"
+                >
+                  chevron_right
+                </span>
               </button>
 
               {/* Dots */}
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20" role="tablist" aria-label="Slides da demonstração">
+              <div
+                className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20"
+                role="tablist"
+                aria-label="Slides da demonstração"
+              >
                 {slides.map((slide, i) => (
                   <button
                     key={i}
@@ -109,7 +131,7 @@ export default function Demo() {
                     aria-selected={i === current}
                     onClick={() => setCurrent(i)}
                     className={`w-2 h-2 rounded-full transition-all ${
-                      i === current ? "bg-primary w-5" : "bg-white/60 hover:bg-white/80"
+                      i === current ? 'bg-primary w-5' : 'bg-white/60 hover:bg-white/80'
                     }`}
                     aria-label={`Ir para slide ${i + 1}: ${slide.alt}`}
                   />

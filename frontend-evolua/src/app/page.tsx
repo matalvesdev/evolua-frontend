@@ -1,20 +1,20 @@
-import type { Metadata } from "next";
-import Navbar from "@/components/landing/Navbar";
-import Hero from "@/components/landing/Hero";
-import FeatureVoice from "@/components/landing/FeatureVoice";
-import FeatureSchedule from "@/components/landing/FeatureSchedule";
-import FeatureSecurity from "@/components/landing/FeatureSecurity";
-import Demo from "@/components/landing/Demo";
-import SocialProof from "@/components/landing/SocialProof";
-import Pricing from "@/components/landing/Pricing";
-import Signup from "@/components/landing/Signup";
-import Footer from "@/components/landing/Footer";
-import HimetricaAnalytics from "@/components/landing/HimetricaAnalytics";
+import type { Metadata } from 'next';
+import Navbar from '@/components/landing/Navbar';
+import Hero from '@/components/landing/Hero';
+import FeatureVoice from '@/components/landing/FeatureVoice';
+import FeatureSchedule from '@/components/landing/FeatureSchedule';
+import FeatureSecurity from '@/components/landing/FeatureSecurity';
+import Demo from '@/components/landing/Demo';
+import SocialProof from '@/components/landing/SocialProof';
+import Pricing from '@/components/landing/Pricing';
+import Signup from '@/components/landing/Signup';
+import Footer from '@/components/landing/Footer';
+import HimetricaAnalytics from '@/components/landing/HimetricaAnalytics';
 
 export const metadata: Metadata = {
-  title: "Evolua - Sua Jornada Clínica",
+  title: 'Evolua - Sua Jornada Clínica',
   description:
-    "Simplifique sua rotina clínica com relatórios por voz, agenda inteligente e prontuário digital.",
+    'Simplifique sua rotina clínica com relatórios por voz, agenda inteligente e prontuário digital.',
 };
 
 export default function LandingPage() {
@@ -39,4 +39,3 @@ export default function LandingPage() {
     </div>
   );
 }
-

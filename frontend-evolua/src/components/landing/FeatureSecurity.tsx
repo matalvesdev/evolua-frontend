@@ -1,6 +1,13 @@
-"use client";
+'use client';
 
-import { motion, fadeInUp, fadeIn, staggerContainer, smoothTransition, viewportConfig } from "./motion";
+import {
+  motion,
+  fadeInUp,
+  fadeIn,
+  staggerContainer,
+  smoothTransition,
+  viewportConfig,
+} from './motion';
 
 export default function FeatureSecurity() {
   return (
@@ -19,9 +26,9 @@ export default function FeatureSecurity() {
           Onde está guardada a evolução de quem você cuida?
         </h2>
         <p className="text-lg text-text-secondary-light leading-relaxed">
-          Seu prontuário não é apenas papel ou um arquivo digital. É a história
-          clínica de uma pessoa. Na Evolua, garantimos segurança máxima com a
-          leveza de uma interface feita para seres humanos.
+          Seu prontuário não é apenas papel ou um arquivo digital. É a história clínica de uma
+          pessoa. Na Evolua, garantimos segurança máxima com a leveza de uma interface feita para
+          seres humanos.
         </p>
       </motion.div>
 
@@ -32,7 +39,11 @@ export default function FeatureSecurity() {
         viewport={viewportConfig}
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
-        <motion.div variants={fadeInUp} transition={smoothTransition} className="p-6 bg-primary-light/30 rounded-2xl">
+        <motion.div
+          variants={fadeInUp}
+          transition={smoothTransition}
+          className="p-6 bg-primary-light/30 rounded-2xl"
+        >
           <span className="material-symbols-outlined text-primary mb-4" aria-hidden="true">
             folder_shared
           </span>
@@ -41,7 +52,11 @@ export default function FeatureSecurity() {
             Histórico completo e linha do tempo de evolução em um só lugar.
           </p>
         </motion.div>
-        <motion.div variants={fadeInUp} transition={smoothTransition} className="p-6 bg-green-50 rounded-2xl">
+        <motion.div
+          variants={fadeInUp}
+          transition={smoothTransition}
+          className="p-6 bg-green-50 rounded-2xl"
+        >
           <span className="material-symbols-outlined text-green-600 mb-4" aria-hidden="true">
             verified_user
           </span>
@@ -63,10 +78,7 @@ export default function FeatureSecurity() {
           href="#demo-section"
           className="text-primary font-bold flex items-center gap-1 hover:underline"
         >
-          Ver na prática{" "}
-          <span className="material-symbols-outlined text-sm">
-            arrow_forward
-          </span>
+          Ver na prática <span className="material-symbols-outlined text-sm">arrow_forward</span>
         </a>
       </motion.div>
     </section>
