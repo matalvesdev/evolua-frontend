@@ -85,7 +85,10 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
 
   // 4. Redirect unauthenticated users away from protected routes
   if (!isAuthenticated && isProtectedRoute) {
-    return NextResponse.redirect(new URL('https://useevolua.com'));
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = '/auth/login';
+    loginUrl.search = '';
+    return NextResponse.redirect(loginUrl);
   }
 
   // 5. Redirect authenticated users away from auth routes
