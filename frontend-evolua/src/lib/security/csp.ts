@@ -4,8 +4,8 @@
  */
 
 export interface CSPConfig {
-  nonce: string
-  isDev: boolean
+  nonce: string;
+  isDev: boolean;
 }
 
 /**
@@ -13,11 +13,11 @@ export interface CSPConfig {
  * Uses Web Crypto API for edge runtime compatibility.
  */
 export function generateNonce(): string {
-  const bytes = new Uint8Array(16)
-  crypto.getRandomValues(bytes)
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
   // Convert to base64 using btoa (available in edge runtime)
-  const binary = String.fromCharCode(...bytes)
-  return btoa(binary)
+  const binary = String.fromCharCode(...bytes);
+  return btoa(binary);
 }
 
 /**
@@ -25,41 +25,45 @@ export function generateNonce(): string {
  * Includes all directives required by the Evolua CRM frontend.
  */
 export function buildCSP({ nonce, isDev }: CSPConfig): string {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? ""
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
+  const staticApiOrigins = ['https://api.useevolua.online', 'https://api.useevolua.com.br'];
 
-  const scriptSrc = isDev
-    ? `'self' 'unsafe-eval' 'unsafe-inline'`
-    : `'self' 'unsafe-inline'`
+  const scriptSrc = isDev ? `'self' 'unsafe-eval' 'unsafe-inline'` : `'self' 'unsafe-inline'`;
 
-  const connectSources = ["'self'", "*.supabase.co", "https://app.himetrica.com"]
-  if (supabaseUrl) connectSources.push(supabaseUrl)
+  const connectSources = [
+    "'self'",
+    '*.supabase.co',
+    'https://app.himetrica.com',
+    ...staticApiOrigins,
+  ];
+  if (supabaseUrl) connectSources.push(supabaseUrl);
   if (apiUrl) {
     // Add both the full API URL and its origin to ensure subpath requests are allowed
-    connectSources.push(apiUrl)
+    connectSources.push(apiUrl);
     try {
-      const apiOrigin = new URL(apiUrl).origin
-      if (apiOrigin !== apiUrl) connectSources.push(apiOrigin)
+      const apiOrigin = new URL(apiUrl).origin;
+      if (apiOrigin !== apiUrl) connectSources.push(apiOrigin);
     } catch {
       // If URL parsing fails, just use the raw value
     }
   }
 
   const directives: Record<string, string> = {
-    "default-src": "'self'",
-    "script-src": scriptSrc,
-    "style-src": "'self' 'unsafe-inline' fonts.googleapis.com",
-    "style-src-elem": "'self' 'unsafe-inline' fonts.googleapis.com",
-    "img-src": "'self' data: blob: *.supabase.co lh3.googleusercontent.com images.unsplash.com",
-    "connect-src": connectSources.join(" "),
-    "frame-ancestors": "'none'",
-    "font-src": "'self' fonts.googleapis.com fonts.gstatic.com",
-    "object-src": "'none'",
-    "base-uri": "'self'",
-    "form-action": "'self'",
-  }
+    'default-src': "'self'",
+    'script-src': scriptSrc,
+    'style-src': "'self' 'unsafe-inline' fonts.googleapis.com",
+    'style-src-elem': "'self' 'unsafe-inline' fonts.googleapis.com",
+    'img-src': "'self' data: blob: *.supabase.co lh3.googleusercontent.com images.unsplash.com",
+    'connect-src': Array.from(new Set(connectSources)).join(' '),
+    'frame-ancestors': "'none'",
+    'font-src': "'self' fonts.googleapis.com fonts.gstatic.com",
+    'object-src': "'none'",
+    'base-uri': "'self'",
+    'form-action': "'self'",
+  };
 
   return Object.entries(directives)
     .map(([key, value]) => `${key} ${value}`)
-    .join("; ")
+    .join('; ');
 }
