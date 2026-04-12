@@ -114,14 +114,14 @@ export default function GoalsPage({ params }: GoalsPageProps) {
   }
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden">
       {/* Gradient Orbs */}
-      <div className="fixed top-20 right-20 w-96 h-96 bg-[#8A05BE]/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed bottom-20 left-20 w-80 h-80 bg-blue-300/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed top-16 -right-24 md:right-20 w-64 h-64 md:w-96 md:h-96 bg-[#8A05BE]/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed -bottom-12 -left-20 md:bottom-20 md:left-20 w-56 h-56 md:w-80 md:h-80 bg-blue-300/20 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 md:px-8 py-8 pb-32">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-8 pb-28 sm:pb-32">
         {/* Breadcrumbs */}
-        <div className="mb-6 flex items-center gap-2 text-sm text-gray-600">
+        <div className="mb-6 flex items-center gap-2 text-xs sm:text-sm text-gray-600 overflow-x-auto whitespace-nowrap pb-1">
           <Link href="/dashboard/pacientes" className="hover:text-[#8A05BE] transition-colors">
             Pacientes
           </Link>
@@ -176,20 +176,20 @@ export default function GoalsPage({ params }: GoalsPageProps) {
 
           {/* Short-term Goals */}
           <section>
-            <div className="flex items-center justify-between mb-6 px-2">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 px-1 sm:px-2 gap-3">
+              <div className="flex items-start sm:items-center gap-3">
                 <div className="bg-[#8A05BE]/10 p-1.5 rounded-lg text-[#8A05BE]">
                   <span className="material-symbols-outlined text-[20px]">target</span>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">Metas de Curto Prazo</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">Metas de Curto Prazo</h3>
               </div>
-              <span className="text-sm font-medium px-3 py-1 bg-white/50 rounded-full text-gray-600 border border-white/50 shadow-sm">
+              <span className="inline-flex w-fit text-xs sm:text-sm font-medium px-3 py-1 bg-white/50 rounded-full text-gray-600 border border-white/50 shadow-sm">
                 {goals.length} {goals.length === 1 ? 'meta ativa' : 'metas ativas'}
               </span>
             </div>
 
             {goals.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 {goals.map((goal) => (
                   <GoalCard
                     key={goal.id}
@@ -242,8 +242,8 @@ export default function GoalsPage({ params }: GoalsPageProps) {
 
       {/* Modal de edição do objetivo terapêutico */}
       {editObjectiveOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 flex flex-col gap-6">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-2 sm:p-4 bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-4 sm:p-6 md:p-8 flex flex-col gap-4 sm:gap-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900">Editar Objetivo Terapêutico</h3>
               <button
@@ -285,17 +285,17 @@ export default function GoalsPage({ params }: GoalsPageProps) {
               </div>
             </div>
 
-            <div className="flex gap-3 justify-end">
+            <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end">
               <button
                 onClick={() => setEditObjectiveOpen(false)}
-                className="px-5 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleSaveObjective}
                 disabled={isUpdating}
-                className="px-5 py-2.5 rounded-xl bg-[#8A05BE] text-white text-sm font-medium hover:bg-[#7A04AA] disabled:opacity-60 transition-colors flex items-center gap-2"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#8A05BE] text-white text-sm font-medium hover:bg-[#7A04AA] disabled:opacity-60 transition-colors flex items-center justify-center gap-2"
               >
                 {isUpdating && (
                   <span className="material-symbols-outlined animate-spin text-base">
@@ -312,12 +312,12 @@ export default function GoalsPage({ params }: GoalsPageProps) {
       {/* Floating Action Button */}
       <button
         onClick={handleAddGoal}
-        className="fixed bottom-8 right-8 size-16 bg-[#8A05BE] hover:bg-[#7A04AA] text-white rounded-2xl shadow-xl hover:scale-105 hover:shadow-[#8A05BE]/40 transition-all flex items-center justify-center group z-50"
+        className="fixed bottom-24 md:bottom-8 right-4 md:right-8 size-14 md:size-16 bg-[#8A05BE] hover:bg-[#7A04AA] text-white rounded-2xl shadow-xl hover:scale-105 hover:shadow-[#8A05BE]/40 transition-all flex items-center justify-center group z-50"
       >
-        <span className="material-symbols-outlined text-[32px] group-hover:rotate-90 transition-transform duration-300">
+        <span className="material-symbols-outlined text-[28px] md:text-[32px] group-hover:rotate-90 transition-transform duration-300">
           add
         </span>
-        <div className="absolute right-full mr-4 bg-white/90 backdrop-blur-md text-gray-900 px-4 py-2 rounded-xl text-sm font-bold shadow-lg opacity-0 translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all whitespace-nowrap pointer-events-none border border-white/50">
+        <div className="hidden md:block absolute right-full mr-4 bg-white/90 backdrop-blur-md text-gray-900 px-4 py-2 rounded-xl text-sm font-bold shadow-lg opacity-0 translate-x-4 group-hover:translate-x-0 group-hover:opacity-100 transition-all whitespace-nowrap pointer-events-none border border-white/50">
           Adicionar Nova Meta
         </div>
       </button>

@@ -57,7 +57,7 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
       {/* Título */}
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
@@ -68,7 +68,7 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
           type="text"
           placeholder="Ex: Aquisição do Fonema /r/"
           {...register('title')}
-          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8A05BE] focus:border-transparent transition-all"
+          className="w-full px-4 py-2.5 sm:py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#8A05BE] focus:border-transparent transition-all"
         />
         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
       </div>
@@ -81,9 +81,9 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
         <textarea
           id="description"
           placeholder="Descreva em detalhes qual é o objetivo terapêutico..."
-          rows={5}
+          rows={4}
           {...register('description')}
-          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8A05BE] focus:border-transparent transition-all resize-none"
+          className="w-full px-4 py-2.5 sm:py-3 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#8A05BE] focus:border-transparent transition-all resize-y min-h-[120px]"
         />
         {errors.description && (
           <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
@@ -98,7 +98,7 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
         <select
           id="priority"
           {...register('priority')}
-          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8A05BE] focus:border-transparent transition-all"
+          className="w-full px-4 py-2.5 sm:py-3 rounded-lg border border-gray-200 bg-white text-gray-900 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#8A05BE] focus:border-transparent transition-all"
         >
           <option value="low">Baixa</option>
           <option value="medium">Média</option>
@@ -115,18 +115,18 @@ export function CreateGoalForm({ patientId }: CreateGoalFormProps) {
       )}
 
       {/* Buttons */}
-      <div className="flex gap-3 pt-6">
+      <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2 sm:pt-4 md:pt-6">
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex-1 px-6 py-3 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+          className="w-full sm:flex-1 px-6 py-3 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
         >
           Cancelar
         </button>
         <button
           type="submit"
           disabled={isCreating}
-          className="flex-1 px-6 py-3 rounded-lg bg-[#8A05BE] text-white font-medium hover:bg-[#6D08AF] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className="w-full sm:flex-1 px-6 py-3 rounded-lg bg-[#8A05BE] text-white font-medium hover:bg-[#6D08AF] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
         >
           {isCreating && (
             <span className="material-symbols-outlined text-sm animate-spin">

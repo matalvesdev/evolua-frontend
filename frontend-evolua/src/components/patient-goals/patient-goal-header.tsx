@@ -1,26 +1,26 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { EvolutionHistoryPanel } from "@/components/evolution-history"
+import { useState } from 'react';
+import { EvolutionHistoryPanel } from '@/components/evolution-history';
 
 interface PatientGoalHeaderProps {
-  patientId: string
-  patientName: string
-  patientImage?: string
-  status: "active" | "inactive" | "discharged"
-  age: number
-  birthDate: string
-  specialty: string
-  schooling: string
-  startDate: string
-  overallProgress: number
+  patientId: string;
+  patientName: string;
+  patientImage?: string;
+  status: 'active' | 'inactive' | 'discharged';
+  age: number;
+  birthDate: string;
+  specialty: string;
+  schooling: string;
+  startDate: string;
+  overallProgress: number;
 }
 
 const statusConfig = {
-  active: { label: "Em Tratamento", color: "green" },
-  inactive: { label: "Inativo", color: "gray" },
-  discharged: { label: "Alta", color: "blue" },
-}
+  active: { label: 'Em Tratamento', color: 'green' },
+  inactive: { label: 'Inativo', color: 'gray' },
+  discharged: { label: 'Alta', color: 'blue' },
+};
 
 export function PatientGoalHeader({
   patientId,
@@ -34,16 +34,16 @@ export function PatientGoalHeader({
   startDate,
   overallProgress,
 }: PatientGoalHeaderProps) {
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
-  const statusInfo = statusConfig[status]
-  const initial = patientName.charAt(0)
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const statusInfo = statusConfig[status];
+  const initial = patientName.charAt(0);
 
   return (
     <>
-      <section className="glass-card rounded-3xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-start relative overflow-hidden transition-all hover:shadow-lg border border-white">
+      <section className="glass-card rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col lg:flex-row gap-6 md:gap-8 items-start relative overflow-hidden transition-all hover:shadow-lg border border-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-linear-to-bl from-[#8A05BE]/10 via-[#8A05BE]/10 to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        
-        <div className="flex-1 flex flex-col md:flex-row gap-6 items-center md:items-start z-10 w-full">
+
+        <div className="flex-1 flex flex-col md:flex-row gap-4 sm:gap-6 items-center md:items-start z-10 w-full min-w-0">
           {/* Patient Avatar */}
           <div className="relative group shrink-0">
             {patientImage ? (
@@ -64,8 +64,12 @@ export function PatientGoalHeader({
           {/* Patient Info */}
           <div className="flex flex-col items-center md:items-start text-center md:text-left flex-1">
             <div className="flex items-center gap-3 mb-2 flex-wrap justify-center md:justify-start">
-              <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{patientName}</h1>
-              <span className={`px-3 py-1 bg-${statusInfo.color}-100/50 text-${statusInfo.color}-700 border border-${statusInfo.color}-200/50 text-xs font-bold rounded-full backdrop-blur-sm`}>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight break-words">
+                {patientName}
+              </h1>
+              <span
+                className={`px-3 py-1 bg-${statusInfo.color}-100/50 text-${statusInfo.color}-700 border border-${statusInfo.color}-200/50 text-[11px] sm:text-xs font-bold rounded-full backdrop-blur-sm`}
+              >
                 {statusInfo.label}
               </span>
             </div>
@@ -76,7 +80,9 @@ export function PatientGoalHeader({
                 {age} anos ({birthDate})
               </span>
               <span className="flex items-center gap-1.5 px-3 py-1 bg-white/50 rounded-lg border border-white/50">
-                <span className="material-symbols-outlined text-[#8A05BE] text-[18px]">medical_services</span>
+                <span className="material-symbols-outlined text-[#8A05BE] text-[18px]">
+                  medical_services
+                </span>
                 {specialty}
               </span>
               <span className="flex items-center gap-1.5 px-3 py-1 bg-white/50 rounded-lg border border-white/50">
@@ -85,19 +91,19 @@ export function PatientGoalHeader({
               </span>
             </div>
 
-            <div className="flex gap-3 w-full md:w-auto flex-wrap">
-              <button className="flex-1 md:flex-none bg-[#8A05BE] hover:bg-[#7A04AA] text-white text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-lg shadow-[#8A05BE]/25 hover:shadow-[#8A05BE]/40 flex items-center justify-center gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:flex gap-2 sm:gap-3 w-full md:w-auto">
+              <button className="w-full xl:w-auto bg-[#8A05BE] hover:bg-[#7A04AA] text-white text-sm font-bold py-2.5 px-4 sm:px-6 rounded-full transition-all shadow-lg shadow-[#8A05BE]/25 hover:shadow-[#8A05BE]/40 flex items-center justify-center gap-2">
                 <span className="material-symbols-outlined text-[18px]">print</span>
                 Imprimir Plano
               </button>
               <button
                 onClick={() => setIsHistoryOpen(true)}
-                className="flex-1 md:flex-none bg-white border border-[#8A05BE]/30 hover:bg-[#8A05BE]/5 text-[#8A05BE] text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-sm flex items-center justify-center gap-2"
+                className="w-full xl:w-auto bg-white border border-[#8A05BE]/30 hover:bg-[#8A05BE]/5 text-[#8A05BE] text-sm font-bold py-2.5 px-4 sm:px-6 rounded-full transition-all shadow-sm flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined text-[18px]">timeline</span>
                 Histórico de Evolução
               </button>
-              <button className="flex-1 md:flex-none bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 text-sm font-bold py-2.5 px-6 rounded-full transition-all shadow-sm">
+              <button className="w-full xl:w-auto sm:col-span-2 xl:col-span-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 text-sm font-bold py-2.5 px-4 sm:px-6 rounded-full transition-all shadow-sm">
                 Editar Detalhes
               </button>
             </div>
@@ -109,12 +115,16 @@ export function PatientGoalHeader({
           <div className="flex flex-col gap-1">
             <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">Início</span>
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#8A05BE] text-[20px]">calendar_today</span>
+              <span className="material-symbols-outlined text-[#8A05BE] text-[20px]">
+                calendar_today
+              </span>
               <span className="text-lg font-bold text-gray-900">{startDate}</span>
             </div>
           </div>
           <div className="flex flex-col gap-2 flex-1">
-            <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">Progresso Geral</span>
+            <span className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+              Progresso Geral
+            </span>
             <div className="flex items-center gap-3">
               <span className="text-2xl font-bold text-gray-900">{overallProgress}%</span>
               <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden shadow-inner">
@@ -128,6 +138,27 @@ export function PatientGoalHeader({
             </div>
           </div>
         </div>
+
+        <div className="lg:hidden w-full z-10 grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-white/60 pt-4">
+          <div className="bg-white/60 rounded-xl px-3 py-2 border border-white/60">
+            <p className="text-[11px] font-bold text-gray-600 uppercase tracking-wider">Início</p>
+            <p className="text-sm font-semibold text-gray-900 mt-1">{startDate}</p>
+          </div>
+          <div className="bg-white/60 rounded-xl px-3 py-2 border border-white/60">
+            <p className="text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+              Progresso Geral
+            </p>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-sm font-semibold text-gray-900">{overallProgress}%</span>
+              <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-linear-to-r from-[#8A05BE] to-[#C084FC] rounded-full"
+                  style={{ width: `${overallProgress}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <EvolutionHistoryPanel
@@ -136,5 +167,5 @@ export function PatientGoalHeader({
         onClose={() => setIsHistoryOpen(false)}
       />
     </>
-  )
+  );
 }

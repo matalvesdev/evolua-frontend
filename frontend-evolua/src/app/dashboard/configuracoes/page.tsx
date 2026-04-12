@@ -1,25 +1,25 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useUser } from "@/hooks"
-import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import * as React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useUser } from '@/hooks';
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 
 const NAV_TABS = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/dashboard/pacientes", label: "Pacientes" },
-  { href: "/dashboard/agendamentos", label: "Agenda" },
-  { href: "/dashboard/financeiro", label: "Financeiro" },
-  { href: "/dashboard/relatorios", label: "Relatórios" },
-  { href: "/dashboard/configuracoes", label: "Configurações" },
-]
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/dashboard/pacientes', label: 'Pacientes' },
+  { href: '/dashboard/agendamentos', label: 'Agenda' },
+  { href: '/dashboard/financeiro', label: 'Financeiro' },
+  { href: '/dashboard/relatorios', label: 'Relatórios' },
+  { href: '/dashboard/configuracoes', label: 'Configurações' },
+];
 
 export default function ConfiguracoesPage() {
-  const pathname = usePathname()
-  const { loading } = useUser()
-  const [isSaving, setIsSaving] = React.useState(false)
-  const [saved, setSaved] = React.useState(false)
+  const pathname = usePathname();
+  const { loading } = useUser();
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [saved, setSaved] = React.useState(false);
 
   const [prefs, setPrefs] = React.useState({
     emailNotifications: true,
@@ -27,118 +27,141 @@ export default function ConfiguracoesPage() {
     appointmentReminders: true,
     reportNotifications: true,
     darkMode: false,
-  })
+  });
 
   const [passwords, setPasswords] = React.useState({
-    current: "",
-    newPass: "",
-    confirm: "",
-  })
-  const [passError, setPassError] = React.useState("")
-  const [passSuccess, setPassSuccess] = React.useState(false)
+    current: '',
+    newPass: '',
+    confirm: '',
+  });
+  const [passError, setPassError] = React.useState('');
+  const [passSuccess, setPassSuccess] = React.useState(false);
 
-  const togglePref = (key: keyof typeof prefs) =>
-    setPrefs((p) => ({ ...p, [key]: !p[key] }))
+  const togglePref = (key: keyof typeof prefs) => setPrefs((p) => ({ ...p, [key]: !p[key] }));
 
   const handleSavePrefs = async () => {
-    setIsSaving(true)
-    setSaved(false)
-    await new Promise((r) => setTimeout(r, 1000))
-    setIsSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
-  }
+    setIsSaving(true);
+    setSaved(false);
+    await new Promise((r) => setTimeout(r, 1000));
+    setIsSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
 
   const handleChangePassword = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setPassError("")
-    setPassSuccess(false)
+    e.preventDefault();
+    setPassError('');
+    setPassSuccess(false);
     if (passwords.newPass.length < 6) {
-      setPassError("A nova senha deve ter pelo menos 6 caracteres")
-      return
+      setPassError('A nova senha deve ter pelo menos 6 caracteres');
+      return;
     }
     if (passwords.newPass !== passwords.confirm) {
-      setPassError("As senhas não coincidem")
-      return
+      setPassError('As senhas não coincidem');
+      return;
     }
-    setIsSaving(true)
-    await new Promise((r) => setTimeout(r, 1000))
-    setIsSaving(false)
-    setPassSuccess(true)
-    setPasswords({ current: "", newPass: "", confirm: "" })
-    setTimeout(() => setPassSuccess(false), 3000)
-  }
+    setIsSaving(true);
+    await new Promise((r) => setTimeout(r, 1000));
+    setIsSaving(false);
+    setPassSuccess(true);
+    setPasswords({ current: '', newPass: '', confirm: '' });
+    setTimeout(() => setPassSuccess(false), 3000);
+  };
 
   if (loading) {
     return (
       <>
         <DashboardHeader />
-        <nav className="px-6 lg:px-10 bg-transparent mb-8 hidden md:block">
-          <div className="flex items-center justify-center gap-8">
+        <nav className="hidden md:block bg-transparent mb-8 px-6 lg:px-10">
+          <div className="flex items-center justify-start lg:justify-center gap-4 lg:gap-8 overflow-x-auto pb-2 no-scrollbar">
             {NAV_TABS.map((item) => {
-              const isActive = item.href === "/dashboard"
-                ? pathname === "/dashboard"
-                : pathname.startsWith(item.href)
+              const isActive =
+                item.href === '/dashboard'
+                  ? pathname === '/dashboard'
+                  : pathname.startsWith(item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                     isActive
-                      ? "border-[#8A05BE] text-gray-900"
-                      : "border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30"
+                      ? 'border-[#8A05BE] text-gray-900'
+                      : 'border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30'
                   }`}
                 >
                   {item.label}
                 </Link>
-              )
+              );
             })}
           </div>
         </nav>
         <div className="flex-1 flex items-center justify-center">
-          <span className="material-symbols-outlined text-4xl text-[#8A05BE] animate-spin">progress_activity</span>
+          <span className="material-symbols-outlined text-4xl text-[#8A05BE] animate-spin">
+            progress_activity
+          </span>
         </div>
       </>
-    )
+    );
   }
 
   const notifItems = [
-    { key: "emailNotifications" as const, icon: "mail", label: "Notificações por e-mail", desc: "Receba atualizações e lembretes por e-mail" },
-    { key: "pushNotifications" as const, icon: "notifications_active", label: "Notificações push", desc: "Receba notificações no navegador" },
-    { key: "appointmentReminders" as const, icon: "event", label: "Lembretes de agendamentos", desc: "Receba lembretes antes dos agendamentos" },
-    { key: "reportNotifications" as const, icon: "description", label: "Notificações de relatórios", desc: "Seja notificado quando relatórios forem gerados" },
-  ]
+    {
+      key: 'emailNotifications' as const,
+      icon: 'mail',
+      label: 'Notificações por e-mail',
+      desc: 'Receba atualizações e lembretes por e-mail',
+    },
+    {
+      key: 'pushNotifications' as const,
+      icon: 'notifications_active',
+      label: 'Notificações push',
+      desc: 'Receba notificações no navegador',
+    },
+    {
+      key: 'appointmentReminders' as const,
+      icon: 'event',
+      label: 'Lembretes de agendamentos',
+      desc: 'Receba lembretes antes dos agendamentos',
+    },
+    {
+      key: 'reportNotifications' as const,
+      icon: 'description',
+      label: 'Notificações de relatórios',
+      desc: 'Seja notificado quando relatórios forem gerados',
+    },
+  ];
 
   return (
     <>
       <DashboardHeader />
 
       {/* Navigation tabs */}
-      <nav className="px-6 lg:px-10 bg-transparent mb-8 hidden md:block">
-        <div className="flex items-center justify-center gap-8">
+      <nav className="hidden md:block bg-transparent mb-8 px-6 lg:px-10">
+        <div className="flex items-center justify-start lg:justify-center gap-4 lg:gap-8 overflow-x-auto pb-2 no-scrollbar">
           {NAV_TABS.map((item) => {
-            const isActive = item.href === "/dashboard"
-              ? pathname === "/dashboard"
-              : pathname.startsWith(item.href)
+            const isActive =
+              item.href === '/dashboard'
+                ? pathname === '/dashboard'
+                : pathname.startsWith(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={`px-1 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   isActive
-                    ? "border-[#8A05BE] text-gray-900"
-                    : "border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30"
+                    ? 'border-[#8A05BE] text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-[#8A05BE] hover:border-[#8A05BE]/30'
                 }`}
               >
                 {item.label}
               </Link>
-            )
+            );
           })}
         </div>
       </nav>
 
-      <main className="flex-1 overflow-y-auto p-4 md:p-8">
-        <div className="max-w-3xl mx-auto space-y-6">
+      <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="max-w-4xl mx-auto space-y-6">
           {/* Page header */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Configurações</h1>
@@ -163,17 +186,21 @@ export default function ConfiguracoesPage() {
                   key={item.key}
                   type="button"
                   onClick={() => togglePref(item.key)}
-                  className="w-full flex items-center justify-between p-4 rounded-xl hover:bg-white/60 transition-colors"
+                  className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl hover:bg-white/60 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
                     <span className="material-symbols-outlined text-gray-400">{item.icon}</span>
-                    <div className="text-left">
+                    <div className="text-left min-w-0">
                       <p className="text-sm font-semibold text-gray-900">{item.label}</p>
                       <p className="text-xs text-gray-500">{item.desc}</p>
                     </div>
                   </div>
-                  <div className={`w-11 h-6 rounded-full relative transition-colors ${prefs[item.key] ? "bg-[#8A05BE]" : "bg-gray-300"}`}>
-                    <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${prefs[item.key] ? "translate-x-5.5" : "translate-x-0.5"}`} />
+                  <div
+                    className={`w-11 h-6 rounded-full relative transition-colors ${prefs[item.key] ? 'bg-[#8A05BE]' : 'bg-gray-300'}`}
+                  >
+                    <div
+                      className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${prefs[item.key] ? 'translate-x-5.5' : 'translate-x-0.5'}`}
+                    />
                   </div>
                 </button>
               ))}
@@ -183,24 +210,28 @@ export default function ConfiguracoesPage() {
             <div className="border-t border-gray-100/50 mt-4 pt-4">
               <button
                 type="button"
-                onClick={() => togglePref("darkMode")}
-                className="w-full flex items-center justify-between p-4 rounded-xl hover:bg-white/60 transition-colors"
+                onClick={() => togglePref('darkMode')}
+                className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl hover:bg-white/60 transition-colors"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <span className="material-symbols-outlined text-gray-400">dark_mode</span>
-                  <div className="text-left">
+                  <div className="text-left min-w-0">
                     <p className="text-sm font-semibold text-gray-900">Modo escuro</p>
                     <p className="text-xs text-gray-500">Ativar tema escuro na interface</p>
                   </div>
                 </div>
-                <div className={`w-11 h-6 rounded-full relative transition-colors ${prefs.darkMode ? "bg-[#8A05BE]" : "bg-gray-300"}`}>
-                  <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${prefs.darkMode ? "translate-x-5.5" : "translate-x-0.5"}`} />
+                <div
+                  className={`w-11 h-6 rounded-full relative transition-colors ${prefs.darkMode ? 'bg-[#8A05BE]' : 'bg-gray-300'}`}
+                >
+                  <div
+                    className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${prefs.darkMode ? 'translate-x-5.5' : 'translate-x-0.5'}`}
+                  />
                 </div>
               </button>
             </div>
 
             {/* Save prefs */}
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100/50 mt-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 pt-4 border-t border-gray-100/50 mt-4">
               {saved && (
                 <span className="flex items-center gap-1.5 text-sm text-green-600 font-medium">
                   <span className="material-symbols-outlined text-lg">check_circle</span>
@@ -210,11 +241,13 @@ export default function ConfiguracoesPage() {
               <button
                 onClick={handleSavePrefs}
                 disabled={isSaving}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#8A05BE] text-white text-sm font-semibold hover:bg-[#7A04AA] disabled:opacity-60 transition-all shadow-lg shadow-purple-200/50"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#8A05BE] text-white text-sm font-semibold hover:bg-[#7A04AA] disabled:opacity-60 transition-all shadow-lg shadow-purple-200/50"
               >
                 {isSaving ? (
                   <>
-                    <span className="material-symbols-outlined text-lg animate-spin">progress_activity</span>
+                    <span className="material-symbols-outlined text-lg animate-spin">
+                      progress_activity
+                    </span>
                     Salvando...
                   </>
                 ) : (
@@ -239,11 +272,13 @@ export default function ConfiguracoesPage() {
               </div>
             </div>
 
-            <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
+            <form onSubmit={handleChangePassword} className="space-y-4 max-w-xl">
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold text-gray-700">Senha atual</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-lg">key</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-lg">
+                    key
+                  </span>
                   <input
                     type="password"
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white/50 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(138,5,190,0.25)] focus:border-[#8A05BE]/30 transition-all"
@@ -257,7 +292,9 @@ export default function ConfiguracoesPage() {
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold text-gray-700">Nova senha</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-lg">lock</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-lg">
+                    lock
+                  </span>
                   <input
                     type="password"
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white/50 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(138,5,190,0.25)] focus:border-[#8A05BE]/30 transition-all"
@@ -271,7 +308,9 @@ export default function ConfiguracoesPage() {
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold text-gray-700">Confirmar nova senha</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-lg">lock</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-gray-400 text-lg">
+                    lock
+                  </span>
                   <input
                     type="password"
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white/50 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[rgba(138,5,190,0.25)] focus:border-[#8A05BE]/30 transition-all"
@@ -299,7 +338,7 @@ export default function ConfiguracoesPage() {
               <button
                 type="submit"
                 disabled={isSaving}
-                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#8A05BE] text-white text-sm font-semibold hover:bg-[#7A04AA] disabled:opacity-60 transition-all shadow-lg shadow-purple-200/50"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#8A05BE] text-white text-sm font-semibold hover:bg-[#7A04AA] disabled:opacity-60 transition-all shadow-lg shadow-purple-200/50"
               >
                 <span className="material-symbols-outlined text-lg">lock</span>
                 Alterar senha
@@ -318,7 +357,7 @@ export default function ConfiguracoesPage() {
                 <p className="text-xs text-red-600">Ações irreversíveis que afetarão sua conta</p>
               </div>
             </div>
-            <button className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-all">
+            <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-red-500 text-white text-sm font-semibold hover:bg-red-600 transition-all">
               <span className="material-symbols-outlined text-lg">delete_forever</span>
               Excluir conta
             </button>
@@ -326,5 +365,5 @@ export default function ConfiguracoesPage() {
         </div>
       </main>
     </>
-  )
+  );
 }
