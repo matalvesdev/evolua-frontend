@@ -48,3 +48,24 @@ export { useUser } from "./use-user"
 
 // Message Hooks
 export { useMessages, useCreateMessage } from "./use-messages"
+
+// Push Notifications Hook
+export { usePushNotifications } from "./use-push-notifications"
+
+// Clinical Protocols Hooks
+export { useProtocolTemplates, usePatientProtocols, useProtocolMutations } from "./use-clinical-protocols"
+
+// Treatment Plans Hooks
+export { useTreatmentPlans, useTreatmentPlan, useTreatmentPlanMutations } from "./use-treatment-plans"
+
+// Exercises Hooks
+export { useExerciseTemplates, useExercisePrescriptions, useExerciseMutations } from "./use-exercises"
+
+// CAA Hooks
+export { useCAABoards, useCAABoard, useArasaacSearch, useCAAboadMutations } from "./use-caa"
+
+// Materials Hooks
+export { useMaterials, useMaterial, useMaterialMutations } from "./use-materials"
+
+// Therapeutic Session Hooks
+export { useSessions, useTherapeuticSessionRecorder } from "./use-therapeutic-session"

@@ -11,8 +11,9 @@ const mobileNavItems = [
   { href: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
   { href: '/dashboard/pacientes', icon: 'groups', label: 'Pacientes' },
   { href: '/dashboard/agendamentos', icon: 'calendar_month', label: 'Agenda' },
-  { href: '/dashboard/tarefas', icon: 'check_circle', label: 'Tarefas' },
-  { href: '/dashboard/financeiro', icon: 'payments', label: 'Financeiro' },
+  { href: '/dashboard/sessao', icon: 'videocam', label: 'Sessão' },
+  { href: '/dashboard/caa', icon: 'grid_view', label: 'CAA' },
+  { href: '/dashboard/materiais', icon: 'article', label: 'Materiais' },
   { href: '/dashboard/relatorios', icon: 'description', label: 'Relatórios' },
 ];
 

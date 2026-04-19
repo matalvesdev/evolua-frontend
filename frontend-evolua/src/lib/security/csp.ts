@@ -29,12 +29,16 @@ export function buildCSP({ nonce, isDev }: CSPConfig): string {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
   const staticApiOrigins = ['https://api.useevolua.online', 'https://api.useevolua.com.br'];
 
-  const scriptSrc = isDev ? `'self' 'unsafe-eval' 'unsafe-inline'` : `'self' 'unsafe-inline'`;
+  // Use nonce for script-src to avoid unsafe-inline in production
+  const scriptSrc = isDev
+    ? `'self' 'unsafe-eval' 'unsafe-inline' 'nonce-${nonce}'`
+    : `'self' 'unsafe-inline' 'nonce-${nonce}'`;
 
   const connectSources = [
     "'self'",
     '*.supabase.co',
     'https://app.himetrica.com',
+    'https://api.arasaac.org', // ARASAAC pictogram API
     ...staticApiOrigins,
   ];
   if (supabaseUrl) connectSources.push(supabaseUrl);
@@ -54,7 +58,8 @@ export function buildCSP({ nonce, isDev }: CSPConfig): string {
     'script-src': scriptSrc,
     'style-src': "'self' 'unsafe-inline' fonts.googleapis.com",
     'style-src-elem': "'self' 'unsafe-inline' fonts.googleapis.com",
-    'img-src': "'self' data: blob: *.supabase.co lh3.googleusercontent.com images.unsplash.com",
+    'img-src':
+      "'self' data: blob: *.supabase.co lh3.googleusercontent.com images.unsplash.com https://static.arasaac.org https://api.arasaac.org",
     'connect-src': Array.from(new Set(connectSources)).join(' '),
     'frame-ancestors': "'none'",
     'font-src': "'self' fonts.googleapis.com fonts.gstatic.com",
