@@ -193,17 +193,24 @@ export function AiChatFab() {
                                   <span className="material-symbols-outlined text-[10px]">link</span>
                                   Fontes
                                 </p>
-                                {msg.sources.map((src, j) => (
-                                  <a
-                                    key={j}
-                                    href={src.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block text-[10px] text-[#8A05BE] hover:underline truncate mb-0.5"
-                                  >
-                                    [{j + 1}] {src.title}
-                                  </a>
-                                ))}
+                                {msg.sources.map((src, j) => {
+                                  const href = src.source_url ?? src.url
+                                  return href ? (
+                                    <a
+                                      key={j}
+                                      href={href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="block text-[10px] text-[#8A05BE] hover:underline truncate mb-0.5"
+                                    >
+                                      [{j + 1}] {src.title}
+                                    </a>
+                                  ) : (
+                                    <span key={j} className="block text-[10px] text-gray-500 truncate mb-0.5">
+                                      [{j + 1}] {src.title}
+                                    </span>
+                                  )
+                                })}
                               </div>
                             )}
                           </>
