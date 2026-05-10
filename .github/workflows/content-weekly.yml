@@ -1,0 +1,97 @@
+name: Geração Semanal de Conteúdo
+
+on:
+  # Toda segunda-feira às 07:00 BRT (10:00 UTC)
+  schedule:
+    - cron: "0 10 * * 1"
+
+  # Permite rodar manualmente pelo GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      semana:
+        description: "Semana (ex: 2026-05-05_a_2026-05-11). Deixe em branco para semana atual."
+        required: false
+        default: ""
+      sem_upload:
+        description: "Pular upload para Supabase?"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  gerar-conteudo:
+    name: Gerar conteúdo e enviar relatório
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: .agents/marketing/gerador/package-lock.json
+
+      - name: Instalar dependências do gerador
+        working-directory: .agents/marketing/gerador
+        run: npm ci
+
+      - name: Instalar Chrome (Puppeteer)
+        run: npx puppeteer browsers install chrome
+        working-directory: .agents/marketing/gerador
+
+      - name: Criar .env do gerador
+        working-directory: .agents/marketing/gerador
+        run: |
+          cat > .env << EOF
+          GITHUB_TOKEN=${{ secrets.GERADOR_GITHUB_TOKEN }}
+          COPILOT_ENDPOINT=https://models.inference.ai.azure.com
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          MODEL_CRIATIVO=gpt-4o
+          MODEL_COPY=claude-3-5-sonnet
+          MODEL_ESTRATEGIA=o1-mini
+          MODEL_RAPIDO=gpt-4o-mini
+          MODEL_BLOG=gpt-4o
+          MODEL_CARROSSEL=gpt-4o
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_BUCKET=marketing-assets
+          POSTS_POR_SEMANA=5
+          RENDER_IMAGES=true
+          SLIDE_WIDTH=1080
+          SLIDE_HEIGHT=1080
+          STORY_WIDTH=1080
+          STORY_HEIGHT=1920
+          GMAIL_USER=${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD=${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_DESTINO=mateusalvesbassanelli@gmail.com
+          EOF
+
+      - name: Rodar cronjob
+        run: |
+          SEMANA_FLAG=""
+          if [ -n "${{ github.event.inputs.semana }}" ]; then
+            SEMANA_FLAG="--semana=${{ github.event.inputs.semana }}"
+          fi
+
+          UPLOAD_FLAG=""
+          if [ "${{ github.event.inputs.sem_upload }}" = "true" ]; then
+            UPLOAD_FLAG="--sem-upload"
+          fi
+
+          node scripts/cronjob-semanal.js $SEMANA_FLAG $UPLOAD_FLAG
+
+      - name: Upload output como artefato
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: conteudo-semanal-${{ github.run_id }}
+          path: .agents/marketing/gerador/output/
+          retention-days: 30

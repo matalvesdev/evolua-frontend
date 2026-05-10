@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #F8F8FF;
+    color: #1A1A2E;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    color: #1A1A2E;
+  }
+
+  ::selection {
+    background-color: #C5C1FF;
+    color: #1A1A2E;
+  }
+}
+
+/* ─── MagicUI keyframes ─────────────────────────── */
+@keyframes aurora-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+@keyframes shine-border {
+  0%   { --shine-angle: 0deg; }
+  100% { --shine-angle: 360deg; }
+}
+
+@keyframes rainbow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── MagicUI component styles ─────────────────── */
+@layer components {
+  /* AuroraText — família roxa coesa */
+  .aurora-text .aurora-letter {
+    display: inline-block;
+    background: linear-gradient(
+      90deg,
+      #4f46e5 0%,
+      #6C63FF 30%,
+      #818cf8 60%,
+      #a78bfa 80%,
+      #6C63FF 100%
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: aurora-shift var(--aurora-speed, 3s) ease infinite;
+  }
+
+  /* RainbowButton — shimmer monocromático dentro da família roxa */
+  .rainbow-button {
+    background: linear-gradient(90deg, #4f46e5, #6C63FF, #818cf8, #6C63FF, #4f46e5);
+    background-size: 300% 100%;
+    animation: rainbow 5s ease infinite;
+  }
+  .rainbow-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: blur(14px);
+    opacity: 0.35;
+    z-index: 0;
+    animation: rainbow 5s ease infinite;
+  }
+
+  /* Variante para fundos escuros (bg-primary / bg-deep) */
+  .rainbow-button-on-dark {
+    background: linear-gradient(90deg, #ffffff, #EAE8FF, #ffffff, #EAE8FF, #ffffff);
+    background-size: 300% 100%;
+    color: #1A1A2E;
+    animation: rainbow 5s ease infinite;
+  }
+  .rainbow-button-on-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: blur(14px);
+    opacity: 0.25;
+    z-index: 0;
+    animation: rainbow 5s ease infinite;
+  }
+
+  /* Animate marquee (CSS-only fallback for Marquee component) */
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+}
+
+@layer components {
+  .btn-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+  }
+}

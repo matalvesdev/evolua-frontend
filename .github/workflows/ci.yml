@@ -1,79 +1,179 @@
 name: CI
 
 on:
-  workflow_dispatch:
   pull_request:
-    branches: ['main', 'master', 'develop']
-    paths:
-      - 'frontend-evolua/**'
-      - 'backend-evolua/backend-evolua/**'
-      - '.github/workflows/ci.yml'
+    branches: [main]
   push:
-    branches: ['main', 'master', 'develop']
-    paths:
-      - 'frontend-evolua/**'
-      - 'backend-evolua/backend-evolua/**'
-      - '.github/workflows/ci.yml'
+    branches: [main]
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  NODE_VERSION: '22'
+
 jobs:
+  # ────────────────────────────────────────────────────────────────────
+  # Backend Fastify + contracts (TS) — typecheck + tests
+  # ────────────────────────────────────────────────────────────────────
+  backend-ts:
+    name: Backend (TS) typecheck + tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend-core/package-lock.json
+      - run: npm ci
+      - name: Build contracts (Zod source of truth)
+        run: npm run build -w contracts
+      - name: Generate Prisma client
+        run: npx prisma generate
+      - name: Typecheck api
+        run: npx tsc --noEmit -p apps/api/tsconfig.json
+      - name: Tests (Vitest)
+        run: npm test --workspace=apps/api --if-present
+
+  # ────────────────────────────────────────────────────────────────────
+  # AI service (Python / FastAPI)
+  # ────────────────────────────────────────────────────────────────────
+  ai-python:
+    name: AI service (Python) lint + import
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend-core/apps/ai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: Ruff lint
+        run: ruff check app
+      - name: Mypy strict
+        run: mypy app
+        continue-on-error: true
+
+  # ────────────────────────────────────────────────────────────────────
+  # WhatsApp service (Go)
+  # ────────────────────────────────────────────────────────────────────
+  whatsapp-go:
+    name: WhatsApp service (Go) build + vet
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend-core/apps/services/whatsapp
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+          cache-dependency-path: backend-core/apps/services/whatsapp/go.sum
+      - run: go mod download
+      - run: go vet ./...
+      - run: go build ./...
+      - run: go test ./... -count=1
+        continue-on-error: true # remover quando houver testes
+
+  # ────────────────────────────────────────────────────────────────────
+  # Frontend (dashboard SPA)
+  # ────────────────────────────────────────────────────────────────────
   frontend:
-    name: Frontend (lint + test + build)
+    name: Frontend lint + typecheck + build
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: frontend-evolua
+        working-directory: frontend-core
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-          cache-dependency-path: frontend-evolua/package-lock.json
+          cache-dependency-path: frontend-core/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend-core/dist
+          retention-days: 7
 
-      - name: Install deps
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Test
-        run: npm run test -- --ci --passWithNoTests
-
-      - name: Build
-        run: npm run build
-
-  backend:
-    name: Backend (lint + test + build)
+  # ────────────────────────────────────────────────────────────────────
+  # Landing page (marketing)
+  # ────────────────────────────────────────────────────────────────────
+  landing:
+    name: Landing lint + typecheck + build
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend-evolua/backend-evolua
+        working-directory: landing-core
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-          cache-dependency-path: backend-evolua/backend-evolua/package-lock.json
+          cache-dependency-path: landing-core/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: landing-dist
+          path: landing-core/dist
+          retention-days: 7
 
-      - name: Install deps
-        run: npm ci
+  # ────────────────────────────────────────────────────────────────────
+  # Migration drift — detecta schema.prisma diferente das migrations
+  # ────────────────────────────────────────────────────────────────────
+  prisma-migrations:
+    name: Prisma migrations drift check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: backend-core/package-lock.json
+      - run: npm ci
+      - name: Verifica que schema.prisma == migrations aplicadas
+        # `prisma migrate diff --exit-code` retorna 2 se houver diff.
+        # Sem DB real — comparamos schema.prisma com o estado das migrations.
+        run: |
+          npx prisma migrate diff \
+            --from-migrations prisma/migrations \
+            --to-schema-datamodel prisma/schema.prisma \
+            --exit-code
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Test
-        run: npm run test -- --ci --passWithNoTests
-
-      - name: Build
-        run: npm run build
+  # ────────────────────────────────────────────────────────────────────
+  # Secret scan — falha em commits com chaves típicas
+  # ────────────────────────────────────────────────────────────────────
+  secret-scan:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

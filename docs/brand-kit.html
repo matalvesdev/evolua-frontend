@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evolua — Brand Kit v5.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  <style>
+    .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; }
+  </style>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ── Paleta Evolua — Brand Kit v5.0 — Serena & Clínica ── */
+
+      /* Superfícies */
+      --canvas:         #F8F8FF;   /* fundo base da página */
+      --surface:        #FFFFFF;   /* cards, navbar, modais */
+      --surface-low:    #F0EFF9;   /* seções alternadas */
+
+      /* Primário — Violeta */
+      --primary:        #6C63FF;   /* CTA principal, links ativos */
+      --primary-dark:   #5650D4;   /* hover de botões */
+      --primary-light:  #8B85FF;   /* estados desabilitados */
+
+      /* Lavanda — "ar" da marca */
+      --lavender:       #EAE8FF;   /* bg de seções, badges */
+      --lavender-mid:   #C5C1FF;   /* bordas ativas, divisores */
+      --lavender-deep:  #9D97F5;   /* ícones médios */
+
+      /* Ink — tipografia */
+      --ink:            #1A1A2E;   /* headlines, corpo (quase-preto violáceo) */
+      --ink-soft:       #4A4A6A;   /* subtítulos, texto auxiliar */
+      --muted:          #8888AA;   /* labels, placeholders */
+
+      /* Deep — seção escura */
+      --deep:           #2D2B55;   /* fundo de seções de contraste */
+      --deep-mid:       #3D3A6B;   /* cards sobre fundo deep */
+      --deep-light:     #514E85;   /* bordas sobre deep */
+
+      /* Utilidades */
+      --neon:           #C4F135;   /* CTA sobre fundo escuro */
+      --rose:           #FB7185;   /* urgência, erros */
+      --white:          #FFFFFF;
+
+      /* Aliases semânticos */
+      --outline-variant: #E0DFEF;
+      --outline:         #C5C1FF;
+
+      --text-primary:   #1A1A2E;
+      --text-secondary: #4A4A6A;
+      --text-muted:     #8888AA;
+
+      --font-headline: 'Space Grotesk', sans-serif;
+      --font-body:     'DM Sans', sans-serif;
+      --radius: 2px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--canvas);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 216px; height: 100vh;
+      background: var(--ink);
+      border-right: 1px solid var(--outline-variant);
+      display: flex;
+      flex-direction: column;
+      padding: 32px 20px;
+      z-index: 100;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      font-family: var(--font-headline);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--lavender-deep);
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+    .sidebar-version {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .nav-group { margin-bottom: 24px; }
+    .nav-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .nav-item {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 5px 0;
+      transition: color .15s;
+    }
+    .nav-item:hover { color: var(--lavender-deep); }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: 216px;
+      padding: 64px 60px;
+      max-width: 1120px;
+    }
+
+    /* ── SECTIONS ── */
+    section { margin-bottom: 96px; }
+    .section-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-family: var(--font-headline);
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.05;
+      margin-bottom: 14px;
+      letter-spacing: -1.5px;
+    }
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 48px;
+      line-height: 1.75;
+    }
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--outline-variant);
+      margin-bottom: 80px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 72px 0 64px;
+      border-bottom: 1px solid var(--outline-variant);
+      margin-bottom: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute;
+      top: -120px; left: -80px;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(108,99,255,.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      top: -60px; right: 0;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(251,113,133,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--font-headline);
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -3px;
+      line-height: 1;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-top: 24px;
+      max-width: 440px;
+      line-height: 1.7;
+    }
+
+    /* ── LOGO CARDS ── */
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .logo-card {
+      padding: 48px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-card-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .lc-dark        { background: var(--ink); }
+    .lc-surface     { background: var(--surface-low); }
+    .lc-violet      { background: var(--deep-mid); }
+    .lc-gradient    { background: linear-gradient(135deg, var(--deep) 0%, var(--primary-dark) 100%); }
+    .lc-light       { background: var(--canvas); }
+    .lc-neon        { background: var(--neon); }
+    .lc-white       { background: var(--white); }
+    .lc-mono-dark   { background: #111; }
+
+    /* ── PALETA ── */
+    .swatch-row {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+    .swatch {
+      flex: 1;
+      height: 88px;
+      display: flex;
+      align-items: flex-end;
+      padding: 10px 12px;
+      cursor: default;
+      position: relative;
+      transition: height .15s;
+      min-width: 0;
+    }
+    .swatch:hover { height: 112px; z-index: 1; }
+    .swatch-label {
+      font-size: 10px;
+      font-family: var(--font-headline);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      opacity: 0;
+      transition: opacity .15s;
+      line-height: 1.4;
+      word-break: break-all;
+    }
+    .swatch:hover .swatch-label { opacity: 1; }
+    .swatch-sm { height: 56px; }
+    .swatch-sm:hover { height: 72px; }
+
+    /* Token table */
+    .token-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 32px; }
+    .token-table th {
+      text-align: left; padding: 8px 14px;
+      border-bottom: 1px solid var(--outline-variant);
+      font-size: 10px; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--text-muted); font-weight: 600;
+    }
+    .token-table td {
+      padding: 11px 14px; border-bottom: 1px solid var(--outline-variant);
+      color: var(--text-muted); font-size: 12px; vertical-align: middle;
+    }
+    .token-table tr:hover td { background: var(--surface-low); }
+    .token-dot {
+      display: inline-block; width: 14px; height: 14px;
+      border-radius: 2px; vertical-align: middle; margin-right: 8px;
+    }
+    .token-name { color: var(--text-primary); font-family: var(--font-body); font-size: 13px; }
+    .token-hex  { font-family: 'Courier New', monospace; color: var(--lavender-deep); }
+    .token-use  { color: var(--text-muted); font-family: var(--font-body); font-size: 12px; }
+
+    /* ── TYPE ── */
+    .type-specimen { padding: 40px; background: var(--surface-low); margin-bottom: 2px; }
+    .type-meta { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 16px; font-weight: 600; }
+    .type-row { display: flex; align-items: baseline; gap: 28px; padding: 22px 40px; background: var(--surface-low); }
+    .type-row-meta { width: 128px; flex-shrink: 0; font-size: 11px; color: var(--text-muted); font-family: 'Courier New', monospace; line-height: 1.6; }
+
+    /* ── SPACING ── */
+    .spacing-grid { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+    .spacing-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .spacing-box { background: var(--primary); opacity: 0.8; }
+    .spacing-label { font-size: 10px; color: var(--text-muted); font-family: 'Courier New', monospace; }
+    .radius-grid { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 32px; }
+    .radius-item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .radius-box { width: 80px; height: 80px; background: var(--lavender); border: 2px solid var(--primary); }
+    .radius-label { font-size: 10px; color: var(--text-muted); font-family: 'Courier New', monospace; text-align: center; line-height: 1.5; }
+
+    /* ── COMPONENTS ── */
+    .comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2px; }
+    .comp-card {
+      background: var(--surface);
+      border: 1px solid var(--outline-variant);
+      padding: 36px 32px 32px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .comp-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--primary);
+    }
+    .comp-card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .comp-card-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: var(--primary-dark);
+      font-weight: 700;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .comp-card-label::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--primary);
+    }
+    .comp-card-num {
+      font-family: var(--font-headline);
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; font-family: var(--font-body); font-size: 14px;
+      font-weight: 600; cursor: pointer; border: none;
+      border-radius: var(--radius); letter-spacing: 0.2px;
+      transition: opacity .15s, transform .1s;
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary  { background: var(--primary); color: var(--white); }
+    .btn-accent   { background: var(--rose); color: var(--ink); }
+    .btn-neon     { background: var(--neon); color: var(--deep); font-weight: 700; }
+    .btn-outline  { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+    .btn-ghost    { background: transparent; color: var(--ink); border: 1.5px solid var(--lavender-mid); }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Badge */
+    .badge {
+      display: inline-block; padding: 3px 10px; font-size: 10px;
+      font-weight: 700; letter-spacing: 0.8px;
+      border-radius: var(--radius); text-transform: uppercase;
+    }
+    .badge-v    { background: var(--lavender); color: var(--primary-dark); border: 1px solid var(--lavender-mid); }
+    .badge-acc  { background: var(--lavender); color: var(--primary-dark); border: 1px solid var(--lavender-mid); }
+    .badge-neon { background: var(--neon); color: var(--deep); }
+    .badge-rose { background: rgba(251,113,133,.15); color: #B8485A; border: 1px solid rgba(251,113,133,.4); }
+    .badge-dark { background: var(--ink); color: var(--lavender-deep); border: 1px solid var(--deep-mid); }
+
+    /* Input */
+    .input-demo {
+      width: 100%; background: var(--surface); border: 1.5px solid var(--outline-variant);
+      color: var(--ink); padding: 12px 16px; font-family: var(--font-body);
+      font-size: 14px; border-radius: var(--radius); outline: none; transition: border-color .15s;
+    }
+    .input-demo:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,99,255,.18); }
+    .input-demo::placeholder { color: var(--muted); }
+    .input-label { font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; font-weight: 500; }
+    .input-group { display: flex; flex-direction: column; gap: 16px; }
+
+    /* Card */
+    .ui-card {
+      background: var(--lavender); border: 1px solid var(--lavender-mid);
+      border-radius: var(--radius); padding: 24px; position: relative; overflow: hidden;
+    }
+    .ui-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; background: var(--primary);
+    }
+    .ui-card-title { font-family: var(--font-headline); font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; padding-left: 8px; }
+    .ui-card-body  { font-size: 13px; color: var(--ink-soft); line-height: 1.6; padding-left: 8px; }
+
+    /* Stat */
+    .stat-card { background: var(--surface-low); border: 1px solid var(--outline-variant); border-radius: var(--radius); padding: 20px 24px; }
+    .stat-label { font-size: 10px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .stat-value { font-family: var(--font-headline); font-size: 38px; font-weight: 700; color: var(--ink); line-height: 1; }
+    .stat-delta { font-size: 13px; color: var(--primary); margin-top: 4px; font-weight: 600; }
+    .stat-grid  { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+
+    /* Alert */
+    .alert { padding: 14px 18px; border-left: 4px solid; border-radius: var(--radius); font-size: 13px; margin-bottom: 8px; line-height: 1.6; }
+    .alert-v    { border-color: var(--primary); background: rgba(108,99,255,.08); color: var(--primary-dark); }
+    .alert-acc  { border-color: var(--lavender-mid); background: var(--lavender); color: var(--primary-dark); }
+    .alert-neon { border-color: var(--neon); background: rgba(196,241,53,.18); color: var(--ink); }
+    .alert-err  { border-color: var(--rose); background: rgba(251,113,133,.10); color: #B8485A; }
+
+    /* ── POST MOCKUPS ── */
+    .post-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 2px; }
+    .post-mock {
+      aspect-ratio: 1; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 22px; position: relative; overflow: hidden;
+    }
+    .post-mock-title {
+      font-family: var(--font-headline); font-size: 16px; font-weight: 700;
+      line-height: 1.2; letter-spacing: -0.4px; margin-bottom: 8px;
+    }
+    .post-mock-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.5; font-weight: 600; }
+
+    /* ── GUIDELINE ── */
+    .guideline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .guideline-card { padding: 36px; position: relative; }
+    .guideline-do   { background: rgba(108,99,255,.08); border-top: 3px solid var(--primary); }
+    .guideline-dont { background: rgba(251,113,133,.06); border-top: 3px solid var(--rose); }
+    .guideline-tag  { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 20px; }
+    .guideline-do .guideline-tag   { color: var(--primary-dark); }
+    .guideline-dont .guideline-tag { color: var(--rose); }
+    .guideline-text { font-size: 13px; color: var(--ink-soft); line-height: 1.8; }
+    .guideline-text p { margin-bottom: 10px; }
+
+    /* ── DOWNLOADS ── */
+    .dl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; }
+    .dl-card {
+      background: var(--surface);
+      border: 1px solid var(--outline-variant);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .dl-preview {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .dl-preview.bg-deep    { background: var(--deep); }
+    .dl-preview.bg-ink     { background: var(--ink); }
+    .dl-preview.bg-canvas  { background: var(--canvas); border-bottom: 1px solid var(--outline-variant); }
+    .dl-preview.bg-white   { background: #FFFFFF; border-bottom: 1px solid var(--outline-variant); }
+    .dl-preview.bg-primary { background: var(--primary); }
+    .dl-preview.bg-neon    { background: var(--neon); }
+    .dl-preview.bg-grad    { background: linear-gradient(135deg, #1A1A2E 0%, #6C63FF 100%); }
+    .dl-preview.ratio-wide  { aspect-ratio: 1200 / 630; padding: 32px; }
+    .dl-preview.ratio-cover { aspect-ratio: 1584 / 396; padding: 24px 48px; }
+    .dl-info {
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid var(--outline-variant);
+    }
+    .dl-title {
+      font-family: var(--font-headline);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .dl-title-name { display: flex; align-items: center; gap: 8px; }
+    .dl-title-name::before {
+      content: '';
+      width: 5px; height: 5px;
+      background: var(--primary);
+    }
+    .dl-meta {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
+    }
+    .dl-buttons {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .dl-btn {
+      flex: 1;
+      padding: 9px 12px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      border: 1px solid var(--outline-variant);
+      background: var(--surface);
+      color: var(--ink);
+      cursor: pointer;
+      transition: background .12s, color .12s, border-color .12s;
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .dl-btn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .dl-btn.dl-btn-primary { background: var(--ink); color: var(--neon); border-color: var(--ink); }
+    .dl-btn.dl-btn-primary:hover { background: var(--deep); }
+
+    .dl-section-title {
+      grid-column: 1 / -1;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      padding: 28px 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+    .dl-section-title::before {
+      content: '';
+      width: 24px; height: 2px;
+      background: var(--primary);
+    }
+
+    .dl-bulk {
+      margin-top: 32px;
+      padding: 32px;
+      background: var(--ink);
+      color: var(--lavender);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .dl-bulk-info { flex: 1; min-width: 220px; }
+    .dl-bulk-info strong { color: var(--white); font-family: var(--font-headline); font-size: 16px; display: block; margin-bottom: 4px; }
+    .dl-bulk-info span { font-size: 12px; color: var(--lavender-deep); line-height: 1.6; }
+
+    /* ── FOOTER ── */
+    .brand-footer {
+      margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--outline-variant);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: var(--text-muted);
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--ink); }
+    ::-webkit-scrollbar-thumb { background: var(--lavender-mid); border-radius: 2px; }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 32px 24px; }
+      .hero h1 { font-size: 44px; }
+      .guideline-grid, .logo-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ───── SIDEBAR ───── -->
+<nav class="sidebar">
+  <div class="sidebar-logo">evolua</div>
+  <div class="sidebar-version">Brand Kit v5.0 · 2026</div>
+  <div class="nav-group">
+    <div class="nav-label">Identidade</div>
+    <a class="nav-item" href="#logo">Logo & Símbolo</a>
+    <a class="nav-item" href="#paleta">Paleta v5.0</a>
+    <a class="nav-item" href="#tipografia">Tipografia</a>
+    <a class="nav-item" href="#espacamento">Espaçamento</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Sistema</div>
+    <a class="nav-item" href="#componentes">Componentes</a>
+    <a class="nav-item" href="#posts">Social Media</a>
+    <a class="nav-item" href="#gradientes">Gradientes</a>
+    <a class="nav-item" href="#diretrizes">Diretrizes</a>
+    <a class="nav-item" href="#downloads">Downloads</a>
+  </div>
+</nav>
+
+<!-- ───── MAIN ───── -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow-2"></div>
+    <div class="hero-eyebrow">Evolua · @useevoluaapp · Brand Kit v5.0</div>
+    <h1>Identidade<br /><em>Visual</em></h1>
+    <p class="hero-sub">Sistema completo de marca — paleta v5.0 light-first, símbolo, tipografia, componentes e diretrizes. Uma só família cromática. Presença máxima.</p>
+  </div>
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 01 · LOGO & SÍMBOLO -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="logo">
+    <div class="section-tag">01 · Identidade</div>
+    <h2>Logo & Símbolo</h2>
+    <p class="section-desc">
+      Símbolo geométrico inspirado em <strong>onda sonora / equalizador de fala</strong> —
+      barras verticais ritmadas dentro de um quadrado sólido. Referência direta ao universo
+      da fonoaudiologia: voz, escuta, fluência, comunicação. Sem arredondamentos, sem ornamentos.
+      Pareado ao wordmark <strong>EVOLUA</strong> em Space Grotesk Black, uppercase,
+      letter-spacing aberto — leitura firme, memorável, profissional.
+    </p>
+
+    <div class="logo-grid">
+
+      <!-- Principal: fundo escuro · lockup horizontal -->
+      <div class="logo-card lc-dark" style="grid-column:1/3;">
+        <div class="logo-card-label">Principal · Fundo escuro</div>
+        <div style="display:flex; align-items:center; gap:18px;">
+          <!-- Símbolo: quad deep + glyph graphic_eq neon -->
+          <div style="width:64px; height:64px; background:#2D2B55; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:34px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+          </div>
+          <!-- Wordmark -->
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:44px; line-height:1; letter-spacing:0.12em; color:#FFFFFF; text-transform:uppercase;">EVOLUA</div>
+        </div>
+        <div style="font-size:9px;letter-spacing:3px;color:var(--lavender-deep);text-transform:uppercase;margin-top:4px;">gestão para fonoaudiólogas</div>
+      </div>
+
+      <!-- Símbolo isolado — app icon -->
+      <div class="logo-card lc-surface" style="align-items:center;">
+        <div class="logo-card-label">Símbolo · App icon</div>
+        <div style="width:96px; height:96px; background:#2D2B55; display:flex; align-items:center; justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:52px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+        </div>
+        <div style="font-size:9px;letter-spacing:2px;color:var(--ink-soft);">96 × 96</div>
+      </div>
+
+      <!-- Sobre fundo violet sólido (primary) -->
+      <div class="logo-card lc-violet">
+        <div class="logo-card-label" style="color:rgba(255,255,255,.55);">Fundo violet</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:52px; height:52px; background:#1A1A2E; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:28px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:34px; line-height:1; letter-spacing:0.12em; color:#FFFFFF; text-transform:uppercase;">EVOLUA</div>
+        </div>
+      </div>
+
+      <!-- Sobre fundo gradient -->
+      <div class="logo-card lc-gradient">
+        <div class="logo-card-label" style="color:rgba(255,255,255,.55);">Fundo gradient</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:52px; height:52px; background:#FFFFFF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:28px; color:#6C63FF; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:34px; line-height:1; letter-spacing:0.12em; color:#FFFFFF; text-transform:uppercase;">EVOLUA</div>
+        </div>
+      </div>
+
+      <!-- Sobre fundo claro (canvas) -->
+      <div class="logo-card lc-light">
+        <div class="logo-card-label" style="color:#4A4A6A;">Fundo claro · Canvas</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:52px; height:52px; background:#2D2B55; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:28px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:34px; line-height:1; letter-spacing:0.12em; color:#1A1A2E; text-transform:uppercase;">EVOLUA</div>
+        </div>
+      </div>
+
+      <!-- Monocromático branco (sobre escuro) -->
+      <div class="logo-card lc-mono-dark">
+        <div class="logo-card-label">Monocromático · Branco</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:52px; height:52px; background:#FFFFFF; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:28px; color:#1A1A2E; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:34px; line-height:1; letter-spacing:0.12em; color:#FFFFFF; text-transform:uppercase;">EVOLUA</div>
+        </div>
+      </div>
+
+      <!-- Fundo neon · contraste máximo -->
+      <div class="logo-card lc-neon" style="grid-column:2/4;">
+        <div class="logo-card-label" style="color:#1A1A2E;">Fundo neon · Contraste máximo</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="width:52px; height:52px; background:#1A1A2E; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:28px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:34px; line-height:1; letter-spacing:0.12em; color:#1A1A2E; text-transform:uppercase;">EVOLUA</div>
+        </div>
+      </div>
+
+    </div><!-- /logo-grid -->
+
+    <!-- Anatomia do símbolo -->
+    <div style="margin-top:40px; padding:40px; background:var(--surface-low);">
+      <div class="type-meta" style="margin-bottom:28px;">Anatomia do símbolo</div>
+      <div style="display:flex; gap:48px; align-items:flex-start; flex-wrap:wrap;">
+        <!-- Mockup ampliado do símbolo -->
+        <div style="position:relative; flex-shrink:0;">
+          <div style="width:160px; height:160px; background:#2D2B55; display:flex; align-items:center; justify-content:center; position:relative;">
+            <span class="material-symbols-outlined" style="font-size:88px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+            <!-- Linhas guia de zona de segurança -->
+            <div style="position:absolute; inset:-20px; border:1px dashed var(--lavender-mid); pointer-events:none;"></div>
+            <div style="position:absolute; left:-32px; top:50%; transform:translateY(-50%); font-size:9px; color:var(--ink-soft); font-family:'Courier New',monospace;">1×</div>
+            <div style="position:absolute; right:-32px; top:50%; transform:translateY(-50%); font-size:9px; color:var(--ink-soft); font-family:'Courier New',monospace;">1×</div>
+          </div>
+          <div style="font-size:10px; color:var(--ink-soft); margin-top:24px; text-align:center; font-family:'Courier New',monospace;">160 × 160 · margem 1×</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:18px; font-size:13px; color:var(--ink-soft); line-height:1.7; max-width:480px;">
+          <div>
+            <span style="display:inline-block;width:12px;height:12px;background:#2D2B55;margin-right:8px;vertical-align:middle;"></span>
+            <strong style="color:var(--ink);">Container quad</strong> — quadrado sólido em <code style="background:var(--lavender);padding:1px 5px;font-size:11px;">deep #2D2B55</code>. Sempre proporção 1:1. Sem borda, sem radius, sem sombra.
+          </div>
+          <div>
+            <span style="display:inline-block;width:12px;height:12px;background:#C4F135;margin-right:8px;vertical-align:middle;"></span>
+            <strong style="color:var(--ink);">Glyph graphic_eq</strong> — Material Symbol Outlined, <code style="background:var(--lavender);padding:1px 5px;font-size:11px;">FILL 1</code>, <code style="background:var(--lavender);padding:1px 5px;font-size:11px;">wght 600</code>, em <code style="background:var(--lavender);padding:1px 5px;font-size:11px;">neon #C4F135</code>. Cinco barras verticais ritmadas — onda sonora / equalizador de fala.
+          </div>
+          <div>
+            <span style="display:inline-block;width:12px;height:12px;background:var(--lavender-mid);margin-right:8px;vertical-align:middle;"></span>
+            <strong style="color:var(--ink);">Proporção do glyph</strong> — ocupa ~55% da largura do container (padding interno equilibrado).
+          </div>
+          <div>
+            <strong style="color:var(--ink);">Zona de segurança</strong> — espaço mínimo livre ao redor do quad = 1× a largura do quad. Nada deve entrar nessa zona.
+          </div>
+          <div>
+            <strong style="color:var(--ink);">Wordmark</strong> — Space Grotesk 700, uppercase, tracking <code style="background:var(--lavender);padding:1px 5px;font-size:11px;">0.12em</code>. Em lockups horizontais, o wordmark fica à direita do quad com gap = 30% da largura do quad.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tamanhos mínimos -->
+    <div style="margin-top:2px; padding:32px; background:var(--surface-low); display:flex; gap:40px; align-items:flex-end; flex-wrap:wrap;">
+      <div class="type-meta" style="width:100%;margin-bottom:8px;">Tamanhos mínimos</div>
+      <div style="text-align:center;">
+        <div style="width:24px; height:24px; background:#2D2B55; display:flex; align-items:center; justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:14px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+        </div>
+        <div style="font-size:10px;color:var(--ink-soft);margin-top:6px;">24px<br/>mínimo digital</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:40px; height:40px; background:#2D2B55; display:flex; align-items:center; justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:22px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+        </div>
+        <div style="font-size:10px;color:var(--ink-soft);margin-top:6px;">40px<br/>favicon</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:64px; height:64px; background:#2D2B55; display:flex; align-items:center; justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:36px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+        </div>
+        <div style="font-size:10px;color:var(--ink-soft);margin-top:6px;">64px<br/>app icon</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="width:120px; height:120px; background:#2D2B55; display:flex; align-items:center; justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:66px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+        </div>
+        <div style="font-size:10px;color:var(--ink-soft);margin-top:6px;">512px<br/>app store</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 02 · PALETA v5.0 -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="paleta">
+    <div class="section-tag">02 · Cor</div>
+    <h2>Paleta v5.0 · Serena & Clínica</h2>
+    <p class="section-desc">
+      Uma única família cromática, light-first. Violeta suave (<strong>primary</strong>) como cor-guia,
+      lavanda como "ar" da marca, fundo off-white com toque azulado para bem-estar visual,
+      <strong>deep</strong> em roxo profundo (não preto absoluto) para seções de contraste,
+      <strong>neon</strong> chartreuse exclusivo para CTAs sobre fundo escuro e <strong>rose</strong> reservado para urgência.
+      Sem fúcsias, sem magentas — sem ruído cromático.
+    </p>
+
+    <!-- Superfícies (light) -->
+    <div class="swatch-row">
+      <div class="swatch" style="background:#F8F8FF;"><span class="swatch-label" style="color:#2D2B55;">canvas<br/>#F8F8FF</span></div>
+      <div class="swatch" style="background:#FFFFFF; box-shadow: inset 0 0 0 1px #E0DFEF;"><span class="swatch-label" style="color:#2D2B55;">surface<br/>#FFFFFF</span></div>
+      <div class="swatch" style="background:#F0EFF9;"><span class="swatch-label" style="color:#2D2B55;">surface-low<br/>#F0EFF9</span></div>
+      <div class="swatch" style="background:#E0DFEF;"><span class="swatch-label" style="color:#2D2B55;">outline-variant<br/>#E0DFEF</span></div>
+    </div>
+
+    <!-- Lavender · "ar" da marca -->
+    <div class="swatch-row">
+      <div class="swatch" style="background:#EAE8FF; flex:1.2;"><span class="swatch-label" style="color:#2D2B55;">lavender<br/>#EAE8FF</span></div>
+      <div class="swatch" style="background:#C5C1FF; flex:1.2;"><span class="swatch-label" style="color:#2D2B55;">lavender-mid<br/>#C5C1FF</span></div>
+      <div class="swatch" style="background:#9D97F5; flex:1.2;"><span class="swatch-label" style="color:#1A1A2E;">lavender-deep<br/>#9D97F5</span></div>
+    </div>
+
+    <!-- Primary · Violeta -->
+    <div class="swatch-row">
+      <div class="swatch" style="background:#8B85FF; flex:1.2;"><span class="swatch-label" style="color:#1A1A2E;">primary-light<br/>#8B85FF</span></div>
+      <div class="swatch" style="background:#6C63FF; flex:1.6;"><span class="swatch-label" style="color:#fff;">primary<br/>#6C63FF</span></div>
+      <div class="swatch" style="background:#5650D4; flex:1.2;"><span class="swatch-label" style="color:#fff;">primary-dark<br/>#5650D4</span></div>
+    </div>
+
+    <!-- Deep · Seções escuras -->
+    <div class="swatch-row">
+      <div class="swatch" style="background:#514E85;"><span class="swatch-label" style="color:#EAE8FF;">deep-light<br/>#514E85</span></div>
+      <div class="swatch" style="background:#3D3A6B;"><span class="swatch-label" style="color:#C5C1FF;">deep-mid<br/>#3D3A6B</span></div>
+      <div class="swatch" style="background:#2D2B55; flex:1.4;"><span class="swatch-label" style="color:#9D97F5;">deep<br/>#2D2B55</span></div>
+      <div class="swatch" style="background:#1A1A2E; flex:1.4;"><span class="swatch-label" style="color:#9D97F5;">ink<br/>#1A1A2E</span></div>
+    </div>
+
+    <!-- Ink · Tipografia -->
+    <div class="swatch-row">
+      <div class="swatch swatch-sm" style="background:#1A1A2E;"><span class="swatch-label" style="color:#9D97F5;">ink<br/>#1A1A2E</span></div>
+      <div class="swatch swatch-sm" style="background:#4A4A6A;"><span class="swatch-label" style="color:#C5C1FF;">ink-soft<br/>#4A4A6A</span></div>
+      <div class="swatch swatch-sm" style="background:#8888AA;"><span class="swatch-label" style="color:#1A1A2E;">muted<br/>#8888AA</span></div>
+    </div>
+
+    <!-- Acentos -->
+    <div class="swatch-row">
+      <div class="swatch" style="background:#C4F135; flex:1.4;"><span class="swatch-label" style="color:#1A1A2E;">neon<br/>#C4F135</span></div>
+      <div class="swatch" style="background:#FB7185; flex:1.2;"><span class="swatch-label" style="color:#1A1A2E;">rose<br/>#FB7185</span></div>
+    </div>
+
+    <!-- Token table -->
+    <table class="token-table">
+      <thead>
+        <tr><th>Token</th><th>Hex</th><th>Uso</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3" style="padding-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft);font-weight:700;">Superfícies</td></tr>
+        <tr><td><span class="token-dot" style="background:#F8F8FF;border:1px solid #E0DFEF;"></span><span class="token-name">--canvas</span></td><td class="token-hex">#F8F8FF</td><td class="token-use">Fundo base da página (off-white com toque azulado)</td></tr>
+        <tr><td><span class="token-dot" style="background:#FFFFFF;border:1px solid #E0DFEF;"></span><span class="token-name">--surface</span></td><td class="token-hex">#FFFFFF</td><td class="token-use">Cards, navbar, modais, elementos elevados</td></tr>
+        <tr><td><span class="token-dot" style="background:#F0EFF9;"></span><span class="token-name">--surface-low</span></td><td class="token-hex">#F0EFF9</td><td class="token-use">Seções alternadas, hover states sutis</td></tr>
+
+        <tr><td colspan="3" style="padding-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft);font-weight:700;">Primary · Violeta</td></tr>
+        <tr><td><span class="token-dot" style="background:#6C63FF;"></span><span class="token-name">--primary</span></td><td class="token-hex">#6C63FF</td><td class="token-use">CTA principal, links ativos, foco de input</td></tr>
+        <tr><td><span class="token-dot" style="background:#5650D4;"></span><span class="token-name">--primary-dark</span></td><td class="token-hex">#5650D4</td><td class="token-use">Hover de botões, estado pressionado</td></tr>
+        <tr><td><span class="token-dot" style="background:#8B85FF;"></span><span class="token-name">--primary-light</span></td><td class="token-hex">#8B85FF</td><td class="token-use">Estados desabilitados, ícones secundários</td></tr>
+
+        <tr><td colspan="3" style="padding-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft);font-weight:700;">Lavender · Ar da marca</td></tr>
+        <tr><td><span class="token-dot" style="background:#EAE8FF;"></span><span class="token-name">--lavender</span></td><td class="token-hex">#EAE8FF</td><td class="token-use">Background de seções, badges, chips, container primary</td></tr>
+        <tr><td><span class="token-dot" style="background:#C5C1FF;"></span><span class="token-name">--lavender-mid</span></td><td class="token-hex">#C5C1FF</td><td class="token-use">Bordas ativas, divisores em destaque, outline</td></tr>
+        <tr><td><span class="token-dot" style="background:#9D97F5;"></span><span class="token-name">--lavender-deep</span></td><td class="token-hex">#9D97F5</td><td class="token-use">Ícones médios, sub-accents, texto sobre fundo dark</td></tr>
+
+        <tr><td colspan="3" style="padding-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft);font-weight:700;">Ink · Tipografia</td></tr>
+        <tr><td><span class="token-dot" style="background:#1A1A2E;"></span><span class="token-name">--ink</span></td><td class="token-hex">#1A1A2E</td><td class="token-use">Headlines, corpo de texto (quase-preto violáceo)</td></tr>
+        <tr><td><span class="token-dot" style="background:#4A4A6A;"></span><span class="token-name">--ink-soft</span></td><td class="token-hex">#4A4A6A</td><td class="token-use">Subtítulos, texto auxiliar, descrições</td></tr>
+        <tr><td><span class="token-dot" style="background:#8888AA;"></span><span class="token-name">--muted</span></td><td class="token-hex">#8888AA</td><td class="token-use">Labels, placeholders, texto terciário</td></tr>
+
+        <tr><td colspan="3" style="padding-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft);font-weight:700;">Deep · Seções escuras</td></tr>
+        <tr><td><span class="token-dot" style="background:#2D2B55;"></span><span class="token-name">--deep</span></td><td class="token-hex">#2D2B55</td><td class="token-use">Fundo de seções de contraste, símbolo do logo</td></tr>
+        <tr><td><span class="token-dot" style="background:#3D3A6B;"></span><span class="token-name">--deep-mid</span></td><td class="token-hex">#3D3A6B</td><td class="token-use">Cards sobre fundo deep, hover em sections dark</td></tr>
+        <tr><td><span class="token-dot" style="background:#514E85;"></span><span class="token-name">--deep-light</span></td><td class="token-hex">#514E85</td><td class="token-use">Bordas e divisores sobre fundos deep/ink</td></tr>
+
+        <tr><td colspan="3" style="padding-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft);font-weight:700;">Acentos</td></tr>
+        <tr><td><span class="token-dot" style="background:#C4F135;"></span><span class="token-name">--neon</span></td><td class="token-hex">#C4F135</td><td class="token-use">CTA sobre fundo escuro (deep/ink) — contraste 9.4:1</td></tr>
+        <tr><td><span class="token-dot" style="background:#FB7185;"></span><span class="token-name">--rose</span></td><td class="token-hex">#FB7185</td><td class="token-use">Urgência, erro, dado crítico, alertas</td></tr>
+
+        <tr><td colspan="3" style="padding-top:18px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft);font-weight:700;">Outline & Texto</td></tr>
+        <tr><td><span class="token-dot" style="background:#E0DFEF;"></span><span class="token-name">--outline-variant</span></td><td class="token-hex">#E0DFEF</td><td class="token-use">Bordas neutras, dividers, table borders</td></tr>
+        <tr><td><span class="token-dot" style="background:#C5C1FF;"></span><span class="token-name">--outline</span></td><td class="token-hex">#C5C1FF</td><td class="token-use">Bordas em destaque, focus ring</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Contraste -->
+    <div style="margin-top:40px; padding:32px; background:var(--surface-low);">
+      <div class="type-meta" style="margin-bottom:20px;">Contraste WCAG AA (mín. 4.5:1)</div>
+      <div style="display:flex;gap:2px;flex-wrap:wrap;">
+        <div style="padding:16px 20px;background:#6C63FF;color:#fff;font-weight:700;font-size:13px;min-width:140px;">
+          Branco em primary<br/><span style="font-weight:400;font-size:11px;opacity:.7;">ratio ~5.9:1 ✓</span>
+        </div>
+        <div style="padding:16px 20px;background:#FFFFFF;color:#1A1A2E;font-weight:700;font-size:13px;min-width:140px;border:1px solid #E0DFEF;">
+          Ink em surface<br/><span style="font-weight:400;font-size:11px;opacity:.7;">ratio ~16.1:1 ✓</span>
+        </div>
+        <div style="padding:16px 20px;background:#2D2B55;color:#C4F135;font-weight:700;font-size:13px;min-width:140px;">
+          Neon em deep<br/><span style="font-weight:400;font-size:11px;opacity:.7;">ratio ~9.4:1 ✓</span>
+        </div>
+        <div style="padding:16px 20px;background:#1A1A2E;color:#9D97F5;font-weight:700;font-size:13px;min-width:140px;">
+          Lavender-deep em ink<br/><span style="font-weight:400;font-size:11px;opacity:.7;">ratio ~7.1:1 ✓</span>
+        </div>
+        <div style="padding:16px 20px;background:#FFFFFF;color:#FB7185;font-weight:700;font-size:13px;min-width:140px;border:1px solid #E0DFEF;">
+          Rose em surface<br/><span style="font-weight:400;font-size:11px;opacity:.7;">ratio ~3.8:1 (apenas textos large)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 03 · TIPOGRAFIA -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="tipografia">
+    <div class="section-tag">03 · Tipografia</div>
+    <h2>Tipografia</h2>
+    <p class="section-desc">Space Grotesk para tudo que precisa parar o scroll. DM Sans para tudo que precisa ser lido. Pesos variando de 300 a 700 — nunca misture mais de dois pesos na mesma peça.</p>
+
+    <div class="type-specimen" style="margin-bottom:2px;">
+      <div class="type-meta">Space Grotesk — Headline / Display</div>
+      <div style="font-family:'Space Grotesk';font-size:88px;font-weight:700;color:var(--ink);letter-spacing:-4px;line-height:1;">Aa</div>
+      <div style="font-family:'Space Grotesk';font-size:15px;color:var(--ink-soft);margin-top:18px;letter-spacing:1.5px;line-height:2;">
+        A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br/>
+        a b c d e f g h i j k l m n o p q r s t u v w x y z<br/>
+        0 1 2 3 4 5 6 7 8 9  !  @  #  $  %  &amp;  *  —  +  =  :
+      </div>
+    </div>
+    <div class="type-specimen" style="margin-bottom:40px;">
+      <div class="type-meta">DM Sans — Body / Label</div>
+      <div style="font-family:'DM Sans';font-size:88px;font-weight:400;color:var(--ink);line-height:1;">Aa</div>
+      <div style="font-family:'DM Sans';font-size:15px;color:var(--ink-soft);margin-top:18px;letter-spacing:1.5px;line-height:2;">
+        A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br/>
+        a b c d e f g h i j k l m n o p q r s t u v w x y z<br/>
+        0 1 2 3 4 5 6 7 8 9  !  @  #  $  %  &amp;  *  —  +  =  :
+      </div>
+    </div>
+
+    <div class="type-meta" style="margin-bottom:2px;">Escala tipográfica</div>
+    <div style="gap:2px;display:flex;flex-direction:column;">
+      <div class="type-row">
+        <div class="type-row-meta">Display<br/>wght 700<br/>72px / -3px</div>
+        <div style="font-family:'Space Grotesk';font-size:72px;font-weight:700;color:var(--ink);letter-spacing:-3px;line-height:1.05;">Escale agora</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-meta">H1<br/>wght 700<br/>48px / -2px</div>
+        <div style="font-family:'Space Grotesk';font-size:48px;font-weight:700;color:var(--ink);letter-spacing:-2px;line-height:1.1;">Gestão que liberta</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-meta">H2<br/>wght 600<br/>36px / -1px</div>
+        <div style="font-family:'Space Grotesk';font-size:36px;font-weight:600;color:var(--ink);letter-spacing:-1px;">15 pacientes por semana</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-meta">H3<br/>wght 600<br/>24px / -0.5px</div>
+        <div style="font-family:'Space Grotesk';font-size:24px;font-weight:600;color:var(--ink);letter-spacing:-0.5px;">Controle total da sua clínica</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-meta">Body L<br/>wght 400<br/>16px / 0</div>
+        <div style="font-family:'DM Sans';font-size:16px;color:var(--ink-soft);line-height:1.7;max-width:440px;">O Evolua é o sistema de gestão para fonoaudiólogas que querem atender mais sem contratar recepcionistas.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-meta">Body M<br/>wght 400<br/>14px / 0</div>
+        <div style="font-family:'DM Sans';font-size:14px;color:var(--ink-soft);line-height:1.7;max-width:440px;">Prontuário eletrônico, agendamento automático, cobrança e relatórios em um só lugar.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-meta">Caption<br/>wght 500<br/>11px / +2px</div>
+        <div style="font-family:'DM Sans';font-size:11px;font-weight:500;color:var(--ink-soft);letter-spacing:2px;text-transform:uppercase;">GESTÃO PARA FONOAUDIÓLOGAS · @USEEVOLUAAPP</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-meta">Label CTA<br/>wght 700<br/>14px / +0.3px</div>
+        <div style="display:inline-flex; padding:10px 18px; background:var(--ink); border-radius:var(--radius);">
+          <span style="font-family:'DM Sans';font-size:14px;font-weight:700;color:var(--neon);letter-spacing:0.3px;">Começar agora, é grátis →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 04 · ESPAÇAMENTO -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="espacamento">
+    <div class="section-tag">04 · Espaçamento & Forma</div>
+    <h2>Espaçamento</h2>
+    <p class="section-desc">Sistema base-4. Todos os espaços são múltiplos de 4px. Border-radius mínimo de 2px — visual quadrado, direto, sem suavização excessiva.</p>
+
+    <div class="type-meta" style="margin-bottom:20px;">Escala de espaço</div>
+    <div class="spacing-grid" style="margin-bottom:48px;">
+      <div class="spacing-item"><div class="spacing-box" style="width:4px;height:4px;"></div><div class="spacing-label">4px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:8px;height:8px;"></div><div class="spacing-label">8px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:12px;height:12px;"></div><div class="spacing-label">12px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:16px;height:16px;"></div><div class="spacing-label">16px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:24px;height:24px;"></div><div class="spacing-label">24px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:32px;height:32px;"></div><div class="spacing-label">32px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:48px;height:48px;"></div><div class="spacing-label">48px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:64px;height:64px;"></div><div class="spacing-label">64px</div></div>
+      <div class="spacing-item"><div class="spacing-box" style="width:96px;height:96px;"></div><div class="spacing-label">96px</div></div>
+    </div>
+
+    <div class="type-meta" style="margin-bottom:20px;">Border Radius</div>
+    <div class="radius-grid">
+      <div class="radius-item"><div class="radius-box" style="border-radius:2px;"></div><div class="radius-label">2px · DEFAULT<br/>Botões, cards, inputs</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:4px;"></div><div class="radius-label">4px · md<br/>Dropdowns, tooltips</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:8px;"></div><div class="radius-label">8px · lg<br/>Modais, painéis</div></div>
+      <div class="radius-item"><div class="radius-box" style="border-radius:9999px;border-color:var(--lavender-mid);"></div><div class="radius-label">full<br/>Avatares apenas</div></div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 05 · COMPONENTES -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="componentes">
+    <div class="section-tag">05 · Componentes</div>
+    <h2>Componentes UI</h2>
+    <p class="section-desc">Biblioteca mínima. Todos os componentes derivam dos tokens v5.0. Nenhuma outra cor entra no sistema sem passar por estes tokens.</p>
+
+    <div class="comp-grid">
+
+      <!-- Botões -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <div class="comp-card-label">Botões</div>
+          <div class="comp-card-num">01 / 06 · 5 variantes</div>
+        </div>
+        <div class="btn-row" style="flex-direction:column;align-items:stretch;gap:10px;">
+          <button class="btn btn-neon">Começar gratuitamente →</button>
+          <button class="btn btn-primary">Agendar demonstração</button>
+          <button class="btn btn-accent">Oferta especial</button>
+          <button class="btn btn-outline">Ver planos</button>
+          <button class="btn btn-ghost">Saiba mais</button>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <div class="comp-card-label">Badges & Tags</div>
+          <div class="comp-card-num">02 / 06 · 5 variantes</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge badge-neon">Novo</span>
+          <span class="badge badge-v">Pilar 2</span>
+          <span class="badge badge-acc">Científico</span>
+          <span class="badge badge-rose">Urgente</span>
+          <span class="badge badge-dark">Carrossel</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;padding-top:14px;border-top:1px dashed var(--outline-variant);">
+          <span class="badge" style="background:rgba(196,241,53,.12);color:#5C7A0F;border:1px solid rgba(196,241,53,.4);">CPL &lt; R$30 ✓</span>
+          <span class="badge badge-v">G4OS</span>
+          <span class="badge badge-acc">TikTok</span>
+        </div>
+      </div>
+
+      <!-- Alertas -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <div class="comp-card-label">Alertas</div>
+          <div class="comp-card-num">03 / 06 · 4 estados</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="alert alert-v">Briefing da semana gerado com sucesso — 5 posts.</div>
+          <div class="alert alert-acc">Insight do PubMed: disfagia afeta 50% dos pós-AVC.</div>
+          <div class="alert alert-neon">CPL validado: R$18. Aprovado para impulsionar.</div>
+          <div class="alert alert-err">Post repetido detectado. Verifique memory.json.</div>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <div class="comp-card-label">Inputs</div>
+          <div class="comp-card-num">04 / 06 · text + select</div>
+        </div>
+        <div class="input-group">
+          <div><div class="input-label">Nome completo</div><input class="input-demo" type="text" placeholder="Dra. Camila Ribeiro" /></div>
+          <div><div class="input-label">CRFa</div><input class="input-demo" type="text" placeholder="2-12345/SP" /></div>
+          <div><div class="input-label">Especialidade</div>
+            <select class="input-demo" style="appearance:none;">
+              <option>Disfagia</option><option>Linguagem</option><option>Voz</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card conteúdo -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <div class="comp-card-label">Card de conteúdo</div>
+          <div class="comp-card-num">05 / 06 · slide / post</div>
+        </div>
+        <div class="ui-card">
+          <div class="ui-card-title">Disfagia pós-AVC — Slide 4</div>
+          <div class="ui-card-body">50% dos pacientes com AVC desenvolvem disfagia. Risco de pneumonia aspirativa: 3× maior. Fonte: PMID 38012345 (2024)</div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="comp-card">
+        <div class="comp-card-header">
+          <div class="comp-card-label">Métricas G4OS</div>
+          <div class="comp-card-num">06 / 06 · stat group</div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-label">CPL Médio</div><div class="stat-value">R$22</div><div class="stat-delta">↓ 18% ✓</div></div>
+          <div class="stat-card"><div class="stat-label">Leads</div><div class="stat-value">347</div><div class="stat-delta">↑ 43%</div></div>
+          <div class="stat-card"><div class="stat-label">Conversão</div><div class="stat-value">12%</div><div class="stat-delta">↑ 2pp</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 06 · SOCIAL MEDIA -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="posts">
+    <div class="section-tag">06 · Social Media</div>
+    <h2>Posts & Stories</h2>
+    <p class="section-desc">
+      Sistema modular de templates para feed e stories. O elemento de identidade é a barra lateral em
+      <strong style="color:var(--primary);">#6C63FF</strong> (primary) ou faixa superior em
+      <strong style="color:var(--neon);background:var(--ink);padding:1px 5px;">#C4F135</strong> (neon, sobre escuro).
+      <strong style="color:var(--rose);">#FB7185</strong> (rose) é exclusivo para badges de urgência e dados críticos.
+      Capas dark = <strong style="color:var(--ink);">#1A1A2E</strong>; slides claros = <strong>#F8F8FF</strong>;
+      gradientes apenas conforme seção 07. Use 2 fontes max: Space Grotesk (títulos) + DM Sans (corpo).
+    </p>
+
+    <!-- ─── A. CAPAS DE CARROSSEL (4 variações) ─── -->
+    <div style="margin-top:24px;font-family:var(--font-headline);font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px;">A · Capas de carrossel · 1080×1080</div>
+    <div class="post-grid">
+
+      <!-- A1: Capa dark padrão -->
+      <div class="post-mock" style="background:var(--ink);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--primary);"></div>
+        <span class="badge badge-acc" style="position:absolute;top:20px;right:20px;">Pilar 1</span>
+        <div class="post-mock-title" style="color:var(--white);padding-left:16px;">Respiração lenta melhora sua saúde — e sua voz?</div>
+        <div class="post-mock-tag" style="color:var(--lavender-deep);padding-left:16px;">@useevoluaapp · Carrossel</div>
+      </div>
+
+      <!-- A2: Capa pergunta provocativa -->
+      <div class="post-mock" style="background:var(--deep);justify-content:center;">
+        <div style="position:absolute;top:0;left:0;right:0;height:5px;background:var(--neon);"></div>
+        <div style="text-align:left;padding:0 8px;">
+          <div style="font-family:'Space Grotesk';font-size:64px;font-weight:700;color:var(--neon);line-height:1;letter-spacing:-2px;">?</div>
+          <div class="post-mock-title" style="color:var(--white);font-size:18px;margin-top:8px;">Você cobra o quanto vale seu atendimento?</div>
+          <div class="post-mock-tag" style="color:var(--lavender-deep);">@useevoluaapp · Pilar 4</div>
+        </div>
+      </div>
+
+      <!-- A3: Capa estatística (number-led) -->
+      <div class="post-mock" style="background:var(--canvas);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--rose);"></div>
+        <div style="padding-left:16px;">
+          <div style="font-family:'Space Grotesk';font-size:64px;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-3px;">73%</div>
+          <div class="post-mock-title" style="color:var(--ink);font-size:14px;margin-top:6px;">das fonos não fazem follow-up adequado em 30 dias</div>
+          <div class="post-mock-tag" style="color:var(--ink-soft);">PMID 38234567 · Pilar 2</div>
+        </div>
+      </div>
+
+      <!-- A4: Capa case/depoimento -->
+      <div class="post-mock" style="background:linear-gradient(160deg,var(--primary-dark) 0%,var(--deep) 100%);">
+        <span class="badge" style="position:absolute;top:20px;right:20px;background:var(--neon);color:var(--ink);">Caso real</span>
+        <div style="padding-left:8px;padding-right:16px;">
+          <div style="font-family:'Space Grotesk';font-size:42px;font-weight:700;color:var(--neon);line-height:1;letter-spacing:-1.5px;">"</div>
+          <div class="post-mock-title" style="color:var(--white);font-size:15px;line-height:1.3;">Reduzi faltas em 60% trocando WhatsApp por agenda automática.</div>
+          <div class="post-mock-tag" style="color:var(--lavender-deep);">— Carla, fonoaudióloga em SP</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── B. SLIDES DE CONTEÚDO (4 variações) ─── -->
+    <div style="margin-top:32px;font-family:var(--font-headline);font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px;">B · Slides internos do carrossel</div>
+    <div class="post-grid">
+
+      <!-- B1: Slide numerado -->
+      <div class="post-mock" style="background:var(--canvas);justify-content:flex-start;padding-top:0;">
+        <div style="position:absolute;top:0;left:0;right:0;height:5px;background:var(--primary);"></div>
+        <div style="padding:24px 20px 0;">
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:14px;">
+            <div style="font-family:'Space Grotesk';font-size:48px;font-weight:700;color:var(--primary);line-height:1;">01</div>
+            <div style="font-size:11px;color:var(--primary-dark);text-transform:uppercase;letter-spacing:1.5px;opacity:.6;">de 7</div>
+          </div>
+          <div class="post-mock-title" style="color:var(--deep);font-size:14px;">A fisiologia vocal responde melhor com respiração lenta</div>
+          <div style="font-size:11px;color:var(--primary-dark);margin-top:8px;opacity:.7;">PMID 39234567 (2024)</div>
+        </div>
+      </div>
+
+      <!-- B2: Slide de definição (key term) -->
+      <div class="post-mock" style="background:var(--lavender);justify-content:center;align-items:center;text-align:center;">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--primary-dark);margin-bottom:12px;font-weight:700;">DEFINIÇÃO</div>
+        <div style="font-family:'Space Grotesk';font-size:24px;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:-0.8px;">Disfagia orofaríngea</div>
+        <div style="font-size:12px;color:var(--ink-soft);margin-top:10px;line-height:1.4;padding:0 16px;">Dificuldade na transição alimentar entre boca e esôfago.</div>
+      </div>
+
+      <!-- B3: Slide passo-a-passo (lista) -->
+      <div class="post-mock" style="background:var(--surface);justify-content:flex-start;padding:24px 20px 0;">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--primary);"></div>
+        <div style="padding-left:14px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--rose);font-weight:700;margin-bottom:10px;">3 passos · pilar 3</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:8px;align-items:start;">
+              <div style="width:18px;height:18px;background:var(--primary);color:var(--white);font-family:'Space Grotesk';font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+              <div style="font-size:11px;color:var(--ink);line-height:1.3;font-weight:500;">Avalie postura cervical antes de iniciar</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:start;">
+              <div style="width:18px;height:18px;background:var(--primary);color:var(--white);font-family:'Space Grotesk';font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+              <div style="font-size:11px;color:var(--ink);line-height:1.3;font-weight:500;">Inicie com 4-2-6 (segundos)</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:start;">
+              <div style="width:18px;height:18px;background:var(--primary);color:var(--white);font-family:'Space Grotesk';font-weight:700;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+              <div style="font-size:11px;color:var(--ink);line-height:1.3;font-weight:500;">Reavalie tensão laríngea</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- B4: Slide comparação (vs) -->
+      <div class="post-mock" style="background:var(--canvas);padding:0;flex-direction:row;">
+        <div style="flex:1;background:var(--ink);padding:18px;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:10px;letter-spacing:1.5px;color:var(--rose);font-weight:700;text-transform:uppercase;margin-bottom:6px;">Antes</div>
+          <div style="font-size:13px;color:var(--white);font-weight:500;line-height:1.3;">Caderno + WhatsApp</div>
+          <div style="font-size:10px;color:var(--lavender-deep);margin-top:4px;">15h/sem em gestão</div>
+        </div>
+        <div style="flex:1;background:var(--neon);padding:18px;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:10px;letter-spacing:1.5px;color:var(--ink);font-weight:700;text-transform:uppercase;margin-bottom:6px;">Depois</div>
+          <div style="font-size:13px;color:var(--ink);font-weight:600;line-height:1.3;">Evolua integrado</div>
+          <div style="font-size:10px;color:var(--ink);margin-top:4px;font-weight:500;">2h/sem em gestão</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── C. STORIES & REELS 9:16 (4 variações) ─── -->
+    <div style="margin-top:32px;font-family:var(--font-headline);font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px;">C · Stories & Reels · 1080×1920</div>
+    <div class="post-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+
+      <!-- C1: Story dado -->
+      <div class="post-mock" style="aspect-ratio:9/16;background:linear-gradient(160deg,var(--deep) 0%,var(--deep-mid) 60%,var(--primary-dark) 100%);">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--primary);"></div>
+        <span class="badge badge-acc" style="position:absolute;top:20px;right:20px;font-size:9px;">STORY</span>
+        <div style="position:absolute;top:50%;left:24px;right:20px;transform:translateY(-50%);">
+          <div style="font-family:'Space Grotesk';font-size:20px;font-weight:700;color:var(--white);line-height:1.25;letter-spacing:-0.5px;">Você sabia que a disfagia afeta 50% dos sobreviventes de AVC?</div>
+        </div>
+        <div class="post-mock-title" style="color:var(--neon);font-size:12px;padding-left:16px;">Arrasta pra ver →</div>
+      </div>
+
+      <!-- C2: TikTok hook -->
+      <div class="post-mock" style="aspect-ratio:9/16;background:var(--ink);">
+        <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--rose));"></div>
+        <span style="position:absolute;top:20px;left:20px;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--lavender-deep);font-weight:600;">TikTok · Hook</span>
+        <div style="position:absolute;top:50%;left:20px;right:20px;transform:translateY(-50%);">
+          <div style="font-family:'Space Grotesk';font-size:26px;font-weight:700;color:var(--white);line-height:1.15;letter-spacing:-0.8px;">3 sinais de que você precisa de um sistema de gestão</div>
+          <div style="margin-top:14px;font-size:12px;color:var(--lavender-deep);">#fonoaudiologia #gestão</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--neon);">@useevoluaapp</div>
+      </div>
+
+      <!-- C3: Reel cover -->
+      <div class="post-mock" style="aspect-ratio:9/16;background:var(--canvas);justify-content:flex-end;padding:0;">
+        <div style="position:absolute;top:0;left:0;right:0;bottom:40%;background:linear-gradient(180deg,var(--primary) 0%,var(--primary-dark) 100%);display:flex;align-items:center;justify-content:center;">
+          <div style="width:50px;height:50px;background:var(--neon);clip-path:polygon(20% 15%,80% 50%,20% 85%);"></div>
+        </div>
+        <div style="padding:16px;background:var(--canvas);width:100%;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--primary-dark);font-weight:700;margin-bottom:6px;">REEL · 30s</div>
+          <div style="font-family:'Space Grotesk';font-size:14px;font-weight:700;color:var(--ink);line-height:1.2;">Como cobrar pacote sem perder paciente</div>
+        </div>
+      </div>
+
+      <!-- C4: Story enquete -->
+      <div class="post-mock" style="aspect-ratio:9/16;background:var(--deep);justify-content:center;">
+        <div style="text-align:center;padding:0 16px;">
+          <div style="font-size:11px;color:var(--lavender-deep);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:18px;">Enquete</div>
+          <div style="font-family:'Space Grotesk';font-size:18px;font-weight:700;color:var(--white);line-height:1.25;letter-spacing:-0.4px;margin-bottom:24px;">Qual o seu maior problema com gestão da clínica?</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="background:var(--white);color:var(--ink);padding:10px;font-size:12px;font-weight:600;text-align:left;">📅 Agendamento</div>
+            <div style="background:var(--neon);color:var(--ink);padding:10px;font-size:12px;font-weight:700;text-align:left;">💰 Cobrança</div>
+            <div style="background:var(--white);color:var(--ink);padding:10px;font-size:12px;font-weight:600;text-align:left;">📋 Prontuário</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── D. CTA & PROMOCIONAIS (3 variações) ─── -->
+    <div style="margin-top:32px;font-family:var(--font-headline);font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px;">D · CTAs & Promocionais · 1080×1080</div>
+    <div class="post-grid">
+
+      <!-- D1: CTA classic -->
+      <div class="post-mock" style="background:var(--deep);justify-content:center;align-items:center;">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--primary);"></div>
+        <div style="text-align:center;padding:0 24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--rose);letter-spacing:1.5px;margin-bottom:14px;text-transform:uppercase;">Quer escalar sem recepcionista?</div>
+          <button class="btn btn-neon" style="font-size:13px;">Teste o Evolua grátis →</button>
+        </div>
+      </div>
+
+      <!-- D2: Webinar/evento -->
+      <div class="post-mock" style="background:linear-gradient(135deg,var(--ink) 0%,var(--primary-dark) 100%);justify-content:flex-start;padding:24px 20px 0;">
+        <div style="font-size:10px;letter-spacing:2px;color:var(--neon);font-weight:700;text-transform:uppercase;">AO VIVO · 14/MAI · 19h</div>
+        <div style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:var(--white);line-height:1.15;letter-spacing:-0.6px;margin:14px 0;">Webinar grátis: Da agenda lotada à clínica organizada</div>
+        <div style="font-size:11px;color:var(--lavender-deep);margin-bottom:12px;">com Carla Mendonça, fono CRFa 12345</div>
+        <div style="margin-top:auto;display:flex;align-items:center;gap:8px;">
+          <div style="width:8px;height:8px;background:var(--rose);"></div>
+          <div style="font-size:11px;color:var(--white);font-weight:600;">Vagas limitadas</div>
+        </div>
+      </div>
+
+      <!-- D3: Promo de feature/lançamento -->
+      <div class="post-mock" style="background:var(--neon);justify-content:flex-start;padding:24px 20px 0;">
+        <div style="display:inline-block;background:var(--ink);color:var(--neon);font-size:10px;font-weight:700;letter-spacing:1.5px;padding:4px 8px;text-transform:uppercase;width:fit-content;">NOVO</div>
+        <div style="font-family:'Space Grotesk';font-size:24px;font-weight:700;color:var(--ink);line-height:1.1;letter-spacing:-0.8px;margin:14px 0 8px;">Cobrança recorrente automática</div>
+        <div style="font-size:12px;color:var(--ink);line-height:1.4;font-weight:500;">Pix, boleto ou cartão. Você define a regra, o Evolua cobra.</div>
+        <div style="margin-top:auto;display:flex;align-items:center;gap:6px;">
+          <div style="font-size:11px;font-weight:700;color:var(--ink);">useevolua.app/billing →</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── E. RECURSOS EDITORIAIS (3 variações) ─── -->
+    <div style="margin-top:32px;font-family:var(--font-headline);font-weight:600;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px;">E · Recursos editoriais · post & blog OG</div>
+    <div class="post-grid">
+
+      <!-- E1: Quote pull -->
+      <div class="post-mock" style="background:var(--canvas);justify-content:center;">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--primary);"></div>
+        <div style="padding-left:16px;padding-right:8px;">
+          <div style="font-family:'Space Grotesk';font-size:36px;font-weight:700;color:var(--primary);line-height:0.9;">"</div>
+          <div style="font-family:'Space Grotesk';font-size:15px;font-weight:600;color:var(--ink);line-height:1.3;letter-spacing:-0.3px;margin-top:-8px;">Cada minuto em planilha é um minuto fora do paciente.</div>
+          <div style="font-size:10px;color:var(--ink-soft);margin-top:10px;text-transform:uppercase;letter-spacing:1px;">— Equipe Evolua</div>
+        </div>
+      </div>
+
+      <!-- E2: Calendário/agenda visual -->
+      <div class="post-mock" style="background:var(--surface);padding:18px;justify-content:flex-start;">
+        <div style="font-size:10px;letter-spacing:1.5px;color:var(--primary-dark);font-weight:700;text-transform:uppercase;margin-bottom:8px;">Sua semana</div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">
+          <div style="background:var(--lavender);height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft);font-weight:600;">S</div>
+          <div style="background:var(--primary);height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--white);font-weight:700;">T</div>
+          <div style="background:var(--primary);height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--white);font-weight:700;">Q</div>
+          <div style="background:var(--lavender);height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft);font-weight:600;">Q</div>
+          <div style="background:var(--primary);height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--white);font-weight:700;">S</div>
+          <div style="background:var(--lavender);height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft);font-weight:600;">S</div>
+          <div style="background:var(--lavender);height:24px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-soft);font-weight:600;">D</div>
+        </div>
+        <div style="margin-top:12px;font-family:'Space Grotesk';font-size:14px;font-weight:700;color:var(--ink);line-height:1.2;">12 atendimentos esta semana — todos confirmados.</div>
+        <div style="font-size:10px;color:var(--ink-soft);margin-top:6px;">Agenda Evolua · sem WhatsApp</div>
+      </div>
+
+      <!-- E3: Blog OG (wide) -->
+      <div style="grid-column:1/-1;display:flex;gap:2px;min-height:160px;">
+        <div style="flex:2;background:var(--ink);padding:36px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;">
+          <div style="position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--primary);"></div>
+          <div style="padding-left:22px;">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--rose);margin-bottom:12px;font-weight:700;">Artigo · Blog Evolua</div>
+            <div style="font-family:'Space Grotesk';font-size:26px;font-weight:700;color:var(--white);letter-spacing:-0.8px;line-height:1.2;margin-bottom:12px;">Como a respiração lenta pode transformar a qualidade vocal</div>
+            <div style="font-size:12px;color:var(--lavender-deep);">7 min de leitura · Pilar 1 · Evidência clínica</div>
+          </div>
+        </div>
+        <div style="flex:1;background:linear-gradient(160deg,var(--primary-dark),var(--deep));padding:36px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div style="width:44px; height:44px; background:#1A1A2E; display:flex; align-items:center; justify-content:center;">
+            <span class="material-symbols-outlined" style="font-size:24px; color:#C4F135; font-variation-settings:'FILL' 1, 'wght' 600;">graphic_eq</span>
+          </div>
+          <div style="font-family:'Space Grotesk';font-size:22px;font-weight:700;color:var(--white);letter-spacing:0.12em;text-transform:uppercase;">EVOLUA</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 07 · GRADIENTES -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="gradientes">
+    <div class="section-tag">07 · Gradientes</div>
+    <h2>Gradientes</h2>
+    <p class="section-desc">Gradientes aprovados. Nunca use mais de 2 stops numa peça de feed. Toda peça respeita a paleta v5.0 — sem fúcsias, sem magentas, sem cores fora do sistema.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;">
+      <div>
+        <div style="height:120px;background:linear-gradient(135deg,#1A1A2E 0%,#6C63FF 100%);"></div>
+        <div style="padding:12px 14px;background:var(--surface-low);font-size:12px;color:var(--ink-soft);">
+          <strong style="color:var(--ink);display:block;margin-bottom:4px;">Deep Rise</strong>
+          ink → primary · 135° · Posts de capa
+        </div>
+      </div>
+      <div>
+        <div style="height:120px;background:linear-gradient(135deg,#2D2B55 0%,#6C63FF 100%);"></div>
+        <div style="padding:12px 14px;background:var(--surface-low);font-size:12px;color:var(--ink-soft);">
+          <strong style="color:var(--ink);display:block;margin-bottom:4px;">Violet Wave</strong>
+          deep → primary · 135° · Hero, headlines bold
+        </div>
+      </div>
+      <div>
+        <div style="height:120px;background:linear-gradient(135deg,#6C63FF 0%,#FB7185 100%);"></div>
+        <div style="padding:12px 14px;background:var(--surface-low);font-size:12px;color:var(--ink-soft);">
+          <strong style="color:var(--ink);display:block;margin-bottom:4px;">Aurora</strong>
+          primary → rose · 135° · Paid media, urgência
+        </div>
+      </div>
+      <div>
+        <div style="height:120px;background:linear-gradient(180deg,#F8F8FF 0%,#EAE8FF 100%);"></div>
+        <div style="padding:12px 14px;background:var(--surface-low);font-size:12px;color:var(--ink-soft);">
+          <strong style="color:var(--ink);display:block;margin-bottom:4px;">Serenity</strong>
+          canvas → lavender · 180° · Fundos de seção light
+        </div>
+      </div>
+      <div>
+        <div style="height:120px;background:linear-gradient(135deg,#1A1A2E 0%,#3D3A6B 50%,#C4F135 100%);"></div>
+        <div style="padding:12px 14px;background:var(--surface-low);font-size:12px;color:var(--ink-soft);">
+          <strong style="color:var(--ink);display:block;margin-bottom:4px;">Neon Strike</strong>
+          ink → deep-mid → neon · CTAs de máximo impacto
+        </div>
+      </div>
+      <div>
+        <div style="height:120px;background:linear-gradient(135deg,#5650D4 0%,#8B85FF 100%);"></div>
+        <div style="padding:12px 14px;background:var(--surface-low);font-size:12px;color:var(--ink-soft);">
+          <strong style="color:var(--ink);display:block;margin-bottom:4px;">Primary Glow</strong>
+          primary-dark → primary-light · Blog OG, banners
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 08 · DIRETRIZES -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="diretrizes">
+    <div class="section-tag">08 · Diretrizes</div>
+    <h2>Do & Don't</h2>
+
+    <div class="guideline-grid">
+      <div class="guideline-card guideline-do">
+        <div class="guideline-tag">✓ Fazer</div>
+        <div class="guideline-text">
+          <p>• Barra lateral em primary (#6C63FF) em todos os posts</p>
+          <p>• Texto sobre primary sempre em #FFFFFF — nunca lavender sobre primary</p>
+          <p>• Rose (#FB7185) em no máximo 1 elemento por peça (urgência/erro)</p>
+          <p>• Neon (#C4F135) exclusivo para CTA sobre fundos deep/ink</p>
+          <p>• Light-first: canvas (#F8F8FF) é o fundo padrão da aplicação</p>
+          <p>• Gancho de capa amplo — nunca começa com "fonoaudióloga"</p>
+          <p>• CTA sempre de captura de lead</p>
+          <p>• Fontes científicas com PMID real nos slides de Pilar 2</p>
+          <p>• Border-radius máximo de 2px nos componentes UI</p>
+        </div>
+      </div>
+      <div class="guideline-card guideline-dont">
+        <div class="guideline-tag">✗ Nunca fazer</div>
+        <div class="guideline-text">
+          <p>• Usar fúcsia, magenta ou cores fora da paleta v5.0</p>
+          <p>• Usar tema dark como fundo padrão — a aplicação é light-first</p>
+          <p>• Combinar mais de 3 tons da família violet numa mesma peça</p>
+          <p>• Colocar texto lavender-deep (#9D97F5) sobre fundo primary (#6C63FF)</p>
+          <p>• Usar neon (#C4F135) sobre fundos light — só sobre deep/ink</p>
+          <p>• Distorcer, rotacionar ou adicionar sombra ao logo</p>
+          <p>• Usar as palavras: "solução", "inovar", "ecossistema", "maximizar"</p>
+          <p>• Impulsionar post sem CPL &lt; R$30 validado no orgânico</p>
+          <p>• Inventar PMIDs — toda fonte científica deve ter verificação real</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regra de cor nos posts -->
+    <div style="margin-top:40px;padding:32px;background:var(--surface-low);">
+      <div class="type-meta" style="margin-bottom:24px;">Hierarquia de cor nos posts (orgânico)</div>
+      <div style="display:flex;gap:2px;flex-wrap:wrap;font-size:12px;">
+        <div style="padding:16px 20px;background:var(--ink);border-left:5px solid var(--primary);min-width:160px;">
+          <div style="color:var(--lavender-deep);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Capa / CTA</div>
+          <div style="color:var(--white);font-weight:700;">Fundo ink<br/>Barra primary<br/>Texto branco</div>
+        </div>
+        <div style="padding:16px 20px;background:var(--canvas);border-top:5px solid var(--primary);min-width:160px;">
+          <div style="color:var(--ink-soft);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Conteúdo</div>
+          <div style="color:var(--ink);font-weight:700;">Fundo canvas<br/>Barra primary<br/>Texto ink</div>
+        </div>
+        <div style="padding:16px 20px;background:linear-gradient(135deg,#1A1A2E,#6C63FF);min-width:160px;">
+          <div style="color:var(--lavender-mid);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:1px;">Paid / Bold</div>
+          <div style="color:var(--white);font-weight:700;">Gradiente Deep Rise<br/>CTA em neon<br/>Badge rose</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ──────────────────────────────────────────────────────── -->
+  <!-- 09 · DOWNLOADS -->
+  <!-- ──────────────────────────────────────────────────────── -->
+  <section id="downloads">
+    <div class="section-tag">09 · Assets</div>
+    <h2>Downloads</h2>
+    <p class="section-desc">
+      Pacote completo de logo e símbolo prontos para upload em redes sociais, landing page,
+      email marketing e materiais impressos. SVG é vetorial (escalável sem perda); PNG é renderizado
+      no tamanho exato pedido pela plataforma. Use sempre a variação de maior contraste com o fundo.
+    </p>
+
+    <!-- ─── Símbolo (App icon / Avatar) ─── -->
+    <div class="dl-section-title">Símbolo · App icon & avatar de redes sociais</div>
+    <div class="dl-grid" style="margin-top:0;">
+
+      <!-- ★ PADRÃO · Mono Primary (roxo, sem quad) -->
+      <div class="dl-card" style="border-color:var(--primary);box-shadow:0 0 0 1px var(--primary) inset;">
+        <div class="dl-preview bg-canvas" data-asset-preview="symbol-primary"></div>
+        <div class="dl-info">
+          <div class="dl-title">
+            <span class="dl-title-name">Símbolo · Padrão</span>
+            <span style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);background:var(--lavender);padding:3px 7px;display:inline-block;width:fit-content;">★ Recomendado</span>
+          </div>
+          <div class="dl-meta">glyph primary <strong style="color:var(--primary);">#6C63FF</strong> · sem quad · uso default em qualquer fundo claro</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="symbol-primary">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-primary" data-size="1024">PNG 1024</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-canvas" data-asset-preview="symbol-deep"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Símbolo · Quad deep</span></div>
+          <div class="dl-meta">quad deep · glyph neon · app icon iOS/Android</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="symbol-deep">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="1024">PNG 1024</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-canvas" data-asset-preview="symbol-ink"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Símbolo · Quad ink</span></div>
+          <div class="dl-meta">quad ink · glyph neon · contraste alto</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="symbol-ink">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-ink" data-size="1024">PNG 1024</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-primary" data-asset-preview="symbol-on-primary"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Símbolo · Sobre primary</span></div>
+          <div class="dl-meta">quad ink · glyph neon · banner violeta</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="symbol-on-primary">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-on-primary" data-size="1024">PNG 1024</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-neon" data-asset-preview="symbol-on-neon"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Símbolo · Sobre neon</span></div>
+          <div class="dl-meta">quad ink · glyph neon · contraste máx.</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="symbol-on-neon">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-on-neon" data-size="1024">PNG 1024</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-ink" data-asset-preview="symbol-mono-white"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Símbolo · Mono branco</span></div>
+          <div class="dl-meta">tudo branco · glyph s/ quad · sobre escuro</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="symbol-mono-white">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-mono-white" data-size="1024">PNG 1024</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-canvas" data-asset-preview="symbol-mono-ink"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Símbolo · Mono ink</span></div>
+          <div class="dl-meta">tudo ink · glyph s/ quad · impressão p/b</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="symbol-mono-ink">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-mono-ink" data-size="1024">PNG 1024</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── Tamanhos exatos para redes sociais ─── -->
+    <div class="dl-section-title">PNG · Tamanhos exatos para perfis</div>
+    <div style="background:var(--surface); border:1px solid var(--outline-variant); padding:24px; display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1px; background:var(--outline-variant);">
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">Instagram</div>
+        <div class="dl-meta">Foto de perfil · 320 × 320</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="320" style="margin-top:auto;">Baixar PNG 320</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">TikTok</div>
+        <div class="dl-meta">Avatar · 200 × 200</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="200" style="margin-top:auto;">Baixar PNG 200</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">Facebook</div>
+        <div class="dl-meta">Foto de perfil · 170 × 170</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="170" style="margin-top:auto;">Baixar PNG 170</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">X / Twitter</div>
+        <div class="dl-meta">Avatar · 400 × 400</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="400" style="margin-top:auto;">Baixar PNG 400</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">YouTube</div>
+        <div class="dl-meta">Foto canal · 800 × 800</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="800" style="margin-top:auto;">Baixar PNG 800</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">LinkedIn</div>
+        <div class="dl-meta">Logo empresa · 300 × 300</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="300" style="margin-top:auto;">Baixar PNG 300</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">Apple Touch</div>
+        <div class="dl-meta">iOS home icon · 180 × 180</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="180" style="margin-top:auto;">Baixar PNG 180</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">Favicon</div>
+        <div class="dl-meta">Browser tab · 32 × 32</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="32" style="margin-top:auto;">Baixar PNG 32</button>
+      </div>
+
+      <div style="background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:10px;">
+        <div style="font-family:var(--font-headline);font-weight:600;font-size:13px;color:var(--ink);">App Store</div>
+        <div class="dl-meta">App icon · 1024 × 1024</div>
+        <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="symbol-deep" data-size="1024" style="margin-top:auto;">Baixar PNG 1024</button>
+      </div>
+
+    </div>
+
+    <!-- ─── Lockup horizontal ─── -->
+    <div class="dl-section-title">Lockup horizontal · Site, email, papelaria</div>
+    <div class="dl-grid" style="grid-template-columns:repeat(auto-fit, minmax(360px, 1fr));">
+
+      <!-- ★ PADRÃO · Mono Primary -->
+      <div class="dl-card" style="border-color:var(--primary);box-shadow:0 0 0 1px var(--primary) inset;">
+        <div class="dl-preview bg-canvas" data-asset-preview="lockup-light" style="aspect-ratio: 16/9;"></div>
+        <div class="dl-info">
+          <div class="dl-title">
+            <span class="dl-title-name">Lockup · Padrão</span>
+            <span style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);background:var(--lavender);padding:3px 7px;display:inline-block;width:fit-content;">★ Recomendado</span>
+          </div>
+          <div class="dl-meta">glyph + EVOLUA em <strong style="color:var(--primary);">primary</strong> · sem quad · site, email, documentos</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="lockup-light">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="lockup-light" data-size="2400">PNG @2x</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-ink" data-asset-preview="lockup-dark" style="aspect-ratio: 16/9;"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Lockup · Fundo escuro</span></div>
+          <div class="dl-meta">glyph neon · word branco · sobre ink/deep</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="lockup-dark">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="lockup-dark" data-size="2400">PNG @2x</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-primary" data-asset-preview="lockup-on-primary" style="aspect-ratio: 16/9;"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Lockup · Sobre primary</span></div>
+          <div class="dl-meta">glyph + word brancos · banners violeta, paid media</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="lockup-on-primary">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="lockup-on-primary" data-size="2400">PNG @2x</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-grad" data-asset-preview="lockup-on-grad" style="aspect-ratio: 16/9;"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Lockup · Sobre gradiente</span></div>
+          <div class="dl-meta">glyph neon · word branco · capas, OG images</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="lockup-on-grad">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="lockup-on-grad" data-size="2400">PNG @2x</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-ink" data-asset-preview="lockup-mono-white" style="aspect-ratio: 16/9;"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Lockup · Mono branco</span></div>
+          <div class="dl-meta">tudo branco · sobre fotos / fundos coloridos</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="lockup-mono-white">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="lockup-mono-white" data-size="2400">PNG @2x</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-canvas" data-asset-preview="lockup-mono-ink" style="aspect-ratio: 16/9;"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Lockup · Mono ink</span></div>
+          <div class="dl-meta">tudo ink · papelaria, documentos PDF, impressão p/b</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="lockup-mono-ink">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="lockup-mono-ink" data-size="2400">PNG @2x</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-canvas" data-asset-preview="lockup-quad" style="aspect-ratio: 16/9;"></div>
+        <div class="dl-info">
+          <div class="dl-title"><span class="dl-title-name">Lockup · Com quad</span></div>
+          <div class="dl-meta">quad deep + glyph neon · uso em apresentações slide-style</div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="lockup-quad">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="lockup-quad" data-size="2400">PNG @2x</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── Banners / Open Graph ─── -->
+    <div class="dl-section-title">Banners · Open Graph & capas</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:2px;">
+
+      <div class="dl-card">
+        <div class="dl-preview ratio-wide bg-grad" data-asset-preview="og-default"></div>
+        <div class="dl-info">
+          <div class="dl-title">
+            <span class="dl-title-name">Open Graph · Padrão</span>
+            <span class="dl-meta">1200 × 630 · Facebook / LinkedIn / WhatsApp / Twitter</span>
+          </div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="og-default">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="og-default" data-size="1200">PNG 1200×630</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview ratio-cover bg-ink" data-asset-preview="cover-linkedin"></div>
+        <div class="dl-info">
+          <div class="dl-title">
+            <span class="dl-title-name">LinkedIn Cover</span>
+            <span class="dl-meta">1584 × 396 · Cover empresa</span>
+          </div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="cover-linkedin">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="cover-linkedin" data-size="1584">PNG 1584×396</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-grad" data-asset-preview="cover-twitter" style="aspect-ratio: 1500/500;padding:32px;"></div>
+        <div class="dl-info">
+          <div class="dl-title">
+            <span class="dl-title-name">Twitter / X Header</span>
+            <span class="dl-meta">1500 × 500 · Banner perfil</span>
+          </div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="cover-twitter">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="cover-twitter" data-size="1500">PNG 1500×500</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-preview bg-ink" data-asset-preview="cover-youtube" style="aspect-ratio: 2560/1440;padding:60px;"></div>
+        <div class="dl-info">
+          <div class="dl-title">
+            <span class="dl-title-name">YouTube Channel Art</span>
+            <span class="dl-meta">2560 × 1440 · Banner canal</span>
+          </div>
+          <div class="dl-buttons">
+            <button class="dl-btn" data-dl="svg" data-asset="cover-youtube">SVG</button>
+            <button class="dl-btn dl-btn-primary" data-dl="png" data-asset="cover-youtube" data-size="2560">PNG 2560×1440</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ─── Bulk download ─── -->
+    <div class="dl-bulk">
+      <div class="dl-bulk-info">
+        <strong>Pacote completo</strong>
+        <span>Baixa todos os SVGs (símbolo + lockup + banners) numa única ação. Os arquivos são salvos individualmente em sua pasta de Downloads.</span>
+      </div>
+      <button class="dl-btn dl-btn-primary" id="dl-bulk-btn" style="padding:14px 28px;font-size:13px;flex:0 0 auto;">↓ Baixar todos os SVGs</button>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <div class="brand-footer">
+    <div>
+      <strong style="color:var(--text-primary);font-family:'Space Grotesk';">Evolua</strong> · Brand Kit v5.0 · Maio 2026<br/>
+      CMO: João Branco · Produto: @useevoluaapp · Paleta: Serena & Clínica
+    </div>
+    <div style="text-align:right;line-height:1.8;">
+      Gerador: <span style="color:var(--lavender-deep);">.agents/marketing/gerador/</span><br/>
+      Tailwind: <span style="color:var(--lavender-deep);">landing-core/tailwind.config.js</span>
+    </div>
+  </div>
+
+</main>
+
+<!-- ──────────────────────────────────────────────────────── -->
+<!-- DOWNLOADS · GERAÇÃO E DOWNLOAD DE ASSETS                -->
+<!-- ──────────────────────────────────────────────────────── -->
+<script>
+(function() {
+  'use strict';
+
+  // ─── Paleta canônica v5.0 ────────────────────────────────
+  const C = {
+    canvas:  '#F8F8FF',
+    surface: '#FFFFFF',
+    ink:     '#1A1A2E',
+    inkSoft: '#4A4A6A',
+    deep:    '#2D2B55',
+    deepMid: '#3D3A6B',
+    primary: '#6C63FF',
+    primaryDark: '#5650D4',
+    lavender:'#EAE8FF',
+    lavenderDeep: '#9D97F5',
+    neon:    '#C4F135',
+    white:   '#FFFFFF',
+    rose:    '#FB7185',
+  };
+
+  // ─── Glyph "graphic_eq" como path SVG (5 barras, viewBox 24x24) ──
+  // Pattern 17/58/83/58/17% — pirâmide simétrica, cantos rx=1
+  const GLYPH_RECTS = `
+    <rect x="3"  y="10" width="2" height="4"  rx="1"/>
+    <rect x="7"  y="5"  width="2" height="14" rx="1"/>
+    <rect x="11" y="2"  width="2" height="20" rx="1"/>
+    <rect x="15" y="5"  width="2" height="14" rx="1"/>
+    <rect x="19" y="10" width="2" height="4"  rx="1"/>
+  `;
+
+  // ─── Construtor: símbolo quadrado (quad + glyph) ─────────
+  // opts: { size, quadColor, glyphColor, withQuad (default true) }
+  function symbolSVG(opts) {
+    const size = opts.size || 1024;
+    const quad = opts.withQuad === false ? '' :
+      `<rect width="${size}" height="${size}" fill="${opts.quadColor}"/>`;
+    // Centraliza glyph 24x24 escalado a 60% do quad
+    const glyphSize = size * 0.62;
+    const glyphOffset = (size - glyphSize) / 2;
+    const scale = glyphSize / 24;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+  ${quad}
+  <g transform="translate(${glyphOffset} ${glyphOffset}) scale(${scale})" fill="${opts.glyphColor}">${GLYPH_RECTS}</g>
+</svg>`;
+  }
+
+  // ─── Construtor: lockup horizontal (símbolo + EVOLUA) ───────
+  // opts: { quadColor?, glyphColor, wordColor, bgColor?, bgGradient?, showQuad? }
+  // Sem quad (default): glyph fica em escala 1:1 ao espaço do quad p/ massa visual consistente
+  function lockupSVG(opts) {
+    const W = 1200, H = 360;
+    const symSize = 240;
+    const symX = 60, symY = (H - symSize) / 2;
+    // Glyph a 88% do espaço alocado quando sem quad (massa visual maior)
+    // Glyph a 62% do quad quando há quad (margem interna)
+    const showQuad = opts.showQuad !== false && !!opts.quadColor;
+    const glyphPct = showQuad ? 0.62 : 0.88;
+    const gSize = symSize * glyphPct;
+    const gOff = (symSize - gSize) / 2;
+    const gScale = gSize / 24;
+    // Wordmark à direita
+    const wordX = symX + symSize + 60;
+    const wordY = H / 2;
+
+    let bg = '';
+    let defs = '';
+    if (opts.bgGradient) {
+      defs = `<defs><linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="${C.deep}"/>
+        <stop offset="100%" stop-color="${C.primary}"/>
+      </linearGradient></defs>`;
+      bg = `<rect width="${W}" height="${H}" fill="url(#bgGrad)"/>`;
+    } else if (opts.bgColor) {
+      bg = `<rect width="${W}" height="${H}" fill="${opts.bgColor}"/>`;
+    }
+
+    const quad = showQuad ?
+      `<rect x="${symX}" y="${symY}" width="${symSize}" height="${symSize}" fill="${opts.quadColor}"/>` : '';
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+  ${defs}
+  ${bg}
+  ${quad}
+  <g transform="translate(${symX + gOff} ${symY + gOff}) scale(${gScale})" fill="${opts.glyphColor}">${GLYPH_RECTS}</g>
+  <text x="${wordX}" y="${wordY}" fill="${opts.wordColor}"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-weight="700" font-size="160"
+    letter-spacing="19.2"
+    dominant-baseline="central">EVOLUA</text>
+</svg>`;
+  }
+
+  // ─── Construtor: Open Graph 1200x630 ─────────────────────
+  function ogSVG() {
+    const W = 1200, H = 630;
+    const quadSize = 180;
+    const quadX = 80, quadY = 80;
+    const gSize = quadSize * 0.62;
+    const gOff = (quadSize - gSize) / 2;
+    const gScale = gSize / 24;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+  <defs><linearGradient id="og" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="${C.deep}"/>
+    <stop offset="100%" stop-color="${C.primary}"/>
+  </linearGradient></defs>
+  <rect width="${W}" height="${H}" fill="url(#og)"/>
+  <rect x="${quadX}" y="${quadY}" width="${quadSize}" height="${quadSize}" fill="${C.ink}"/>
+  <g transform="translate(${quadX + gOff} ${quadY + gOff}) scale(${gScale})" fill="${C.neon}">${GLYPH_RECTS}</g>
+  <text x="${quadX + quadSize + 32}" y="${quadY + quadSize / 2}" fill="${C.white}"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-weight="700" font-size="120"
+    letter-spacing="14.4"
+    dominant-baseline="central">EVOLUA</text>
+  <text x="${quadX}" y="${H - 200}" fill="${C.white}"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-weight="700" font-size="68" letter-spacing="-1">Gestão para fonoaudiólogas</text>
+  <text x="${quadX}" y="${H - 130}" fill="${C.lavenderDeep}"
+    font-family="'DM Sans', system-ui, sans-serif"
+    font-weight="400" font-size="32">Agenda, prontuário e financeiro num só lugar</text>
+  <rect x="${quadX}" y="${H - 80}" width="280" height="3" fill="${C.neon}"/>
+</svg>`;
+  }
+
+  // ─── Construtor: LinkedIn cover 1584x396 ─────────────────
+  function linkedinCoverSVG() {
+    const W = 1584, H = 396;
+    const quadSize = 140;
+    const quadX = 80, quadY = (H - quadSize) / 2;
+    const gSize = quadSize * 0.62;
+    const gOff = (quadSize - gSize) / 2;
+    const gScale = gSize / 24;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+  <rect width="${W}" height="${H}" fill="${C.ink}"/>
+  <rect x="${quadX}" y="${quadY}" width="${quadSize}" height="${quadSize}" fill="${C.deep}"/>
+  <g transform="translate(${quadX + gOff} ${quadY + gOff}) scale(${gScale})" fill="${C.neon}">${GLYPH_RECTS}</g>
+  <text x="${quadX + quadSize + 36}" y="${H/2 - 18}" fill="${C.white}"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-weight="700" font-size="68"
+    letter-spacing="8.16"
+    dominant-baseline="central">EVOLUA</text>
+  <text x="${quadX + quadSize + 36}" y="${H/2 + 36}" fill="${C.lavenderDeep}"
+    font-family="'DM Sans', system-ui, sans-serif"
+    font-weight="400" font-size="22"
+    dominant-baseline="central">Software de gestão para fonoaudiólogas · useevolua.app</text>
+</svg>`;
+  }
+
+  // ─── Construtor: Twitter/X header 1500x500 ───────────────
+  // Layout: avatar circular cobre canto inferior esquerdo na timeline → safe zone à direita
+  // Composição: gradiente diagonal · lockup à direita · tagline · stripe neon
+  function twitterHeaderSVG() {
+    const W = 1500, H = 500;
+    // Twitter sobrepõe avatar 200×200 em x≈70, y≈H-100 → layout deve evitar essa área
+    // Desenho do conteúdo principal à direita/centro
+    const quadSize = 130;
+    const quadX = 360;
+    const quadY = 180;
+    const gSize = quadSize * 0.62;
+    const gOff = (quadSize - gSize) / 2;
+    const gScale = gSize / 24;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+  <defs>
+    <linearGradient id="tw" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${C.ink}"/>
+      <stop offset="55%" stop-color="${C.deep}"/>
+      <stop offset="100%" stop-color="${C.primary}"/>
+    </linearGradient>
+    <pattern id="twDots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="${C.lavenderDeep}" opacity="0.18"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="${W}" height="${H}" fill="url(#tw)"/>
+  <rect width="${W}" height="${H}" fill="url(#twDots)"/>
+
+  <!-- Geometric accent block (right side) -->
+  <rect x="${W - 280}" y="0" width="280" height="${H}" fill="${C.ink}" opacity="0.35"/>
+  <rect x="${W - 280}" y="0" width="6" height="${H}" fill="${C.neon}"/>
+
+  <!-- Safe-zone marker (avatar Twitter sobrepõe canto inferior esquerdo) -->
+  <!-- Lockup -->
+  <rect x="${quadX}" y="${quadY}" width="${quadSize}" height="${quadSize}" fill="${C.ink}"/>
+  <g transform="translate(${quadX + gOff} ${quadY + gOff}) scale(${gScale})" fill="${C.neon}">${GLYPH_RECTS}</g>
+
+  <text x="${quadX + quadSize + 32}" y="${quadY + quadSize / 2 - 14}" fill="${C.white}"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-weight="700" font-size="78"
+    letter-spacing="9.36"
+    dominant-baseline="central">EVOLUA</text>
+  <text x="${quadX + quadSize + 32}" y="${quadY + quadSize / 2 + 42}" fill="${C.lavenderDeep}"
+    font-family="'DM Sans', system-ui, sans-serif"
+    font-weight="400" font-size="20"
+    letter-spacing="1.4"
+    dominant-baseline="central">SOFTWARE PARA FONOAUDIÓLOGAS</text>
+
+  <!-- Tagline destacado -->
+  <rect x="${quadX}" y="${quadY + quadSize + 38}" width="56" height="3" fill="${C.neon}"/>
+  <text x="${quadX}" y="${quadY + quadSize + 78}" fill="${C.white}"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-weight="700" font-size="32"
+    letter-spacing="-0.6">Gestão simples. Atendimento sem ruído.</text>
+
+  <!-- Handle -->
+  <text x="${W - 60}" y="${H - 32}" fill="${C.lavenderDeep}"
+    font-family="'DM Sans', system-ui, sans-serif"
+    font-weight="500" font-size="18"
+    text-anchor="end">@useevoluaapp · useevolua.app</text>
+</svg>`;
+  }
+
+  // ─── Construtor: YouTube channel art 2560x1440 ───────────
+  function youtubeArtSVG() {
+    const W = 2560, H = 1440;
+    // Safe zone central: 1546x423 centered
+    const quadSize = 280;
+    const cx = W / 2, cy = H / 2;
+    const quadX = cx - quadSize / 2 - 320;
+    const quadY = cy - quadSize / 2;
+    const gSize = quadSize * 0.62;
+    const gOff = (quadSize - gSize) / 2;
+    const gScale = gSize / 24;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+  <rect width="${W}" height="${H}" fill="${C.ink}"/>
+  <rect x="${quadX}" y="${quadY}" width="${quadSize}" height="${quadSize}" fill="${C.deep}"/>
+  <g transform="translate(${quadX + gOff} ${quadY + gOff}) scale(${gScale})" fill="${C.neon}">${GLYPH_RECTS}</g>
+  <text x="${quadX + quadSize + 60}" y="${cy - 40}" fill="${C.white}"
+    font-family="'Space Grotesk', system-ui, sans-serif"
+    font-weight="700" font-size="180"
+    letter-spacing="21.6"
+    dominant-baseline="central">EVOLUA</text>
+  <text x="${quadX + quadSize + 60}" y="${cy + 80}" fill="${C.lavenderDeep}"
+    font-family="'DM Sans', system-ui, sans-serif"
+    font-weight="400" font-size="44"
+    dominant-baseline="central">Gestão para fonoaudiólogas</text>
+</svg>`;
+  }
+
+  // ─── Catálogo de assets ──────────────────────────────────
+  const ASSETS = {
+    'symbol-primary':    () => symbolSVG({ withQuad: false,   glyphColor: C.primary }),
+    'symbol-deep':       () => symbolSVG({ quadColor: C.deep, glyphColor: C.neon }),
+    'symbol-ink':        () => symbolSVG({ quadColor: C.ink,  glyphColor: C.neon }),
+    'symbol-on-primary': () => symbolSVG({ quadColor: C.ink,  glyphColor: C.neon }),
+    'symbol-on-neon':    () => symbolSVG({ quadColor: C.ink,  glyphColor: C.neon }),
+    'symbol-mono-white': () => symbolSVG({ withQuad: false,   glyphColor: C.white }),
+    'symbol-mono-ink':   () => symbolSVG({ withQuad: false,   glyphColor: C.ink }),
+
+    'lockup-light':      () => lockupSVG({ glyphColor: C.primary, wordColor: C.primary, bgColor: C.canvas }),
+    'lockup-dark':       () => lockupSVG({ glyphColor: C.neon,    wordColor: C.white,   bgColor: C.ink }),
+    'lockup-on-primary': () => lockupSVG({ glyphColor: C.white,   wordColor: C.white,   bgColor: C.primary }),
+    'lockup-on-grad':    () => lockupSVG({ glyphColor: C.neon,    wordColor: C.white,   bgGradient: true }),
+    'lockup-mono-white': () => lockupSVG({ glyphColor: C.white,   wordColor: C.white,   bgColor: C.ink }),
+    'lockup-mono-ink':   () => lockupSVG({ glyphColor: C.ink,     wordColor: C.ink,     bgColor: C.canvas }),
+    'lockup-quad':       () => lockupSVG({ quadColor: C.deep,     glyphColor: C.neon,   wordColor: C.ink, bgColor: C.canvas }),
+
+    'og-default':        ogSVG,
+    'cover-linkedin':    linkedinCoverSVG,
+    'cover-twitter':     twitterHeaderSVG,
+    'cover-youtube':     youtubeArtSVG,
+  };
+
+  // ─── Render previews dentro dos cards ────────────────────
+  function renderPreviews() {
+    document.querySelectorAll('[data-asset-preview]').forEach(el => {
+      const key = el.dataset.assetPreview;
+      const fn = ASSETS[key];
+      if (!fn) return;
+      // SVG preview com max-width 100% e height auto
+      const svg = fn();
+      const wrapped = svg.replace(
+        /<svg /,
+        '<svg style="max-width:100%;max-height:100%;width:auto;height:auto;display:block;" '
+      );
+      el.innerHTML = wrapped;
+    });
+  }
+
+  // ─── Download SVG (Blob) ─────────────────────────────────
+  function downloadSVG(filename, svgString) {
+    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  // ─── Download PNG (canvas) ───────────────────────────────
+  async function downloadPNG(filename, svgString, targetWidth) {
+    // Garante fonte Space Grotesk carregada antes de rasterizar
+    if (document.fonts && document.fonts.ready) {
+      try { await document.fonts.ready; } catch (_) {}
+    }
+
+    // Lê viewBox para preservar aspect ratio
+    const vbMatch = svgString.match(/viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"/);
+    const vbW = vbMatch ? parseFloat(vbMatch[1]) : targetWidth;
+    const vbH = vbMatch ? parseFloat(vbMatch[2]) : targetWidth;
+    const aspect = vbH / vbW;
+    const W = targetWidth;
+    const H = Math.round(targetWidth * aspect);
+
+    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = W;
+        canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, W, H);
+        URL.revokeObjectURL(url);
+        canvas.toBlob(b => {
+          if (!b) return reject(new Error('canvas.toBlob falhou'));
+          const pngUrl = URL.createObjectURL(b);
+          const a = document.createElement('a');
+          a.href = pngUrl;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(pngUrl), 1000);
+          resolve();
+        }, 'image/png');
+      };
+      img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+      img.src = url;
+    });
+  }
+
+  // ─── Wire-up dos botões ──────────────────────────────────
+  function bindButtons() {
+    document.querySelectorAll('[data-dl]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const type = btn.dataset.dl;
+        const asset = btn.dataset.asset;
+        const size = parseInt(btn.dataset.size, 10) || 1024;
+        const fn = ASSETS[asset];
+        if (!fn) return;
+        const svg = fn();
+        const original = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = '...';
+        try {
+          if (type === 'svg') {
+            downloadSVG(`evolua-${asset}.svg`, svg);
+          } else {
+            await downloadPNG(`evolua-${asset}-${size}.png`, svg, size);
+          }
+        } catch (e) {
+          console.error('Download falhou:', e);
+          alert('Erro ao gerar arquivo. Veja console.');
+        } finally {
+          btn.textContent = original;
+          btn.disabled = false;
+        }
+      });
+    });
+
+    // Bulk download — todos os SVGs
+    const bulkBtn = document.getElementById('dl-bulk-btn');
+    if (bulkBtn) {
+      bulkBtn.addEventListener('click', async () => {
+        const original = bulkBtn.textContent;
+        bulkBtn.disabled = true;
+        const keys = Object.keys(ASSETS);
+        for (let i = 0; i < keys.length; i++) {
+          bulkBtn.textContent = `Baixando ${i + 1}/${keys.length}...`;
+          downloadSVG(`evolua-${keys[i]}.svg`, ASSETS[keys[i]]());
+          // Espaçamento para não saturar o browser
+          await new Promise(r => setTimeout(r, 200));
+        }
+        bulkBtn.textContent = original;
+        bulkBtn.disabled = false;
+      });
+    }
+  }
+
+  // ─── Init ────────────────────────────────────────────────
+  function init() {
+    renderPreviews();
+    bindButtons();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>

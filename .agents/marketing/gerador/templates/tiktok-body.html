@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: #F8F8FF;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Barra violet lateral esquerda */
+  .accent-line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: #6C63FF;
+  }
+
+  /* Barra violet superior */
+  .top-bar {
+    height: 8px;
+    background: #6C63FF;
+    flex-shrink: 0;
+  }
+
+  /* Logo */
+  .logo {
+    padding: 60px 80px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .logo-dot {
+    width: 14px;
+    height: 14px;
+    background: #6C63FF;
+  }
+
+  .logo-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #6C63FF;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Número do passo — neon sobre branco */
+  .step-num {
+    position: absolute;
+    top: 60px;
+    right: 80px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 120px;
+    font-weight: 900;
+    color: #C4F135;
+    letter-spacing: -4px;
+    line-height: 1;
+    /* sombra sutil para legibilidade sobre fundo claro */
+    text-shadow: 0 2px 16px rgba(196,241,53,0.35);
+  }
+
+  /* Conteúdo principal */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 80px;
+    gap: 48px;
+  }
+
+  .titulo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 72px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -2px;
+    color: #2D2B55;
+    max-width: 880px;
+  }
+
+  /* Divisor violet */
+  .divisor {
+    width: 64px;
+    height: 5px;
+    background: #6C63FF;
+  }
+
+  .corpo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #1A1A2E;
+    white-space: pre-line;
+    max-width: 920px;
+  }
+
+  .corpo strong {
+    color: #6C63FF;
+    font-weight: 700;
+  }
+
+  /* Rodapé */
+  .footer {
+    padding: 0 80px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .arroba {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #6C63FF;
+  }
+
+  .counter {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #4A4A6A;
+  }
+</style>
+</head>
+<body>
+  <div class="accent-line"></div>
+  <div class="top-bar"></div>
+
+  <div class="logo">
+    <div class="logo-dot"></div>
+    <span class="logo-text">Evolua</span>
+  </div>
+
+  <span class="step-num">{{NUMERO}}</span>
+
+  <div class="main">
+    <h2 class="titulo">{{TITULO}}</h2>
+    <div class="divisor"></div>
+    <div class="corpo">{{CORPO}}</div>
+  </div>
+
+  <div class="footer">
+    <span class="arroba">{{ARROBA}}</span>
+    <span class="counter">{{NUMERO}} / {{TOTAL}}</span>
+  </div>
+</body>
+</html>

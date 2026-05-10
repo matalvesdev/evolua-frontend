@@ -1,19 +1,18 @@
 # Copilot Workspace Instructions
 
-Este workspace usa monorepo com frontend Next.js, backend NestJS e automacoes de marketing em TypeScript.
+Este workspace usa monorepo com frontend Next.js, backend NestJS em TypeScript.
 
 ## Objetivo de produtividade
 
 - Entregar mudancas completas, com verificacao local quando possivel.
 - Evitar respostas teoricas quando o pedido for de implementacao.
 - Priorizar alteracoes pequenas, seguras e com baixo impacto colateral.
-- Sempre confirmar impacto em frontend, backend e skills quando a tarefa tocar mais de uma area.
 
 ## Stack e comandos principais
 
 - Frontend: `frontend-evolua` (Next.js)
 - Backend: `backend-evolua/backend-evolua` (NestJS + Prisma)
-- Skills de agentes: `skills/*.skill.ts`
+- Squads: `squads/` (dev, marketing, data)
 
 Sempre que alterar frontend:
 
@@ -31,7 +30,6 @@ Sempre que alterar backend:
 - Interfaces de entrada/saida explicitas para funcoes de dominio.
 - Nomes de arquivos em kebab-case.
 - Funcoes assincronas com async/await para I/O.
-- Logs estruturados para fluxos de orquestracao e integracao externa.
 - Evitar mudancas grandes sem dividir em etapas verificaveis.
 
 ## Edicao e seguranca

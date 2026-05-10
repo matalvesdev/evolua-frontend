@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" fill="none">
+  <!-- Fundo quadrado com cor canvas -->
+  <rect width="72" height="72" fill="#6C63FF"/>
+  <!-- Barra vertical do E -->
+  <rect x="14" y="12" width="9" height="48" fill="#FFFFFF"/>
+  <!-- Topo -->
+  <rect x="14" y="12" width="36" height="9" fill="#FFFFFF"/>
+  <!-- Meio (75% da largura) -->
+  <rect x="14" y="31" width="27" height="9" fill="#FFFFFF"/>
+  <!-- Base -->
+  <rect x="14" y="51" width="36" height="9" fill="#FFFFFF"/>
+  <!-- Acento lavanda-mid — quad flutuante superior direito -->
+  <rect x="55" y="12" width="9" height="9" fill="#C5C1FF"/>
+</svg>

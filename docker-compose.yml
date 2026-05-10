@@ -1,0 +1,94 @@
+# ============================================================================
+# docker-compose.yml — Evolua CRM (ambiente local / dev)
+# ============================================================================
+# Serviços incluídos:
+#   - evolution-go        : WhatsApp gateway (porta 8080)
+#   - evolution-go-db     : PostgreSQL dedicado para o Evolution Go
+#   - backend             : NestJS API (porta 3000) — opcional, pode rodar via npm
+#
+# Uso rápido:
+#   docker-compose up -d evolution-go evolution-go-db
+#
+# Para subir tudo:
+#   docker-compose up -d
+# ============================================================================
+
+version: '3.9'
+
+services:
+
+  # ── Evolution Go ────────────────────────────────────────────────────────────
+  evolution-go:
+    image: evoapicloud/evolution-go:latest
+    container_name: evolua_evolution_go
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    environment:
+      # Banco de dados interno do Evolution Go (2 bancos obrigatórios)
+      DATABASE_URL: postgresql://evogo:${EVOGO_DB_PASSWORD:-evogo_secret}@evolution-go-db:5432/evogo_auth
+      DATABASE_USERS_URL: postgresql://evogo:${EVOGO_DB_PASSWORD:-evogo_secret}@evolution-go-db:5432/evogo_users
+      # Chave global de autenticação da API
+      GLOBAL_API_KEY: ${EVOLUTION_GO_API_KEY:-change_me_in_production}
+      # Se true, base64 de mídias é incluído no payload do webhook
+      WEBHOOK_FILES: 'false'
+      # Porta interna
+      PORT: '8080'
+    depends_on:
+      evolution-go-db:
+        condition: service_healthy
+    networks:
+      - evolua_net
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:8080/health']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  # ── Banco de dados do Evolution Go ─────────────────────────────────────────
+  evolution-go-db:
+    image: postgres:16-alpine
+    container_name: evolua_evolution_go_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evogo
+      POSTGRES_PASSWORD: ${EVOGO_DB_PASSWORD:-evogo_secret}
+      POSTGRES_MULTIPLE_DATABASES: evogo_auth,evogo_users
+    volumes:
+      - evolution_go_db_data:/var/lib/postgresql/data
+      # Script para criar múltiplos bancos automaticamente
+      - ./docker/pg-init-multiple-dbs.sh:/docker-entrypoint-initdb.d/init.sh:ro
+    networks:
+      - evolua_net
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U evogo -d evogo_auth']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend NestJS (opcional em dev — use npm run start:dev normalmente) ───
+  # backend:
+  #   build:
+  #     context: ./backend-evolua/backend-evolua
+  #     dockerfile: Dockerfile
+  #   container_name: evolua_backend
+  #   restart: unless-stopped
+  #   ports:
+  #     - '3000:8080'
+  #   env_file:
+  #     - ./backend-evolua/backend-evolua/.env
+  #   environment:
+  #     EVOLUTION_GO_URL: http://evolution-go:8080
+  #   depends_on:
+  #     evolution-go:
+  #       condition: service_healthy
+  #   networks:
+  #     - evolua_net
+
+volumes:
+  evolution_go_db_data:
+
+networks:
+  evolua_net:
+    driver: bridge
