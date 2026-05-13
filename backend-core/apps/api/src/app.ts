@@ -37,6 +37,9 @@ import audioRoutes from './modules/audio/audio.routes.js';
 import aiRoutes from './modules/ai/ai.routes.js';
 import waCrmRoutes from './modules/wa-crm/wa-crm.routes.js';
 import consentRoutes from './modules/consent/consent.routes.js';
+import caaRoutes from './modules/caa/caa.routes.js';
+import materialsRoutes from './modules/materials/materials.routes.js';
+import { billingRoutes, billingWebhookRoutes } from './modules/billing/billing.routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -151,6 +154,20 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(aiRoutes, { prefix: '/api/ai' });
   await app.register(waCrmRoutes, { prefix: '/api/wa-crm' });
   await app.register(consentRoutes, { prefix: '/api/consent' });
+  await app.register(caaRoutes, { prefix: '/api/caa' });
+  await app.register(materialsRoutes, { prefix: '/api/materials' });
+  await app.register(billingRoutes, { prefix: '/api/billing' });
+
+  // Webhooks de billing — contexto encapsulado com parser raw-string para validar HMAC.
+  // O parser só vale dentro deste escopo; demais rotas continuam recebendo JSON parseado.
+  await app.register(async (instance) => {
+    instance.addContentTypeParser(
+      'application/json',
+      { parseAs: 'string' },
+      (_req, body, done) => done(null, body),
+    );
+    await instance.register(billingWebhookRoutes);
+  }, { prefix: '/webhooks' });
 
   return app;
 }
