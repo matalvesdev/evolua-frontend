@@ -10,10 +10,17 @@ const navLinks = [
   { label: 'Changelog', to: '/changelog' },
 ]
 
+const supportLinks = [
+  { label: 'Central de Ajuda', to: '/ajuda' },
+  { label: 'Contato', to: '/contato' },
+  { label: 'Status', to: '/status' },
+]
+
 const legalLinks = [
   { label: 'Termos de Uso', to: '/termos' },
   { label: 'Privacidade', to: '/privacidade' },
-  { label: 'Status', to: '/status' },
+  { label: 'Segurança & LGPD', to: '/seguranca' },
+  { label: 'Cookies', to: '/cookies' },
 ]
 
 const socialLinks = [
@@ -32,7 +39,7 @@ export function Footer() {
           <Logo width={180} variant="light" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-20 mb-16 md:mb-32 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-20 mb-16 md:mb-32 w-full">
           {/* Mission */}
           <div className="sm:col-span-2">
             <h5 className="font-label text-[10px] font-bold tracking-[0.4em] uppercase text-muted mb-6 md:mb-10">
@@ -51,6 +58,24 @@ export function Footer() {
             </h5>
             <div className="flex flex-col gap-4 md:gap-6">
               {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="text-xs font-bold tracking-widest uppercase text-muted hover:text-primary transition-all"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h5 className="font-label text-[10px] font-bold tracking-[0.4em] uppercase text-muted mb-6 md:mb-10">
+              Suporte
+            </h5>
+            <div className="flex flex-col gap-4 md:gap-6">
+              {supportLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
