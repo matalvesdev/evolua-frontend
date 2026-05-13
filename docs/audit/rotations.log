@@ -1,0 +1,140 @@
+# Credential Rotation Audit Log
+
+Registro cronológico de **toda** rotação de credencial do projeto.
+
+Formato por entrada (uma linha por credencial rotacionada):
+
+```
+YYYY-MM-DD | OPERADOR | CREDENCIAL | MOTIVO | TICKET
+```
+
+Motivos canônicos: `scheduled-90d`, `pre-deploy`, `incident`, `member-offboarding`, `key-leak`.
+
+---
+
+## 2026-05-12 — Migração Evolution Go → Open-source
+
+**Operador:** OpenCode
+**Status:** 🟢 CONCLUÍDA
+
+| Variável | Antes | Depois |
+|---|---|---|
+| `EVOLUTION_GO_API_KEY` | (Go binary) | `EVOLUTION_API_KEY` (Evolution v2.2.3) |
+| `EVOLUTION_GO_WEBHOOK_SECRET` | — | `EVOLUTION_WEBHOOK_SECRET` (mesmo valor preservado) |
+| `EVOLUTION_GO_DB_PASSWORD` | — | `EVOLUTION_DB_PASSWORD` |
+| Imagem Docker | `evolutionapi/evolution-go:*` (LICENSE_REQUIRED) | `atendai/evolution-api:v2.2.3` |
+| Postgres | multi-db (Go) | single-db `evolution` |
+| Instância criada | — | `evolua` (instanceId `8f5b20ee-…`, hash `ED0BFCE0-…`) |
+
+Renomeação aplicada em 9 arquivos: scripts, docs, `.env.example` raiz/backend/whatsapp, `env.ts`, `wa-crm.routes.ts`, `main.go`, `config.go`. Compilação `tsc --noEmit -p apps/api` verde.
+
+**Pendências:**
+- [ ] Escanear QR via http://localhost:8080/manager para parear WhatsApp.
+- [ ] Decidir se serviço Go em `backend-core/apps/services/whatsapp/` será removido (Evolution já cobre o uso).
+
+---
+
+## 2026-05-12 — Rotação por vazamento de credenciais no histórico Git
+
+**Operador:** matalvesdev
+**Status:** 🟢 CONCLUÍDA
+
+| Credencial | Ação | Resultado |
+|---|---|---|
+| `SUPABASE_SERVICE_ROLE_KEY` | reset no dashboard | ✅ rotacionada |
+| `SUPABASE_DB_PASSWORD` | nova senha gerada | ✅ rotacionada |
+| `DATABASE_URL` / `DIRECT_URL` | atualizadas com nova senha | ✅ propagadas |
+| `HUGGINGFACE_API_KEY` | token antigo revogado, novo `read` fine-grained | ✅ rotacionada |
+| `auth.refresh_tokens` | DELETE para forçar logout global | ✅ executado |
+| Audit logs últimas 72h | revisados — sem acessos suspeitos | ✅ |
+
+### Limpeza do histórico Git (executada 2026-05-12 21:25 UTC)
+
+| Etapa | Ação | Resultado |
+|---|---|---|
+| Backup | `.git` copiado para `%TEMP%/opencode/evolua-git-backup-20260512-212127/` | ✅ 16MB salvos |
+| Stash | mudanças não-commitadas preservadas em `stash@{0}` | ✅ recuperadas após |
+| Filter-repo | `git filter-repo --invert-paths --path CRITICAL-INFO.md --path .env.development --path .env.production --path .env.local --path .env.staging` | ✅ 81 commits reescritos, .git 16MB → 7.1MB |
+| Verificação | `git log --all -- 'CRITICAL-INFO.md' '.env.development' '.env.production'` | ✅ saída vazia |
+| Force push main | `git push origin main --force` (29b2a1a → a1a125d) | ✅ aplicado |
+| Branches secundários no remoto | deletados: `develop` (apontava para `98c0b61` vazado!), `copilot/vscode-mnf7jvqs-1cfy`, 5x `dependabot/*` | ✅ deletados |
+| Branches locais stale | `develop` e `copilot/*` removidos | ✅ |
+
+### ⚠️ Pendências para o operador
+
+- [ ] **Fechar PRs antigas no GitHub** (preservam refs com hashes do histórico antigo):
+  - PR #1, #2, #3, #4, #5 (todas dependabot do `frontend-evolua/`)
+  - URL: https://github.com/matalvesdev/evolua-frontend/pulls?state=open
+  - Após fechar: `git push origin --delete refs/pull/1/head` etc., **OU** aguardar GC do GitHub.
+- [ ] **Cache do GitHub**: peça remoção via Support se quiser garantir que snapshots
+  de busca (ex.: `GitHub Code Search`) sejam invalidados — endpoint:
+  https://docs.github.com/en/rest/repos/contents#delete-a-file (não há automation pública).
+- [ ] **Forks**: rode `gh api repos/matalvesdev/evolua-frontend/forks` (após instalar `gh`)
+  para listar forks existentes. Cada fork ainda contém o histórico vazado e precisa ser
+  comunicado/deletado pelos donos.
+- [ ] **Recriar projeto Supabase separado para produção** (dev/prod isolados)
+
+---
+
+## 2026-05-12 — Auditoria inicial (descoberta de vazamento)
+
+**Operador:** OpenCode (auditoria automatizada)
+**Status:** 🟢 ESCALADA → ver entrada acima
+
+### Achados
+
+Os seguintes segredos foram **commitados no histórico do repositório público**
+`https://github.com/matalvesdev/evolua-frontend` (commits `4c7f760`, `632f0f4`,
+`4c6b244`, `9cf1754`, `98c0b61`, `8335257`):
+
+| Credencial | Onde apareceu | Severidade |
+|---|---|---|
+| `DATABASE_URL` (senha `Fm13102330041994!`) | `CRITICAL-INFO.md` | 🔴 ALTA |
+| `SUPABASE_ANON_KEY` (`eyJ…SKttNSYTTB…`) | `.env.development`, `.env.production`, `frontend-evolua/.env.*`, `CRITICAL-INFO.md` | 🟡 MÉDIA (anon é pública, mas vincula projeto) |
+| `SUPABASE_SERVICE_ROLE_KEY` | `CRITICAL-INFO.md` | 🔴 CRÍTICA |
+| `HUGGINGFACE_API_KEY` (`hf_qWhzRGtR…`) | `.env` local | 🟡 MÉDIA |
+
+Mesmo que os arquivos tenham sido removidos do HEAD, o histórico do git preserva
+os valores. Como o repo é público no GitHub, considere todos como **comprometidos**.
+
+### Ações requeridas (executar nesta ordem)
+
+- [ ] **Supabase `service_role`**: reset em https://supabase.com/dashboard/project/diiaoaboykraaiavgdqs/settings/api
+- [ ] **Supabase DB password**: gerar nova em Database → Settings
+- [ ] **HuggingFace token**: revogar em https://huggingface.co/settings/tokens
+- [ ] **Atualizar `.env` local** com os 3 valores novos
+- [ ] **Atualizar secret manager de prod** (App Runner / Vercel / Fly) — todos os deploys
+- [ ] **Auditar `audit_logs`** das últimas 24-72h:
+  ```sql
+  select action, resource, count(*), max(created_at)
+  from audit_logs
+  where created_at > now() - interval '72 hours'
+  group by 1, 2 order by count(*) desc;
+  ```
+- [ ] **Forçar logout global** (após rotacionar service_role):
+  ```sql
+  delete from auth.refresh_tokens;
+  ```
+- [ ] **Considerar reescrita de histórico**: `git filter-repo` ou BFG para purgar
+  os blobs vazados. Comunicar todos os clones existentes (force-push obrigatório).
+  Alternativa: arquivar o repo e criar um novo limpo (mais radical, mas garantido).
+- [ ] **Comunicar DPO** (LGPD art. 48) se houver risco a titulares de dados —
+  ANPD em 72h se aplicável.
+
+### Após conclusão
+
+✅ Concluída — ver entrada superior "Rotação por vazamento de credenciais no histórico Git".
+
+---
+
+## Próximas rotações agendadas
+
+- **2026-08-10** — rotação trimestral (`scheduled-90d`)
+- Após cada incidente — registrar imediatamente
+- Sempre que membro do time sair — `member-offboarding`
+
+---
+
+## Histórico
+
+<!-- adicione novas entradas no topo -->

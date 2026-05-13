@@ -1,0 +1,227 @@
+{
+  "$comment": "Payload completo para popular o workspace Notion via MCP. Veja docs/notion-setup.md para uso.",
+  "rootPage": {
+    "title": "Evolua — Operação",
+    "icon": "🚀",
+    "description": "Hub operacional do Evolua V2. Espelha docs/ROADMAP.md."
+  },
+  "databases": [
+    {
+      "name": "Evolua — Roadmap",
+      "icon": "🗺️",
+      "description": "9 workstreams + marcos M0-M3. Sincronize semanalmente com docs/ROADMAP.md.",
+      "properties": {
+        "Name": { "type": "title" },
+        "Status": {
+          "type": "select",
+          "options": [
+            { "name": "done", "color": "green" },
+            { "name": "in progress", "color": "yellow" },
+            { "name": "blocked", "color": "red" },
+            { "name": "todo", "color": "default" }
+          ]
+        },
+        "Workstream": {
+          "type": "select",
+          "options": [
+            { "name": "Plataforma", "color": "blue" },
+            { "name": "Backend", "color": "purple" },
+            { "name": "Billing", "color": "green" },
+            { "name": "WhatsApp", "color": "green" },
+            { "name": "Frontend", "color": "pink" },
+            { "name": "Observabilidade", "color": "orange" },
+            { "name": "Segurança", "color": "red" },
+            { "name": "Marketing", "color": "yellow" },
+            { "name": "Suporte", "color": "gray" }
+          ]
+        },
+        "Marco": {
+          "type": "select",
+          "options": [
+            { "name": "M0", "color": "blue" },
+            { "name": "M1", "color": "green" },
+            { "name": "M2", "color": "yellow" },
+            { "name": "M3", "color": "purple" }
+          ]
+        },
+        "Sprint": {
+          "type": "select",
+          "options": [
+            { "name": "Sprint atual", "color": "green" },
+            { "name": "+1", "color": "blue" },
+            { "name": "+2", "color": "yellow" },
+            { "name": "+3", "color": "orange" },
+            { "name": "Backlog", "color": "gray" }
+          ]
+        },
+        "Priority": {
+          "type": "select",
+          "options": [
+            { "name": "P0", "color": "red" },
+            { "name": "P1", "color": "orange" },
+            { "name": "P2", "color": "yellow" },
+            { "name": "P3", "color": "gray" }
+          ]
+        },
+        "Owner": { "type": "people" },
+        "Estimate": { "type": "number" },
+        "Last update": { "type": "last_edited_time" }
+      },
+      "rows": [
+        { "Name": "Rotação completa de credenciais", "Status": "done", "Workstream": "Segurança", "Marco": "M0", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Limpeza do histórico Git (filter-repo + force-push)", "Status": "done", "Workstream": "Segurança", "Marco": "M0", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Aplicar migration de RLS em produção", "Status": "todo", "Workstream": "Plataforma", "Marco": "M0", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Separar projeto Supabase prod do dev", "Status": "todo", "Workstream": "Plataforma", "Marco": "M0", "Sprint": "+1", "Priority": "P0" },
+        { "Name": "Pipeline GitHub Actions: lint → test → build → deploy", "Status": "todo", "Workstream": "Plataforma", "Marco": "M0", "Sprint": "+1", "Priority": "P0" },
+        { "Name": "Terraform: state remoto S3 + DynamoDB lock", "Status": "todo", "Workstream": "Plataforma", "Marco": "M0", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Backup automático Postgres (PITR + dump diário)", "Status": "todo", "Workstream": "Plataforma", "Marco": "M0", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Pre-deploy checklist no CI (gate manual)", "Status": "todo", "Workstream": "Plataforma", "Marco": "M0", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Auditoria endpoints públicos vs autenticados", "Status": "todo", "Workstream": "Backend", "Marco": "M0", "Sprint": "+1", "Priority": "P1" },
+        { "Name": "Rate limiting por tenant (Redis)", "Status": "todo", "Workstream": "Backend", "Marco": "M2", "Sprint": "+2", "Priority": "P2" },
+        { "Name": "Refatorar @evolua/contracts → pacote interno", "Status": "todo", "Workstream": "Backend", "Marco": "M1", "Sprint": "+2", "Priority": "P2" },
+        { "Name": "Webhooks idempotentes (AbacatePay/Stripe/Evolution)", "Status": "in progress", "Workstream": "Backend", "Marco": "M1", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Jobs assíncronos: BullMQ ou pg-boss (RFC)", "Status": "todo", "Workstream": "Backend", "Marco": "M2", "Sprint": "Backlog", "Priority": "P2" },
+        { "Name": "Definir planos: Free / Starter / Pro / Business", "Status": "done", "Workstream": "Billing", "Marco": "M1", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Integrar AbacatePay (PIX/Boleto/assinaturas)", "Status": "in progress", "Workstream": "Billing", "Marco": "M1", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Integrar Stripe (cartão internacional)", "Status": "in progress", "Workstream": "Billing", "Marco": "M1", "Sprint": "Sprint atual", "Priority": "P1" },
+        { "Name": "Página /billing no frontend", "Status": "done", "Workstream": "Billing", "Marco": "M1", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Webhooks billing: activated/canceled/failed", "Status": "done", "Workstream": "Billing", "Marco": "M1", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Dunning automático via Notifica", "Status": "todo", "Workstream": "Billing", "Marco": "M2", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Dashboard interno de MRR", "Status": "todo", "Workstream": "Billing", "Marco": "M2", "Sprint": "+3", "Priority": "P2" },
+        { "Name": "HMAC SHA-256 obrigatório em prod (Evolution Go)", "Status": "todo", "Workstream": "WhatsApp", "Marco": "M0", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Reconexão automática + alerta de QR expirado", "Status": "todo", "Workstream": "WhatsApp", "Marco": "M1", "Sprint": "+1", "Priority": "P1" },
+        { "Name": "Multi-instância Evolution por tenant", "Status": "todo", "Workstream": "WhatsApp", "Marco": "M2", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Templates HSM aprovados (fluxo de submissão)", "Status": "todo", "Workstream": "WhatsApp", "Marco": "M2", "Sprint": "+3", "Priority": "P2" },
+        { "Name": "Auditoria acessibilidade WCAG AA (axe)", "Status": "todo", "Workstream": "Frontend", "Marco": "M2", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Performance budget LCP<2.5s no Lighthouse CI", "Status": "todo", "Workstream": "Frontend", "Marco": "M2", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Onboarding wizard 5 passos", "Status": "todo", "Workstream": "Frontend", "Marco": "M2", "Sprint": "+2", "Priority": "P0" },
+        { "Name": "Landing: home + pricing + comparativo", "Status": "todo", "Workstream": "Frontend", "Marco": "M1", "Sprint": "+1", "Priority": "P1" },
+        { "Name": "Suite e2e Playwright (onboarding+checkout)", "Status": "todo", "Workstream": "Frontend", "Marco": "M2", "Sprint": "+3", "Priority": "P1" },
+        { "Name": "Sentry frontend + backend integrado", "Status": "in progress", "Workstream": "Observabilidade", "Marco": "M3", "Sprint": "Sprint atual", "Priority": "P0" },
+        { "Name": "Grafana + Prometheus self-hosted", "Status": "todo", "Workstream": "Observabilidade", "Marco": "M3", "Sprint": "+3", "Priority": "P2" },
+        { "Name": "Dynatrace APM (avaliar custo pós-M2)", "Status": "blocked", "Workstream": "Observabilidade", "Marco": "M3", "Sprint": "Backlog", "Priority": "P3" },
+        { "Name": "Logs Pino → Loki ou CloudWatch (RFC)", "Status": "todo", "Workstream": "Observabilidade", "Marco": "M2", "Sprint": "+3", "Priority": "P2" },
+        { "Name": "SLO: API p95<400ms, disponibilidade 99.5%", "Status": "todo", "Workstream": "Observabilidade", "Marco": "M3", "Sprint": "+3", "Priority": "P1" },
+        { "Name": "Alertas Slack: error budget, fila WA, webhooks", "Status": "todo", "Workstream": "Observabilidade", "Marco": "M3", "Sprint": "+3", "Priority": "P1" },
+        { "Name": "Runbooks: DB, fila, AbacatePay down, Evolution off", "Status": "todo", "Workstream": "Observabilidade", "Marco": "M3", "Sprint": "+3", "Priority": "P1" },
+        { "Name": "LGPD: política, registro de operações, DPO", "Status": "todo", "Workstream": "Segurança", "Marco": "M2", "Sprint": "+2", "Priority": "P0" },
+        { "Name": "Termos de uso revisados por jurídico", "Status": "todo", "Workstream": "Segurança", "Marco": "M2", "Sprint": "+2", "Priority": "P0" },
+        { "Name": "DPA template para clientes B2B", "Status": "todo", "Workstream": "Segurança", "Marco": "M2", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "Pentest interno (M2) e externo (pré-GA)", "Status": "todo", "Workstream": "Segurança", "Marco": "M3", "Sprint": "Backlog", "Priority": "P1" },
+        { "Name": "Backup restore drill mensal", "Status": "todo", "Workstream": "Segurança", "Marco": "M2", "Sprint": "+3", "Priority": "P2" },
+        { "Name": "Plano de marketing executado", "Status": "in progress", "Workstream": "Marketing", "Marco": "M1", "Sprint": "Sprint atual", "Priority": "P1" },
+        { "Name": "Automação de conteúdo 5×/semana", "Status": "todo", "Workstream": "Marketing", "Marco": "M2", "Sprint": "+1", "Priority": "P1" },
+        { "Name": "SEO técnico landing (sitemap, schema, meta)", "Status": "todo", "Workstream": "Marketing", "Marco": "M2", "Sprint": "+2", "Priority": "P1" },
+        { "Name": "10 cases de uso documentados", "Status": "todo", "Workstream": "Marketing", "Marco": "M2", "Sprint": "+3", "Priority": "P2" },
+        { "Name": "Programa de indicação (revenue share)", "Status": "todo", "Workstream": "Marketing", "Marco": "M3", "Sprint": "Backlog", "Priority": "P3" },
+        { "Name": "Chat de suporte in-app (Crisp ou self-hosted)", "Status": "todo", "Workstream": "Suporte", "Marco": "M2", "Sprint": "+3", "Priority": "P1" },
+        { "Name": "Base de conhecimento pública", "Status": "todo", "Workstream": "Suporte", "Marco": "M2", "Sprint": "+3", "Priority": "P2" },
+        { "Name": "SLA de resposta por plano", "Status": "todo", "Workstream": "Suporte", "Marco": "M3", "Sprint": "Backlog", "Priority": "P2" },
+        { "Name": "Status page pública (status.useevolua.com)", "Status": "todo", "Workstream": "Suporte", "Marco": "M3", "Sprint": "Backlog", "Priority": "P2" }
+      ]
+    },
+    {
+      "name": "Evolua — Tickets",
+      "icon": "🎫",
+      "description": "Granularidade de execução. Cada item do Roadmap pode gerar N tickets.",
+      "properties": {
+        "Title": { "type": "title" },
+        "Status": {
+          "type": "select",
+          "options": [
+            { "name": "Backlog", "color": "gray" },
+            { "name": "Todo", "color": "default" },
+            { "name": "In progress", "color": "yellow" },
+            { "name": "In review", "color": "blue" },
+            { "name": "Blocked", "color": "red" },
+            { "name": "Done", "color": "green" }
+          ]
+        },
+        "Type": {
+          "type": "select",
+          "options": [
+            { "name": "feat", "color": "green" },
+            { "name": "fix", "color": "red" },
+            { "name": "chore", "color": "gray" },
+            { "name": "docs", "color": "blue" },
+            { "name": "refactor", "color": "purple" },
+            { "name": "test", "color": "yellow" },
+            { "name": "infra", "color": "orange" }
+          ]
+        },
+        "Roadmap item": { "type": "relation", "relatesTo": "Evolua — Roadmap" },
+        "Priority": {
+          "type": "select",
+          "options": [
+            { "name": "P0", "color": "red" },
+            { "name": "P1", "color": "orange" },
+            { "name": "P2", "color": "yellow" },
+            { "name": "P3", "color": "gray" }
+          ]
+        },
+        "Estimate": { "type": "number" },
+        "Assignee": { "type": "people" },
+        "PR": { "type": "url" },
+        "Created": { "type": "created_time" }
+      },
+      "rows": [
+        { "Title": "Adicionar handler webhook AbacatePay billing.paid", "Status": "Done", "Type": "feat", "Priority": "P0", "Estimate": 2 },
+        { "Title": "Adicionar handler webhook Stripe invoice.paid", "Status": "Done", "Type": "feat", "Priority": "P0", "Estimate": 2 },
+        { "Title": "Configurar raw body parser para webhooks /webhooks/billing/*", "Status": "Done", "Type": "infra", "Priority": "P0", "Estimate": 1 },
+        { "Title": "Criar billing.mapper.ts (Prisma → DTO)", "Status": "Done", "Type": "refactor", "Priority": "P1", "Estimate": 1 },
+        { "Title": "Criar /dashboard/billing page (planos+faturas)", "Status": "Done", "Type": "feat", "Priority": "P0", "Estimate": 3 },
+        { "Title": "use-billing hooks (TanStack Query)", "Status": "Done", "Type": "feat", "Priority": "P1", "Estimate": 2 },
+        { "Title": "Sentry init frontend-core (ErrorBoundary + setUser)", "Status": "Done", "Type": "infra", "Priority": "P0", "Estimate": 2 },
+        { "Title": "Sentry init landing-core", "Status": "Done", "Type": "infra", "Priority": "P1", "Estimate": 1 },
+        { "Title": "Docker compose Evolution Go + Redis + Postgres", "Status": "Done", "Type": "infra", "Priority": "P1", "Estimate": 2 },
+        { "Title": "git filter-repo + force-push para limpar segredos", "Status": "Done", "Type": "chore", "Priority": "P0", "Estimate": 3 },
+        { "Title": "Sincronizar planos: criar produtos no painel AbacatePay", "Status": "Todo", "Type": "chore", "Priority": "P0", "Estimate": 2 },
+        { "Title": "Sincronizar planos: criar prices no painel Stripe", "Status": "Todo", "Type": "chore", "Priority": "P1", "Estimate": 2 },
+        { "Title": "Job de reconciliação billing_events com error", "Status": "Backlog", "Type": "feat", "Priority": "P2", "Estimate": 5 },
+        { "Title": "Aplicar migration RLS em prod (revisar policies)", "Status": "Todo", "Type": "infra", "Priority": "P0", "Estimate": 5 },
+        { "Title": "GitHub Actions: workflow CI lint+test+build", "Status": "Todo", "Type": "infra", "Priority": "P0", "Estimate": 5 },
+        { "Title": "GitHub Actions: workflow CD App Runner", "Status": "Todo", "Type": "infra", "Priority": "P0", "Estimate": 5 },
+        { "Title": "Terraform: backend S3 + DynamoDB lock", "Status": "Todo", "Type": "infra", "Priority": "P1", "Estimate": 3 },
+        { "Title": "Notion: criar databases via MCP a partir desse payload", "Status": "Todo", "Type": "chore", "Priority": "P2", "Estimate": 1 },
+        { "Title": "Fechar PRs antigas #1-#5 (dependabot leaked refs)", "Status": "Todo", "Type": "chore", "Priority": "P0", "Estimate": 1 },
+        { "Title": "Página de pricing pública na landing-core", "Status": "Todo", "Type": "feat", "Priority": "P1", "Estimate": 5 }
+      ]
+    },
+    {
+      "name": "Evolua — RFCs",
+      "icon": "📐",
+      "description": "Decisões arquiteturais. Cada RFC vira um documento + um registro aqui.",
+      "properties": {
+        "Title": { "type": "title" },
+        "Status": {
+          "type": "select",
+          "options": [
+            { "name": "Draft", "color": "gray" },
+            { "name": "Review", "color": "yellow" },
+            { "name": "Accepted", "color": "green" },
+            { "name": "Rejected", "color": "red" },
+            { "name": "Superseded", "color": "purple" }
+          ]
+        },
+        "Author": { "type": "people" },
+        "Decision date": { "type": "date" },
+        "Trade-offs": { "type": "rich_text" },
+        "Decided by": {
+          "type": "multi_select",
+          "options": [
+            { "name": "tech-lead", "color": "blue" },
+            { "name": "PO", "color": "green" },
+            { "name": "team", "color": "purple" }
+          ]
+        }
+      ],
+      "rows": [
+        { "Title": "RFC-001 — Filas: BullMQ vs pg-boss", "Status": "Draft", "Trade-offs": "BullMQ: maduro, requer Redis. pg-boss: zero infra extra, performance OK até ~5k jobs/min." },
+        { "Title": "RFC-002 — Logs: Loki self-hosted vs CloudWatch", "Status": "Draft", "Trade-offs": "Loki: barato, controle, requer ops. CloudWatch: pay-per-GB, integração nativa AWS." },
+        { "Title": "RFC-003 — APM: Dynatrace vs Sentry+Grafana", "Status": "Draft", "Trade-offs": "Dynatrace: enterprise, ~$2k/mês. Sentry+Grafana: $0-200/mês, requer setup." },
+        { "Title": "RFC-004 — Suporte: Crisp vs Chatwoot self-hosted", "Status": "Draft", "Trade-offs": "Crisp: $25/mês/agente, hospedado FR. Chatwoot: open-source, requer infra." },
+        { "Title": "RFC-005 — Stripe vs apenas AbacatePay no BR", "Status": "Draft", "Trade-offs": "AbacatePay: PIX/Boleto, taxa BR. Stripe: cartão internacional, taxa USD. Manter ambos como provider-pattern." }
+      ]
+    }
+  ]
+}
