@@ -12,3 +12,6 @@ export * from './message.js';
 export * from './audio.js';
 export * from './ai.js';
 export * from './wa-crm.js';
+export * from './caa.js';
+export * from './materials.js';
+export * from './billing.js';
