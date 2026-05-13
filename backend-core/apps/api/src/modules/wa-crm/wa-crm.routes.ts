@@ -24,14 +24,14 @@ import { env } from '../../config/env.js';
  * pelo serviço Go. Formato esperado: `sha256=<hex>`. Comparação em tempo
  * constante para evitar timing attacks.
  *
- * Em desenvolvimento, se EVOLUTION_GO_WEBHOOK_SECRET não estiver definido,
+ * Em desenvolvimento, se EVOLUTION_WEBHOOK_SECRET não estiver definido,
  * a verificação é pulada (apenas o `x-internal-token` é exigido).
  */
 function verifyWebhookSignature(
   rawBody: string,
   signatureHeader: string | undefined,
 ): boolean {
-  const secret = env.EVOLUTION_GO_WEBHOOK_SECRET;
+  const secret = env.EVOLUTION_WEBHOOK_SECRET;
   if (!secret) {
     if (env.NODE_ENV === 'production') {
       // Em prod sem secret é falha de configuração — rejeitar.

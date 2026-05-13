@@ -30,7 +30,7 @@ type Config struct {
 	GatewayURL string
 
 	// HMAC para assinar webhooks enviados ao Fastify gateway. Em produção
-	// deve ser igual a EVOLUTION_GO_WEBHOOK_SECRET do gateway.
+	// deve ser igual a EVOLUTION_WEBHOOK_SECRET do gateway.
 	WebhookSecret string
 }
 
@@ -60,7 +60,7 @@ func Load() (*Config, error) {
 
 		GatewayURL: getEnv("GATEWAY_URL", "http://localhost:3000"),
 
-		WebhookSecret: os.Getenv("EVOLUTION_GO_WEBHOOK_SECRET"),
+		WebhookSecret: os.Getenv("EVOLUTION_WEBHOOK_SECRET"),
 	}
 	return cfg, nil
 }

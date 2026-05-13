@@ -21,7 +21,7 @@ const envSchema = z.object({
 
   // HMAC para validar webhooks vindos do serviço Go (Evolution API gateway).
   // Em produção é OBRIGATÓRIO; em dev é opcional para facilitar testes locais.
-  EVOLUTION_GO_WEBHOOK_SECRET: z.string().min(16).optional(),
+  EVOLUTION_WEBHOOK_SECRET: z.string().min(16).optional(),
 
   // Sentry (opcional — habilita captura de exceções estruturadas)
   SENTRY_DSN: z.string().url().optional(),
@@ -40,6 +40,19 @@ const envSchema = z.object({
 
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(100),
   RATE_LIMIT_WINDOW: z.string().default('1 minute'),
+
+  // Billing — URL pública do app (usada para success/cancel URLs do checkout)
+  APP_URL: z.string().url().optional(),
+
+  // AbacatePay (provider primário BR — PIX/Boleto)
+  ABACATEPAY_API_URL: z.string().url().default('https://api.abacatepay.com/v1'),
+  ABACATEPAY_API_KEY: z.string().min(1).optional(),
+  ABACATEPAY_WEBHOOK_SECRET: z.string().min(16).optional(),
+
+  // Stripe (provider fallback internacional)
+  STRIPE_API_URL: z.string().url().default('https://api.stripe.com/v1'),
+  STRIPE_SECRET_KEY: z.string().min(1).optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().min(16).optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

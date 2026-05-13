@@ -63,7 +63,7 @@ func main() {
 	})
 
 	if cfg.WebhookSecret == "" {
-		logger.Warn().Msg("EVOLUTION_GO_WEBHOOK_SECRET not set; outbound webhook will not be HMAC-signed (gateway must accept dev-mode)")
+		logger.Warn().Msg("EVOLUTION_WEBHOOK_SECRET not set; outbound webhook will not be HMAC-signed (gateway must accept dev-mode)")
 	}
 
 	if cfg.EvolutionAPIURL == "" || cfg.EvolutionAPIKey == "" {
