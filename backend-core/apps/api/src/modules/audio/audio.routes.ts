@@ -54,7 +54,7 @@ const audioRoutes: FastifyPluginAsync = async (app) => {
     async (req) => {
       const clinicId = await resolveClinicId(req.user.id);
       const r = await audioService.list(clinicId, req.query);
-      return { data: r.data.map(audioMapper.toDto), pagination: r.pagination };
+      return { data: r.data.map((s) => audioMapper.toDto(s)), pagination: r.pagination };
     },
   );
 
@@ -71,7 +71,13 @@ const audioRoutes: FastifyPluginAsync = async (app) => {
       const clinicId = await resolveClinicId(req.user.id);
       const s = await audioService.findOne(clinicId, req.params.id);
       if (!s) return rep.code(404).send(notFound);
-      return audioMapper.toDto(s);
+      let signedUrl: string | null = null;
+      try {
+        signedUrl = await audioService.signUrl(s.audioUrl);
+      } catch (err) {
+        req.log.warn({ err, sessionId: s.id }, 'audio: signed URL generation failed');
+      }
+      return audioMapper.toDto(s, signedUrl);
     },
   );
 

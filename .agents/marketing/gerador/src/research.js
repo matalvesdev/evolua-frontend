@@ -186,6 +186,11 @@ CRITÉRIOS DE QUALIDADE DO GANCHO (G4):
 
 Gere ${numPosts} posts de Instagram e ${numBlogPosts} artigos de blog.
 
+REGRA DE DESTAQUE DOS ARTIGOS DE BLOG:
+- Marque "destaque": true para NO MÁXIMO 1 artigo da semana — aquele que tem maior potencial de SEO/captura, que ataca a dor mais central da persona ou que ancora um lançamento.
+- Se nenhum artigo for claramente superior, marque todos como "destaque": false.
+- "destaque": true faz o artigo virar capa do /blog da landing por toda a semana.
+
 Responda com JSON:
 {
   "semana": "${semana}",
@@ -218,6 +223,7 @@ Responda com JSON:
       "palavraChave": "keyword principal",
       "extensao": "1400",
       "objetivo": "Ranquear para [keyword], gerar leads via CTA no meio e no fim",
+      "destaque": false,
       "fonteIndex": null,
       "fontePmid": null
     }

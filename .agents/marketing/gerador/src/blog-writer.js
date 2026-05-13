@@ -93,6 +93,7 @@ Não inclua <html>, <head>, <body> — apenas o conteúdo do artigo.
 
   const postData = {
     ...estrutura,
+    destaque: briefing.destaque === true,
     geradoEm: new Date().toISOString(),
     briefing,
   };

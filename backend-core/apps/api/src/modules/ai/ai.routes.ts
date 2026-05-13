@@ -4,6 +4,8 @@ import { z } from 'zod';
 import {
   AiChatRequestSchema,
   AiChatResponseSchema,
+  GenerateEvolutionRequestSchema,
+  GeneratedEvolutionSchema,
   GenerateReportRequestSchema,
   GenerateReportResponseSchema,
   LibraryDocumentListResponseSchema,
@@ -44,6 +46,31 @@ const aiRoutes: FastifyPluginAsync = async (app) => {
       },
     },
     async (req) => aiService.generateReport(req.body, req.user.id),
+  );
+
+  route.post(
+    '/evolution/generate',
+    {
+      config: { rateLimit: { max: 20, timeWindow: '1 minute' } },
+      schema: {
+        tags: ['ai'],
+        body: GenerateEvolutionRequestSchema,
+        response: {
+          200: GeneratedEvolutionSchema,
+          502: ErrorResponseSchema,
+        },
+      },
+    },
+    async (req, reply) => {
+      try {
+        return await aiService.generateEvolution(req.body, req.user.id);
+      } catch (e) {
+        return reply.code(502).send({
+          error: 'AiServiceError',
+          message: e instanceof Error ? e.message : 'Falha ao gerar evolução',
+        });
+      }
+    },
   );
 
   // ── Biblioteca clínica (RAG) ───────────────────────────────────────────

@@ -100,25 +100,90 @@ async def generate_evolution(
 # ── /material/generate ─────────────────────────────────────────────────
 
 
+TherapyArea = Literal[
+    "linguagem", "fala", "fluencia", "voz",
+    "degluticao", "fonologia", "mof", "tea", "caa",
+]
+MaterialFormat = Literal["atividade", "brincadeira", "jogo", "historia", "exercicio", "roteiro"]
+AgeGroup = Literal["bebe", "infantil", "escolar", "adolescente", "adulto"]
+
+
+AREA_LABELS: dict[str, str] = {
+    "linguagem": "Linguagem",
+    "fala": "Fala",
+    "fluencia": "Fluência",
+    "voz": "Voz",
+    "degluticao": "Deglutição",
+    "fonologia": "Fonologia",
+    "mof": "Motricidade Orofacial",
+    "tea": "TEA (Transtorno do Espectro Autista)",
+    "caa": "Comunicação Aumentativa e Alternativa",
+}
+FORMAT_LABELS: dict[str, str] = {
+    "atividade": "Atividade dirigida",
+    "brincadeira": "Brincadeira lúdica",
+    "jogo": "Jogo terapêutico",
+    "historia": "História/Narrativa",
+    "exercicio": "Exercício específico",
+    "roteiro": "Roteiro de sessão",
+}
+AGE_LABELS: dict[str, str] = {
+    "bebe": "Bebês (0–2 anos)",
+    "infantil": "Pré-escolares (3–6 anos)",
+    "escolar": "Escolares (7–12 anos)",
+    "adolescente": "Adolescentes (13–17 anos)",
+    "adulto": "Adultos",
+}
+
+
 class GenerateMaterialRequest(BaseModel):
-    objective: str
-    age_range: str | None = None
-    therapy_area: str | None = None
-    format: str = Field(default="exercise", pattern="^(exercise|handout|game|story)$")
+    area: TherapyArea
+    format: MaterialFormat
+    age: AgeGroup
+    context: str | None = Field(default=None, max_length=1500)
+    # campos legacy opcionais (não usados pelo frontend novo)
+    objective: str | None = None
 
 
 class GeneratedMaterial(BaseModel):
     title: str
     content: str
-    instructions: str
+    objectives: list[str] = Field(default_factory=list)
+    materials_needed: list[str] = Field(default_factory=list)
+    duration_minutes: int | None = None
+    instructions: str = ""
 
 
 MATERIAL_PROMPT = (
-    "Você cria materiais terapêuticos personalizados e baseados em evidências. "
-    "Responda em JSON válido sem texto adicional:\n"
-    '{"title": "...", "content": "corpo do material em texto corrido com parágrafos", '
-    '"instructions": "instruções claras de aplicação para o terapeuta"}'
+    "Você é um terapeuta clínico especialista que cria materiais terapêuticos baseados em "
+    "evidências, claros, lúdicos e adequados à faixa etária. Use linguagem profissional em "
+    "português do Brasil. Responda APENAS em JSON válido, sem texto adicional, no schema:\n"
+    '{"title": "título curto e específico", '
+    '"objectives": ["objetivo 1", "objetivo 2", "objetivo 3"], '
+    '"materials_needed": ["item 1", "item 2"], '
+    '"duration_minutes": 20, '
+    '"content": "descrição completa do material em parágrafos, passos numerados quando aplicável, '
+    'sem markdown", '
+    '"instructions": "orientações práticas para o terapeuta aplicar (1 parágrafo curto)"}'
 )
+
+
+def _coerce_str_list(value: object, limit: int = 8) -> list[str]:
+    if isinstance(value, list):
+        return [str(v).strip() for v in value if str(v).strip()][:limit]
+    if isinstance(value, str) and value.strip():
+        return [value.strip()]
+    return []
+
+
+def _coerce_int(value: object) -> int | None:
+    try:
+        if value is None or value == "":
+            return None
+        n = int(float(value))  # tolera "20" ou 20.0
+        return max(1, min(180, n))
+    except (TypeError, ValueError):
+        return None
 
 
 @router.post(
@@ -132,10 +197,10 @@ async def generate_material(
 ) -> GeneratedMaterial:
     _ = user_id
     user_msg = (
-        f"Objetivo terapêutico: {req.objective}\n"
-        f"Faixa etária: {req.age_range or 'não especificada'}\n"
-        f"Área: {req.therapy_area or 'não especificada'}\n"
-        f"Formato: {req.format}"
+        f"Área clínica: {AREA_LABELS.get(req.area, req.area)}\n"
+        f"Formato: {FORMAT_LABELS.get(req.format, req.format)}\n"
+        f"Faixa etária: {AGE_LABELS.get(req.age, req.age)}\n"
+        f"Contexto adicional: {req.context.strip() if req.context else 'nenhum'}"
     )
     messages = [
         {"role": "system", "content": MATERIAL_PROMPT},
@@ -143,17 +208,24 @@ async def generate_material(
     ]
 
     try:
-        raw = await hf_client.chat(messages, max_tokens=900, temperature=0.4)
+        raw = await hf_client.chat(messages, max_tokens=1100, temperature=0.5)
     except HuggingFaceModelLoading as e:
         raise HTTPException(status_code=503, detail=str(e)) from e
     except HuggingFaceError as e:
         raise HTTPException(status_code=502, detail=str(e)) from e
 
     parsed = _safe_json(raw) or {}
+    title = str(parsed.get("title") or "").strip() or (
+        f"{FORMAT_LABELS.get(req.format, req.format)} de "
+        f"{AREA_LABELS.get(req.area, req.area)}"
+    )
     return GeneratedMaterial(
-        title=str(parsed.get("title", "Material terapêutico")),
-        content=str(parsed.get("content", raw)),
-        instructions=str(parsed.get("instructions", "")),
+        title=title[:120],
+        content=str(parsed.get("content") or raw).strip(),
+        objectives=_coerce_str_list(parsed.get("objectives")),
+        materials_needed=_coerce_str_list(parsed.get("materials_needed")),
+        duration_minutes=_coerce_int(parsed.get("duration_minutes")),
+        instructions=str(parsed.get("instructions") or "").strip()[:1000],
     )
 
 

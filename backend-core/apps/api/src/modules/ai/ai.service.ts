@@ -3,6 +3,10 @@ import { logger } from '../../lib/logger.js';
 import type {
   AiChatRequest,
   AiChatResponse,
+  GenerateEvolutionRequest,
+  GeneratedEvolution,
+  GenerateMaterialRequest,
+  GeneratedMaterial,
   GenerateReportRequest,
   GenerateReportResponse,
   LibraryDocumentListResponse,
@@ -49,6 +53,90 @@ export class AiService {
     } catch (e) {
       return this.fallback(e instanceof Error ? e.message : String(e));
     }
+  }
+
+  /**
+   * Proxy para geração de evolução SOAP a partir de transcript/notas.
+   * Levanta erro em caso de falha (rota retorna 502).
+   */
+  async generateEvolution(
+    req: GenerateEvolutionRequest,
+    userId: string,
+  ): Promise<GeneratedEvolution> {
+    const res = await fetch(`${env.AI_SERVICE_URL}/clinical/evolution/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-token': env.INTERNAL_SERVICE_TOKEN,
+        'x-user-id': userId,
+      },
+      body: JSON.stringify({
+        patient_id: req.patientId,
+        transcript: req.transcript,
+        therapist_notes: req.therapistNotes,
+        treatment_plan_summary: req.treatmentPlanSummary,
+      }),
+      signal: AbortSignal.timeout(90_000),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`AI evolution ${res.status}: ${body.slice(0, 300)}`);
+    }
+    const data = (await res.json()) as {
+      soap: { subjective: string; objective: string; assessment: string; plan: string };
+      summary: string;
+      next_session_suggestions: string[];
+    };
+    return {
+      soap: data.soap,
+      summary: data.summary,
+      nextSessionSuggestions: data.next_session_suggestions ?? [],
+    };
+  }
+
+  /**
+   * Proxy para geração de material terapêutico (atividade, brincadeira, jogo etc.).
+   * Levanta erro em caso de falha (rota retorna 502).
+   */
+  async generateMaterial(
+    req: GenerateMaterialRequest,
+    userId: string,
+  ): Promise<GeneratedMaterial> {
+    const res = await fetch(`${env.AI_SERVICE_URL}/clinical/material/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-token': env.INTERNAL_SERVICE_TOKEN,
+        'x-user-id': userId,
+      },
+      body: JSON.stringify({
+        area: req.area,
+        format: req.format,
+        age: req.age,
+        context: req.context ?? null,
+      }),
+      signal: AbortSignal.timeout(90_000),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`AI material ${res.status}: ${body.slice(0, 300)}`);
+    }
+    const data = (await res.json()) as {
+      title: string;
+      content: string;
+      objectives?: string[];
+      materials_needed?: string[];
+      duration_minutes?: number | null;
+      instructions?: string;
+    };
+    return {
+      title: data.title,
+      content: data.content,
+      objectives: data.objectives ?? [],
+      materialsNeeded: data.materials_needed ?? [],
+      durationMinutes: data.duration_minutes ?? null,
+      instructions: data.instructions ?? '',
+    };
   }
 
   /**

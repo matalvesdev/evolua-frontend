@@ -13,19 +13,42 @@ export interface PaginatedAudioSessions {
   pagination: { page: number; pageSize: number; total: number; totalPages: number };
 }
 
-const ALLOWED_AUDIO_HOSTS = ['supabase.co', 'amazonaws.com'];
+const BUCKET = 'audio-sessions';
+const SIGN_TTL_SECONDS = 3600; // 1h
 
-function isAllowedAudioUrl(url: string): boolean {
-  try {
-    const u = new URL(url);
-    if (u.protocol !== 'https:') return false;
-    return ALLOWED_AUDIO_HOSTS.some((d) => u.hostname.endsWith(d));
-  } catch {
-    return false;
+/**
+ * Gera signed URL para um path do bucket privado `audio-sessions`.
+ * Usa o endpoint REST `/storage/v1/object/sign/<bucket>/<path>` com service_role.
+ */
+async function createSignedUrl(path: string, ttlSeconds = SIGN_TTL_SECONDS): Promise<string> {
+  const url = `${env.SUPABASE_URL}/storage/v1/object/sign/${BUCKET}/${path}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ expiresIn: ttlSeconds }),
+    signal: AbortSignal.timeout(8_000),
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Supabase Storage sign ${res.status}: ${body.slice(0, 200)}`);
   }
+  const data = (await res.json()) as { signedURL?: string; signedUrl?: string };
+  const rel = data.signedURL ?? data.signedUrl;
+  if (!rel) throw new Error('Supabase Storage: signedURL ausente na resposta');
+  // `signedURL` vem como path relativo: `/object/sign/<bucket>/...?token=...`
+  return `${env.SUPABASE_URL}/storage/v1${rel.startsWith('/') ? rel : `/${rel}`}`;
 }
 
 export class AudioService {
+  /** Exposto para o mapper / rotas gerarem URL de reprodução. */
+  signUrl(path: string): Promise<string> {
+    return createSignedUrl(path);
+  }
+
   async create(
     clinicId: string,
     therapistId: string,
@@ -41,13 +64,21 @@ export class AudioService {
       throw err;
     }
 
+    // Path obrigatório precisa começar com o patientId (defesa em profundidade).
+    if (!input.audioPath.startsWith(`${input.patientId}/`)) {
+      const err = new Error('audioPath deve começar com <patientId>/');
+      (err as Error & { statusCode: number }).statusCode = 400;
+      throw err;
+    }
+
     return prisma.audioSession.create({
       data: {
         clinicId,
         therapistId,
         patientId: input.patientId,
         appointmentId: input.appointmentId ?? null,
-        audioUrl: input.audioUrl,
+        // Coluna `audio_url` no DB armazena o PATH (string opaca p/ o Prisma).
+        audioUrl: input.audioPath,
         audioDuration: input.audioDuration ?? null,
         fileSize: input.fileSize ?? null,
         transcriptionStatus: 'pending',
@@ -112,10 +143,10 @@ export class AudioService {
 
   /**
    * Solicita transcrição ao serviço Python AI.
-   * Retorna a sessão atualizada (status `processing` enquanto espera resposta).
    *
-   * O serviço Python (TODO) faz: download do áudio → Whisper → atualização do registro.
-   * Aqui só mudamos o status e disparamos a chamada async.
+   * Gera signed URL just-in-time para que o Python baixe o áudio do bucket privado.
+   * O serviço Python faz: GET signed URL → Whisper → este Node atualiza o registro
+   * via callback (atualmente: a chamada bloqueia e retornamos o texto direto).
    */
   async transcribe(
     clinicId: string,
@@ -124,9 +155,6 @@ export class AudioService {
   ): Promise<AudioSession | null> {
     const session = await this.findOne(clinicId, input.audioSessionId);
     if (!session) return null;
-    if (!isAllowedAudioUrl(session.audioUrl)) {
-      throw Object.assign(new Error('audioUrl não permitida'), { statusCode: 400 });
-    }
 
     const updated = await prisma.audioSession.update({
       where: { id: session.id },
@@ -149,6 +177,8 @@ export class AudioService {
     language?: string,
   ): Promise<void> {
     try {
+      // Coluna `audioUrl` no Prisma armazena o storage path.
+      const signedUrl = await createSignedUrl(session.audioUrl, 1800); // 30min — espaço para download
       const res = await fetch(`${env.AI_SERVICE_URL}/clinical/transcribe`, {
         method: 'POST',
         headers: {
@@ -158,7 +188,7 @@ export class AudioService {
         },
         body: JSON.stringify({
           audio_session_id: session.id,
-          audio_url: session.audioUrl,
+          audio_url: signedUrl,
           language: language ?? 'pt',
         }),
         signal: AbortSignal.timeout(120_000),

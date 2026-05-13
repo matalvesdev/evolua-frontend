@@ -66,6 +66,33 @@ export const GenerateReportResponseSchema = z.object({
 });
 export type GenerateReportResponse = z.infer<typeof GenerateReportResponseSchema>;
 
+// ── Geração de evolução SOAP a partir de transcript ─────────────────────────
+export const GenerateEvolutionRequestSchema = z.object({
+  patientId: z.string().uuid(),
+  transcript: z.string().max(50000).optional(),
+  therapistNotes: z.string().max(10000).optional(),
+  treatmentPlanSummary: z.string().max(5000).optional(),
+}).refine(
+  (v) => Boolean((v.transcript && v.transcript.trim()) || (v.therapistNotes && v.therapistNotes.trim())),
+  { message: 'Forneça transcript e/ou therapistNotes' },
+);
+export type GenerateEvolutionRequest = z.infer<typeof GenerateEvolutionRequestSchema>;
+
+export const SoapSchema = z.object({
+  subjective: z.string(),
+  objective: z.string(),
+  assessment: z.string(),
+  plan: z.string(),
+});
+export type Soap = z.infer<typeof SoapSchema>;
+
+export const GeneratedEvolutionSchema = z.object({
+  soap: SoapSchema,
+  summary: z.string(),
+  nextSessionSuggestions: z.array(z.string()).default([]),
+});
+export type GeneratedEvolution = z.infer<typeof GeneratedEvolutionSchema>;
+
 // ── Biblioteca clínica (RAG) ────────────────────────────────────────────────
 export const LibraryDocumentSchema = z.object({
   id: z.string().uuid(),

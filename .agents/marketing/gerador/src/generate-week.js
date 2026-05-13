@@ -8,7 +8,7 @@ import { pesquisarSemana } from "./research.js";
 import { gerarPost } from "./generate-post.js";
 import { gerarBlogSemana } from "./blog-writer.js";
 import { renderCarrossel, renderStories, renderEstatico, renderTikTok, renderBlogOg, closeBrowser } from "./render.js";
-import { uploadPost, uploadBlog, salvarSemanaNoDb } from "./upload-to-supabase.js";
+import { uploadPost, uploadBlog, salvarSemanaNoDb, inserirBlogPostsNoDb } from "./upload-to-supabase.js";
 import { gerarRoteiroComponentes, gerarVariacoesHook, gerarScriptMontagem } from "./video-pipeline.js";
 import { registrarSemana } from "./memory.js";
 import { config } from "./config.js";
@@ -175,11 +175,13 @@ export async function gerarSemana(opcoes = {}) {
   console.log(`${"─".repeat(60)}`);
 
   let blogGerado = [];
+  let blogMetas = [];
   try {
-    blogGerado = await gerarBlogSemana(briefing.blogPosts);
+    blogMetas = await gerarBlogSemana(briefing.blogPosts);
+    blogGerado = blogMetas;
 
     // Renderizar OG image para cada artigo
-    for (const artigo of blogGerado) {
+    for (const artigo of blogMetas) {
       if (artigo.slug) {
         const ogPath = path.join(__dirname, "../output/blog", artigo.slug, "og.png");
         await renderBlogOg(artigo, ogPath).catch(() => null);
@@ -189,7 +191,12 @@ export async function gerarSemana(opcoes = {}) {
 
     if (fazerUpload) {
       const blogDir = path.join(__dirname, "../output/blog");
-      blogGerado = await uploadBlog(blogDir, semana);
+      const uploads = await uploadBlog(blogDir, semana);
+      // Insere/atualiza registros em public.blog_posts (alimenta /blog da landing)
+      await inserirBlogPostsNoDb(blogMetas, uploads, blogDir);
+      // Mescla URLs nos metas para o relatório
+      const urlBySlug = new Map(uploads.map((u) => [u.slug, u]));
+      blogGerado = blogMetas.map((m) => ({ ...m, ...(urlBySlug.get(m.slug) || {}) }));
     }
   } catch (err) {
     console.error(`\n❌ Erro ao gerar blog: ${err.message}`);
