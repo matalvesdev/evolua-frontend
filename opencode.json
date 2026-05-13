@@ -1,0 +1,90 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp",
+      "enabled": true
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "enabled": true,
+      "environment": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@latest"],
+      "enabled": true
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true
+    },
+    "fetch": {
+      "type": "local",
+      "command": ["npx", "-y", "@kazuph/mcp-fetch"],
+      "enabled": true
+    },
+
+    "abacatepay": {
+      "type": "remote",
+      "url": "https://mcp.abacatepay.com/mcp",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:ABACATEPAY_API_KEY}"
+      }
+    },
+    "stripe": {
+      "type": "remote",
+      "url": "https://mcp.stripe.com",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer {env:STRIPE_SECRET_KEY}"
+      }
+    },
+
+    "notion": {
+      "type": "remote",
+      "url": "https://mcp.notion.com/mcp",
+      "enabled": true
+    },
+
+    "sentry": {
+      "type": "remote",
+      "url": "https://mcp.sentry.dev/mcp",
+      "enabled": true
+    },
+    "grafana": {
+      "type": "local",
+      "command": ["docker", "run", "--rm", "-i",
+        "-e", "GRAFANA_URL",
+        "-e", "GRAFANA_API_KEY",
+        "mcp/grafana", "-t", "stdio"],
+      "enabled": false,
+      "environment": {
+        "GRAFANA_URL": "{env:GRAFANA_URL}",
+        "GRAFANA_API_KEY": "{env:GRAFANA_API_KEY}"
+      }
+    },
+
+    "dynatrace": {
+      "type": "local",
+      "command": ["npx", "-y", "@dynatrace-oss/dynatrace-mcp-server@latest"],
+      "enabled": false,
+      "environment": {
+        "OAUTH_CLIENT_ID": "{env:DT_OAUTH_CLIENT_ID}",
+        "OAUTH_CLIENT_SECRET": "{env:DT_OAUTH_CLIENT_SECRET}",
+        "DT_ENVIRONMENT": "{env:DT_ENVIRONMENT}"
+      }
+    }
+  }
+}

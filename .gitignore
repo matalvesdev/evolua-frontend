@@ -33,6 +33,10 @@ next-env.d.ts
 # Prisma
 **/prisma/migrations/**/migration.sql.bak
 
+# Supabase CLI
+supabase/.temp/
+supabase/.branches/
+
 # ──────────────────────────────────────────────────────────────────────
 # Variáveis de ambiente (NUNCA commitar)
 # ──────────────────────────────────────────────────────────────────────
