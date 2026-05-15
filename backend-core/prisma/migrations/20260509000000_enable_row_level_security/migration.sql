@@ -79,12 +79,17 @@ DECLARE
     'wa_messages',
     'therapeutic_materials',
     'exercise_templates',
-    'patient_exercise_prescriptions'
+    'patient_exercise_prescriptions',
+    'caa_boards'
   ];
 BEGIN
   FOREACH t IN ARRAY tables LOOP
-    EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t);
-    EXECUTE format('ALTER TABLE public.%I FORCE ROW LEVEL SECURITY', t);
+    -- Tabela pode não existir ainda em ambientes antigos
+    IF EXISTS (SELECT 1 FROM information_schema.tables
+               WHERE table_schema='public' AND table_name=t) THEN
+      EXECUTE format('ALTER TABLE public.%I ENABLE ROW LEVEL SECURITY', t);
+      EXECUTE format('ALTER TABLE public.%I FORCE ROW LEVEL SECURITY', t);
+    END IF;
   END LOOP;
 END $$;
 
@@ -114,6 +119,9 @@ CREATE POLICY users_self_update ON public.users
 
 -- ── Política genérica tenant_isolation para tabelas com clinic_id ───────────
 -- Aplicada a tabelas onde o filtro é puramente clinic_id.
+-- NOTA: clinical_protocol_templates, treatment_sessions, wa_messages,
+-- goal_progress_snapshots e goal_milestones ficam fora porque NÃO possuem
+-- coluna clinic_id (templates globais ou filtro via tabela pai).
 DO $$
 DECLARE
   t text;
@@ -131,16 +139,18 @@ DECLARE
     'notifications',
     'push_subscriptions',
     'treatment_plans',
-    'treatment_sessions',
-    'clinical_protocol_templates',
     'clinical_protocol_entries',
     'wa_conversations',
-    'wa_messages',
     'therapeutic_materials',
-    'patient_exercise_prescriptions'
+    'patient_exercise_prescriptions',
+    'caa_boards'
   ];
 BEGIN
   FOREACH t IN ARRAY tables LOOP
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables
+                   WHERE table_schema='public' AND table_name=t) THEN
+      CONTINUE;
+    END IF;
     EXECUTE format('DROP POLICY IF EXISTS %I_tenant_all ON public.%I', t, t);
     EXECUTE format(
       'CREATE POLICY %I_tenant_all ON public.%I FOR ALL TO authenticated USING (clinic_id = public.current_clinic_id()) WITH CHECK (clinic_id = public.current_clinic_id())',
@@ -148,6 +158,44 @@ BEGIN
     );
   END LOOP;
 END $$;
+
+-- ── treatment_sessions: filtro via treatment_plans (sem coluna clinic_id) ──
+DROP POLICY IF EXISTS treatment_sessions_tenant ON public.treatment_sessions;
+CREATE POLICY treatment_sessions_tenant ON public.treatment_sessions
+  FOR ALL TO authenticated
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.treatment_plans p
+      WHERE p.id = treatment_sessions.treatment_plan_id
+        AND p.clinic_id = public.current_clinic_id()
+    )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.treatment_plans p
+      WHERE p.id = treatment_sessions.treatment_plan_id
+        AND p.clinic_id = public.current_clinic_id()
+    )
+  );
+
+-- ── wa_messages: filtro via wa_conversations (sem coluna clinic_id) ───────
+DROP POLICY IF EXISTS wa_messages_tenant ON public.wa_messages;
+CREATE POLICY wa_messages_tenant ON public.wa_messages
+  FOR ALL TO authenticated
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.wa_conversations c
+      WHERE c.id = wa_messages.conversation_id
+        AND c.clinic_id = public.current_clinic_id()
+    )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.wa_conversations c
+      WHERE c.id = wa_messages.conversation_id
+        AND c.clinic_id = public.current_clinic_id()
+    )
+  );
 
 -- ── ExerciseTemplate: clinic_id NULL = template nativo (todos veem) ─────────
 DROP POLICY IF EXISTS exercise_templates_select ON public.exercise_templates;
@@ -160,6 +208,13 @@ CREATE POLICY exercise_templates_modify ON public.exercise_templates
   FOR ALL TO authenticated
   USING (clinic_id = public.current_clinic_id())
   WITH CHECK (clinic_id = public.current_clinic_id());
+
+-- ── clinical_protocol_templates: tabela global (templates do sistema) ──────
+-- Leitura livre para autenticados; escrita apenas via service_role (backend).
+DROP POLICY IF EXISTS clinical_protocol_templates_read ON public.clinical_protocol_templates;
+CREATE POLICY clinical_protocol_templates_read ON public.clinical_protocol_templates
+  FOR SELECT TO authenticated
+  USING (true);
 
 -- ── goal_progress_snapshots / goal_milestones: filtro via patient_goals ─────
 DROP POLICY IF EXISTS goal_snapshots_tenant ON public.goal_progress_snapshots;
