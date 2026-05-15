@@ -49,6 +49,10 @@ resource "aws_instance" "backend" {
 
   lifecycle {
     create_before_destroy = true
+    # Trava AMI/user-data: t2.micro está em produção (i-0cc95731e636e1275)
+    # e será substituída pela migração ARM (backend_arm) via blue/green.
+    # Não permitir replace acidental por drift do AMI mais recente.
+    ignore_changes = [ami, user_data]
   }
 }
 
