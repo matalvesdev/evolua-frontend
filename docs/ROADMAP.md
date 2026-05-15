@@ -30,11 +30,11 @@ Meta de lançamento oficial (v1.0 GA): **end of Q3 / sprint a definir com o time
 ### 1. Plataforma & Infra (owner: tech lead)
 
 - ⚪ Rotação completa de credenciais (ver `docs/CREDENTIAL-ROTATION.md`)
-- ⚪ Aplicar migration de RLS (`prisma/migrations/20260509000000_enable_row_level_security/`)
+- 🟢 Aplicar migration de RLS (`prisma/migrations/20260509000000_enable_row_level_security/`) — **32 tabelas com RLS habilitado em prod (sa-east-1)**
 - ⚪ Separar projeto Supabase de produção do de desenvolvimento
-- ⚪ Pipeline GitHub Actions: lint → test → build → deploy (App Runner)
-- ⚪ Terraform: revisar `terraform/` e versionar state remoto (S3 + DynamoDB lock)
-- ⚪ Backup automático Postgres (PITR + dump diário S3)
+- 🟡 Pipeline GitHub Actions: lint → test → build (CI) + `deploy-migrations.yml` com gate manual via environment `production`
+- 🟡 Terraform: state remoto S3 + DynamoDB lock — código pronto (`terraform/bootstrap/`), falta `terraform apply` + migração
+- 🟡 Backup automático Postgres — workflow `pg-backup.yml` (dump diário → S3) + lifecycle Glacier; PITR depende de upgrade Supabase Pro
 - ⚪ Pre-deploy checklist incorporado no CI (gate manual)
 
 ### 2. Backend Core (owner: tech lead)
@@ -119,9 +119,11 @@ Meta de lançamento oficial (v1.0 GA): **end of Q3 / sprint a definir com o time
 - 🟢 Setup Sentry frontend + landing + backend
 - 🟢 Billing MVP completo (AbacatePay + Stripe, contracts, migration, webhooks idempotentes, página `/billing`)
 - 🟢 Migração Evolution Go → open-source v2.2.3 (rename completo, stack docker healthy)
-- 🟢 Testes Vitest billing (HMAC providers + mappers — 13/13 passando)
-- ⚪ RLS aplicado em prod (M0)
-- ⚪ CI/CD verde end-to-end (M0)
+- 🟢 Testes Vitest billing (HMAC providers + mappers — 13/13 passando) — **suite total: 42/42**
+- 🟢 RLS aplicado em prod (M0) — 32 tabelas, políticas tenant_isolation + helpers `current_clinic_id()`/`current_user_role()`
+- 🟢 CI drift check corrigido (Postgres service container + shadow DB)
+- 🟢 Workflow `deploy-migrations.yml` com gate manual `production`
+- 🟡 CI/CD verde end-to-end (M0) — falta validar primeiro run pós-fix
 
 ### Sprint +1 — Billing MVP
 - 🟢 AbacatePay: provider + checkout + webhook handlers
