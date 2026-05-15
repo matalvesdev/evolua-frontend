@@ -1,0 +1,80 @@
+name: Postgres backup → S3
+
+# Dump diário do Supabase Postgres para s3://evolua-pg-backups-sa-east-1
+# Roda toda madrugada (03:17 UTC = ~00:17 BRT) e pode ser disparado manualmente.
+#
+# Secrets necessários (Settings → Secrets → Actions):
+#   - DIRECT_URL                       (Supabase porta 5432)
+#   - PG_BACKUP_AWS_ACCESS_KEY_ID
+#   - PG_BACKUP_AWS_SECRET_ACCESS_KEY
+#   - PG_BACKUP_BUCKET                 (ex: evolua-pg-backups-sa-east-1)
+#   - PG_BACKUP_REGION                 (ex: sa-east-1)
+#
+# Retenção: lifecycle no bucket move p/ Glacier em 30d e expira em 365d.
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: pg-backup
+  cancel-in-progress: false
+
+jobs:
+  dump:
+    name: pg_dump → S3
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Install Postgres 16 client
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+          sudo apt-get update -qq
+          sudo apt-get install -y postgresql-client-16
+
+      - name: Dump database
+        env:
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: |
+          set -euo pipefail
+          STAMP=$(date -u +%Y%m%dT%H%M%SZ)
+          OUT="evolua-${STAMP}.dump"
+          echo "Dumping to ${OUT}..."
+          pg_dump --format=custom --no-owner --no-privileges --compress=9 \
+            --file="${OUT}" "${DIRECT_URL}"
+          ls -lh "${OUT}"
+          # SHA256 para verificação posterior
+          sha256sum "${OUT}" > "${OUT}.sha256"
+          echo "DUMP_FILE=${OUT}" >> "$GITHUB_ENV"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.PG_BACKUP_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PG_BACKUP_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.PG_BACKUP_REGION }}
+
+      - name: Upload to S3
+        env:
+          BUCKET: ${{ secrets.PG_BACKUP_BUCKET }}
+        run: |
+          set -euo pipefail
+          YEAR=$(date -u +%Y)
+          MONTH=$(date -u +%m)
+          PREFIX="daily/${YEAR}/${MONTH}"
+          # STANDARD: dentro do free tier (5GB grátis 12 meses).
+          # Lifecycle no bucket migra pra DEEP_ARCHIVE em 7d (ver terraform/backups.tf).
+          aws s3 cp "${DUMP_FILE}"        "s3://${BUCKET}/${PREFIX}/${DUMP_FILE}"
+          aws s3 cp "${DUMP_FILE}.sha256" "s3://${BUCKET}/${PREFIX}/${DUMP_FILE}.sha256"
+          echo "::notice::Uploaded s3://${BUCKET}/${PREFIX}/${DUMP_FILE}"
+
+      - name: Smoke test (size > 100KB)
+        run: |
+          SIZE=$(stat -c%s "${DUMP_FILE}")
+          echo "Dump size: ${SIZE} bytes"
+          if [ "${SIZE}" -lt 102400 ]; then
+            echo "::error::Backup suspiciously small (<100KB). Aborting alert."
+            exit 1
+          fi

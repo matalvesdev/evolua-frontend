@@ -30,6 +30,22 @@ output "ssh_command" {
   value       = "ssh -i ${var.key_name}.pem ubuntu@${aws_eip.backend.public_ip}"
 }
 
+# ── Backend V2 (ARM Graviton) — só populado durante migração blue/green ──
+output "backend_arm_instance_id" {
+  description = "ID da instância EC2 ARM (t4g.*) — null se enable_backend_v2 = false"
+  value       = length(aws_instance.backend_arm) > 0 ? aws_instance.backend_arm[0].id : null
+}
+
+output "backend_arm_public_ip" {
+  description = "IP público temporário da nova instância ARM (sem EIP até cutover)"
+  value       = length(aws_instance.backend_arm) > 0 ? aws_instance.backend_arm[0].public_ip : null
+}
+
+output "backend_arm_ssh_command" {
+  description = "Comando SSH para a nova instância ARM"
+  value       = length(aws_instance.backend_arm) > 0 ? "ssh -i ${var.key_name}.pem ubuntu@${aws_instance.backend_arm[0].public_ip}" : null
+}
+
 output "next_steps" {
   description = "Proximos passos apos o deploy"
   value       = <<-EOT

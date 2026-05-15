@@ -25,9 +25,30 @@ variable "landing_domain" {
 }
 
 variable "instance_type" {
-  description = "EC2 instance type (t2.micro = free tier)"
+  description = "EC2 instance type (t2.micro = free tier; t4g.micro = ARM Graviton p\u00f3s free tier)"
   type        = string
   default     = "t2.micro"
+}
+
+# Migra\u00e7\u00e3o blue/green: criar inst\u00e2ncia ARM em paralelo \u00e0 t2.micro atual.
+# Quando true e instance_type_arm64 != "", cria recurso aws_instance.backend_arm.
+# Ap\u00f3s cutover do EIP, definir enable_backend_v2 = false e remover bloco backend antigo.
+variable "enable_backend_v2" {
+  description = "Provisiona inst\u00e2ncia ARM (t4g.*) em paralelo \u00e0 t2.micro para migra\u00e7\u00e3o blue/green"
+  type        = bool
+  default     = false
+}
+
+variable "instance_type_arm64" {
+  description = "EC2 instance type ARM (Graviton). Use t4g.micro (1GB) ou t4g.nano (0.5GB)."
+  type        = string
+  default     = "t4g.micro"
+}
+
+variable "root_volume_size_arm64" {
+  description = "Tamanho do EBS root da inst\u00e2ncia ARM em GB (gp3)"
+  type        = number
+  default     = 8
 }
 
 variable "key_name" {

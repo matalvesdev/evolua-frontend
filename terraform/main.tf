@@ -12,6 +12,17 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  # ── State remoto S3 + lock DynamoDB ────────────────────────────────────
+  # Pré-requisito: rodar `terraform/bootstrap` UMA VEZ para criar bucket + tabela.
+  # Migração inicial do state local: `terraform init -migrate-state`.
+  backend "s3" {
+    bucket         = "evolua-terraform-state"
+    key            = "evolua/prod/terraform.tfstate"
+    region         = "sa-east-1"
+    dynamodb_table = "evolua-terraform-locks"
+    encrypt        = true
+  }
 }
 
 provider "aws" {
@@ -42,5 +53,26 @@ data "aws_ami" "ubuntu" {
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
+  }
+}
+
+# AMI ARM64 para inst\u00e2ncias Graviton (t4g.*)
+data "aws_ami" "ubuntu_arm64" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-arm64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["arm64"]
   }
 }
