@@ -39,6 +39,7 @@ jobs:
     steps:
       - name: Validate manual confirmation
         if: github.event_name == 'workflow_dispatch'
+        working-directory: .
         run: |
           if [ "${{ github.event.inputs.confirm }}" != "DEPLOY" ]; then
             echo "::error::Confirmação inválida. Digite exatamente 'DEPLOY'."
