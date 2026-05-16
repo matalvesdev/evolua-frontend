@@ -57,8 +57,15 @@ variable "key_name" {
 }
 
 variable "allowed_ssh_cidr" {
-  description = "CIDR do seu IP para acesso SSH"
+  description = "DEPRECATED: use allowed_ssh_cidrs (lista). Mantido para retro-compat."
   type        = string
+  default     = ""
+}
+
+variable "allowed_ssh_cidrs" {
+  description = "Lista de CIDRs com acesso SSH direto ao backend"
+  type        = list(string)
+  default     = ["201.13.9.241/32", "201.93.36.190/32"]
 }
 
 variable "supabase_url" {

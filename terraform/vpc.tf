@@ -23,7 +23,18 @@ resource "aws_security_group" "backend_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.allowed_ssh_cidr]
+    cidr_blocks = var.allowed_ssh_cidrs
+  }
+
+  # SSH via EC2 Instance Connect (managed prefix list sa-east-1)
+  # Permite Console browser-based Connect button. Para `ec2-instance-connect ssh`
+  # CLI funcionar de qualquer IP, criar um EIC Endpoint (free) na VPC default.
+  ingress {
+    description     = "SSH via EC2 Instance Connect (Console)"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    prefix_list_ids = ["pl-029debe66aa9d13b3"]
   }
 
   # HTTP (Nginx → redireciona para HTTPS)

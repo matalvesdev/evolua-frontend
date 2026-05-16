@@ -58,6 +58,12 @@ resource "aws_instance" "backend" {
 
 # Elastic IP associado à instância (sem custo enquanto associado)
 # Necessário para o DNS do Route53 não mudar a cada restart
+#
+# ⚠️  Durante migração blue/green (t2.micro → t4g.micro ARM), o EIP é
+# reassociado manualmente via `aws ec2 associate-address` para o ARM
+# (i-0592c784f5e0f0b6f). `ignore_changes = [instance]` impede o TF de
+# reverter a associação enquanto o t2.micro antigo ainda existe no state.
+# Remover após terminar o t2.micro e ajustar `instance = aws_instance.backend_arm[0].id`.
 resource "aws_eip" "backend" {
   instance = aws_instance.backend.id
   domain   = "vpc"
@@ -67,6 +73,10 @@ resource "aws_eip" "backend" {
   }
 
   depends_on = [aws_instance.backend]
+
+  lifecycle {
+    ignore_changes = [instance]
+  }
 }
 
 # ──────────────────────────────────────────────────────────────────────────
