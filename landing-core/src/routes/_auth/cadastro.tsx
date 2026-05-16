@@ -1,9 +1,8 @@
-import { createFileRoute, Navigate } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/cadastro')({
-  component: CadastroPage,
+  beforeLoad: () => {
+    throw redirect({ href: 'https://app.useevolua.com.br/cadastro' })
+  },
+  component: () => null,
 })
-
-function CadastroPage() {
-  return <Navigate to="https://app.useevolua.com.br/cadastro" />
-}
