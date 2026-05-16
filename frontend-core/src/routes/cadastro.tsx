@@ -738,7 +738,7 @@ function CadastroPage() {
       {/* Minimal header */}
       <header className="px-5 md:px-12 py-5 flex items-center justify-between border-b border-border-soft">
         <Link to="/" className="hover:opacity-70 transition-opacity">
-          <Logo variant="primary" size="sm" />
+          <Logo variant="quad" size="sm" />
         </Link>
         <Link
           to="/"
