@@ -1,14 +1,20 @@
 import fp from 'fastify-plugin';
-import jwt from '@fastify/jwt';
+import { createRemoteJWKSet, jwtVerify, type JWTPayload } from 'jose';
 import type { FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 import { env } from '../config/env.js';
 
 /**
- * JWT do Supabase. Estrutura do payload Supabase:
- *   { sub: <uuid>, email, role, aud, exp, iat, ... }
+ * JWT do Supabase (ES256 + JWKS).
  *
- * Em microservices Go/Python o Fastify atua como gateway:
- * valida o token e repassa user.id em header `x-user-id`.
+ * Supabase agora assina tokens com chave assimétrica ES256. A chave pública é
+ * publicada em `<SUPABASE_URL>/auth/v1/.well-known/jwks.json` e identificada
+ * pelo `kid` no header do JWT.
+ *
+ * Payload típico:
+ *   { sub: <uuid>, email, role: 'authenticated', aud: 'authenticated', iss, exp, iat }
+ *
+ * Em microservices Go/Python o Fastify atua como gateway: valida o token e
+ * repassa user.id em header `x-user-id`.
  */
 export type AuthUser = {
   id: string;
@@ -27,37 +33,51 @@ declare module 'fastify' {
   }
 }
 
-declare module '@fastify/jwt' {
-  interface FastifyJWT {
-    payload: { sub: string; email?: string; role?: string };
-    user: AuthUser;
-  }
-}
+type SupabasePayload = JWTPayload & {
+  email?: string;
+  role?: string;
+};
 
 const authPlugin: FastifyPluginAsync = async (app) => {
-  await app.register(jwt, {
-    secret: env.SUPABASE_JWT_SECRET,
-    verify: { algorithms: ['HS256'] },
-    formatUser: (payload) => ({
+  const jwksUrl = new URL('/auth/v1/.well-known/jwks.json', env.SUPABASE_URL);
+  const issuer = new URL('/auth/v1', env.SUPABASE_URL).toString();
+  const JWKS = createRemoteJWKSet(jwksUrl, {
+    cooldownDuration: 30_000,
+    cacheMaxAge: 10 * 60_000,
+  });
+
+  async function verifyBearer(req: FastifyRequest): Promise<AuthUser> {
+    const header = req.headers.authorization;
+    if (!header || !header.toLowerCase().startsWith('bearer ')) {
+      throw new Error('missing bearer token');
+    }
+    const token = header.slice(7).trim();
+    const { payload } = await jwtVerify<SupabasePayload>(token, JWKS, {
+      issuer,
+      audience: 'authenticated',
+    });
+    if (!payload.sub) throw new Error('token missing sub');
+    return {
       id: payload.sub,
       email: payload.email,
       role: payload.role,
-    }),
-  });
+    };
+  }
 
   app.decorate('authenticate', async (req: FastifyRequest, rep: FastifyReply) => {
     try {
-      await req.jwtVerify();
-    } catch {
+      req.user = await verifyBearer(req);
+    } catch (err) {
+      req.log.debug({ err: (err as Error).message }, 'jwt verify failed');
       return rep.code(401).send({ error: 'Unauthorized', message: 'Invalid or missing token' });
     }
   });
 
   app.decorate('authenticateOptional', async (req: FastifyRequest) => {
     try {
-      await req.jwtVerify();
+      req.user = await verifyBearer(req);
     } catch {
-      // ignore — rota é pública
+      // rota pública — ignora
     }
   });
 };
