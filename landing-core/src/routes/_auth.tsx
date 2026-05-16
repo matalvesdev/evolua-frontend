@@ -1,13 +1,17 @@
-import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
+import { createFileRoute, Outlet, Link, Navigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth')({
   component: AuthLayout,
 })
 
 function AuthLayout() {
+  // Redirect auth routes to app
+  const pathname = window?.location?.pathname ?? ''
+  if (pathname === '/entrar') return <Navigate to="https://app.useevolua.com.br/entrar" />
+  if (pathname === '/cadastro') return <Navigate to="https://app.useevolua.com.br/cadastro" />
+
   return (
     <div className="min-h-screen bg-canvas flex flex-col">
-      {/* Minimal header */}
       <header className="px-5 md:px-12 py-5 flex items-center justify-between border-b border-outline-variant">
         <Link to="/" className="font-headline font-black text-2xl tracking-tighter text-ink hover:opacity-70 transition-opacity">
           EVOLUA

@@ -1,5 +1,24 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com; connect-src 'self'; frame-ancestors 'none';" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ],
+  "redirects": [
+    { "source": "/app/entrar", "destination": "https://app.useevolua.com.br/entrar", "permanent": false },
+    { "source": "/app/cadastro", "destination": "https://app.useevolua.com.br/cadastro", "permanent": false },
+    { "source": "/app/dashboard(.*)", "destination": "https://app.useevolua.com.br/dashboard$1", "permanent": false },
+    { "source": "/app/recuperar-senha", "destination": "https://app.useevolua.com.br/recuperar-senha", "permanent": false },
+    { "source": "/app/nova-senha", "destination": "https://app.useevolua.com.br/nova-senha", "permanent": false },
+    { "source": "/entrar", "destination": "https://app.useevolua.com.br/entrar", "permanent": false },
+    { "source": "/cadastro", "destination": "https://app.useevolua.com.br/cadastro", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
