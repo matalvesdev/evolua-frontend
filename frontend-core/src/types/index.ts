@@ -11,13 +11,24 @@ export interface User {
 
 export interface Patient {
   id: string
+  clinicId: string
+  therapistId: string | null
   name: string
-  email?: string
-  phone?: string
-  status: 'active' | 'inactive' | 'discharged'
+  email: string | null
+  phone: string | null
+  birthDate: string | null
+  cpf: string | null
+  status: string
+  guardianName: string | null
+  guardianPhone: string | null
+  guardianRelationship: string | null
+  address: unknown
+  medicalHistory: { diagnoses?: string[]; medications?: string[]; allergies?: string[]; notes?: string } | null
+  startDate: string | null
+  dischargeDate: string | null
+  dischargeReason: string | null
   createdAt: string
-  diagnosis?: string
-  age?: number
+  updatedAt: string
 }
 
 export interface Appointment {

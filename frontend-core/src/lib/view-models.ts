@@ -51,18 +51,25 @@ function colorFor(id: string): string {
 export function patientToVM(p: ApiPatient): PatientVM {
   const status: PatientVM['status'] =
     p.status === 'active' ? 'ativo' : p.status === 'discharged' ? 'inativo' : 'aguardando'
+
+  const age = p.birthDate
+    ? Math.floor((Date.now() - new Date(p.birthDate).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+    : 0
+
+  const diagnosis = p.medicalHistory?.diagnoses?.[0] ?? '—'
+
   return {
     id: p.id,
     name: p.name,
-    age: p.age ?? 0,
-    diagnosis: p.diagnosis ?? '—',
+    age,
+    diagnosis,
     sessions: 0,
     next: '—',
     status,
     avatar: initials(p.name),
     color: colorFor(p.id),
     phone: p.phone ?? '',
-    guardian: '',
+    guardian: p.guardianName ?? '',
     email: p.email ?? '',
     since: p.createdAt?.slice(0, 10) ?? '',
     notes: '',
