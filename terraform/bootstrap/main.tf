@@ -54,7 +54,8 @@ variable "lock_table_name" {
 
 # ── Bucket de state ──────────────────────────────────────────────────────
 resource "aws_s3_bucket" "tfstate" {
-  bucket = var.state_bucket_name
+  bucket        = var.state_bucket_name
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_versioning" "tfstate" {

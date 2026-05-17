@@ -1,9 +1,15 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Logo } from '@/components/Logo'
 
 export const Route = createFileRoute('/cadastro')({
+  beforeLoad: async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      throw redirect({ to: '/dashboard' })
+    }
+  },
   component: CadastroPage,
 })
 
