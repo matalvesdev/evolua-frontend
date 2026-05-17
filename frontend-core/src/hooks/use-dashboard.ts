@@ -2,8 +2,10 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import type { DashboardStats, Appointment, Patient, Report, Task } from '@/types'
 
-// Todos os endpoints do backend Fastify estão sob o prefixo /api/*.
-// As rotas espelham os módulos em backend-core/apps/api/src/modules/.
+interface ListResponse<T> {
+  data: T[]
+  pagination: { page: number; pageSize: number; total: number; totalPages: number }
+}
 
 export function useDashboardStats() {
   return useQuery<DashboardStats>({
@@ -16,7 +18,10 @@ export function useDashboardStats() {
 export function useTodayAppointments() {
   return useQuery<Appointment[]>({
     queryKey: ['appointments', 'today'],
-    queryFn: () => api.get<Appointment[]>('/api/appointments/today'),
+    queryFn: async () => {
+      const res = await api.get<ListResponse<Appointment>>('/api/appointments/today')
+      return res.data ?? []
+    },
     staleTime: 30_000,
   })
 }
@@ -32,10 +37,12 @@ export function useWeekAppointments() {
 
   return useQuery<Appointment[]>({
     queryKey: ['appointments', 'week'],
-    queryFn: () =>
-      api.get<Appointment[]>(
+    queryFn: async () => {
+      const res = await api.get<ListResponse<Appointment>>(
         `/api/appointments?startDate=${weekStart.toISOString()}&endDate=${weekEnd.toISOString()}`,
-      ),
+      )
+      return res.data ?? []
+    },
     staleTime: 30_000,
   })
 }
@@ -43,7 +50,10 @@ export function useWeekAppointments() {
 export function useActivePatients() {
   return useQuery<Patient[]>({
     queryKey: ['patients', 'active'],
-    queryFn: () => api.get<Patient[]>('/api/patients?status=active&limit=100'),
+    queryFn: async () => {
+      const res = await api.get<ListResponse<Patient>>('/api/patients?status=active&pageSize=100')
+      return res.data ?? []
+    },
     staleTime: 120_000,
   })
 }
@@ -51,7 +61,10 @@ export function useActivePatients() {
 export function usePendingReports() {
   return useQuery<Report[]>({
     queryKey: ['reports', 'pending'],
-    queryFn: () => api.get<Report[]>('/api/reports?status=pending_review'),
+    queryFn: async () => {
+      const res = await api.get<ListResponse<Report>>('/api/reports?status=pending_review&pageSize=10')
+      return res.data ?? []
+    },
     staleTime: 60_000,
   })
 }
@@ -59,7 +72,10 @@ export function usePendingReports() {
 export function usePendingTasks() {
   return useQuery<Task[]>({
     queryKey: ['tasks', 'pending'],
-    queryFn: () => api.get<Task[]>('/api/tasks?status=pending&limit=8'),
+    queryFn: async () => {
+      const res = await api.get<ListResponse<Task>>('/api/tasks?status=pending&pageSize=8')
+      return res.data ?? []
+    },
     staleTime: 60_000,
   })
 }
