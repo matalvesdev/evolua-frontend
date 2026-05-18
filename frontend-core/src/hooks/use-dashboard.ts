@@ -62,7 +62,7 @@ export function usePendingReports() {
   return useQuery<Report[]>({
     queryKey: ['reports', 'pending'],
     queryFn: async () => {
-      const res = await api.get<ListResponse<Report>>('/api/reports?status=pending_review&pageSize=10')
+      const res = await api.get<ListResponse<Report>>('/api/reports?status=review&pageSize=10')
       return res.data ?? []
     },
     staleTime: 60_000,
