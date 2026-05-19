@@ -385,7 +385,7 @@ function SessaoPage() {
           <p className="text-xs text-text-tertiary text-center max-w-xs">
             {transcriptionStatus === 'completed'
               ? 'A IA está organizando a transcrição em formato SOAP.'
-              : 'Pode levar até 1 minuto dependendo da duração da sessão.'}
+              : 'Pode levar até 2 minutos (o serviço de IA pode estar iniciando).'}
           </p>
           {liveTranscript && (
             <p className="text-xs text-text-secondary italic max-w-md text-center mt-2">
