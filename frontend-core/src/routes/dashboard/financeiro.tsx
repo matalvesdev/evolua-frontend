@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { useTransactions, useCreateTransaction, useFinancesSummary } from '@/hooks/use-finances'
+import { useFinancialMetrics } from '@/hooks/use-financial'
 import { transactionToVM, type TransactionVM as Transaction } from '@/lib/view-models'
 
 export const Route = createFileRoute('/dashboard/financeiro')({
@@ -11,9 +12,6 @@ export const Route = createFileRoute('/dashboard/financeiro')({
 
 type TxType = 'receita' | 'despesa'
 type TxStatus = 'pago' | 'pendente' | 'vencido'
-
-const MONTHS_SPARKLINE: number[] = []
-const MAX_SPARK = MONTHS_SPARKLINE.length ? Math.max(...MONTHS_SPARKLINE) : 1
 
 const STATUS_CFG: Record<TxStatus, {label:string; color:string}> = {
   pago:     { label:'Pago',     color:'text-success bg-success-surface' },
@@ -30,9 +28,11 @@ function formatDate(d: string) {
 
 // ── Gráfico de barras simples ─────────────────────────────────────────────────
 
-function Sparkline() {
+function Sparkline({ metrics }: { metrics: { revenue: number }[] }) {
   const MONTH_LABELS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']
-  if (MONTHS_SPARKLINE.length === 0) {
+  const values = metrics.map(m => m.revenue)
+  const maxVal = values.length ? Math.max(...values) : 1
+  if (values.length === 0) {
     return (
       <div className="empty-state h-16">
         <p className="text-xs text-text-secondary">Sem histórico</p>
@@ -41,14 +41,14 @@ function Sparkline() {
   }
   return (
     <div className="flex items-end gap-1.5 h-16">
-      {MONTHS_SPARKLINE.map((v, i) => (
+      {values.map((v, i) => (
         <div key={i} className="flex-1 flex flex-col items-center gap-1 group">
           <div
-            className={`w-full rounded-sm transition-colors ${i === 3 ? 'bg-neon' : 'bg-neon/30 group-hover:bg-neon/50'}`}
-            style={{ height: `${(v / MAX_SPARK) * 100}%` }}
-            title={`${MONTH_LABELS[i]}: ${fmt(v)}`}
+            className={`w-full rounded-sm transition-colors ${i === values.length - 1 ? 'bg-neon' : 'bg-neon/30 group-hover:bg-neon/50'}`}
+            style={{ height: `${(v / maxVal) * 100}%` }}
+            title={`${MONTH_LABELS[i] || i}: ${fmt(v)}`}
           />
-          <span className="text-[8px] text-text-tertiary">{MONTH_LABELS[i]}</span>
+          <span className="text-[8px] text-text-tertiary">{MONTH_LABELS[i] || i}</span>
         </div>
       ))}
     </div>
@@ -147,6 +147,7 @@ function FinanceiroPage() {
   const txQuery = useTransactions({ pageSize: 100 })
   const summaryQuery = useFinancesSummary()
   const createTx = useCreateTransaction()
+  const { data: financialMetrics = [] } = useFinancialMetrics()
   const transactions: Transaction[] = useMemo(
     () => (txQuery.data?.data ?? []).map(transactionToVM),
     [txQuery.data],
@@ -228,13 +229,13 @@ function FinanceiroPage() {
       <div className="card p-5 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <p className="section-label">Receita mensal — {new Date().getFullYear()}</p>
-          {MONTHS_SPARKLINE.length > 0 && (
+          {financialMetrics.length > 0 && (
             <p className="font-display font-bold text-sm text-olive">
-              {fmt(MONTHS_SPARKLINE[MONTHS_SPARKLINE.length - 1] ?? 0)} no mês atual
+              {fmt(financialMetrics[financialMetrics.length - 1]?.revenue ?? 0)} no mês atual
             </p>
           )}
         </div>
-        <Sparkline />
+        <Sparkline metrics={financialMetrics} />
       </div>
 
       {/* Filtros + tabela */}

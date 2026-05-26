@@ -1,5 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState, useRef, useEffect } from 'react'
+import { api } from '@/lib/api'
+import { useArticles, type Article } from '@/hooks/use-articles'
+import { useSuggestedQuestions } from '@/hooks/use-suggested-questions'
 
 export const Route = createFileRoute('/dashboard/biblioteca')({
   component: BibliotecaPage,
@@ -10,20 +13,6 @@ export const Route = createFileRoute('/dashboard/biblioteca')({
 type ArticleArea = 'linguagem' | 'voz' | 'fluencia' | 'degluticao' | 'audiologia' | 'tea' | 'caa'
 type ArticleType = 'artigo' | 'diretriz' | 'protocolo' | 'revisao' | 'manual'
 
-interface Article {
-  id: string
-  title: string
-  authors: string
-  source: string
-  year: number
-  area: ArticleArea
-  type: ArticleType
-  abstract: string
-  doi?: string
-  tags: string[]
-  saved: boolean
-}
-
 interface ChatMessage {
   id: string
   role: 'user' | 'assistant'
@@ -32,17 +21,15 @@ interface ChatMessage {
   timestamp: Date
 }
 
-// ── Mock ──────────────────────────────────────────────────────────────────────
-
-const ARTICLES: Article[] = []
-
-// ── Respostas mock do chatbot ──────────────────────────────────────────────────
-
-function generateChatResponse(_question: string, _articles: Article[]): { content: string; sources: string[] } {
-  // TODO: integrar com endpoint de IA do backend (RAG sobre a biblioteca clínica).
-  return {
-    content: 'A assistente de estudos com IA será ativada em breve. Enquanto isso, utilize a busca e os filtros da biblioteca para localizar referências.',
-    sources: [],
+async function generateChatResponse(question: string, _articles: Article[]): Promise<{ content: string; sources: string[] }> {
+  try {
+    const result = await api.post<{ content: string; sources: string[] }>('/api/ai/rag/library', { question })
+    return result
+  } catch {
+    return {
+      content: 'A assistente de estudos está temporariamente indisponível. Tente novamente mais tarde.',
+      sources: [],
+    }
   }
 }
 
@@ -66,7 +53,11 @@ const TYPE_CFG: Record<ArticleType, { label:string; color:string }> = {
   manual:   { label:'Manual',    color:'text-olive   bg-neon-surface'          },
 }
 
-const SUGGESTED_QUESTIONS: string[] = []
+const FALLBACK_QUESTIONS = [
+  'Quais as diretrizes mais recentes para TEA?',
+  'Protocolos de avaliação de deglutição',
+  'Escalas validadas para voz no Brasil',
+]
 
 // ── Componente Chat ───────────────────────────────────────────────────────────
 
@@ -89,7 +80,7 @@ function ChatPanel({ articles }: { articles: Article[] }) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
-  function handleSend(text?: string) {
+  async function handleSend(text?: string) {
     const q = (text ?? input).trim()
     if (!q || loading) return
 
@@ -103,16 +94,26 @@ function ChatPanel({ articles }: { articles: Article[] }) {
     setInput('')
     setLoading(true)
 
-    // TODO: substituir por chamada real ao endpoint de IA (RAG sobre a biblioteca).
-    const { content, sources } = generateChatResponse(q, articles)
-    const assistantMsg: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: 'assistant',
-      content,
-      sources,
-      timestamp: new Date(),
+    try {
+      const { content, sources } = await generateChatResponse(q, articles)
+      const assistantMsg: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content,
+        sources,
+        timestamp: new Date(),
+      }
+      setMessages(prev => [...prev, assistantMsg])
+    } catch {
+      const errorMsg: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: 'Erro ao consultar a assistente. Tente novamente.',
+        sources: [],
+        timestamp: new Date(),
+      }
+      setMessages(prev => [...prev, errorMsg])
     }
-    setMessages(prev => [...prev, assistantMsg])
     setLoading(false)
   }
 
@@ -157,7 +158,7 @@ function ChatPanel({ articles }: { articles: Article[] }) {
         </div>
         <div className="min-w-0">
           <p className="font-display font-bold text-xs uppercase tracking-wider text-text-primary">Assistente Clínico</p>
-          <p className="text-[10px] text-text-tertiary">Baseado na sua biblioteca · {ARTICLES.length} referências indexadas</p>
+          <p className="text-[10px] text-text-tertiary">Baseado na sua biblioteca · {articles.length} referências indexadas</p>
         </div>
         <div className="ml-auto flex items-center gap-1.5 px-2 py-1 bg-success-surface border border-success/20 rounded-full">
           <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
@@ -276,17 +277,18 @@ function ChatPanel({ articles }: { articles: Article[] }) {
 // ── Página principal ──────────────────────────────────────────────────────────
 
 function BibliotecaPage() {
+  const { data: articles = [] }                  = useArticles()
+  const { data: suggestedQuestions = [] }        = useSuggestedQuestions()
+  const SUGGESTED_QUESTIONS = suggestedQuestions.length > 0 ? suggestedQuestions : FALLBACK_QUESTIONS
   const [search, setSearch]           = useState('')
   const [areaFilter, setAreaFilter]   = useState<ArticleArea|'all'>('all')
   const [typeFilter, setTypeFilter]   = useState<ArticleType|'all'>('all')
   const [savedFilter, setSavedFilter] = useState(false)
   const [expanded, setExpanded]       = useState<string|null>(null)
-  const [savedIds, setSavedIds]       = useState<Set<string>>(
-    new Set(ARTICLES.filter(a => a.saved).map(a => a.id))
-  )
+  const [savedIds, setSavedIds]       = useState<Set<string>>(new Set())
   const [chatOpen, setChatOpen]       = useState(true)
 
-  const filtered = ARTICLES.filter(a => {
+  const filtered = articles.filter(a => {
     const matchSearch = search === '' ||
       a.title.toLowerCase().includes(search.toLowerCase()) ||
       a.authors.toLowerCase().includes(search.toLowerCase()) ||
@@ -346,9 +348,9 @@ function BibliotecaPage() {
           {/* Stats rápidas */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label:'Referências', value: ARTICLES.length,    icon:'library_books',  color:'text-text-primary' },
-              { label:'Diretrizes',  value: ARTICLES.filter(a => a.type === 'diretriz' || a.type === 'manual').length, icon:'verified', color:'text-danger' },
-              { label:'Com DOI',     value: ARTICLES.filter(a => a.doi).length, icon:'link', color:'text-info' },
+              { label:'Referências', value: articles.length,    icon:'library_books',  color:'text-text-primary' },
+              { label:'Diretrizes',  value: articles.filter(a => a.type === 'diretriz' || a.type === 'manual').length, icon:'verified', color:'text-danger' },
+              { label:'Com DOI',     value: articles.filter(a => a.doi).length, icon:'link', color:'text-info' },
               { label:'Salvos',      value: savedIds.size, icon:'bookmark', color:'text-olive' },
             ].map(s => (
               <div key={s.label} className="card p-4 flex flex-col gap-1">

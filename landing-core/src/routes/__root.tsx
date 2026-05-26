@@ -4,6 +4,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
+import { InAppSupport } from '../components/KnowledgeBase'
 
 interface RouterContext {
   queryClient: QueryClient
@@ -42,6 +43,7 @@ function RootLayout() {
         <Outlet />
       </main>
       <Footer />
+      <InAppSupport />
       {import.meta.env.DEV && (
         <>
           <TanStackRouterDevtools position="bottom-right" />

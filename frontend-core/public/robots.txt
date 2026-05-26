@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /app
+Sitemap: https://app.useevolua.com.br/sitemap.xml

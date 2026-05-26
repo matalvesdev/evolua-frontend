@@ -1,11 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
+import { useReports, useCreateReport, useUpdateReport } from '@/hooks/use-reports'
+import type { Report as HookReport } from '@/hooks/use-reports'
 
 export const Route = createFileRoute('/dashboard/relatorios')({
   component: RelatoriosPage,
 })
 
-// ── Mock ──────────────────────────────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────────────────────
 
 type ReportStatus = 'pending' | 'reviewed' | 'exported'
 
@@ -20,7 +22,18 @@ interface Report {
   summary: string
 }
 
-const INITIAL_REPORTS: Report[] = []
+function toLocalReport(r: HookReport): Report {
+  return {
+    id: r.id,
+    patient: r.patientName,
+    type: r.type,
+    date: r.createdAt.split('T')[0],
+    duration: '',
+    status: r.status === 'final' ? 'reviewed' : 'pending',
+    aiGenerated: false,
+    summary: r.content.slice(0, 200),
+  }
+}
 
 const STATUS_CONFIG: Record<ReportStatus, { label: string; color: string; icon: string }> = {
   pending:  { label:'Aguardando revisão', color:'text-warning bg-warning-surface', icon:'rate_review' },
@@ -103,7 +116,10 @@ function ReportDrawer({ report, onClose, onSave }: { report: Report; onClose: ()
 // ── Página principal ──────────────────────────────────────────────────────────
 
 function RelatoriosPage() {
-  const [reports, setReports]     = useState<Report[]>(INITIAL_REPORTS)
+  const { data: hookReports = [] }  = useReports()
+  const createReport                = useCreateReport()
+  const updateReport                = useUpdateReport()
+  const reports                     = hookReports.map(toLocalReport)
   const [filter, setFilter]       = useState<'all'|ReportStatus>('all')
   const [search, setSearch]       = useState('')
   const [selected, setSelected]   = useState<Report | null>(null)
@@ -116,11 +132,17 @@ function RelatoriosPage() {
   }), [])
 
   function saveReport(r: Report, status: ReportStatus) {
-    setReports(prev => {
-      const exists = prev.find(x => x.id === r.id)
-      if (exists) return prev.map(x => x.id === r.id ? { ...x, status } : x)
-      return [{ ...r, status }, ...prev]
-    })
+    const exists = reports.find(x => x.id === r.id)
+    if (exists) {
+      updateReport.mutate({ id: r.id, body: { status: status === 'reviewed' ? 'final' : 'draft' } })
+    } else {
+      createReport.mutate({
+        patientName: r.patient,
+        type: r.type,
+        title: r.type,
+        content: r.summary,
+      })
+    }
     setSelected(null)
     setShowNew(false)
   }

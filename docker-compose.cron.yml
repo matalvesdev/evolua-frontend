@@ -1,0 +1,42 @@
+# Docker Compose for scheduled cron jobs
+# Runs alongside the main services to handle:
+# - Weekly content generation (Monday 07:00)
+# - Daily DB health check (03:17)
+# - Newsletter dispatch (Wednesday 10:00)
+#
+# Usage: docker compose -f docker-compose.cron.yml up -d
+
+services:
+  cron:
+    image: alpine:3.20
+    container_name: evolua-cron
+    restart: unless-stopped
+    volumes:
+      - ./scripts:/scripts:ro
+      - ./.agents:/.agents:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - NODE_ENV=production
+      # Set in production via your secret manager
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - NOTIFICA_API_KEY=${NOTIFICA_API_KEY}
+      - NOTIFICA_API_URL=${NOTIFICA_API_URL:-https://app.usenotifica.com.br/v1}
+      - NOTIFICA_FROM_EMAIL=${NOTIFICA_FROM_EMAIL:-newsletter@useevolua.com.br}
+      - GMAIL_USER=${GMAIL_USER}
+      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
+      - EMAIL_DESTINO=${EMAIL_DESTINO}
+      - SENTRY_DSN=${SENTRY_DSN}
+    entrypoint: |
+      sh -c '
+        echo "0 7 * * 1 node /scripts/cronjob-semanal.js --sem-upload" > /etc/crontabs/root
+        echo "17 3 * * * node /scripts/db-healthcheck.js" >> /etc/crontabs/root
+        echo "0 10 * * 3 node /scripts/send-newsletter.js" >> /etc/crontabs/root
+        crond -f -l 2
+      '
+    networks:
+      - evolua
+
+networks:
+  evolua:
+    external: true

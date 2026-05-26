@@ -47,4 +47,21 @@ export async function submitContactMessage(input: ContactInput): Promise<void> {
   if (error) {
     throw new Error('Não conseguimos enviar sua mensagem. Tente novamente.')
   }
+
+  const apiUrl = typeof import.meta !== 'undefined' ? import.meta.env.VITE_API_URL ?? '' : ''
+  if (apiUrl) {
+    fetch(`${apiUrl}/api/contact/notify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nome: parsed.data.nome,
+        email: parsed.data.email,
+        whatsapp: parsed.data.whatsapp || null,
+        assunto: parsed.data.assunto,
+        mensagem: parsed.data.mensagem,
+      }),
+    }).catch(() => {
+      /* fire-and-forget — notification failure is non-critical */
+    })
+  }
 }

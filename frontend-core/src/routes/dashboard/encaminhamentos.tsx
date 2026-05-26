@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useDocuments, useCreateDocument, useUpdateDocument } from '@/hooks/use-documents'
+import type { Document as HookDoc } from '@/hooks/use-documents'
 
 export const Route = createFileRoute('/dashboard/encaminhamentos')({
   component: EncaminhamentosPage,
@@ -25,6 +27,18 @@ interface Document {
   date: string
   status: DocStatus
   content: string
+}
+
+function toLocalDoc(d: HookDoc): Document {
+  return {
+    id: d.id,
+    type: (d.title as DocType) || 'encaminhamento-escola',
+    patientName: d.patientName,
+    destinatario: d.type,
+    date: d.createdAt.split('T')[0],
+    status: d.status === 'final' ? 'finalizado' : 'rascunho',
+    content: d.content,
+  }
 }
 
 // ── Templates por tipo ────────────────────────────────────────────────────────
@@ -261,7 +275,7 @@ const STATUS_CFG: Record<DocStatus, { label: string; color: string }> = {
   enviado:    { label: 'Enviado ✓',  color: 'text-success bg-success-surface'   },
 }
 
-const INITIAL_DOCS: Document[] = []
+// Hook data is used via useDocuments() in the component
 
 // ── Modal: Novo Documento ─────────────────────────────────────────────────────
 
@@ -368,14 +382,15 @@ function DocEditor({ doc, onClose, onUpdate }: {
   function handlePrint() {
     const win = window.open('', '_blank')
     if (!win) return
+    const title = `${cfg.label} — ${doc.patientName}`.replace(/[<>&"']/g, '')
     win.document.write(`
-      <html><head><title>${cfg.label} — ${doc.patientName}</title>
+      <html><head><title>${title}</title>
       <style>
         body { font-family: 'Times New Roman', serif; font-size: 12pt; margin: 2cm; line-height: 1.6; color: #000; }
         pre { white-space: pre-wrap; font-family: inherit; }
         @media print { body { margin: 1.5cm; } }
       </style></head>
-      <body><pre>${content}</pre></body></html>
+      <body><pre>${content.replace(/[<>&"']/g, '')}</pre></body></html>
     `)
     win.document.close()
     win.print()
@@ -444,7 +459,10 @@ function DocEditor({ doc, onClose, onUpdate }: {
 // ── Página principal ──────────────────────────────────────────────────────────
 
 function EncaminhamentosPage() {
-  const [docs, setDocs]       = useState<Document[]>(INITIAL_DOCS)
+  const { data: hookDocs = [] }   = useDocuments()
+  const createDoc                 = useCreateDocument()
+  const updateDoc                 = useUpdateDocument()
+  const docs                      = hookDocs.map(toLocalDoc)
   const [showNew, setShowNew] = useState(false)
   const [editing, setEditing] = useState<Document | null>(null)
   const [filterStatus, setFilterStatus] = useState<string>('all')
@@ -452,11 +470,22 @@ function EncaminhamentosPage() {
   const [search, setSearch]             = useState('')
 
   function handleSave(doc: Document) {
-    setDocs(prev => [doc, ...prev])
+    createDoc.mutate({
+      patientName: doc.patientName,
+      type: doc.type,
+      title: doc.type,
+      content: doc.content,
+    })
   }
 
   function handleUpdate(id: string, patch: Partial<Document>) {
-    setDocs(prev => prev.map(d => d.id === id ? { ...d, ...patch } : d))
+    updateDoc.mutate({
+      id,
+      body: {
+        content: patch.content,
+        status: patch.status === 'finalizado' || patch.status === 'enviado' ? 'final' : 'draft',
+      },
+    })
   }
 
   const filtered = docs.filter(d => {

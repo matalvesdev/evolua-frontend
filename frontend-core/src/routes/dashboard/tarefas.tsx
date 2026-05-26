@@ -1,6 +1,14 @@
 import { useState, useRef } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import type { Priority, TaskItem } from '@/components/dashboard/TaskList'
+import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from '@/hooks/use-tasks'
+import type { TaskItem as HookTaskItem } from '@/hooks/use-tasks'
+
+type Priority = 'high' | 'medium' | 'low'
+
+interface LocalTask extends HookTaskItem {
+  done: boolean
+  category: string
+}
 
 export const Route = createFileRoute('/dashboard/tarefas')({
   component: TarefasPage,
@@ -14,8 +22,6 @@ const PRIORITY_CONFIG: Record<Priority, { label: string; dot: string; row: strin
 
 const CATEGORIES = ['Todos', 'Clínico', 'Administrativo', 'Agenda', 'Financeiro', 'Geral']
 
-const INITIAL_TASKS: TaskItem[] = []
-
 function formatDue(iso: string | null): { label: string; cls: string } | null {
   if (!iso) return null
   const d   = new Date(iso)
@@ -27,11 +33,17 @@ function formatDue(iso: string | null): { label: string; cls: string } | null {
   return { label: d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }), cls: 'text-text-tertiary' }
 }
 
-let _id = 200
-function genId() { return String(++_id) }
-
 function TarefasPage() {
-  const [tasks, setTasks]         = useState<TaskItem[]>(INITIAL_TASKS)
+  const { data: hookTasks = [] }  = useTasks()
+  const createTask                = useCreateTask()
+  const updateTask                = useUpdateTask()
+  const deleteTask                = useDeleteTask()
+
+  const tasks: LocalTask[] = hookTasks.map(t => ({
+    ...t,
+    done: t.status === 'completed',
+    category: '',
+  }))
   const [filter, setFilter]       = useState<'pendentes' | 'concluidas' | 'todas'>('pendentes')
   const [category, setCategory]   = useState('Todos')
   const [priority, setPriority]   = useState<Priority | 'todas'>('todas')
@@ -46,32 +58,33 @@ function TarefasPage() {
   const inputRef = useRef<HTMLInputElement>(null)
 
   function toggle(id: string) {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t))
+    const t = tasks.find(x => x.id === id)
+    if (t) {
+      updateTask.mutate({ id, body: { status: t.status === 'completed' ? 'pending' : 'completed' } })
+    }
   }
   function remove(id: string) {
-    setTasks(prev => prev.filter(t => t.id !== id))
+    deleteTask.mutate(id)
   }
-  function startEdit(t: TaskItem) {
+  function startEdit(t: LocalTask) {
     setEditId(t.id)
     setEditTitle(t.title)
   }
   function saveEdit(id: string) {
     if (editTitle.trim()) {
-      setTasks(prev => prev.map(t => t.id === id ? { ...t, title: editTitle.trim() } : t))
+      updateTask.mutate({ id, body: { title: editTitle.trim() } })
     }
     setEditId(null)
   }
   function addTask() {
     const title = newTitle.trim()
     if (!title) { setAdding(false); return }
-    setTasks(prev => [{
-      id:       genId(),
+    createTask.mutate({
       title,
       priority: newPriority,
-      dueDate:  newDue ? new Date(newDue).toISOString() : null,
-      done:     false,
-      category: newCategory,
-    }, ...prev])
+      dueDate: newDue || undefined,
+      status: 'pending',
+    })
     setNewTitle(''); setNewPriority('medium'); setNewCategory('Geral'); setNewDue('')
     setAdding(false)
   }
@@ -252,7 +265,7 @@ function TarefasPage() {
         <div className="card p-0 overflow-hidden">
           <ul className="divide-y divide-border-soft">
             {filtered.map(t => {
-              const due = formatDue(t.dueDate)
+              const due = formatDue(t.dueDate ?? null)
               const cfg = PRIORITY_CONFIG[t.priority]
               return (
                 <li key={t.id} className={`flex items-start gap-3 px-5 py-4 hover:bg-surface-low transition-colors group border-l-2 ${cfg.row}`}>

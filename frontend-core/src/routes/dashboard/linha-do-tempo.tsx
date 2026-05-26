@@ -1,5 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { usePatients } from '@/hooks/use-patients'
+import { useTimeline } from '@/hooks/use-timeline'
+import type { TimelineEvent as HookTimelineEvent } from '@/hooks/use-timeline'
+import type { Patient as HookPatient } from '@/types'
 
 export const Route = createFileRoute('/dashboard/linha-do-tempo')({
   component: LinhaDoTempoPage,
@@ -37,11 +41,30 @@ interface Patient {
   avatar: string
 }
 
-// ── Mock ──────────────────────────────────────────────────────────────────────
+function toLocalPatient(p: HookPatient): Patient {
+  return {
+    id: p.id,
+    name: p.name,
+    age: 0,
+    diagnosis: '',
+    startDate: '',
+    sessionCount: 0,
+    avatar: p.name?.charAt(0)?.toUpperCase() ?? '?',
+  }
+}
 
-const INITIAL_PATIENTS: Patient[] = []
-
-const INITIAL_EVENTS: Record<string, TimelineEvent[]> = {}
+function toLocalEvent(e: HookTimelineEvent): TimelineEvent {
+  return {
+    id: e.id,
+    date: e.date,
+    type: (e.type as EventType) || 'sessao',
+    title: e.title,
+    description: e.description,
+    score: e.score,
+    area: e.area,
+    tag: e.tag,
+  }
+}
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
@@ -147,11 +170,14 @@ function TimelineItem({ event, isLast }: { event: TimelineEvent; isLast: boolean
 // ── Página principal ──────────────────────────────────────────────────────────
 
 function LinhaDoTempoPage() {
-  const [selectedPatient, setSelectedPatient] = useState<string>(INITIAL_PATIENTS[0]?.id ?? '')
+  const [selectedPatient, setSelectedPatient] = useState<string>('')
   const [filterType, setFilterType] = useState<string>('all')
+  const { data: patientsRes }       = usePatients()
+  const patients                    = (patientsRes?.data ?? []).map(toLocalPatient)
+  const { data: hookEvents = [] }   = useTimeline(selectedPatient || undefined)
 
-  const patient = INITIAL_PATIENTS.find(p => p.id === selectedPatient)
-  const allEvents = INITIAL_EVENTS[selectedPatient] ?? []
+  const patient   = patients.find(p => p.id === selectedPatient)
+  const allEvents = hookEvents.map(toLocalEvent)
 
   const filtered = filterType === 'all'
     ? allEvents
@@ -199,7 +225,7 @@ function LinhaDoTempoPage() {
             onChange={e => { setSelectedPatient(e.target.value); setFilterType('all') }}
             className="input w-full"
           >
-            {INITIAL_PATIENTS.map(p => (
+            {patients.map(p => (
               <option key={p.id} value={p.id}>{p.name} — {p.diagnosis}</option>
             ))}
           </select>

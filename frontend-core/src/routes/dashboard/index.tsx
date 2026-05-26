@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useUser } from '@/hooks/use-auth'
+import { useBlogPosts } from '@/hooks/use-blog'
 import { StatsGrid }      from '@/components/dashboard/StatsGrid'
 import { WeeklyCalendar } from '@/components/dashboard/WeeklyCalendar'
 import { AIAssistant }    from '@/components/dashboard/AIAssistant'
@@ -21,6 +22,7 @@ function getGreeting() {
 
 function DashboardHome() {
   const { user } = useUser()
+  const { data: blogPosts = [], isLoading: blogLoading } = useBlogPosts()
 
   const firstName = (
     (user?.user_metadata as Record<string,string> | undefined)?.['nome']?.split(' ')[0] ??
@@ -139,13 +141,35 @@ function DashboardHome() {
 
           {/* Posts */}
           <div className="divide-y divide-border-soft">
-            {([] as { tag: string; tagColor: string; title: string; excerpt: string; author: string; date: string; readTime: string; icon: string }[]).length === 0 ? (
+            {blogLoading ? (
+              <div className="empty-state py-10">
+                <span className="material-symbols-outlined text-3xl text-text-tertiary">article</span>
+                <p className="text-sm text-text-secondary">Carregando...</p>
+              </div>
+            ) : blogPosts.length === 0 ? (
               <div className="empty-state py-10">
                 <span className="material-symbols-outlined text-3xl text-text-tertiary">article</span>
                 <p className="text-sm text-text-secondary">Sem postagens no momento</p>
                 <p className="text-xs text-text-tertiary">Acesse o blog para acompanhar conteúdos publicados</p>
               </div>
-            ) : null}
+            ) : (
+              blogPosts.map(post => (
+                <div key={post.id} className="flex items-start gap-4 px-6 py-4 hover:bg-surface-low transition-colors">
+                  <div className="w-12 h-12 rounded bg-surface flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <span className="material-symbols-outlined text-text-secondary text-xl">article</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-text-primary leading-snug line-clamp-2">{post.title}</p>
+                    <p className="text-xs text-text-tertiary mt-1 line-clamp-2">{post.excerpt}</p>
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wide text-olive">{post.category}</span>
+                      <span className="text-[10px] text-text-tertiary">{post.date}</span>
+                      <span className="text-[10px] text-text-tertiary">{post.readTime}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 

@@ -4,10 +4,12 @@ import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { routeTree } from './routeTree.gen'
 import { initSentry, Sentry } from './lib/sentry'
+import { initAnalytics } from './lib/analytics'
 import './index.css'
 
 // Init Sentry o mais cedo possível, antes de qualquer outro código rodar
 initSentry()
+initAnalytics()
 
 const queryClient = new QueryClient({
   defaultOptions: {

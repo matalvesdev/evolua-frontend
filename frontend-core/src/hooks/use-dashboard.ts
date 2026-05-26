@@ -80,3 +80,22 @@ export function usePendingTasks() {
   })
 }
 
+export interface DashboardAnalytics {
+  activePatients: number
+  sessionCount: number
+  monthlyRevenue: number
+  adherenceRate: number
+  sessionByArea: { area: string; pct: number; color: string }[]
+  monthly: { month: string; sessions: number; revenue?: number }[]
+  adherenceByAge: { group: string; pct: number }[]
+  noReturnPatients: { name: string; area: string; days: number }[]
+}
+
+export function useDashboardAnalytics(period: string) {
+  return useQuery<DashboardAnalytics>({
+    queryKey: ['dashboard', 'analytics', period],
+    queryFn: () => api.get<DashboardAnalytics>(`/api/dashboard/analytics?period=${period}`),
+    staleTime: 60_000,
+  })
+}
+

@@ -14,26 +14,26 @@ export interface BlogPost {
   corpo: string
 }
 
-// Mapeia snake_case do banco → camelCase
+function col(row: Record<string, unknown>, eng: string, pt: string): unknown {
+  return row[eng] ?? row[pt]
+}
+
 function mapRow(row: Record<string, unknown>): BlogPost {
   return {
     id: String(row.id),
     slug: String(row.slug),
-    titulo: String(row.titulo),
-    subtitulo: String(row.subtitulo ?? ''),
-    categoria: row.categoria as BlogPost['categoria'],
-    autor: String(row.autor ?? 'Equipe Evolua'),
-    data: String(row.data),
-    tempoLeitura: Number(row.tempo_leitura ?? row.tempoLeitura ?? 5),
-    destaque: Boolean(row.destaque),
-    imagem: String(row.imagem ?? ''),
-    corpo: String(row.corpo ?? ''),
+    titulo: String(col(row, 'title', 'titulo') ?? ''),
+    subtitulo: String(col(row, 'excerpt', 'subtitulo') ?? ''),
+    categoria: (col(row, 'category', 'categoria') as BlogPost['categoria']) ?? 'Tecnologia',
+    autor: String(col(row, 'author', 'autor') ?? 'Equipe Evolua'),
+    data: String(col(row, 'published_at', 'data') ?? ''),
+    tempoLeitura: Number(col(row, 'read_time', 'tempo_leitura') ?? 5),
+    destaque: Boolean(col(row, 'featured', 'destaque') ?? false),
+    imagem: String(col(row, 'cover_image', 'imagem') ?? ''),
+    corpo: String(col(row, 'content', 'corpo') ?? ''),
   }
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-// Segurança de imagem
-// ──────────────────────────────────────────────────────────────────────────────
 const ALLOWED_IMAGE_HOSTS = [
   'images.unsplash.com',
   'cdn.evolua.app',
@@ -49,25 +49,26 @@ export function isSafeImageUrl(url: string): boolean {
   }
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-// Fetchers — sem fallback de mock. Quando Supabase não responde, devolve lista
-// vazia / undefined. A UI lida com estado vazio.
-// ──────────────────────────────────────────────────────────────────────────────
 export async function fetchPosts(categoria?: string): Promise<BlogPost[]> {
   if (!supabase) return []
 
-  let query = supabase
+  const { data, error } = await supabase
     .from('blog_posts')
     .select('*')
-    .order('data', { ascending: false })
+
+  if (error || !data) return []
+  let posts = data.map((r) => mapRow(r as Record<string, unknown>))
+
+  posts.sort((a, b) => {
+    if (a.destaque !== b.destaque) return a.destaque ? -1 : 1
+    return new Date(b.data).getTime() - new Date(a.data).getTime()
+  })
 
   if (categoria && categoria !== 'Todos') {
-    query = query.eq('categoria', categoria)
+    posts = posts.filter((p) => p.categoria === categoria)
   }
 
-  const { data, error } = await query
-  if (error || !data) return []
-  return data.map(mapRow)
+  return posts
 }
 
 export async function fetchPostBySlug(slug: string): Promise<BlogPost | undefined> {

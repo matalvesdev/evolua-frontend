@@ -1,6 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 import { usePatients, useCreatePatient } from '@/hooks/use-patients'
+import { useAppointments } from '@/hooks/use-appointments'
 import { patientToVM, type PatientVM as Patient } from '@/lib/view-models'
 
 export const Route = createFileRoute('/dashboard/pacientes')({
@@ -93,6 +94,7 @@ function NewPatientModal({ onClose, onSave }: { onClose: () => void; onSave: (p:
 // ── Drawer de detalhes ─────────────────────────────────────────────────────────
 
 function PatientDrawer({ patient, onClose }: { patient: Patient; onClose: () => void }) {
+  const navigate = useNavigate()
   const [tab, setTab] = useState<'info' | 'historico' | 'evolucao'>('info')
 
   const TABS = [
@@ -101,7 +103,13 @@ function PatientDrawer({ patient, onClose }: { patient: Patient; onClose: () => 
     { id: 'evolucao' as const, label: 'Evolução'    },
   ]
 
-  const sessions: { date: string; type: string; duration: string; status: string }[] = []
+  const { data: appointments = [] } = useAppointments({ patientId: patient.id, pageSize: 50 })
+  const sessions: { date: string; type: string; duration: string; status: string }[] = appointments.map(a => ({
+    date: new Date(a.dateTime).toLocaleDateString('pt-BR'),
+    type: a.type,
+    duration: '50 min',
+    status: a.status === 'completed' ? 'Concluída' : 'Cancelada',
+  }))
 
   return (
     <div className="fixed inset-0 z-50 flex">
@@ -126,9 +134,9 @@ function PatientDrawer({ patient, onClose }: { patient: Patient; onClose: () => 
         {/* Ações rápidas */}
         <div className="flex border-b border-border-soft flex-shrink-0">
           {[
-            { icon: 'mic',         label: 'Sessão',   action: () => {} },
-            { icon: 'event',       label: 'Agendar',  action: () => {} },
-            { icon: 'description', label: 'Relatório',action: () => {} },
+            { icon: 'mic',         label: 'Sessão',   action: () => navigate({ to: '/dashboard/sessao', search: { paciente: patient.id } }) },
+            { icon: 'event',       label: 'Agendar',  action: () => navigate({ to: '/dashboard/agenda', search: { paciente: patient.id } }) },
+            { icon: 'description', label: 'Relatório',action: () => navigate({ to: '/dashboard/relatorios', search: { paciente: patient.id } }) },
             { icon: 'chat',        label: 'WhatsApp', action: () => window.open(`https://wa.me/55${patient.phone.replace(/\D/g,'')}`) },
           ].map(a => (
             <button key={a.label} onClick={a.action}
@@ -255,14 +263,18 @@ function PacientesPage() {
       {selected && <PatientDrawer patient={selected} onClose={() => setSelected(null)} />}
       {showNew   && <NewPatientModal
         onClose={() => setShowNew(false)}
-        onSave={p => createPatient.mutate({
-          name: p.name,
-          email: p.email,
-          phone: p.phone,
-          age: p.age,
-          diagnosis: p.diagnosis,
-          status: 'active',
-        })}
+        onSave={p => {
+          const birthDate = p.age
+            ? new Date(new Date().getFullYear() - p.age, 0, 1).toISOString().split('T')[0]
+            : undefined
+          createPatient.mutate({
+            name: p.name,
+            email: p.email,
+            phone: p.phone,
+            birthDate,
+            status: 'active',
+          })
+        }}
       />}
 
       {/* Header */}

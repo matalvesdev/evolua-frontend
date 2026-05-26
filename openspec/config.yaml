@@ -1,0 +1,15 @@
+# OpenSpec Configuration
+# https://openspec.dev/docs/configuration
+
+profile: core
+version: "1.0"
+
+# Domain specs organize the source of truth
+domains:
+  - system
+  - auth
+  - billing
+  - ai
+  - frontend
+  - marketing
+  - infra

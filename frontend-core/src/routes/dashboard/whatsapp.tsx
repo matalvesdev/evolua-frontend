@@ -1,5 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { usePatients } from '@/hooks/use-patients'
+import { useMessages, useAutomations, useSendMessage, useToggleAutomation } from '@/hooks/use-messages'
+import type { Message as HookMessage, Automation as HookAutomation } from '@/hooks/use-messages'
 
 export const Route = createFileRoute('/dashboard/whatsapp')({
   component: WhatsAppPage,
@@ -14,8 +17,6 @@ interface Message {
   sentAt: string
   status: 'sent' | 'delivered' | 'read' | 'failed'
 }
-
-const INITIAL_MESSAGES: Message[] = []
 
 const TYPE_LABELS = { reminder:'Lembrete', confirmation:'Confirmação', reschedule:'Remarcação', exercise:'Exercício', manual:'Manual' }
 const TYPE_COLORS: Record<string, string> = {
@@ -32,34 +33,47 @@ const STATUS_COLORS: Record<string, string> = {
   sent:'text-text-tertiary', delivered:'text-info', read:'text-success', failed:'text-danger'
 }
 
-const PATIENTS: string[] = []
+function toLocalMessage(m: HookMessage): Message {
+  return {
+    id: m.id,
+    patient: m.patient,
+    phone: m.phone,
+    type: m.type,
+    text: m.text,
+    sentAt: m.sentAt,
+    status: m.status,
+  }
+}
 
-// ── Automações configuráveis ──────────────────────────────────────────────────
 type Automation = { id: string; label: string; desc: string; active: boolean }
-const AUTOMATIONS: Automation[] = []
+
+function toLocalAutomation(a: HookAutomation): Automation {
+  return { id: a.id, label: a.label, desc: a.desc, active: a.active }
+}
 
 function WhatsAppPage() {
-  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES)
-  const [automations, setAutomations] = useState(AUTOMATIONS)
-  const [tab, setTab] = useState<'messages'|'automations'|'send'>('messages')
-  const [manualForm, setManualForm] = useState({ patient: PATIENTS[0], text: '' })
+  const { data: patientsRes }    = usePatients()
+  const patients                 = patientsRes?.data?.map(p => p.name) ?? []
+  const { data: hookMessages=[]}= useMessages()
+  const { data: hookAutomations=[]}= useAutomations()
+  const sendMessage              = useSendMessage()
+  const toggleAutomation         = useToggleAutomation()
+  const messages                 = hookMessages.map(toLocalMessage)
+  const automations              = hookAutomations.map(toLocalAutomation)
+  const [tab, setTab]            = useState<'messages'|'automations'|'send'>('messages')
+  const [manualForm, setManualForm] = useState({ patient: patients[0] ?? '', text: '' })
   const [sent, setSent] = useState(false)
 
   function toggleAuto(id: string) {
-    setAutomations(prev => prev.map(a => a.id === id ? {...a, active:!a.active} : a))
+    const a = automations.find(x => x.id === id)
+    if (a) {
+      toggleAutomation.mutate({ id, active: !a.active })
+    }
   }
 
   function sendManual() {
-    const m: Message = {
-      id: Date.now().toString(),
-      patient: manualForm.patient,
-      phone: '+5541999990000',
-      type: 'manual',
-      text: manualForm.text,
-      sentAt: new Date().toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }),
-      status: 'sent',
-    }
-    setMessages(prev => [m, ...prev])
+    if (!manualForm.text.trim()) return
+    sendMessage.mutate({ patientId: '', text: manualForm.text, type: 'manual' })
     setManualForm(f => ({...f, text:''}))
     setSent(true)
     setTimeout(() => setSent(false), 2500)
@@ -181,7 +195,7 @@ function WhatsAppPage() {
           <div>
             <label className="section-label block mb-1.5">Paciente</label>
             <select value={manualForm.patient} onChange={e => setManualForm(f=>({...f,patient:e.target.value}))} className="input w-full">
-              {PATIENTS.map(p => <option key={p}>{p}</option>)}
+              {patients.map(p => <option key={p}>{p}</option>)}
             </select>
           </div>
           <div>

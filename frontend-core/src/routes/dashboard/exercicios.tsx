@@ -1,24 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useExercises, usePatientList, type Exercise } from '@/hooks/use-exercises'
 
 export const Route = createFileRoute('/dashboard/exercicios')({
   component: ExerciciosPage,
 })
-
-interface Exercise {
-  id: string
-  title: string
-  area: string
-  duration: string
-  level: 'Fácil' | 'Médio' | 'Difícil'
-  description: string
-  videoUrl: string // placeholder
-  tags: string[]
-}
-
-const EXERCISES: Exercise[] = []
-
-const PATIENTS: string[] = []
 
 const AREA_COLORS: Record<string, string> = {
   'Voz': 'bg-purple-100 text-purple-700',
@@ -34,10 +20,12 @@ const LEVEL_COLORS: Record<string, string> = {
 }
 
 function ExerciciosPage() {
+  const { data: EXERCISES = [] } = useExercises()
+  const { data: PATIENTS = [] } = usePatientList()
   const [filter, setFilter] = useState('Todos')
   const [selected, setSelected] = useState<Exercise[]>([])
   const [showPrescribe, setShowPrescribe] = useState(false)
-  const [prescribeForm, setPrescribeForm] = useState({ patient: PATIENTS[0], freq: 'Diário', reminder: true, notes: '' })
+  const [prescribeForm, setPrescribeForm] = useState({ patient: PATIENTS[0]?.name ?? '', freq: 'Diário', reminder: true, notes: '' })
   const [prescribed, setPrescribed] = useState<string[]>([])
 
   const areas = ['Todos', ...Array.from(new Set(EXERCISES.map(e => e.area)))]
@@ -81,7 +69,7 @@ function ExerciciosPage() {
               <div>
                 <label className="section-label block mb-1.5">Paciente</label>
                 <select value={prescribeForm.patient} onChange={e => setPrescribeForm(f=>({...f,patient:e.target.value}))} className="input w-full">
-                  {PATIENTS.map(p => <option key={p}>{p}</option>)}
+                  {PATIENTS.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
                 </select>
               </div>
               <div>

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useSettings, useUpdateSettings } from '@/hooks/use-settings'
 
 export const Route = createFileRoute('/dashboard/configuracoes')({
   component: ConfiguracoesPage,
@@ -41,34 +42,47 @@ function SettingRow({ label, description, children }: { label: string; descripti
 function ConfiguracoesPage() {
   const [section, setSection] = useState<Section>('clinica')
   const [toast, setToast]     = useState('')
+  const { data: settings } = useSettings()
+  const updateSettings = useUpdateSettings()
 
   function showToast(msg = 'Configurações salvas!') {
     setToast(msg)
     setTimeout(() => setToast(''), 2500)
   }
 
-  // Estados de configuração
-  const [clinicName, setClinicName]       = useState('')
-  const [clinicPhone, setClinicPhone]     = useState('')
-  const [clinicAddress, setClinicAddress] = useState('')
-  const [sessionDuration, setSessionDuration] = useState('50')
+  // Estados de configuração (inicializados a partir da query)
+  const [clinicName, setClinicName]       = useState(settings?.clinicName ?? '')
+  const [clinicPhone, setClinicPhone]     = useState(settings?.clinicPhone ?? '')
+  const [clinicAddress, setClinicAddress] = useState(settings?.clinicAddress ?? '')
+  const [sessionDuration, setSessionDuration] = useState(String(settings?.sessionDuration ?? '50'))
 
-  const [notifSessao, setNotifSessao]     = useState(true)
-  const [notifReport, setNotifReport]     = useState(true)
-  const [notifPagamento, setNotifPagamento] = useState(false)
-  const [notifWhatsapp, setNotifWhatsapp] = useState(true)
-  const [notifEmail, setNotifEmail]       = useState(false)
+  const [notifSessao, setNotifSessao]     = useState(settings?.notifSessao ?? true)
+  const [notifReport, setNotifReport]     = useState(settings?.notifReport ?? true)
+  const [notifPagamento, setNotifPagamento] = useState(settings?.notifPagamento ?? false)
+  const [notifWhatsapp, setNotifWhatsapp] = useState(settings?.notifWhatsapp ?? true)
+  const [notifEmail, setNotifEmail]       = useState(settings?.notifEmail ?? false)
 
-  const [iaTranscricao, setIaTranscricao] = useState(true)
-  const [iaRelatorio, setIaRelatorio]     = useState(true)
-  const [iaLembrete, setIaLembrete]       = useState(true)
-  const [iaSugestao, setIaSugestao]       = useState(false)
+  const [iaTranscricao, setIaTranscricao] = useState(settings?.iaTranscricao ?? true)
+  const [iaRelatorio, setIaRelatorio]     = useState(settings?.iaRelatorio ?? true)
+  const [iaLembrete, setIaLembrete]       = useState(settings?.iaLembrete ?? true)
+  const [iaSugestao, setIaSugestao]       = useState(settings?.iaSugestao ?? false)
 
-  const [pixKey, setPixKey]               = useState('')
-  const [cobAutomatica, setCobAutomatica] = useState(false)
+  const [pixKey, setPixKey]               = useState(settings?.pixKey ?? '')
+  const [cobAutomatica, setCobAutomatica] = useState(settings?.cobAutomatica ?? false)
 
-  const [lgpd, setLgpd]                   = useState(true)
-  const [analytics, setAnalytics]         = useState(true)
+  const [lgpd, setLgpd]                   = useState(settings?.lgpd ?? true)
+  const [analytics, setAnalytics]         = useState(settings?.analytics ?? true)
+
+  function handleSave() {
+    updateSettings.mutate({
+      clinicName, clinicPhone, clinicAddress,
+      sessionDuration: Number(sessionDuration),
+      notifSessao, notifReport, notifPagamento, notifWhatsapp, notifEmail,
+      iaTranscricao, iaRelatorio, iaLembrete, iaSugestao,
+      pixKey, cobAutomatica, lgpd, analytics,
+    })
+    showToast()
+  }
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -141,7 +155,7 @@ function ConfiguracoesPage() {
                 </div>
               </div>
               <div className="flex justify-end">
-                <button onClick={() => showToast('Dados da clínica salvos!')} className="btn-primary">Salvar alterações</button>
+                <button onClick={handleSave} className="btn-primary">Salvar alterações</button>
               </div>
             </div>
           )}
@@ -165,7 +179,7 @@ function ConfiguracoesPage() {
                 <Toggle checked={notifEmail} onChange={setNotifEmail} />
               </SettingRow>
               <div className="flex justify-end pt-4 border-t border-border-soft mt-4">
-                <button onClick={() => showToast('Notificações salvas!')} className="btn-primary">Salvar</button>
+                <button onClick={handleSave} className="btn-primary">Salvar</button>
               </div>
             </div>
           )}
@@ -189,7 +203,7 @@ function ConfiguracoesPage() {
                 <Toggle checked={iaSugestao} onChange={setIaSugestao} />
               </SettingRow>
               <div className="flex justify-end pt-4 border-t border-border-soft mt-4">
-                <button onClick={() => showToast('Configurações de IA salvas!')} className="btn-primary">Salvar</button>
+                <button onClick={handleSave} className="btn-primary">Salvar</button>
               </div>
             </div>
           )}
@@ -214,7 +228,7 @@ function ConfiguracoesPage() {
                 </div>
               </div>
               <div className="flex justify-end">
-                <button onClick={() => showToast('Configurações de pagamento salvas!')} className="btn-primary">Salvar</button>
+                <button onClick={handleSave} className="btn-primary">Salvar</button>
               </div>
             </div>
           )}
@@ -229,7 +243,7 @@ function ConfiguracoesPage() {
                 <Toggle checked={analytics} onChange={setAnalytics} />
               </SettingRow>
               <div className="flex justify-end pt-4 border-t border-border-soft mt-4">
-                <button onClick={() => showToast('Preferências de privacidade salvas!')} className="btn-primary">Salvar</button>
+                <button onClick={handleSave} className="btn-primary">Salvar</button>
               </div>
               <div className="mt-6 p-4 bg-danger-surface rounded border border-danger/20 flex flex-col gap-3">
                 <p className="text-sm font-bold text-danger">Zona de perigo</p>

@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useLaudos, useCreateLaudo, useUpdateLaudo } from '@/hooks/use-laudos'
+import type { Laudo as HookLaudo } from '@/hooks/use-laudos'
 
 export const Route = createFileRoute('/dashboard/laudos')({
   component: LaudosPage,
@@ -24,7 +26,15 @@ const TYPE_ICONS: Record<LaudoType, string> = {
   alta: 'task_alt', evolucao: 'trending_up', parecer: 'description', avaliacao: 'assignment',
 }
 
-const INITIAL_LAUDOS: Laudo[] = []
+function toLocalLaudo(r: HookLaudo): Laudo {
+  return {
+    id: r.id,
+    type: (r.title as LaudoType) || 'evolucao',
+    patient: r.patientName,
+    date: r.createdAt.split('T')[0],
+    status: r.status === 'final' ? 'signed' : 'draft',
+  }
+}
 
 const STATUS_LABEL = { draft: 'Rascunho', signed: 'Assinado', delivered: 'Entregue' }
 const STATUS_COLOR = { draft: 'bg-warning-surface text-warning', signed: 'bg-info-surface text-info', delivered: 'bg-success-surface text-success' }
@@ -150,7 +160,10 @@ Assinatura: ____________________________________`,
 }
 
 function LaudosPage() {
-  const [laudos, setLaudos] = useState<Laudo[]>(INITIAL_LAUDOS)
+  const { data: hookLaudos = [] }  = useLaudos()
+  const createLaudo                = useCreateLaudo()
+  const updateLaudo                = useUpdateLaudo()
+  const laudos                     = hookLaudos.map(toLocalLaudo)
   const [editing, setEditing] = useState<Laudo | null>(null)
   const [draft, setDraft] = useState('')
   const [showNew, setShowNew] = useState(false)
@@ -162,21 +175,31 @@ function LaudosPage() {
   }
 
   function sign(id: string) {
-    setLaudos(prev => prev.map(l => l.id === id ? {...l, status: 'signed'} : l))
+    updateLaudo.mutate({ id, body: { status: 'final' } })
     setEditing(null)
   }
 
   function createNew() {
-    const l: Laudo = {
-      id: Date.now().toString(),
-      type: newForm.type, patient: newForm.patient,
-      date: new Date().toISOString().split('T')[0],
-      status: 'draft',
+    const body = {
+      patientName: newForm.patient,
+      type: 'laudo' as const,
+      title: newForm.type,
+      content: TEMPLATES[newForm.type],
     }
-    setLaudos(prev => [l, ...prev])
-    setShowNew(false)
-    setEditing(l)
-    setDraft(TEMPLATES[newForm.type])
+    createLaudo.mutate(body, {
+      onSuccess: (created) => {
+        const l: Laudo = {
+          id: created.id,
+          type: newForm.type,
+          patient: created.patientName,
+          date: created.createdAt.split('T')[0],
+          status: 'draft',
+        }
+        setShowNew(false)
+        setEditing(l)
+        setDraft(TEMPLATES[newForm.type])
+      },
+    })
   }
 
   if (editing) {

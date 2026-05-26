@@ -1,5 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { usePatients } from '@/hooks/use-patients'
+import { useTherapeuticGoals, useCreateGoal, useUpdateGoal, useAddSessionEntry } from '@/hooks/use-therapeutic-goals'
+import type { Patient } from '@/types'
 
 export const Route = createFileRoute('/dashboard/plano-terapeutico')({
   component: PlanoTerapeuticoPage,
@@ -37,19 +40,6 @@ interface Goal {
   sessionsLog: SessionEntry[]
   createdAt: string
 }
-
-interface Patient {
-  id: string
-  name: string
-  age: number
-  diagnosis: string
-}
-
-// ── Mock ──────────────────────────────────────────────────────────────────────
-
-const INITIAL_PATIENTS: Patient[] = []
-
-const INITIAL_GOALS: Goal[] = []
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
@@ -195,7 +185,7 @@ function GoalCard({ goal, patient, onAddSession, onStatusChange }: {
         {/* Objetivo */}
         <div>
           <p className="text-sm font-semibold text-text-primary leading-snug">{goal.objective}</p>
-          {patient && <p className="text-xs text-text-tertiary mt-0.5">{patient.name} · {patient.diagnosis}</p>}
+          {patient && <p className="text-xs text-text-tertiary mt-0.5">{patient.name}</p>}
         </div>
 
         {/* Barra de progresso */}
@@ -462,26 +452,36 @@ function NewGoalModal({ patients, onClose, onSave }: {
 // ── Página Principal ──────────────────────────────────────────────────────────
 
 function PlanoTerapeuticoPage() {
-  const [goals, setGoals] = useState<Goal[]>(INITIAL_GOALS)
-  const [patients] = useState<Patient[]>(INITIAL_PATIENTS)
+  const { data: patientsRes }   = usePatients()
+  const patients                = patientsRes?.data ?? []
+  const { data: rawGoals = [] } = useTherapeuticGoals()
+  const goals: Goal[]           = rawGoals as Goal[]
+  const createGoal              = useCreateGoal()
+  const updateGoal              = useUpdateGoal()
+  const addSession              = useAddSessionEntry()
   const [selectedPatient, setSelectedPatient] = useState<string>('all')
   const [selectedArea, setSelectedArea] = useState<string>('all')
   const [selectedStatus, setSelectedStatus] = useState<string>('all')
   const [showNew, setShowNew] = useState(false)
 
   function handleAddSession(goalId: string, entry: SessionEntry) {
-    setGoals(prev => prev.map(g => g.id === goalId
-      ? { ...g, sessionsLog: [...g.sessionsLog, entry] }
-      : g
-    ))
+    addSession.mutate({ goalId, entry })
   }
 
   function handleStatusChange(goalId: string, status: GoalStatus) {
-    setGoals(prev => prev.map(g => g.id === goalId ? { ...g, status } : g))
+    updateGoal.mutate({ id: goalId, body: { status } })
   }
 
   function handleAddGoal(g: Goal) {
-    setGoals(prev => [g, ...prev])
+    createGoal.mutate({
+      patientId: g.patientId,
+      area: g.area,
+      objective: g.objective,
+      criterion: g.criterion,
+      targetDate: g.targetDate,
+      priority: g.priority,
+      status: 'nao-iniciado',
+    })
   }
 
   const filtered = goals.filter(g => {

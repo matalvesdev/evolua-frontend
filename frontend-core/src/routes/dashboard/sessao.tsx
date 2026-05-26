@@ -9,6 +9,7 @@ import {
   type SoapEvolution,
 } from '@/hooks/use-audio-session'
 import { uploadAudioBlob } from '@/lib/storage'
+import { api } from '@/lib/api'
 
 export const Route = createFileRoute('/dashboard/sessao')({
   component: SessaoPage,
@@ -256,9 +257,26 @@ function SessaoPage() {
     )
   }, [phase, transcriptionPoll.data, patientId, patient?.name, sessionType, generateEvolution, evolution])
 
-  function sign() {
-    // TODO(reports-integration): persistir como Report (módulo reports/) com signature.
-    setPhase('signed')
+  const [signing, setSigning] = useState(false)
+
+  async function sign() {
+    if (!draft || signing) return
+    setSigning(true)
+    try {
+      await api.post('/api/reports', {
+        patientId,
+        reportType: 'EVOLUTION',
+        content: draft,
+        sessionType,
+        audioSessionId,
+        signedAt: new Date().toISOString(),
+      })
+      setPhase('signed')
+    } catch (e) {
+      setErrorMsg(e instanceof Error ? e.message : 'Falha ao salvar relatório')
+    } finally {
+      setSigning(false)
+    }
   }
 
   function reset() {
@@ -450,7 +468,7 @@ function SessaoPage() {
           <div>
             <p className="font-display font-bold text-lg uppercase tracking-wide text-text-primary">Sessão finalizada!</p>
             <p className="text-sm text-text-secondary mt-1">Evolução salva no prontuário de {patient?.name ?? '—'}.</p>
-            <p className="text-xs text-text-tertiary mt-2 italic">TODO: persistir como Report formal (integração com módulo reports/)</p>
+            <p className="text-xs text-text-tertiary mt-2">Relatório clínico salvo no prontuário</p>
           </div>
           <div className="flex gap-3 w-full max-w-xs">
             <button onClick={reset} className="flex-1 btn-outline text-sm">

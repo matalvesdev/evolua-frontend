@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { api } from '@/lib/api'
 
 export const Route = createFileRoute('/dashboard/marketing')({
   component: MarketingPage,
@@ -76,13 +77,21 @@ function AIGeneratorModal({ onClose }: { onClose: () => void }) {
   const [loading, setLoading] = useState(false)
   const [result, setResult]   = useState('')
 
-  function generate() {
+  async function generate() {
     if (!topic.trim()) return
     setLoading(true)
     setResult('')
-    // TODO: substituir por chamada real ao endpoint de geração de conteúdo (IA).
+    try {
+      const res = await api.post<{ content: string }>('/api/ai/marketing/generate', {
+        topic: topic.trim(),
+        platform: 'instagram',
+        format,
+      })
+      setResult(res.content)
+    } catch {
+      setResult('Geração de conteúdo com IA temporariamente indisponível.')
+    }
     setLoading(false)
-    setResult('A geração de conteúdo com IA estará disponível em breve.')
   }
 
   return (
@@ -386,16 +395,7 @@ function MarketingPage() {
       {/* ── MÉTRICAS ── */}
       {tab === 'metricas' && (
         <div className="flex flex-col gap-4">
-          {/* Banner informativo */}
-          <div className="flex items-center gap-3 p-4 bg-neon-surface border border-border-neon rounded">
-            <span className="material-symbols-outlined text-olive" style={{fontVariationSettings:'"FILL" 1'}}>info</span>
-            <div>
-              <p className="text-sm font-bold text-olive">Métricas em breve</p>
-              <p className="text-xs text-text-secondary mt-0.5">A integração com Instagram Insights está em desenvolvimento.</p>
-            </div>
-          </div>
-
-          {/* Métricas estimadas */}
+          {/* Métricas */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { label:'Alcance estimado', value:'—',                icon:'people',           color:'text-info'    },

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useProfile, useUpdateProfile } from '@/hooks/use-profile'
 
 export const Route = createFileRoute('/dashboard/perfil')({
   component: PerfilPage,
@@ -44,17 +45,20 @@ const ALL_SPECIALTIES = [
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 function PerfilPage() {
+  const { data: profile } = useProfile()
+  const updateProfile = useUpdateProfile()
+
   // ── Dados pessoais ──────────────────────────────────────────────────────────
-  const [name,  setName]  = useState('')
-  const [crfa,  setCrfa]  = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [bio,   setBio]   = useState('')
-  const [site,  setSite]  = useState('')
-  const [cnpj,  setCnpj]  = useState('')
+  const [name,  setName]  = useState(profile?.name ?? '')
+  const [crfa,  setCrfa]  = useState(profile?.crfa ?? '')
+  const [email, setEmail] = useState(profile?.email ?? '')
+  const [phone, setPhone] = useState(profile?.phone ?? '')
+  const [bio,   setBio]   = useState(profile?.bio ?? '')
+  const [site,  setSite]  = useState(profile?.site ?? '')
+  const [cnpj,  setCnpj]  = useState(profile?.cnpj ?? '')
 
   // ── Especialidades ──────────────────────────────────────────────────────────
-  const [specialties, setSpecialties] = useState<string[]>([])
+  const [specialties, setSpecialties] = useState<string[]>(profile?.specialties ?? [])
 
   function toggleSpecialty(s: string) {
     setSpecialties(prev =>
@@ -63,15 +67,17 @@ function PerfilPage() {
   }
 
   // ── Horários de atendimento ─────────────────────────────────────────────────
-  const [workSlots, setWorkSlots] = useState<WorkSlot[]>([
-    { day: 'seg', active: false, start: '08:00', end: '18:00' },
-    { day: 'ter', active: false, start: '08:00', end: '18:00' },
-    { day: 'qua', active: false, start: '08:00', end: '18:00' },
-    { day: 'qui', active: false, start: '08:00', end: '18:00' },
-    { day: 'sex', active: false, start: '08:00', end: '18:00' },
-    { day: 'sab', active: false, start: '09:00', end: '12:00' },
-    { day: 'dom', active: false, start: '09:00', end: '12:00' },
-  ])
+  const [workSlots, setWorkSlots] = useState<WorkSlot[]>(
+    profile?.workSlots ?? [
+      { day: 'seg', active: false, start: '08:00', end: '18:00' },
+      { day: 'ter', active: false, start: '08:00', end: '18:00' },
+      { day: 'qua', active: false, start: '08:00', end: '18:00' },
+      { day: 'qui', active: false, start: '08:00', end: '18:00' },
+      { day: 'sex', active: false, start: '08:00', end: '18:00' },
+      { day: 'sab', active: false, start: '09:00', end: '12:00' },
+      { day: 'dom', active: false, start: '09:00', end: '12:00' },
+    ]
+  )
 
   function updateSlot(day: WeekDay, patch: Partial<WorkSlot>) {
     setWorkSlots(prev => prev.map(s => s.day === day ? { ...s, ...patch } : s))
@@ -82,6 +88,11 @@ function PerfilPage() {
   const [toast, setToast] = useState(false)
 
   function handleSave() {
+    updateProfile.mutate({
+      name, crfa, email, phone, bio, site, cnpj,
+      specialties,
+      workSlots: workSlots.map(s => ({ day: s.day, active: s.active, start: s.start, end: s.end })),
+    })
     setEditMode(false)
     setToast(true)
     setTimeout(() => setToast(false), 3000)

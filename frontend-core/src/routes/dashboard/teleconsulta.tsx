@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/lib/api'
 
 export const Route = createFileRoute('/dashboard/teleconsulta')({
   component: TeleconsultaPage,
 })
-
-const PATIENTS: string[] = []
 
 interface Session {
   id: string
@@ -17,7 +17,26 @@ interface Session {
   sentViaWhatsApp: boolean
 }
 
-const INITIAL_SESSIONS: Session[] = []
+interface PatientSummary {
+  id: string
+  name: string
+}
+
+function useTeleSessions() {
+  return useQuery<Session[]>({
+    queryKey: ['teleconsulta-sessions'],
+    queryFn: () => api.get<Session[]>('/api/teleconsulta/sessions'),
+    staleTime: 30_000,
+  })
+}
+
+function usePatientSummaries() {
+  return useQuery<PatientSummary[]>({
+    queryKey: ['patients-summary'],
+    queryFn: () => api.get<PatientSummary[]>('/api/patients?pageSize=200'),
+    staleTime: 30_000,
+  })
+}
 
 function generateLink() {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
@@ -26,12 +45,14 @@ function generateLink() {
 }
 
 function TeleconsultaPage() {
-  const [sessions, setSessions] = useState<Session[]>(INITIAL_SESSIONS)
+  const { data: teleSessions = [] } = useTeleSessions()
+  const { data: patients = [] } = usePatientSummaries()
+  const [sessions, setSessions] = useState<Session[]>(teleSessions)
   const [showNew, setShowNew]   = useState(false)
-  const [form, setForm]         = useState({ patient: PATIENTS[0], date: '', time: '09:00', sendWA: true })
+  const [form, setForm]         = useState({ patient: patients[0]?.name ?? '', date: '', time: '09:00', sendWA: true })
   const [copied, setCopied]     = useState<string|null>(null)
   const [activeSession, setActiveSession] = useState<Session|null>(
-    INITIAL_SESSIONS.find(s => s.status === 'active') ?? null
+    teleSessions.find((s: Session) => s.status === 'active') ?? null
   )
 
   function createSession() {
@@ -84,7 +105,7 @@ function TeleconsultaPage() {
               <div>
                 <label className="section-label block mb-1.5">Paciente</label>
                 <select value={form.patient} onChange={e => setForm(f=>({...f,patient:e.target.value}))} className="input w-full">
-                  {PATIENTS.map(p => <option key={p}>{p}</option>)}
+                  {patients.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-4">

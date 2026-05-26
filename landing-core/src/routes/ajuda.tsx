@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import DOMPurify from 'dompurify'
 import { faqQueryOptions } from '../queries/faq'
 import { groupByCategoria, type FaqCategoria } from '../lib/faq'
+import { KnowledgeBase } from '../components/KnowledgeBase'
 
 export const Route = createFileRoute('/ajuda')({
   loader: ({ context: { queryClient } }) =>
@@ -130,7 +131,10 @@ function FaqSkeleton() {
   )
 }
 
+type Tab = 'faq' | 'artigos'
+
 function AjudaPage() {
+  const [tab, setTab] = useState<Tab>('faq')
   const [categoria, setCategoria] = useState<'Todas' | FaqCategoria>('Todas')
   const [busca, setBusca] = useState('')
 
@@ -169,38 +173,70 @@ function AjudaPage() {
               className="w-full pl-12 pr-4 py-4 bg-surface text-ink font-body text-base border border-outline-variant focus:outline-none focus:border-primary transition-colors"
             />
           </motion.div>
+
+          {/* Tabs: FAQ / Artigos */}
+          <motion.div variants={fadeUp} initial="hidden" animate="visible" transition={{ delay: 0.24 }} className="flex gap-2 mt-8">
+            <button
+              onClick={() => setTab('faq')}
+              className={`px-6 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${
+                tab === 'faq' ? 'bg-primary text-white' : 'bg-surface border border-outline-variant text-muted hover:border-primary'
+              }`}
+            >
+              Perguntas Frequentes
+            </button>
+            <button
+              onClick={() => setTab('artigos')}
+              className={`px-6 py-3 text-xs font-bold uppercase tracking-wider transition-colors ${
+                tab === 'artigos' ? 'bg-primary text-white' : 'bg-surface border border-outline-variant text-muted hover:border-primary'
+              }`}
+            >
+              Base de Conhecimento
+            </button>
+          </motion.div>
         </div>
       </section>
 
-      {/* Filtros */}
-      <section className="px-5 md:px-12 pb-10 md:pb-16 bg-canvas/90 backdrop-blur-xl sticky top-20 md:top-24 z-30 border-b border-outline-variant">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-1 scrollbar-hide">
-            {CATEGORIAS_TODAS.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setCategoria(cat)}
-                className={`shrink-0 px-4 md:px-6 py-2 md:py-2.5 btn-text text-[10px] md:text-xs transition-all duration-200 ${
-                  categoria === cat
-                    ? 'bg-primary text-white'
-                    : 'bg-surface border border-outline-variant text-muted hover:border-primary hover:text-primary'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+      {tab === 'faq' && (
+        <>
+          {/* Filtros FAQ */}
+          <section className="px-5 md:px-12 pb-10 md:pb-16 bg-canvas/90 backdrop-blur-xl sticky top-20 md:top-24 z-30 border-b border-outline-variant">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-1 scrollbar-hide">
+                {CATEGORIAS_TODAS.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setCategoria(cat)}
+                    className={`shrink-0 px-4 md:px-6 py-2 md:py-2.5 btn-text text-[10px] md:text-xs transition-all duration-200 ${
+                      categoria === cat
+                        ? 'bg-primary text-white'
+                        : 'bg-surface border border-outline-variant text-muted hover:border-primary hover:text-primary'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* List FAQ */}
+          <section className="px-5 md:px-12 py-10 md:py-16 bg-canvas">
+            <div className="max-w-4xl mx-auto">
+              <Suspense fallback={<FaqSkeleton />}>
+                <FaqList categoria={categoria} busca={busca} />
+              </Suspense>
+            </div>
+          </section>
+        </>
+      )}
+
+      {tab === 'artigos' && (
+        <section className="px-5 md:px-12 py-10 md:py-16 bg-canvas">
+          <div className="max-w-4xl mx-auto">
+            <KnowledgeBase />
           </div>
-        </div>
-      </section>
-
-      {/* List */}
-      <section className="px-5 md:px-12 py-10 md:py-16 bg-canvas">
-        <div className="max-w-4xl mx-auto">
-          <Suspense fallback={<FaqSkeleton />}>
-            <FaqList categoria={categoria} busca={busca} />
-          </Suspense>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA Contato */}
       <section className="py-20 md:py-32 px-5 md:px-12 bg-deep text-white">

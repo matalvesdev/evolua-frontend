@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useAppointments, useCreateAppointment, useUpdateAppointment } from '@/hooks/use-appointments'
 import { appointmentToVM, type AppointmentVM as CalEvent } from '@/lib/view-models'
+import { supabase } from '@/lib/supabase'
 
 export const Route = createFileRoute('/dashboard/agenda')({
   component: AgendaPage,
@@ -35,32 +36,35 @@ const MODALITY_ICON: Record<Modality, string> = {
 // Removido — origem dos eventos agora é o backend via useAppointments()
 
 // ── Google Calendar integration hook ─────────────────────────────────────────
-// Em produção: trocar pela Google Calendar API real com OAuth2 via Supabase Auth (provider: google, scope: https://www.googleapis.com/auth/calendar)
+// OAuth2 via Supabase Auth (provider: google, scope: https://www.googleapis.com/auth/calendar)
 // O access_token é obtido via supabase.auth.getSession() → session.provider_token
 
 type GCalStatus = 'disconnected' | 'connecting' | 'connected' | 'error'
 
 function useGoogleCalendar() {
-  const [status, setStatus]   = useState<GCalStatus>(() =>
-    typeof window !== 'undefined' && localStorage.getItem('gcal_connected') === 'true'
-      ? 'connected'
-      : 'disconnected'
-  )
+  const [status, setStatus]   = useState<GCalStatus>('disconnected')
   const [syncing, setSyncing] = useState(false)
   const [lastSync, setLastSync] = useState<Date | null>(null)
 
   const connect = useCallback(async () => {
     setStatus('connecting')
-    // PRODUÇÃO: window.location.href = await supabase.auth.signInWithOAuth({ provider:'google', options:{ scopes:'https://www.googleapis.com/auth/calendar', redirectTo: window.location.href }})
-    // DEMO: simula fluxo OAuth
-    await new Promise(r => setTimeout(r, 1800))
-    localStorage.setItem('gcal_connected', 'true')
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        scopes: 'https://www.googleapis.com/auth/calendar',
+        redirectTo: window.location.href,
+      },
+    })
+    if (error) {
+      setStatus('error')
+      return
+    }
     setStatus('connected')
     setLastSync(new Date())
   }, [])
 
   const disconnect = useCallback(() => {
-    localStorage.removeItem('gcal_connected')
+    supabase.auth.signOut()
     setStatus('disconnected')
     setLastSync(null)
   }, [])
@@ -68,14 +72,26 @@ function useGoogleCalendar() {
   const sync = useCallback(async () => {
     if (status !== 'connected') return
     setSyncing(true)
-    // PRODUÇÃO: GET https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=...&timeMax=...
-    // com header Authorization: Bearer <provider_token>
-    await new Promise(r => setTimeout(r, 1200))
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.provider_token) {
+      setSyncing(false)
+      return
+    }
+    try {
+      const now = new Date()
+      const timeMin = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+      const timeMax = new Date(now.getFullYear(), now.getMonth() + 2, 0).toISOString()
+      await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime`,
+        { headers: { Authorization: `Bearer ${session.provider_token}` } }
+      )
+    } catch {
+      // Google Calendar API call failed — non-critical
+    }
     setSyncing(false)
     setLastSync(new Date())
   }, [status])
 
-  // Auto-sync a cada 5 minutos quando conectado
   useEffect(() => {
     if (status !== 'connected') return
     const id = setInterval(sync, 5 * 60 * 1000)
@@ -296,15 +312,15 @@ function AgendaPage() {
 
   // Janela de busca: 60 dias antes ↔ 90 dias depois para cobrir navegação razoável
   const range = useMemo(() => {
-    const start = new Date(today)
+    const now = new Date()
+    const start = new Date(now)
     start.setDate(start.getDate() - 60)
-    const end = new Date(today)
+    const end = new Date(now)
     end.setDate(end.getDate() + 90)
     return {
       startDate: start.toISOString(),
       endDate: end.toISOString(),
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const apptQuery = useAppointments({ ...range, pageSize: 200 })
   const createAppt = useCreateAppointment()

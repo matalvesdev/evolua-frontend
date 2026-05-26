@@ -1,7 +1,8 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, Outlet, useRouterState } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Suspense, useState } from 'react'
-import { motion } from 'motion/react'
+import { motion } from 'framer-motion'
+import { supabase } from '../lib/supabase'
 import { postsQueryOptions } from '../queries/posts'
 import type { BlogPost } from '../lib/blog'
 
@@ -166,6 +167,10 @@ function PostsSkeleton() {
 }
 
 function BlogPage() {
+  const matches = useRouterState({ select: (s) => s.matches })
+  const isPostPage = matches.some((m) => m.routeId === '/blog/$slug')
+  if (isPostPage) return <Outlet />
+
   const [categoriaAtiva, setCategoriaAtiva] = useState<string>('Todos')
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState<NewsletterStatus>('idle')
@@ -175,13 +180,11 @@ function BlogPage() {
     if (!newsletterEmail) return
     setNewsletterStatus('loading')
     try {
-      const apiUrl = import.meta.env.VITE_API_URL ?? ''
-      const res = await fetch(`${apiUrl}/api/newsletter`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: newsletterEmail }),
+      const { error } = await supabase!.from('newsletter_subscribers').insert({
+        email: newsletterEmail,
+        source: 'blog-page',
       })
-      if (!res.ok) throw new Error(`${res.status}`)
+      if (error) throw error
       setNewsletterStatus('success')
     } catch {
       setNewsletterStatus('error')

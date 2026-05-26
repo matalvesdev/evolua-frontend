@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { api } from '@/lib/api'
 import { Logo } from '@/components/Logo'
 
 export const Route = createFileRoute('/recuperar-senha')({
@@ -21,12 +21,14 @@ function RecuperarSenha() {
     setLoading(true)
     setError('')
 
-    const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/nova-senha`,
-    })
-
+    try {
+      await api.post('/api/auth/forgot-password', { email })
+    } catch {
+      setError('Erro ao enviar. Tente novamente mais tarde.')
+      setLoading(false)
+      return
+    }
     setLoading(false)
-    if (err) { setError(err.message); return }
     setStep('enviado')
   }
 

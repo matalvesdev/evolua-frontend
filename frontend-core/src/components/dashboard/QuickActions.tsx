@@ -521,15 +521,18 @@ function ModalBiblioteca({ open, onClose }: { open: boolean; onClose: () => void
     query === '' || r.title.toLowerCase().includes(query.toLowerCase()) || r.area.toLowerCase().includes(query.toLowerCase())
   )
 
-  function handleAsk() {
+  async function handleAsk() {
     if (!chatInput.trim() || loading) return
     setLoading(true)
     setChatReply('')
-    // TODO: integrar com endpoint de IA do backend
-    setTimeout(() => {
-      setChatReply('Assistente de estudos disponível em breve. Acesse a Biblioteca para consultar as referências cadastradas.')
-      setLoading(false)
-    }, 600)
+    try {
+      const { api } = await import('@/lib/api')
+      const res = await api.post<{ content: string }>('/api/ai/rag/library', { question: chatInput.trim() })
+      setChatReply(res.content)
+    } catch {
+      setChatReply('Assistente temporariamente indisponível. Acesse a Biblioteca para consultar as referências cadastradas.')
+    }
+    setLoading(false)
   }
 
   function handleClose() { setQuery(''); setChatInput(''); setChatReply(''); onClose() }
@@ -600,15 +603,22 @@ function ModalMarketing({ open, onClose }: { open: boolean; onClose: () => void 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
-  function gerar() {
+  async function gerar() {
     if (!form.tema) return
     setGerando(true)
     setGerado('')
-    // TODO: integrar com endpoint de IA do backend
-    setTimeout(() => {
-      setGerado('Geração de conteúdo com IA disponível em breve. Configure manualmente sua publicação ou aguarde a integração.')
-      setGerando(false)
-    }, 600)
+    try {
+      const { api } = await import('@/lib/api')
+      const res = await api.post<{ content: string }>('/api/ai/marketing/generate', {
+        topic: form.tema,
+        platform: form.rede,
+        format: form.formato,
+      })
+      setGerado(res.content)
+    } catch {
+      setGerado('Geração de conteúdo com IA temporariamente indisponível. Configure manualmente sua publicação ou aguarde a integração.')
+    }
+    setGerando(false)
   }
 
   function handleClose() { setForm({ rede:'instagram', formato:'carrossel', tema:'', legenda:'' }); setGerado(''); onClose() }

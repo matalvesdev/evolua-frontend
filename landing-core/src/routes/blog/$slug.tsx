@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
+import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { postBySlugQueryOptions, postsQueryOptions } from '../../queries/posts'
 
@@ -48,10 +49,11 @@ function PostContent() {
     year: 'numeric',
   })
 
-  // Sanitize HTML content before rendering
-  const safeCorpo = post.corpo
-    ? DOMPurify.sanitize(post.corpo, { USE_PROFILES: { html: true } })
-    : ''
+  const safeCorpo = useMemo(() => {
+    if (!post.corpo) return ''
+    const html = marked.parse(post.corpo, { async: false })
+    return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } })
+  }, [post.corpo])
 
   return (
     <>

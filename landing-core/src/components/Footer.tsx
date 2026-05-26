@@ -1,11 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { Logo } from './Logo'
+import { NewsletterSignup } from './NewsletterSignup'
 
 const navLinks = [
   { label: 'Início', to: '/' },
   { label: 'Nosso Jeito', to: '/nosso-jeito' },
   { label: 'Planos', to: '/planos' },
   { label: 'Blog', to: '/blog' },
+  { label: 'Materiais', to: '/materiais' },
   { label: 'Sobre', to: '/sobre' },
   { label: 'Changelog', to: '/changelog' },
 ]
@@ -49,6 +51,17 @@ export function Footer() {
               Gente que cuida de gente precisa de cuidado também. A gente criou tudo isso para fonoaudiólogas
               maravilhosas terem paz e sucesso.
             </p>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <h5 className="font-label text-[10px] font-bold tracking-[0.4em] uppercase text-muted mb-6 md:mb-10">
+              Fono em Foco
+            </h5>
+            <p className="text-xs text-ink-soft mb-4 max-w-[200px] leading-relaxed">
+              Receba dicas, conteúdo científico e novidades do Evolua toda semana.
+            </p>
+            <NewsletterSignup variant="footer" />
           </div>
 
           {/* Navigation */}

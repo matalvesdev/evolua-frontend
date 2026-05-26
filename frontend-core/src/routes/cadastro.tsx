@@ -785,7 +785,9 @@ function CadastroPage() {
                     data={data}
                     setData={setData}
                     onNext={() => setStep(1)}
-                    onGoogle={() => { /* TODO: Google OAuth */ }}
+                    onGoogle={() => {
+                      supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/dashboard` } })
+                    }}
                   />
                 )}
                 {step === 1 && (

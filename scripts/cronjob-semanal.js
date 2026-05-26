@@ -17,13 +17,11 @@
 //
 //   No Windows (Task Scheduler) ou via GitHub Actions (.github/workflows/content-weekly.yml)
 
-import { execSync } from "child_process";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
-import { config as dotenvConfig } from "dotenv";
+const { execSync } = require("child_process");
+const path = require("path");
+const fs = require("fs");
+const { config: dotenvConfig } = require("dotenv");
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const GERADOR_DIR = path.join(__dirname, "../.agents/marketing/gerador");
 const ENV_FILE = path.join(GERADOR_DIR, ".env");
 
@@ -34,6 +32,11 @@ if (fs.existsSync(ENV_FILE)) {
   console.error(`❌ .env não encontrado em: ${ENV_FILE}`);
   console.error(`   Crie o arquivo baseado em: ${ENV_FILE}.example`);
   process.exit(1);
+}
+
+// Fallback para EMAIL_DESTINO
+if (!process.env.EMAIL_DESTINO) {
+  console.warn("⚠️  EMAIL_DESTINO não configurado. Relatório será enviado para o destinatário padrão.");
 }
 
 // ── Parse de argumentos ───────────────────────────────────────────────────────

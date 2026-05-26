@@ -8,11 +8,9 @@
  * Em desenvolvimento, o React mostra o overlay de erro do Vite por cima;
  * este boundary é a rede de segurança em produção (e quando overlay é
  * fechado).
- *
- * TODO: integrar com Sentry React quando o pacote for instalado —
- * substituir `console.error` por `Sentry.captureException(error)`.
  */
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import * as Sentry from '@sentry/react';
 
 interface Props {
   children: ReactNode;
@@ -31,8 +29,10 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    // Mantém o console no dev — em prod o Sentry assume essa função.
-    console.error('ErrorBoundary caught:', error, info.componentStack);
+    Sentry.captureException(error, { extra: { componentStack: info.componentStack } });
+    if (import.meta.env.DEV) {
+      console.error('ErrorBoundary caught:', error, info.componentStack);
+    }
   }
 
   reset = (): void => this.setState({ error: null });

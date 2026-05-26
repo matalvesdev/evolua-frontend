@@ -1,5 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { api } from '@/lib/api'
+import {
+  useProntuarios,
+  useCreateProntuario,
+  useUpdateProntuario,
+  type Prontuario,
+} from '@/hooks/use-prontuarios'
 
 export const Route = createFileRoute('/dashboard/prontuario')({
   component: ProntuarioPage,
@@ -7,21 +14,6 @@ export const Route = createFileRoute('/dashboard/prontuario')({
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
 type Area = 'linguagem' | 'voz' | 'disfagia' | 'motricidade' | 'gagueira' | 'tea'
-
-interface Prontuario {
-  id: string
-  patient: string
-  dob: string
-  area: Area
-  diagnosis: string
-  created: string
-  lastSession: string
-  sessions: number
-  scales: Record<string, string | number>
-  anamnese: string
-  objectives: string[]
-  evolution: string
-}
 
 // ── Escalas por área ──────────────────────────────────────────────────────────
 const SCALES: Record<Area, { name: string; fields: { key: string; label: string; type: 'select' | 'number'; options?: string[] }[] }[]> = {
@@ -127,9 +119,6 @@ const AREA_ICONS: Record<Area, string> = {
   motricidade: 'face', gagueira: 'hearing', tea: 'psychology'
 }
 
-// ── Mock prontuários ──────────────────────────────────────────────────────────
-const MOCK: Prontuario[] = []
-
 // ── ScaleForm ─────────────────────────────────────────────────────────────────
 function ScaleForm({ area, values, onChange }: {
   area: Area
@@ -175,9 +164,12 @@ function ScaleForm({ area, values, onChange }: {
 
 // ── Página principal ──────────────────────────────────────────────────────────
 function ProntuarioPage() {
-  const [selected, setSelected] = useState<Prontuario | null>(MOCK[0] ?? null)
+  const { data: prontuarios = [] } = useProntuarios()
+  const createProntuario = useCreateProntuario()
+  const updateProntuario = useUpdateProntuario()
+  const [selected, setSelected] = useState<Prontuario | null>(null)
   const [tab, setTab] = useState<'anamnese'|'escalas'|'evolucao'|'objetivos'>('escalas')
-  const [scales, setScales] = useState<Record<string, string|number>>(MOCK[0]?.scales ?? {})
+  const [scales, setScales] = useState<Record<string, string|number>>({})
   const [saved, setSaved] = useState(false)
   const [showNew, setShowNew] = useState(false)
   const [newForm, setNewForm] = useState({ patient:'', dob:'', area:'linguagem' as Area, diagnosis:'' })
@@ -187,8 +179,20 @@ function ProntuarioPage() {
   }
 
   function save() {
+    if (!selected) return
+    updateProntuario.mutate({ id: selected.id, body: { scales } })
     setSaved(true)
     setTimeout(() => setSaved(false), 2500)
+  }
+
+  function createNewProntuario() {
+    createProntuario.mutate({
+      patient: newForm.patient,
+      dob: newForm.dob,
+      area: newForm.area,
+      diagnosis: newForm.diagnosis,
+    })
+    setShowNew(false)
   }
 
   return (
@@ -228,7 +232,7 @@ function ProntuarioPage() {
               </div>
               <div className="flex gap-3 pt-2">
                 <button onClick={() => setShowNew(false)} className="flex-1 btn-outline">Cancelar</button>
-                <button onClick={() => setShowNew(false)} className="flex-1 btn-primary">Criar Prontuário</button>
+                <button onClick={createNewProntuario} className="flex-1 btn-primary">Criar Prontuário</button>
               </div>
             </div>
           </div>
@@ -251,14 +255,14 @@ function ProntuarioPage() {
 
         {/* Lista de pacientes */}
         <div className="lg:col-span-1 flex flex-col gap-2">
-          <p className="section-label px-1">Pacientes ({MOCK.length})</p>
-          {MOCK.length === 0 ? (
+          <p className="section-label px-1">Pacientes ({prontuarios.length})</p>
+          {prontuarios.length === 0 ? (
             <div className="empty-state">
               <span className="material-symbols-outlined text-3xl text-text-tertiary">folder_open</span>
               <p className="text-sm text-text-secondary">Nenhum prontuário</p>
             </div>
           ) : (
-            MOCK.map(p => (
+            prontuarios.map(p => (
               <button
                 key={p.id}
                 onClick={() => selectProntuario(p)}

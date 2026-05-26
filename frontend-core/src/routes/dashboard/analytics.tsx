@@ -1,24 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useDashboardAnalytics } from '@/hooks/use-dashboard'
 
 export const Route = createFileRoute('/dashboard/analytics')({
   component: AnalyticsPage,
 })
 
-// ── Mock data ─────────────────────────────────────────────────────────────────
-// TODO: substituir por hooks de dados reais (use-dashboard) quando os endpoints
-// /api/analytics/* estiverem disponíveis no backend.
+// ── Tipos ──────────────────────────────────────────────────────────────────────
+
 type SessionArea = { area: string; pct: number; color: string }
 type MonthlyEntry = { month: string; sessions: number; revenue?: number }
 type AdherenceEntry = { group: string; pct: number }
 type NoReturnEntry = { name: string; area: string; days: number }
-
-const SESSION_BY_AREA: SessionArea[] = []
-const MONTHLY: MonthlyEntry[] = []
-const ADHERENCE_BY_AGE: AdherenceEntry[] = []
-const NO_RETURN_PATIENTS: NoReturnEntry[] = []
-
-const maxMonthly = MONTHLY.length ? Math.max(...MONTHLY.map(m => m.sessions)) : 1
 
 // ── KPI card ──────────────────────────────────────────────────────────────────
 function KPI({ icon, label, value, sub, color }: { icon: string; label: string; value: string; sub: string; color: string }) {
@@ -36,6 +29,12 @@ function KPI({ icon, label, value, sub, color }: { icon: string; label: string; 
 
 function AnalyticsPage() {
   const [period, setPeriod] = useState<'7d'|'30d'|'90d'|'12m'>('30d')
+  const { data: analytics, isLoading } = useDashboardAnalytics(period)
+  const SESSION_BY_AREA: SessionArea[] = analytics?.sessionByArea ?? []
+  const MONTHLY: MonthlyEntry[] = analytics?.monthly ?? []
+  const ADHERENCE_BY_AGE: AdherenceEntry[] = analytics?.adherenceByAge ?? []
+  const NO_RETURN_PATIENTS: NoReturnEntry[] = analytics?.noReturnPatients ?? []
+  const maxMonthly = MONTHLY.length ? Math.max(...MONTHLY.map(m => m.sessions)) : 1
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -60,10 +59,10 @@ function AnalyticsPage() {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPI icon="group"    label="Pacientes ativos"   value="—" sub="sem dados"   color="text-info"    />
-        <KPI icon="event"    label="Sessões realizadas" value="—" sub="sem dados"   color="text-success" />
-        <KPI icon="payments" label="Receita do mês"     value="—" sub="sem dados"   color="text-olive"   />
-        <KPI icon="percent"  label="Taxa de adesão"     value="—" sub="sem dados"   color="text-warning" />
+        <KPI icon="group"    label="Pacientes ativos"   value={isLoading ? '…' : String(analytics?.activePatients ?? '—')}   sub={isLoading ? 'carregando' : analytics?.activePatients ? 'no período' : 'sem dados'}   color="text-info"    />
+        <KPI icon="event"    label="Sessões realizadas" value={isLoading ? '…' : String(analytics?.sessionCount ?? '—')}   sub={isLoading ? 'carregando' : analytics?.sessionCount ? 'no período' : 'sem dados'}   color="text-success" />
+        <KPI icon="payments" label="Receita do mês"     value={isLoading ? '…' : analytics?.monthlyRevenue ? `R$${analytics.monthlyRevenue}` : '—'}   sub={isLoading ? 'carregando' : analytics?.monthlyRevenue ? 'faturamento' : 'sem dados'}   color="text-olive"   />
+        <KPI icon="percent"  label="Taxa de adesão"     value={isLoading ? '…' : analytics?.adherenceRate ? `${analytics.adherenceRate}%` : '—'}   sub={isLoading ? 'carregando' : analytics?.adherenceRate ? 'dos pacientes' : 'sem dados'}   color="text-warning" />
       </div>
 
       {/* Gráficos */}

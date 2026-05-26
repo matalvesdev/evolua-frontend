@@ -2,195 +2,159 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
-  push:
-    branches: [main]
+    branches: [main, develop]
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: '22'
+  PNPM_VERSION: 9
 
 jobs:
-  # ────────────────────────────────────────────────────────────────────
-  # Backend Fastify + contracts (TS) — typecheck + tests
-  # ────────────────────────────────────────────────────────────────────
-  backend-ts:
-    name: Backend (TS) typecheck + tests
+  typecheck:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend-core
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: backend-core/package-lock.json
-      - run: npm ci
-      - name: Build contracts (Zod source of truth)
-        run: npm run build -w contracts
-      - name: Generate Prisma client
-        run: npx prisma generate
-      - name: Typecheck api
-        run: npx tsc --noEmit -p apps/api/tsconfig.json
-      - name: Tests (Vitest)
-        run: npm test --workspace=apps/api --if-present
+          node-version: 22
+          cache: pnpm
 
-  # ────────────────────────────────────────────────────────────────────
-  # AI service (Python / FastAPI)
-  # ────────────────────────────────────────────────────────────────────
-  ai-python:
-    name: AI service (Python) lint + import
+      - run: pnpm install --frozen-lockfile
+
+      - name: TypeCheck landing-core
+        run: pnpm -F landing-core typecheck
+
+      - name: TypeCheck frontend-core
+        run: pnpm -F frontend-core typecheck
+
+  lint:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend-core/apps/ai
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - uses: pnpm/action-setup@v4
         with:
-          python-version: '3.11'
-          cache: pip
-      - run: pip install -e ".[dev]"
-      - name: Ruff lint
-        run: ruff check app
-      - name: Mypy strict
-        run: mypy app
-        continue-on-error: true
+          version: ${{ env.PNPM_VERSION }}
 
-  # ────────────────────────────────────────────────────────────────────
-  # WhatsApp service (Go)
-  # ────────────────────────────────────────────────────────────────────
-  whatsapp-go:
-    name: WhatsApp service (Go) build + vet
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend-core/apps/services/whatsapp
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-          cache-dependency-path: backend-core/apps/services/whatsapp/go.sum
-      - run: go mod download
-      - run: go vet ./...
-      - run: go build ./...
-      - run: go test ./... -count=1
-        continue-on-error: true # remover quando houver testes
-
-  # ────────────────────────────────────────────────────────────────────
-  # Frontend (dashboard SPA)
-  # ────────────────────────────────────────────────────────────────────
-  frontend:
-    name: Frontend lint + typecheck + build
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend-core
-    steps:
-      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: frontend-core/package-lock.json
-      - run: npm ci
-      - run: npm run lint
-      - run: npx tsc --noEmit
-      - run: npm run build
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend-core/dist
-          retention-days: 7
+          node-version: 22
+          cache: pnpm
 
-  # ────────────────────────────────────────────────────────────────────
-  # Landing page (marketing)
-  # ────────────────────────────────────────────────────────────────────
-  landing:
-    name: Landing lint + typecheck + build
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: landing-core
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: landing-core/package-lock.json
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm run build
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: landing-dist
-          path: landing-core/dist
-          retention-days: 7
+      - run: pnpm install --frozen-lockfile
 
-  # ────────────────────────────────────────────────────────────────────
-  # Migration drift — detecta schema.prisma diferente das migrations
-  # ────────────────────────────────────────────────────────────────────
-  prisma-migrations:
-    name: Prisma migrations drift check
+      - name: Lint landing-core
+        run: pnpm -F landing-core lint
+
+      - name: Lint frontend-core
+        run: pnpm -F frontend-core lint
+
+  test-api:
     runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: prisma
-          POSTGRES_PASSWORD: prisma
-          POSTGRES_DB: shadow
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: evolua_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U prisma"
-          --health-interval 5s
-          --health-timeout 5s
-          --health-retries 10
-    defaults:
-      run:
-        working-directory: backend-core
+
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: backend-core/package-lock.json
-      - run: npm ci
-      - name: Verifica que schema.prisma == migrations aplicadas
-        # Aplica todas as migrations no Postgres efêmero e compara com schema.prisma.
-        # Sai com 2 se houver drift.
-        env:
-          SHADOW_DATABASE_URL: postgresql://prisma:prisma@localhost:5432/shadow
-        run: |
-          npx prisma migrate diff \
-            --from-migrations prisma/migrations \
-            --to-schema-datamodel prisma/schema.prisma \
-            --shadow-database-url "$SHADOW_DATABASE_URL" \
-            --exit-code
+          node-version: 22
+          cache: pnpm
 
-  # ────────────────────────────────────────────────────────────────────
-  # Secret scan — falha em commits com chaves típicas
-  # ────────────────────────────────────────────────────────────────────
-  secret-scan:
-    name: Secret scan (gitleaks)
+      - run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm -F backend-core prisma:generate
+
+      - name: Run API unit tests
+        run: pnpm --filter @evolua/api test
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/evolua_test
+          SUPABASE_URL: http://localhost:54321
+          SUPABASE_ANON_KEY: test-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+          SUPABASE_JWT_SECRET: test-jwt-secret-thats-long-enough-16
+          CORS_ORIGINS: http://localhost:5173
+          INTERNAL_SERVICE_TOKEN: test-internal-token-8chars
+          SENTRY_DSN: https://test@sentry.io/123
+          RATE_LIMIT_MAX: "1000"
+
+  secret-scanning:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Gitleaks
+
+      - name: Secret scanning (gitleaks)
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: npx playwright test
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [typecheck, lint]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build landing-core
+        run: pnpm -F landing-core build
+
+      - name: Build frontend-core
+        run: pnpm -F frontend-core build

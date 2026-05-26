@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, redirect } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { z } from 'zod'
 import { supabase } from '@/lib/supabase'
 import { Logo } from '@/components/Logo'
@@ -38,7 +38,17 @@ function EntrarPage() {
   const [senhaVisivel, setSenhaVisivel] = useState(false)
   const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle')
   const [erro, setErro] = useState('')
-  const [googleToast, setGoogleToast] = useState(false)
+  async function handleGoogleLogin() {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    })
+    if (error) {
+      setErro('Erro ao conectar com Google. Tente novamente.')
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -133,18 +143,13 @@ function EntrarPage() {
             {/* Google */}
             <button
               type="button"
-              onClick={() => { setGoogleToast(true); setTimeout(() => setGoogleToast(false), 3000) }}
+              onClick={handleGoogleLogin}
               className="w-full flex items-center justify-center gap-3 border-2 border-border hover:border-border-bright bg-surface hover:bg-surface-low py-3.5 transition-all duration-200 mb-6 group relative"
             >
               <GoogleIcon />
               <span className="font-headline font-bold text-xs uppercase tracking-wide text-text-primary">
                 Continuar com Google
               </span>
-              {googleToast && (
-                <span className="absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap bg-dark text-neon text-[10px] font-bold px-3 py-1.5 rounded shadow-lg">
-                  Google OAuth em breve
-                </span>
-              )}
             </button>
 
             {/* Divisor */}
