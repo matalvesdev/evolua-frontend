@@ -37,6 +37,7 @@ const NAV_GROUPS = [
   {
     label: 'Recursos',
     items: [
+      { to: '/dashboard/onboarding',  icon: 'rocket_launch',    label: 'Onboarding'      },
       { to: '/dashboard/caa',         icon: 'grid_view',        label: 'CAA'             },
       { to: '/dashboard/materiais',   icon: 'article',          label: 'Materiais'       },
       { to: '/dashboard/biblioteca',  icon: 'local_library',    label: 'Biblioteca'      },

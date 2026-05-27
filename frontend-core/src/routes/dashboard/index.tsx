@@ -203,11 +203,11 @@ function DashboardHome() {
       {/* ── Footer ── */}
       <footer className="pt-4 border-t border-border-soft flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-text-tertiary">
         <p>© {new Date().getFullYear()} Evolua · Todos os direitos reservados</p>
-        <div className="flex gap-5">
-          <a href="#" className="hover:text-olive transition-colors">Suporte</a>
-          <a href="#" className="hover:text-olive transition-colors">Privacidade</a>
-          <a href="#" className="hover:text-olive transition-colors">Termos</a>
-        </div>
+          <div className="flex gap-5">
+            <a href="mailto:suporte@evolua.com.br" className="hover:text-olive transition-colors">Suporte</a>
+            <a href="/privacidade" className="hover:text-olive transition-colors">Privacidade</a>
+            <a href="/termos" className="hover:text-olive transition-colors">Termos</a>
+          </div>
       </footer>
 
     </div>

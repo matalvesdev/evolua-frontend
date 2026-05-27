@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -89,7 +91,43 @@ export default {
       animation: {
         marquee: 'marquee 40s linear infinite',
       },
+      typography: ({ theme }) => ({
+        evolua: {
+          css: {
+            '--tw-prose-body': theme('colors.ink-soft'),
+            '--tw-prose-headings': theme('colors.ink'),
+            '--tw-prose-lead': theme('colors.ink-soft'),
+            '--tw-prose-links': theme('colors.primary'),
+            '--tw-prose-bold': theme('colors.ink'),
+            '--tw-prose-counters': theme('colors.muted'),
+            '--tw-prose-bullets': theme('colors.lavender-deep'),
+            '--tw-prose-hr': theme('colors.outline-variant'),
+            '--tw-prose-quotes': theme('colors.ink'),
+            '--tw-prose-quote-borders': theme('colors.primary'),
+            '--tw-prose-captions': theme('colors.muted'),
+            '--tw-prose-code': theme('colors.primary-dark'),
+            '--tw-prose-pre-code': theme('colors.canvas'),
+            '--tw-prose-pre-bg': theme('colors.deep'),
+            '--tw-prose-th-borders': theme('colors.outline-variant'),
+            '--tw-prose-td-borders': theme('colors.outline-variant'),
+            fontFamily: theme('fontFamily.body').join(', '),
+            h1: { fontFamily: theme('fontFamily.headline').join(', '), fontWeight: '700', letterSpacing: '-0.02em' },
+            h2: { fontFamily: theme('fontFamily.headline').join(', '), fontWeight: '700', letterSpacing: '-0.015em', marginTop: '2.5em', marginBottom: '0.75em' },
+            h3: { fontFamily: theme('fontFamily.headline').join(', '), fontWeight: '600', letterSpacing: '-0.01em', marginTop: '2em', marginBottom: '0.5em' },
+            h4: { fontFamily: theme('fontFamily.headline').join(', '), fontWeight: '600' },
+            p: { lineHeight: '1.75' },
+            a: { fontWeight: '500', textDecoration: 'underline', textDecorationThickness: '1px', textUnderlineOffset: '3px', '&:hover': { color: theme('colors.primary-dark') } },
+            'blockquote p:first-of-type::before': { content: 'none' },
+            'blockquote p:last-of-type::after': { content: 'none' },
+            blockquote: { fontStyle: 'normal', borderLeftWidth: '3px', paddingLeft: '1.25rem', fontWeight: '500' },
+            code: { fontWeight: '500', backgroundColor: theme('colors.lavender'), padding: '0.15em 0.4em', borderRadius: '0.25rem', '&::before': { content: 'none' }, '&::after': { content: 'none' } },
+            'pre code': { backgroundColor: 'transparent', padding: '0' },
+            img: { borderRadius: '0.5rem' },
+            hr: { marginTop: '3em', marginBottom: '3em' },
+          },
+        },
+      }),
     },
   },
-  plugins: [],
+  plugins: [typography],
 }

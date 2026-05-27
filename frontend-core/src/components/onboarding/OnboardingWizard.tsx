@@ -115,7 +115,6 @@ export function OnboardingWizard() {
 
 function EmpresaStep({ onNext }: { onNext: (data?: Record<string, unknown>) => Promise<void> }) {
   const [nome, setNome] = useState('')
-  const [especialidade, setEspecialidade] = useState('')
 
   return (
     <div className="space-y-4">
@@ -128,24 +127,11 @@ function EmpresaStep({ onNext }: { onNext: (data?: Record<string, unknown>) => P
           placeholder="Minha Clínica de Fonoaudiologia"
         />
       </div>
-      <div>
-        <label className="block text-xs font-bold text-text-primary mb-1">Especialidade principal</label>
-        <select
-          value={especialidade}
-          onChange={e => setEspecialidade(e.target.value)}
-          className="w-full border border-border px-3 py-2.5 text-sm focus:outline-none focus:border-primary"
-        >
-          <option value="">Selecione</option>
-          <option value="voz">Voz</option>
-          <option value="disfagia">Disfagia</option>
-          <option value="linguagem-infantil">Linguagem Infantil</option>
-          <option value="linguagem-adulto">Linguagem Adulto</option>
-          <option value="motricidade">Motricidade Orofacial</option>
-          <option value="audicao">Audição</option>
-        </select>
-      </div>
+      <p className="text-xs text-text-tertiary leading-relaxed">
+        Especialidades já configuradas no cadastro. Vá para o próximo passo.
+      </p>
       <button
-        onClick={() => onNext({ nome, especialidade })}
+        onClick={() => onNext({ nome })}
         className="w-full bg-deep text-neon py-3 text-sm font-bold hover:bg-ink transition-colors"
       >
         Continuar

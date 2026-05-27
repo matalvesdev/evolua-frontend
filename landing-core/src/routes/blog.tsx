@@ -106,9 +106,14 @@ function PostCard({ post, destaque = false }: { post: BlogPost; destaque?: boole
   )
 }
 
+const POSTS_PER_PAGE = 6
+
 function PostsGrid({ categoria }: { categoria: string }) {
   const { data: posts } = useSuspenseQuery(postsQueryOptions(categoria === 'Todos' ? undefined : categoria))
+  const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE)
   const [destaques, resto] = [posts.filter((p) => p.destaque), posts.filter((p) => !p.destaque)]
+  const visibleResto = resto.slice(0, visibleCount)
+  const hasMore = visibleCount < resto.length
 
   if (posts.length === 0) {
     return (
@@ -135,13 +140,24 @@ function PostsGrid({ categoria }: { categoria: string }) {
           ))}
         </motion.div>
       )}
-      {resto.length > 0 && (
+      {visibleResto.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-outline-variant">
-          {resto.map((post) => (
+          {visibleResto.map((post) => (
             <motion.div key={post.id} variants={fadeUp}>
               <PostCard post={post} />
             </motion.div>
           ))}
+        </div>
+      )}
+      {hasMore && (
+        <div className="flex justify-center pt-12 pb-4">
+          <button
+            onClick={() => setVisibleCount(c => c + POSTS_PER_PAGE)}
+            className="group inline-flex items-center gap-2 px-6 py-3 border border-outline-variant hover:border-primary text-xs font-bold tracking-[0.2em] uppercase text-ink-soft hover:text-primary transition-all duration-200 bg-surface"
+          >
+            <span>Carregar mais</span>
+            <span className="material-symbols-outlined text-base group-hover:translate-y-0.5 transition-transform">expand_more</span>
+          </button>
         </div>
       )}
     </motion.div>

@@ -11,6 +11,7 @@ export default defineConfig({
   envPrefix: 'VITE_',
   build: {
     sourcemap: false,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -19,6 +20,9 @@ export default defineConfig({
           }
           if (id.includes('@tanstack/react-router') || id.includes('@tanstack/react-query')) {
             return 'vendor-tanstack'
+          }
+          if (id.includes('src/components/blog/') || id.includes('src/queries/posts') || id.includes('src/lib/blog')) {
+            return 'blog'
           }
         },
       },

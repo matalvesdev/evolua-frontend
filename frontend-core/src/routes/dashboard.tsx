@@ -10,8 +10,8 @@ export const Route = createFileRoute('/dashboard')({
   // Garante que /dashboard/* só é acessível autenticado. Em sessão expirada
   // redireciona para /entrar com `redirect=` para retornar após login.
   beforeLoad: async ({ location }) => {
-    const { data: { user }, error } = await supabase.auth.getUser()
-    if (error || !user) {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.user) {
       throw redirect({
         to: '/entrar',
         search: { redirect: location.href },

@@ -5,8 +5,8 @@ import { Logo } from '@/components/Logo'
 
 export const Route = createFileRoute('/cadastro')({
   beforeLoad: async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session?.user) {
       throw redirect({ to: '/dashboard' })
     }
   },
@@ -140,10 +140,10 @@ function InputField({
 // ─── steps ────────────────────────────────────────────────────────────────────
 
 function Step1({
-  data, setData, onNext, onGoogle,
+  data, setData, onNext, onGoogle, googleLoading,
 }: {
   data: FormData; setData: (d: Partial<FormData>) => void
-  onNext: () => void; onGoogle: () => void
+  onNext: () => void; onGoogle: () => void; googleLoading: boolean
 }) {
   const [senhaVis, setSenhaVis] = useState(false)
   const [confirmVis, setConfirmVis] = useState(false)
@@ -169,11 +169,16 @@ function Step1({
       <button
         type="button"
         onClick={onGoogle}
-        className="w-full flex items-center justify-center gap-3 border-2 border-border hover:border-border-bright bg-surface hover:bg-surface-low py-3.5 transition-all duration-200 group"
+        disabled={googleLoading}
+        className="w-full flex items-center justify-center gap-3 border-2 border-border hover:border-border-bright bg-surface hover:bg-surface-low py-3.5 transition-all duration-200 group disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <GoogleIcon />
+        {googleLoading ? (
+          <span className="w-4 h-4 border-2 border-text-tertiary/30 border-t-text-secondary rounded-full animate-spin" />
+        ) : (
+          <GoogleIcon />
+        )}
         <span className="font-headline font-bold text-xs uppercase tracking-wide text-text-primary">
-          Cadastrar com Google
+          {googleLoading ? 'Redirecionando...' : 'Cadastrar com Google'}
         </span>
       </button>
 
@@ -700,6 +705,8 @@ function CadastroPage() {
     setDataState((prev) => ({ ...prev, ...partial }))
   }
 
+  const [googleLoading, setGoogleLoading] = useState(false)
+
   async function submit() {
     setLoading(true)
     setErroGlobal('')
@@ -784,8 +791,10 @@ function CadastroPage() {
                   <Step1
                     data={data}
                     setData={setData}
+                    googleLoading={googleLoading}
                     onNext={() => setStep(1)}
                     onGoogle={() => {
+                      setGoogleLoading(true)
                       supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/dashboard` } })
                     }}
                   />

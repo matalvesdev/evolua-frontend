@@ -11,8 +11,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/entrar')({
   validateSearch: searchSchema,
   beforeLoad: async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session?.user) {
       throw redirect({ to: '/dashboard' })
     }
   },
