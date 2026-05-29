@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 
 export const Route = createFileRoute('/seguranca')({
   component: SegurancaPage,
@@ -63,6 +64,11 @@ const certificacoes = [
 function SegurancaPage() {
   return (
     <>
+      <SeoHead
+        title="Segurança & LGPD"
+        description="Dados clínicos pedem cuidado clínico. Conheça as práticas de segurança, LGPD e certificações do Evolua."
+        path="/seguranca"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-24 bg-canvas">
         <div className="max-w-7xl mx-auto">

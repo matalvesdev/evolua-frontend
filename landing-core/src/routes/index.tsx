@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { lazy, Suspense } from 'react'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 import { Hero } from '../components/Hero'
 import { Marquee } from '../components/Marquee'
 import { Manifesto } from '../components/Manifesto'
@@ -21,6 +22,10 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   return (
     <>
+      <SeoHead
+        title="EVOLUA"
+        description="A plataforma feita para fonoaudiólogas extraordinárias. Agenda cheia, pacientes novos, IA e gestão em um só lugar. Teste grátis por 7 dias."
+      />
       <Hero />
       <Marquee />
       <Manifesto />

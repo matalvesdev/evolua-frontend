@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 
 export const Route = createFileRoute('/termos')({
   component: TermosPage,
@@ -52,6 +53,11 @@ const secoes = [
 function TermosPage() {
   return (
     <>
+      <SeoHead
+        title="Termos de Uso"
+        description="Termos de Uso do Evolua — plataforma de gestão clínica para fonoaudiólogas."
+        path="/termos"
+      />
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-24 bg-canvas">
         <div className="max-w-7xl mx-auto">
           <motion.span

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 
 export const Route = createFileRoute('/planos')({
   component: PlanosPage,
@@ -175,6 +176,11 @@ function PlanosPage() {
 
   return (
     <>
+      <SeoHead
+        title="Planos"
+        description="Simples, justo e sem pegadinha. 14 dias grátis em qualquer plano. Sistema inteiro desbloqueado. Sem cartão de crédito."
+        path="/planos"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-28 bg-canvas text-center">
         <div className="max-w-7xl mx-auto flex flex-col items-center">

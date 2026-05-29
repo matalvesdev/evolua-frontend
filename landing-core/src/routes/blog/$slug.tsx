@@ -1,9 +1,11 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { Suspense, useEffect, useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { postBySlugQueryOptions, postsQueryOptions } from '../../queries/posts'
+import { SeoHead } from '../../components/seo/SeoHead'
+import { blogPostingJsonLd } from '../../components/seo/jsonld'
 import { ReadingProgress } from '../../components/blog/ReadingProgress'
 import { TableOfContents, extractTocItems } from '../../components/blog/TableOfContents'
 import { ShareButtons } from '../../components/blog/ShareButtons'
@@ -79,35 +81,6 @@ function PostContent() {
   const { data: post } = useSuspenseQuery(postBySlugQueryOptions(slug))
   const { data: allPosts } = useSuspenseQuery(postsQueryOptions())
 
-  useEffect(() => {
-    if (!post) return
-    document.title = `${post.titulo} | Evolua Blog`
-
-    const canon = document.querySelector('link[rel="canonical"]')
-    if (canon) canon.setAttribute('href', `https://evolua.app/blog/${post.slug}`)
-
-    const desc = document.querySelector('meta[name="description"]')
-    if (desc) desc.setAttribute('content', post.subtitulo)
-
-    const ogTitle = document.querySelector('meta[property="og:title"]')
-    if (ogTitle) ogTitle.setAttribute('content', `${post.titulo} | Evolua Blog`)
-
-    const ogDesc = document.querySelector('meta[property="og:description"]')
-    if (ogDesc) ogDesc.setAttribute('content', post.subtitulo)
-
-    const ogUrl = document.querySelector('meta[property="og:url"]')
-    if (ogUrl) ogUrl.setAttribute('content', `https://evolua.app/blog/${post.slug}`)
-
-    const ogImage = document.querySelector('meta[property="og:image"]')
-    if (ogImage) ogImage.setAttribute('content', post.imagem)
-
-    const twTitle = document.querySelector('meta[name="twitter:title"]')
-    if (twTitle) twTitle.setAttribute('content', `${post.titulo} | Evolua Blog`)
-
-    const twDesc = document.querySelector('meta[name="twitter:description"]')
-    if (twDesc) twDesc.setAttribute('content', post.subtitulo)
-  }, [post])
-
   if (!post) return <PostNotFound />
 
   const relacionados = allPosts
@@ -154,8 +127,26 @@ function PostContent() {
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
 
+  const siteUrl = 'https://useevolua.com.br'
+  const postUrl = `${siteUrl}/blog/${post.slug}`
+
   return (
     <>
+      <SeoHead
+        title={`${post.titulo} — Evolua Blog`}
+        description={post.subtitulo}
+        path={`/blog/${post.slug}`}
+        ogImage={post.imagem}
+        jsonLd={[blogPostingJsonLd({
+          headline: post.titulo,
+          description: post.subtitulo,
+          imageUrl: post.imagem,
+          datePublished: post.data,
+          dateModified: post.data,
+          authorName: post.autor,
+          url: postUrl,
+        })]}
+      />
       <ReadingProgress />
 
       {/* Post Header */}

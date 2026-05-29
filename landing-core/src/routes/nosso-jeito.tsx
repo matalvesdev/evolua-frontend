@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 
 export const Route = createFileRoute('/nosso-jeito')({
   component: NossoJeitoPage,
@@ -72,6 +73,11 @@ const diferenciais = [
 function NossoJeitoPage() {
   return (
     <>
+      <SeoHead
+        title="Nosso Jeito"
+        description="A gente acredita que cuidar de pessoas é a profissão mais bonita do mundo. Conheça os valores e o propósito do Evolua."
+        path="/nosso-jeito"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-20 md:pb-32 bg-canvas">
         <div className="max-w-7xl mx-auto">

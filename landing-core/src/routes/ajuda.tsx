@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Suspense, useMemo, useState } from 'react'
+import { SeoHead } from '../components/seo/SeoHead'
 import { motion, AnimatePresence } from 'motion/react'
 import DOMPurify from 'dompurify'
 import { faqQueryOptions } from '../queries/faq'
@@ -140,6 +141,11 @@ function AjudaPage() {
 
   return (
     <>
+      <SeoHead
+        title="Ajuda"
+        description="Tudo o que você precisa saber sobre o Evolua. Perguntas frequentes sobre conta, planos, pagamento, clínica, pacientes e mais."
+        path="/ajuda"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-10 md:pb-16 bg-canvas">
         <div className="max-w-7xl mx-auto">

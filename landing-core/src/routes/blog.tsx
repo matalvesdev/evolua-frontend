@@ -4,6 +4,7 @@ import { Suspense, useState } from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import { postsQueryOptions } from '../queries/posts'
+import { SeoHead } from '../components/seo/SeoHead'
 import type { BlogPost } from '../lib/blog'
 
 type NewsletterStatus = 'idle' | 'loading' | 'success' | 'error'
@@ -209,6 +210,11 @@ function BlogPage() {
 
   return (
     <>
+      <SeoHead
+        title="Blog"
+        description="Conteúdo que faz sua clínica crescer. Estratégias reais de marketing, gestão e crescimento para fonoaudiólogas que querem mais."
+        path="/blog"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-12 md:pb-20 bg-canvas">
         <div className="max-w-7xl mx-auto">

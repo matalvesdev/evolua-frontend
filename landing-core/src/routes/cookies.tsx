@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 
 export const Route = createFileRoute('/cookies')({
   component: CookiesPage,
@@ -44,6 +45,11 @@ const tipos = [
 function CookiesPage() {
   return (
     <>
+      <SeoHead
+        title="Política de Cookies"
+        description="Política de Cookies do Evolua. Conforme a LGPD (Lei 13.709/2018). Saiba como usamos cookies."
+        path="/cookies"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-24 bg-canvas">
         <div className="max-w-7xl mx-auto">

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 import { LeadMagnetsGrid } from '../components/LeadMagnetCard'
 
 export const Route = createFileRoute('/materiais')({
@@ -8,6 +9,12 @@ export const Route = createFileRoute('/materiais')({
 
 function MateriaisPage() {
   return (
+    <>
+      <SeoHead
+        title="Materiais Gratuitos"
+        description="Ferramentas para crescer. Checklists, planilhas e guias prontos para usar no seu consultório. Baixe grátis."
+        path="/materiais"
+      />
     <div className="min-h-screen flex flex-col">
       <section className="flex-1 px-5 md:px-12 py-20 md:py-32 bg-canvas">
         <div className="max-w-6xl mx-auto">
@@ -52,5 +59,6 @@ function MateriaisPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

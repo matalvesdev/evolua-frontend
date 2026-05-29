@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
+import { SeoHead } from '../components/seo/SeoHead'
 
 export const Route = createFileRoute('/_auth')({
   component: AuthLayout,
@@ -6,6 +7,8 @@ export const Route = createFileRoute('/_auth')({
 
 function AuthLayout() {
   return (
+    <>
+      <SeoHead noindex />
     <div className="min-h-screen bg-canvas flex flex-col">
       <header className="px-5 md:px-12 py-5 flex items-center justify-between border-b border-outline-variant">
         <Link to="/" className="font-headline font-black text-2xl tracking-tighter text-ink hover:opacity-70 transition-opacity">
@@ -23,5 +26,6 @@ function AuthLayout() {
         <Outlet />
       </main>
     </div>
+    </>
   )
 }

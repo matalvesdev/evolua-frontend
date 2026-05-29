@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
+import { SeoHead } from '../../components/seo/SeoHead'
 import { ensureSupabase } from '../../lib/supabase'
 
 export const Route = createFileRoute('/newsletter/cancelar')({
@@ -48,6 +49,12 @@ function CancelarInscricao() {
   const e = estados[status]
 
   return (
+    <>
+      <SeoHead
+        title="Cancelar Inscrição"
+        description="Cancele sua inscrição na newsletter do Evolua."
+        path="/newsletter/cancelar"
+      />
     <section className="px-5 md:px-12 py-24 md:py-32 bg-canvas min-h-screen flex items-center justify-center">
       <div className="max-w-md mx-auto text-center">
         <motion.div variants={fadeUp} initial="hidden" animate="visible" className="space-y-8">
@@ -71,5 +78,6 @@ function CancelarInscricao() {
         </motion.div>
       </div>
     </section>
+    </>
   )
 }

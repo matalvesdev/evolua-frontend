@@ -2,6 +2,7 @@ import { createRootRouteWithContext, Outlet, ScrollRestoration, useRouterState }
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import type { QueryClient } from '@tanstack/react-query'
+import { SeoHead } from '../components/seo/SeoHead'
 import { Navbar } from '../components/Navbar'
 import { Footer } from '../components/Footer'
 import { InAppSupport } from '../components/KnowledgeBase'
@@ -20,10 +21,19 @@ function RootLayout() {
   const { location } = useRouterState()
   const isAuth = AUTH_PATHS.some((p) => location.pathname.startsWith(p))
 
+  // Default SEO for the entire app — each route overrides with its own <SeoHead>
+  const defaultSeo = (
+    <SeoHead
+      title="EVOLUA"
+      description="A plataforma feita para fonoaudiólogas extraordinárias. Agenda cheia, pacientes novos, IA e gestão em um só lugar."
+    />
+  )
+
   if (isAuth) {
     return (
       <div className="bg-canvas text-ink font-body overflow-x-hidden">
         <ScrollRestoration />
+        {defaultSeo}
         <Outlet />
         {import.meta.env.DEV && (
           <>
@@ -38,6 +48,7 @@ function RootLayout() {
   return (
     <div className="bg-canvas text-ink font-body overflow-x-hidden">
       <ScrollRestoration />
+      {defaultSeo}
       <Navbar />
       <main className="pt-[58px] md:pt-[65px]">
         <Outlet />

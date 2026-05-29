@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 
 export const Route = createFileRoute('/sobre')({
   component: SobrePage,
@@ -31,6 +32,11 @@ const equipe = [
 function SobrePage() {
   return (
     <>
+      <SeoHead
+        title="Sobre"
+        description="Construído por quem ama o que fonoaudiólogas fazem. Conheça a história do Evolua, o CRM feito do zero para fonoaudiologia."
+        path="/sobre"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-20 md:pb-32 bg-canvas">
         <div className="max-w-7xl mx-auto">

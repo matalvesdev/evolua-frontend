@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Suspense } from 'react'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 import { changelogQueryOptions } from '../queries/changelog'
 import { CHANGELOG_TIPO_COLOR, type ChangelogEntry } from '../lib/changelog'
 
@@ -120,6 +121,11 @@ function EntriesSkeleton() {
 function ChangelogPage() {
   return (
     <>
+      <SeoHead
+        title="Changelog"
+        description="A gente lança melhorias toda semana. Aqui fica o registro do que mudou, por que mudou e o que vem por aí no Evolua."
+        path="/changelog"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-24 bg-canvas">
         <div className="max-w-7xl mx-auto">

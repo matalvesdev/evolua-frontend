@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { SeoHead } from '../components/seo/SeoHead'
 import { ASSUNTOS, contactSchema, submitContactMessage, type ContactInput } from '../lib/contact'
 
 export const Route = createFileRoute('/contato')({
@@ -62,6 +63,11 @@ function ContatoPage() {
 
   return (
     <>
+      <SeoHead
+        title="Contato"
+        description="Dúvida, sugestão, parceria, imprensa, suporte — qualquer coisa. Resposta em até 1 dia útil. Fale com a gente."
+        path="/contato"
+      />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-12 md:pb-20 bg-canvas">
         <div className="max-w-7xl mx-auto">

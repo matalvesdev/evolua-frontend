@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { HelmetProvider } from 'react-helmet-async'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
@@ -50,10 +51,12 @@ createRoot(document.getElementById('root')!).render(
         </div>
       }
     >
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <CookieConsent />
-      </QueryClientProvider>
+      <HelmetProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <CookieConsent />
+        </QueryClientProvider>
+      </HelmetProvider>
     </SentryBoundary>
   </StrictMode>,
 )
