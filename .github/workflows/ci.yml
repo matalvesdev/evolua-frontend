@@ -3,6 +3,8 @@ name: CI
 on:
   pull_request:
     branches: [main, develop]
+  push:
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,6 +36,12 @@ jobs:
       - name: TypeCheck frontend-core
         run: pnpm -F frontend-core typecheck
 
+      - name: TypeCheck contracts
+        run: pnpm --filter @evolua/contracts build
+
+      - name: TypeCheck API
+        run: pnpm --filter @evolua/api build
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -55,6 +63,38 @@ jobs:
 
       - name: Lint frontend-core
         run: pnpm -F frontend-core lint
+
+      - name: Lint API (backend)
+        run: pnpm --filter @evolua/api lint
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps (AI service)
+        working-directory: backend-core/apps/ai
+        run: |
+          pip install --upgrade pip
+          pip install ".[dev]"
+
+      - name: Lint AI service (ruff)
+        working-directory: backend-core/apps/ai
+        run: ruff check .
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache-dependency-path: backend-core/apps/services/whatsapp/go.sum
+
+      - name: Vet WhatsApp service (go vet)
+        working-directory: backend-core/apps/services/whatsapp
+        run: go vet ./...
+
+      - name: Build WhatsApp service
+        working-directory: backend-core/apps/services/whatsapp
+        run: go build ./...
 
   test-api:
     runs-on: ubuntu-latest
@@ -103,15 +143,34 @@ jobs:
           SENTRY_DSN: https://test@sentry.io/123
           RATE_LIMIT_MAX: "1000"
 
-  secret-scanning:
+  build:
     runs-on: ubuntu-latest
+    needs: [typecheck, lint]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Secret scanning (gitleaks)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build contracts
+        run: pnpm --filter @evolua/contracts build
+
+      - name: Build API
+        run: pnpm --filter @evolua/api build
+
+      - name: Build landing-core
+        run: pnpm -F landing-core build
+
+      - name: Build frontend-core
+        run: pnpm -F frontend-core build
 
   e2e:
     runs-on: ubuntu-latest
@@ -135,26 +194,15 @@ jobs:
 
       - name: Run E2E tests
         run: npx playwright test
+        env:
+          BASE_URL: http://localhost:5173
 
-  build:
+  secret-scanning:
     runs-on: ubuntu-latest
-    needs: [typecheck, lint]
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: Build landing-core
-        run: pnpm -F landing-core build
-
-      - name: Build frontend-core
-        run: pnpm -F frontend-core build
+      - name: Secret scanning (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

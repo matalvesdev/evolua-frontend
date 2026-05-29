@@ -1,0 +1,53 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend-core/apps/api/**"
+      - "backend-core/contracts/**"
+      - "backend-core/prisma/**"
+      - "backend-core/package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/deploy-api.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-api-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy backend API to Render
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://api.useevolua.com.br
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm -F backend-core prisma:generate
+
+      - name: Build contracts
+        run: pnpm --filter @evolua/contracts build
+
+      - name: Build API
+        run: pnpm --filter @evolua/api build
+
+      - name: Trigger Render deploy hook
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_API }}"
