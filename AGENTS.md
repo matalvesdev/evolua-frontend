@@ -154,6 +154,54 @@ pnpm --filter @evolua/api test
 - ❌ Orphaned TODO comments in production UI — remove placeholders when feature is implemented
 - ❌ Sentry installed but not wired in component ErrorBoundary — always add `Sentry.captureException`
 
+## Active Session — Dashboard Module Audit & Fixes
+## Active Session — Dashboard Module Audit & Fixes
+
+### Goal
+Auditar todos os 26 módulos do dashboard (frontend-core) — checando UI, hooks, backend routes, alinhamento de API e estados de loading/error/empty — e aplicar correções nos módulos com problemas críticos.
+
+### Done
+- Auditado todos os 26 módulos do dashboard (25 arquivos .tsx + 1 subpasta onboarding/)
+- Verificados todos os 24 hooks em `src/hooks/` — padrão React Query, endpoints de API, tratamento de estado
+- Verificados todos os 33 módulos backend em `backend-core/apps/api/src/modules/` para rotas existentes
+- **Fix: `mais.tsx`** — 2 links quebrados corrigidos:
+  - WhatsApp: `/dashboard/pacientes` → `/dashboard/whatsapp`
+  - Teleconsulta: `/dashboard/sessao` → `/dashboard/teleconsulta`
+- **Fix: `marketing.tsx`** — refatoração completa:
+  - Criado `src/hooks/use-marketing.ts` com `useGenerateMarketing()` mutation (React Query)
+  - Substituído `api.post()` inline por mutation com loading/error states
+  - Convertido arrays mock `TEMPLATES`/`SCHEDULED` de `const` para `useState`
+  - Botão "Salvar template" agora adiciona template gerado à lista local
+  - Botão "Copiar" funcional com `navigator.clipboard`
+  - Extração automática de hashtags e inferência de categoria/título
+  - Removida importação direta de `api` da página
+- **Tabela de auditoria completa** gerada com saúde (✅/⚠️/❌) para cada módulo
+
+### Audit Result Summary
+| Status | Count | Modules |
+|--------|-------|---------|
+| ✅ Saudáveis | 17 | analytics, biblioteca, billing, caa, encaminhamentos, exercicios, financeiro, index, laudos, linha-do-tempo, materiais, onboarding, pacientes, plano-terapeutico, prontuario, relatorios, sessao, tarefas, whatsapp |
+| ⚠️ Issues menores | 3 | agenda (sem loading/error), configuracoes (sem loading), perfil (sem loading) |
+| ❌ Críticos (corrigidos) | 2 | **marketing** (mock data → hook + estado local), **mais** (links quebrados → corrigidos) |
+| ❌ Críticos (pendentes) | 1 | **teleconsulta** — inline hooks + sem backend module |
+
+### Fixes Applied
+1. **mais.tsx**: Links WhatsApp e Teleconsulta apontando para rotas erradas → corrigidos
+2. **use-marketing.ts** (novo hook): Mutation React Query para `/api/ai/marketing/generate`
+3. **marketing.tsx**: Mock data eliminado — arrays viraram estado, "Salvar template" funcional, erro exibido, copy-to-clipboard implementado
+
+### Still Pending
+- **teleconsulta.tsx**: Usa inline `useQuery` (anti-pattern), chama `/api/teleconsulta/sessions` sem backend module correspondente
+- **marketing.tsx**: Templates e agendamentos salvos apenas em estado local (sem persistência backend) — precisa de módulo `marketing/` no backend com CRUD
+- **agenda.tsx**: Adicionar `apptQuery.isLoading` e `apptQuery.isError`
+- **configuracoes.tsx**: Adicionar loading state do `useSettings`
+- **perfil.tsx**: Adicionar loading state do `useProfile`
+
+### Anti-Patterns Added
+- ❌ `mais.tsx` links hardcoded pointing to wrong dashboard routes (/dashboard/pacientes instead of /dashboard/whatsapp) — always verify route paths when adding navigation items
+- ❌ `marketing.tsx` hardcoded empty arrays masquerading as real data — never ship UI that shows permanent empty states; use state or hook so data can be populated
+- ❌ `marketing.tsx` inline fetch without React Query mutation — always extract API calls to hooks in `src/hooks/`
+
 ## Installed Agent Skills (181 skills)
 
 ### Organização AI-Native (13 skills)
