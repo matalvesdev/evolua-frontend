@@ -1,69 +1,58 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { useTeleSessions, useCreateTeleSession, useUpdateTeleSession, usePatientSummaries } from '@/hooks/use-teleconsulta'
 
 export const Route = createFileRoute('/dashboard/teleconsulta')({
   component: TeleconsultaPage,
 })
 
-interface Session {
-  id: string
-  patient: string
-  date: string
-  time: string
-  link: string
-  status: 'scheduled' | 'active' | 'ended'
-  sentViaWhatsApp: boolean
-}
-
-interface PatientSummary {
-  id: string
-  name: string
-}
-
-function useTeleSessions() {
-  return useQuery<Session[]>({
-    queryKey: ['teleconsulta-sessions'],
-    queryFn: () => api.get<Session[]>('/api/teleconsulta/sessions'),
-    staleTime: 30_000,
-  })
-}
-
-function usePatientSummaries() {
-  return useQuery<PatientSummary[]>({
-    queryKey: ['patients-summary'],
-    queryFn: () => api.get<PatientSummary[]>('/api/patients?pageSize=200'),
-    staleTime: 30_000,
-  })
-}
-
-function generateLink() {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
-  const code = Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('')
-  return `https://meet.evolua.app/fono/${code}`
-}
-
 function TeleconsultaPage() {
-  const { data: teleSessions = [] } = useTeleSessions()
+  const { data: teleSessions = [], isLoading, isError, refetch } = useTeleSessions()
   const { data: patients = [] } = usePatientSummaries()
-  const [sessions, setSessions] = useState<Session[]>(teleSessions)
+  const createSession = useCreateTeleSession()
+  const updateSession = useUpdateTeleSession()
+
+  const [sessions, setSessions] = useState(teleSessions)
   const [showNew, setShowNew]   = useState(false)
-  const [form, setForm]         = useState({ patient: patients[0]?.name ?? '', date: '', time: '09:00', sendWA: true })
+  const [form, setForm]         = useState({ patient: patients[0]?.name ?? '', patientId: patients[0]?.id ?? '', date: '', time: '09:00', sendWA: true })
   const [copied, setCopied]     = useState<string|null>(null)
-  const [activeSession, setActiveSession] = useState<Session|null>(
-    teleSessions.find((s: Session) => s.status === 'active') ?? null
+  const [activeSession, setActiveSession] = useState<typeof teleSessions[number] | null>(
+    teleSessions.find((s) => s.status === 'active') ?? null
   )
 
-  function createSession() {
-    const link = generateLink()
-    const s: Session = {
-      id: Date.now().toString(),
-      patient: form.patient, date: form.date, time: form.time,
-      link, status: 'scheduled', sentViaWhatsApp: form.sendWA,
-    }
-    setSessions(prev => [s, ...prev])
-    setShowNew(false)
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 border-2 border-olive border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm text-text-tertiary">Carregando teleconsultas...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="card p-6">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <span className="material-symbols-outlined text-3xl text-error">error</span>
+            <p className="text-sm font-bold text-text-primary">Erro ao carregar teleconsultas</p>
+            <p className="text-xs text-text-tertiary">Tente novamente mais tarde.</p>
+            <button onClick={() => refetch()} className="btn-primary text-sm mt-2">Tentar novamente</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  function handleCreate() {
+    createSession.mutate(form, {
+      onSuccess: (s) => {
+        setSessions(prev => [s, ...prev])
+        setShowNew(false)
+      },
+    })
   }
 
   function copyLink(link: string, id: string) {
@@ -72,26 +61,28 @@ function TeleconsultaPage() {
     setTimeout(() => setCopied(null), 2000)
   }
 
-  function sendWhatsApp(s: Session) {
+  function sendWhatsApp(s: typeof teleSessions[number]) {
     const msg = encodeURIComponent(`Olá ${s.patient.split(' ')[0]}! Sua teleconsulta está agendada para ${new Date(s.date+'T00:00:00').toLocaleDateString('pt-BR')} às ${s.time}.\n\nAcesse pelo link:\n${s.link}\n\nEvolua — Sistema de Fonoaudiologia`)
     window.open(`https://wa.me/?text=${msg}`, '_blank')
+    updateSession.mutate({ id: s.id, body: { sentViaWhatsApp: true } })
     setSessions(prev => prev.map(x => x.id === s.id ? {...x, sentViaWhatsApp: true} : x))
   }
 
-  function joinSession(s: Session) {
+  function joinSession(s: typeof teleSessions[number]) {
     setActiveSession(s)
+    updateSession.mutate({ id: s.id, body: { status: 'active' } })
     setSessions(prev => prev.map(x => x.id === s.id ? {...x, status:'active'} : x))
   }
 
   function endSession() {
     if (!activeSession) return
+    updateSession.mutate({ id: activeSession.id, body: { status: 'ended' } })
     setSessions(prev => prev.map(x => x.id === activeSession.id ? {...x, status:'ended'} : x))
     setActiveSession(null)
   }
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      {/* Modal */}
       {showNew && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="bg-surface w-full max-w-md shadow-[var(--shadow-dark)] overflow-hidden">
@@ -104,8 +95,11 @@ function TeleconsultaPage() {
             <div className="p-6 flex flex-col gap-4">
               <div>
                 <label className="section-label block mb-1.5">Paciente</label>
-                <select value={form.patient} onChange={e => setForm(f=>({...f,patient:e.target.value}))} className="input w-full">
-                  {patients.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}
+                <select value={form.patientId} onChange={e => {
+                  const p = patients.find(pp => pp.id === e.target.value)
+                  setForm(f => ({...f, patientId: e.target.value, patient: p?.name ?? ''}))
+                }} className="input w-full">
+                  {patients.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -124,8 +118,8 @@ function TeleconsultaPage() {
               </label>
               <div className="flex gap-3 pt-2">
                 <button onClick={() => setShowNew(false)} className="flex-1 btn-outline">Cancelar</button>
-                <button onClick={createSession} disabled={!form.patient || !form.date} className="flex-1 btn-primary disabled:opacity-50">
-                  Criar e gerar link
+                <button onClick={handleCreate} disabled={!form.patientId || !form.date || createSession.isPending} className="flex-1 btn-primary disabled:opacity-50">
+                  {createSession.isPending ? 'Criando...' : 'Criar e gerar link'}
                 </button>
               </div>
             </div>
@@ -133,7 +127,6 @@ function TeleconsultaPage() {
         </div>
       )}
 
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-display font-bold text-2xl uppercase tracking-wider text-text-primary">Teleconsulta</h1>
@@ -145,7 +138,6 @@ function TeleconsultaPage() {
         </button>
       </div>
 
-      {/* Sala ativa */}
       {activeSession && (
         <div className="card p-0 overflow-hidden border-2 border-info">
           <div className="px-5 py-3 bg-info flex items-center justify-between">
@@ -158,7 +150,6 @@ function TeleconsultaPage() {
             </button>
           </div>
           <div className="p-5 flex flex-col lg:flex-row gap-5">
-            {/* Preview da "sala" */}
             <div className="lg:flex-1 bg-dark aspect-video flex flex-col items-center justify-center gap-3 min-h-[180px]">
               <div className="avatar w-16 h-16 text-2xl">{activeSession.patient.charAt(0)}</div>
               <p className="text-white font-bold text-sm">{activeSession.patient}</p>
@@ -187,7 +178,6 @@ function TeleconsultaPage() {
         </div>
       )}
 
-      {/* Lista de sessões */}
       <div className="card p-0 overflow-hidden">
         <div className="px-5 py-4 border-b border-border-soft">
           <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">Sessões agendadas</p>

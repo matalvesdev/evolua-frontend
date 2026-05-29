@@ -42,13 +42,8 @@ function SettingRow({ label, description, children }: { label: string; descripti
 function ConfiguracoesPage() {
   const [section, setSection] = useState<Section>('clinica')
   const [toast, setToast]     = useState('')
-  const { data: settings } = useSettings()
+  const { data: settings, isLoading, isError } = useSettings()
   const updateSettings = useUpdateSettings()
-
-  function showToast(msg = 'Configurações salvas!') {
-    setToast(msg)
-    setTimeout(() => setToast(''), 2500)
-  }
 
   // Estados de configuração (inicializados a partir da query)
   const [clinicName, setClinicName]       = useState(settings?.clinicName ?? '')
@@ -72,6 +67,36 @@ function ConfiguracoesPage() {
 
   const [lgpd, setLgpd]                   = useState(settings?.lgpd ?? true)
   const [analytics, setAnalytics]         = useState(settings?.analytics ?? true)
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 border-2 border-olive border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm text-text-tertiary">Carregando configurações...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="card p-6">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <span className="material-symbols-outlined text-3xl text-error">error</span>
+            <p className="text-sm font-bold text-text-primary">Erro ao carregar configurações</p>
+            <p className="text-xs text-text-tertiary">Tente novamente mais tarde.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  function showToast(msg = 'Configurações salvas!') {
+    setToast(msg)
+    setTimeout(() => setToast(''), 2500)
+  }
 
   function handleSave() {
     updateSettings.mutate({

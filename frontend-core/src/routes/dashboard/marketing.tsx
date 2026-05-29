@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
-import { api } from '@/lib/api'
+import { useState, useCallback } from 'react'
+import { useGenerateMarketing } from '@/hooks/use-marketing'
 
 export const Route = createFileRoute('/dashboard/marketing')({
   component: MarketingPage,
@@ -19,7 +19,7 @@ interface PostTemplate {
   category: PostCategory
   format: PostFormat
   hashtags: string[]
-  color: string       // classe de bg para o card visual
+  color: string
 }
 
 interface ScheduledPost {
@@ -27,18 +27,12 @@ interface ScheduledPost {
   templateId: string
   title: string
   format: PostFormat
-  scheduledFor: string  // ISO
+  scheduledFor: string
   status: PostStatus
   platform: 'instagram' | 'whatsapp'
   reach?: number
   likes?: number
 }
-
-// ── Mock ──────────────────────────────────────────────────────────────────────
-
-const TEMPLATES: PostTemplate[] = []
-
-const SCHEDULED: ScheduledPost[] = []
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
@@ -63,26 +57,48 @@ const STATUS_CFG: Record<PostStatus, { label:string; color:string }> = {
   publicado: { label:'Publicado', color:'text-success       bg-success-surface'},
 }
 
-function formatSchedule(iso: string) {
-  const d = new Date(iso)
-  return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }) +
-    ' às ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })
+const CATEGORIES = Object.keys(CATEGORY_CFG) as PostCategory[]
+
+function extractHashtags(text: string): string[] {
+  const matches = text.match(/#[\w\u00C0-\u024F]+/g)
+  return matches ? [...new Set(matches)] : []
+}
+
+function guessCategory(text: string): PostCategory {
+  const lower = text.toLowerCase()
+  if (/conscientização|conscientizacao|campanha|setembro|outubro|novembro|rosa|azul|amarelo/.test(lower)) return 'conscientizacao'
+  if (/dica|como|passo|passo a passo|guia|aprenda/.test(lower)) return 'dica'
+  if (/depoimento|história|historia|paciente|relato|caso/.test(lower)) return 'depoimento'
+  if (/serviço|servico|ofereço|oferecemos|agende|consulta|avaliação|avaliacao/.test(lower)) return 'servico'
+  if (/data|dia|especial|mês|mes|ano|2024|2025|2026|parabéns|feliz/.test(lower)) return 'data'
+  return 'dica'
+}
+
+function inferTitle(text: string, topic: string): string {
+  const lines = text.trim().split('\n').filter(Boolean)
+  const firstLine = lines[0]?.replace(/^[#*•-]+\s*/, '').trim()
+  if (firstLine && firstLine.length < 80) return firstLine
+  return topic.length > 60 ? topic.slice(0, 57) + '...' : topic
 }
 
 // ── IA Generator Modal ────────────────────────────────────────────────────────
 
-function AIGeneratorModal({ onClose }: { onClose: () => void }) {
-  const [topic, setTopic]     = useState('')
-  const [format, setFormat]   = useState<PostFormat>('feed')
-  const [loading, setLoading] = useState(false)
-  const [result, setResult]   = useState('')
+interface AIGeneratorModalProps {
+  onSave: (t: PostTemplate) => void
+  onClose: () => void
+}
 
-  async function generate() {
+function AIGeneratorModal({ onSave, onClose }: AIGeneratorModalProps) {
+  const [topic, setTopic] = useState('')
+  const [format, setFormat] = useState<PostFormat>('feed')
+  const [result, setResult] = useState('')
+  const generateMutation = useGenerateMarketing()
+
+  async function handleGenerate() {
     if (!topic.trim()) return
-    setLoading(true)
     setResult('')
     try {
-      const res = await api.post<{ content: string }>('/api/ai/marketing/generate', {
+      const res = await generateMutation.mutateAsync({
         topic: topic.trim(),
         platform: 'instagram',
         format,
@@ -91,8 +107,24 @@ function AIGeneratorModal({ onClose }: { onClose: () => void }) {
     } catch {
       setResult('Geração de conteúdo com IA temporariamente indisponível.')
     }
-    setLoading(false)
   }
+
+  function handleSave() {
+    const category = guessCategory(result)
+    const title = inferTitle(result, topic)
+    onSave({
+      id: crypto.randomUUID(),
+      title,
+      caption: result,
+      category,
+      format,
+      hashtags: extractHashtags(result),
+      color: CATEGORY_CFG[category].color,
+    })
+    onClose()
+  }
+
+  const loading = generateMutation.isPending
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -131,6 +163,13 @@ function AIGeneratorModal({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
+          {generateMutation.isError && (
+            <div className="flex items-center gap-3 p-4 bg-danger-surface border border-border-danger rounded">
+              <span className="material-symbols-outlined text-danger text-sm">error</span>
+              <p className="text-sm text-danger font-bold">Erro ao gerar. Tente novamente.</p>
+            </div>
+          )}
+
           {loading && (
             <div className="flex items-center gap-3 p-4 bg-neon-surface border border-border-neon rounded">
               <span className="material-symbols-outlined text-olive animate-spin">progress_activity</span>
@@ -153,12 +192,12 @@ function AIGeneratorModal({ onClose }: { onClose: () => void }) {
           <div className="flex gap-3">
             <button onClick={onClose} className="flex-1 btn-outline">Cancelar</button>
             {result ? (
-              <button onClick={onClose} className="flex-1 btn-primary flex items-center justify-center gap-2">
+              <button onClick={handleSave} className="flex-1 btn-primary flex items-center justify-center gap-2">
                 <span className="material-symbols-outlined text-sm">save</span>
                 Salvar template
               </button>
             ) : (
-              <button onClick={generate} disabled={!topic.trim() || loading}
+              <button onClick={handleGenerate} disabled={!topic.trim() || loading}
                 className="flex-1 btn-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                 <span className="material-symbols-outlined text-sm" style={{fontVariationSettings:'"FILL" 1'}}>auto_awesome</span>
                 Gerar post
@@ -174,19 +213,25 @@ function AIGeneratorModal({ onClose }: { onClose: () => void }) {
 // ── Página principal ──────────────────────────────────────────────────────────
 
 function MarketingPage() {
-  const [tab, setTab]             = useState<'templates'|'agendamento'|'metricas'>('templates')
+  const [tab, setTab] = useState<'templates'|'agendamento'|'metricas'>('templates')
   const [catFilter, setCatFilter] = useState<PostCategory|'all'>('all')
-  const [showAI, setShowAI]       = useState(false)
-  const [expanded, setExpanded]   = useState<string|null>(null)
+  const [showAI, setShowAI] = useState(false)
+  const [expanded, setExpanded] = useState<string|null>(null)
+  const [templates, setTemplates] = useState<PostTemplate[]>([])
+  const [scheduled] = useState<ScheduledPost[]>([])
 
-  const filtered = TEMPLATES.filter(t => catFilter === 'all' || t.category === catFilter)
+  const handleSaveTemplate = useCallback((t: PostTemplate) => {
+    setTemplates(prev => [t, ...prev])
+  }, [])
 
-  const agendados  = SCHEDULED.filter(s => s.status === 'agendado').length
-  const publicados = SCHEDULED.filter(s => s.status === 'publicado').length
+  const filtered = templates.filter(t => catFilter === 'all' || t.category === catFilter)
+
+  const agendados  = scheduled.filter(s => s.status === 'agendado').length
+  const publicados = scheduled.filter(s => s.status === 'publicado').length
 
   return (
     <div className="flex flex-col gap-6 p-6">
-      {showAI && <AIGeneratorModal onClose={() => setShowAI(false)} />}
+      {showAI && <AIGeneratorModal onSave={handleSaveTemplate} onClose={() => setShowAI(false)} />}
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -200,7 +245,7 @@ function MarketingPage() {
             <span className="material-symbols-outlined text-sm" style={{fontVariationSettings:'"FILL" 1'}}>auto_awesome</span>
             Gerar com IA
           </button>
-          <button className="btn-primary flex items-center gap-2">
+          <button onClick={() => setShowAI(true)} className="btn-primary flex items-center gap-2">
             <span className="material-symbols-outlined text-sm">add</span>
             Novo template
           </button>
@@ -210,7 +255,7 @@ function MarketingPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label:'Templates',       value: TEMPLATES.length, icon:'library_books',  color:'text-text-primary' },
+          { label:'Templates',       value: templates.length, icon:'library_books',  color:'text-text-primary' },
           { label:'Agendados',        value: agendados,        icon:'schedule_send',  color:'text-info'         },
           { label:'Publicados',       value: publicados,       icon:'check_circle',   color:'text-success'      },
           { label:'Alcance estimado', value: '—',              icon:'people',         color:'text-olive'        },
@@ -240,16 +285,15 @@ function MarketingPage() {
       {/* ── TEMPLATES ── */}
       {tab === 'templates' && (
         <div className="flex flex-col gap-4">
-          {/* Filtros de categoria */}
           <div className="flex flex-wrap gap-2">
             <button onClick={() => setCatFilter('all')}
               className={`px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wide border transition-colors ${
                 catFilter === 'all' ? 'bg-dark text-neon border-dark' : 'bg-surface border-border-soft text-text-tertiary hover:text-text-primary'
               }`}>
-              Todos ({TEMPLATES.length})
+              Todos ({templates.length})
             </button>
-            {(Object.keys(CATEGORY_CFG) as PostCategory[]).map(cat => {
-              const count = TEMPLATES.filter(t => t.category === cat).length
+            {CATEGORIES.map(cat => {
+              const count = templates.filter(t => t.category === cat).length
               if (count === 0) return null
               const cfg = CATEGORY_CFG[cat]
               return (
@@ -264,7 +308,6 @@ function MarketingPage() {
             })}
           </div>
 
-          {/* Grade de templates */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map(t => {
               const catCfg = CATEGORY_CFG[t.category]
@@ -272,7 +315,6 @@ function MarketingPage() {
               const isOpen = expanded === t.id
               return (
                 <div key={t.id} className="card p-0 overflow-hidden flex flex-col">
-                  {/* Visual preview */}
                   <div className={`${t.color} p-6 flex flex-col items-center justify-center min-h-[100px] relative`}>
                     <span className="material-symbols-outlined text-4xl opacity-20" style={{fontVariationSettings:'"FILL" 1'}}>
                       {catCfg.icon}
@@ -280,14 +322,12 @@ function MarketingPage() {
                     <p className="font-display font-bold text-sm text-center text-text-primary mt-2 leading-tight">
                       {t.title}
                     </p>
-                    {/* Badge de formato */}
                     <div className="absolute top-3 right-3 flex items-center gap-1 bg-white/80 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wide text-text-secondary">
                       <span className="material-symbols-outlined text-[10px]">{fmtCfg.icon}</span>
                       {fmtCfg.label}
                     </div>
                   </div>
 
-                  {/* Info */}
                   <div className="p-4 flex flex-col gap-2 flex-1">
                     <div className="flex items-center gap-2">
                       <span className={`text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded ${catCfg.color}`}>
@@ -295,7 +335,6 @@ function MarketingPage() {
                       </span>
                     </div>
 
-                    {/* Legenda — colapsável */}
                     <p className={`text-xs text-text-secondary leading-relaxed ${isOpen ? '' : 'line-clamp-3'}`}>
                       {t.caption}
                     </p>
@@ -304,7 +343,6 @@ function MarketingPage() {
                       {isOpen ? 'Ver menos' : 'Ver mais'}
                     </button>
 
-                    {/* Hashtags */}
                     <div className="flex flex-wrap gap-1">
                       {t.hashtags.slice(0,3).map(h => (
                         <span key={h} className="text-[9px] font-bold text-text-tertiary bg-surface-low px-1.5 py-0.5 rounded">
@@ -317,18 +355,16 @@ function MarketingPage() {
                     </div>
                   </div>
 
-                  {/* Ações */}
                   <div className="flex items-center gap-2 px-4 py-3 border-t border-border-soft bg-surface-low">
-                    <button className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-text-tertiary hover:text-olive transition-colors">
+                    <button
+                      onClick={() => { void navigator.clipboard.writeText(t.caption) }}
+                      className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-text-tertiary hover:text-olive transition-colors">
                       <span className="material-symbols-outlined text-sm">content_copy</span>
                       Copiar
                     </button>
                     <button className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-text-tertiary hover:text-olive transition-colors ml-2">
                       <span className="material-symbols-outlined text-sm">schedule_send</span>
                       Agendar
-                    </button>
-                    <button className="ml-auto flex items-center gap-1 text-[10px] font-bold uppercase tracking-wide text-text-tertiary hover:text-danger transition-colors">
-                      <span className="material-symbols-outlined text-sm">edit</span>
                     </button>
                   </div>
                 </div>
@@ -341,7 +377,7 @@ function MarketingPage() {
                 <span className="material-symbols-outlined">library_books</span>
               </div>
               <p className="empty-state__title">Nenhum template disponível</p>
-              <p className="empty-state__desc">Os templates de posts aparecerão aqui quando estiverem disponíveis.</p>
+              <p className="empty-state__desc">Clique em "Gerar com IA" ou "Novo template" para criar seu primeiro post.</p>
             </div>
           )}
         </div>
@@ -349,24 +385,23 @@ function MarketingPage() {
 
       {/* ── AGENDAMENTO ── */}
       {tab === 'agendamento' && (
-
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <p className="section-label">{SCHEDULED.length} posts programados</p>
+            <p className="section-label">{scheduled.length} posts programados</p>
             <button className="btn-primary flex items-center gap-2 text-xs">
               <span className="material-symbols-outlined text-sm">add</span>
               Agendar post
             </button>
           </div>
           <div className="card p-0 overflow-hidden divide-y divide-border-soft">
-            {SCHEDULED.length === 0 ? (
+            {scheduled.length === 0 ? (
               <div className="empty-state py-12">
                 <span className="material-symbols-outlined text-4xl text-text-tertiary">schedule</span>
                 <p className="text-sm text-text-secondary">Nenhum post agendado</p>
                 <p className="text-xs text-text-tertiary">Use o botão acima para criar um agendamento</p>
               </div>
             ) : (
-              SCHEDULED.sort((a,b) => new Date(b.scheduledFor).getTime() - new Date(a.scheduledFor).getTime()).map(post => {
+              scheduled.sort((a,b) => new Date(b.scheduledFor).getTime() - new Date(a.scheduledFor).getTime()).map(post => {
               const fmtCfg = FORMAT_CFG[post.format]
               const stCfg  = STATUS_CFG[post.status]
               return (
@@ -395,7 +430,6 @@ function MarketingPage() {
       {/* ── MÉTRICAS ── */}
       {tab === 'metricas' && (
         <div className="flex flex-col gap-4">
-          {/* Métricas */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               { label:'Alcance estimado', value:'—',                icon:'people',           color:'text-info'    },
@@ -411,18 +445,17 @@ function MarketingPage() {
             ))}
           </div>
 
-          {/* Posts publicados */}
           <div className="card p-0 overflow-hidden">
             <div className="px-5 py-3 border-b border-border-soft">
               <p className="section-label">Posts publicados</p>
             </div>
             <div className="divide-y divide-border-soft">
-              {SCHEDULED.filter(s => s.status === 'publicado').length === 0 ? (
+              {scheduled.filter(s => s.status === 'publicado').length === 0 ? (
                 <div className="empty-state py-10">
                   <p className="text-sm text-text-secondary">Sem posts publicados ainda</p>
                 </div>
               ) : (
-                SCHEDULED.filter(s => s.status === 'publicado').map(post => (
+                scheduled.filter(s => s.status === 'publicado').map(post => (
                 <div key={post.id} className="flex items-center gap-4 px-5 py-4">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold text-text-primary">{post.title}</p>
@@ -447,4 +480,10 @@ function MarketingPage() {
       )}
     </div>
   )
+}
+
+function formatSchedule(iso: string) {
+  const d = new Date(iso)
+  return d.toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }) +
+    ' às ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' })
 }

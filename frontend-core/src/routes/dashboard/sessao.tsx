@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useTransition } from 'react'
 import { usePatients } from '@/hooks/use-patients'
 import {
   useCreateAudioSession,
@@ -64,6 +64,7 @@ function SessaoPage() {
   const [evolution, setEvolution] = useState<SoapEvolution | null>(null)
   const [draft, setDraft] = useState('')
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [, startTransition] = useTransition()
   const [levels, setLevels] = useState<number[]>(Array(32).fill(0))
   const timer = useTimer(phase === 'recording' && !paused)
 
@@ -83,21 +84,17 @@ function SessaoPage() {
   const transcriptionPoll = useAudioTranscription(audioSessionId)
   const generateEvolution = useGenerateEvolution()
 
-  const patient = patients.find(p => p.id === patientId)
+  const patient = patients.find(p => p.id === effectivePatientId)
 
-  useEffect(() => {
-    if (!patientId && patients.length > 0) {
-      setPatientId(patients[0]!.id)
-    }
-  }, [patients, patientId])
+  // Auto-select first patient if none selected
+  const effectivePatientId = patientId || (patients.length > 0 ? patients[0]!.id : '')
 
   // ── Visualizador de volume ───────────────────────────────────────────────
-  const tick = useCallback(() => {
+  function tick() {
     const analyser = analyserRef.current
     if (!analyser) return
     const data = new Uint8Array(analyser.frequencyBinCount)
     analyser.getByteFrequencyData(data)
-    // amostragem em 32 bins
     const step = Math.floor(data.length / 32) || 1
     const next: number[] = []
     for (let i = 0; i < 32; i++) {
@@ -106,7 +103,7 @@ function SessaoPage() {
     }
     setLevels(next)
     animRef.current = requestAnimationFrame(tick)
-  }, [])
+  }
 
   // ── Cleanup ──────────────────────────────────────────────────────────────
   const cleanupMedia = useCallback(() => {
@@ -204,11 +201,11 @@ function SessaoPage() {
 
     try {
       // 1. Upload pro Supabase Storage
-      const path = await uploadAudioBlob(patientId, blob, 'webm')
+      const path = await uploadAudioBlob(effectivePatientId, blob, 'webm')
 
       // 2. Cria AudioSession no backend
       const created = await createSession.mutateAsync({
-        patientId,
+        patientId: effectivePatientId,
         audioPath: path,
         audioDuration: seconds,
         fileSize: blob.size,
@@ -229,16 +226,18 @@ function SessaoPage() {
     if (!transcriptionPoll.data) return
     const { transcriptionStatus, transcription } = transcriptionPoll.data
     if (transcriptionStatus === 'failed') {
-      setErrorMsg('Falha na transcrição. Tente novamente.')
-      setPhase('pre')
+      startTransition(() => {
+        setErrorMsg('Falha na transcrição. Tente novamente.')
+        setPhase('pre')
+      })
       return
     }
     if (transcriptionStatus !== 'completed' || !transcription) return
     if (generateEvolution.isPending || evolution) return
 
-    generateEvolution.mutate(
+      generateEvolution.mutate(
       {
-        patientId,
+        patientId: effectivePatientId,
         transcript: transcription,
       },
       {
@@ -255,7 +254,7 @@ function SessaoPage() {
         },
       },
     )
-  }, [phase, transcriptionPoll.data, patientId, patient?.name, sessionType, generateEvolution, evolution])
+  }, [phase, transcriptionPoll.data, effectivePatientId, patient?.name, sessionType, generateEvolution, evolution])
 
   const [signing, setSigning] = useState(false)
 
@@ -264,7 +263,7 @@ function SessaoPage() {
     setSigning(true)
     try {
       await api.post('/api/reports', {
-        patientId,
+        patientId: effectivePatientId,
         reportType: 'EVOLUTION',
         content: draft,
         sessionType,

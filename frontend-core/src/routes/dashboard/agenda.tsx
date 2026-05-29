@@ -379,6 +379,32 @@ function AgendaPage() {
   const selectedEvents = eventsForDate(selectedDate)
   const gcalCount      = events.filter(e => e.googleEventId).length
 
+  if (apptQuery.isLoading) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 border-2 border-olive border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm text-text-tertiary">Carregando agenda...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (apptQuery.isError) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="card p-6">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <span className="material-symbols-outlined text-3xl text-error">error</span>
+            <p className="text-sm font-bold text-text-primary">Erro ao carregar agenda</p>
+            <p className="text-xs text-text-tertiary">{apptQuery.error?.message ?? 'Tente novamente mais tarde.'}</p>
+            <button onClick={() => apptQuery.refetch()} className="btn-primary text-sm mt-2">Tentar novamente</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-0 p-6">
       {showModal && (

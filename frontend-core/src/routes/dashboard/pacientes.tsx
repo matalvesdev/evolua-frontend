@@ -103,8 +103,8 @@ function PatientDrawer({ patient, onClose }: { patient: Patient; onClose: () => 
     { id: 'evolucao' as const, label: 'Evolução'    },
   ]
 
-  const { data: appointments = [] } = useAppointments({ patientId: patient.id, pageSize: 50 })
-  const sessions: { date: string; type: string; duration: string; status: string }[] = appointments.map(a => ({
+  const { data: appointments } = useAppointments({ patientId: patient.id, pageSize: 50 })
+  const sessions: { date: string; type: string; duration: string; status: string }[] = (appointments?.data ?? []).map(a => ({
     date: new Date(a.dateTime).toLocaleDateString('pt-BR'),
     type: a.type,
     duration: '50 min',

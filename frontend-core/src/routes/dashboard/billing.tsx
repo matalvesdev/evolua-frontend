@@ -54,7 +54,7 @@ function BillingPage() {
     setError(null)
     try {
       const session = await checkout.mutateAsync({ planSlug: plan.slug, provider })
-      window.location.href = session.url
+      window.location.assign(session.url)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao criar checkout')
     }

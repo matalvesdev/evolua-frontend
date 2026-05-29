@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { api } from '@/lib/api'
 import {
   useProntuarios,
   useCreateProntuario,
@@ -274,14 +273,14 @@ function ProntuarioPage() {
               >
                 <div className="flex items-center gap-2.5">
                   <span className={`material-symbols-outlined text-lg ${selected?.id === p.id ? 'text-neon' : 'text-text-tertiary'}`}>
-                    {AREA_ICONS[p.area]}
+                    {AREA_ICONS[p.area as Area]}
                   </span>
                   <div className="min-w-0">
                     <p className={`text-sm font-bold truncate ${selected?.id === p.id ? 'text-white' : 'text-text-primary'}`}>
                       {p.patient.split(' ')[0]} {p.patient.split(' ')[1] ?? ''}
                     </p>
                     <p className={`text-xs truncate ${selected?.id === p.id ? 'text-neon/60' : 'text-text-tertiary'}`}>
-                      {AREA_LABELS[p.area]} · {p.sessions} sessões
+                      {AREA_LABELS[p.area as Area]} · {p.sessions} sessões
                     </p>
                   </div>
                 </div>
@@ -311,8 +310,8 @@ function ProntuarioPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 text-xs text-white font-bold uppercase tracking-wide">
-                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings:'"FILL" 1' }}>{AREA_ICONS[selected.area]}</span>
-                    {AREA_LABELS[selected.area]}
+                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings:'"FILL" 1' }}>{AREA_ICONS[selected.area as Area]}</span>
+                    {AREA_LABELS[selected.area as Area]}
                   </span>
                 </div>
               </div>
@@ -367,7 +366,7 @@ function ProntuarioPage() {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between">
                   <p className="font-display font-bold text-sm text-text-primary uppercase tracking-wide">
-                    Escalas — {AREA_LABELS[selected.area]}
+                    Escalas — {AREA_LABELS[selected.area as Area]}
                   </p>
                   <div className="flex items-center gap-2">
                     {saved && (
@@ -382,7 +381,7 @@ function ProntuarioPage() {
                   </div>
                 </div>
                 <ScaleForm
-                  area={selected.area}
+                  area={selected.area as Area}
                   values={scales}
                   onChange={(k, v) => setScales(s => ({...s, [k]: v}))}
                 />

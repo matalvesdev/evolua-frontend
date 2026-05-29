@@ -32,8 +32,8 @@ const FEATURES = [
     group: 'Gestão',
     items: [
       { icon:'payments',     label:'Financeiro',       desc:'Receitas, despesas e cobranças pendentes',        to:'/dashboard/financeiro',    badge:''     },
-      { icon:'send',         label:'WhatsApp',         desc:'Lembretes automáticos para pacientes',            to:'/dashboard/pacientes',     badge:'Auto' },
-      { icon:'video_call',   label:'Teleconsulta',     desc:'Atendimentos por vídeo conforme normas do CFoF',  to:'/dashboard/sessao',        badge:'CFoF' },
+      { icon:'send',         label:'WhatsApp',         desc:'Lembretes automáticos para pacientes',            to:'/dashboard/whatsapp',      badge:'Auto' },
+      { icon:'video_call',   label:'Teleconsulta',     desc:'Atendimentos por vídeo conforme normas do CFoF',  to:'/dashboard/teleconsulta',  badge:'CFoF' },
     ],
   },
   {

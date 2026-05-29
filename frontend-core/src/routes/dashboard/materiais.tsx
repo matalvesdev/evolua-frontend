@@ -483,9 +483,9 @@ function MateriaisPage() {
     const c: Record<MaterialFormat, number> = {
       atividade: 0, brincadeira: 0, jogo: 0, historia: 0, exercicio: 0, roteiro: 0,
     }
-    for (const m of materials) c[m.format] = (c[m.format] ?? 0) + 1
+    for (const m of (data?.data ?? [])) c[m.format] = (c[m.format] ?? 0) + 1
     return c
-  }, [materials])
+  }, [data?.data])
 
   async function handleDelete(id: string) {
     if (!confirm('Excluir este material? Esta ação não pode ser desfeita.')) return

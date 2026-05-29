@@ -61,7 +61,7 @@ const FALLBACK_QUESTIONS = [
 
 // ── Componente Chat ───────────────────────────────────────────────────────────
 
-function ChatPanel({ articles }: { articles: Article[] }) {
+function ChatPanel({ articles, suggestedQuestions }: { articles: Article[]; suggestedQuestions: string[] }) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '0',
@@ -237,7 +237,7 @@ function ChatPanel({ articles }: { articles: Article[] }) {
       {/* Sugestões */}
       {messages.length <= 1 && (
         <div className="px-4 pb-3 flex flex-wrap gap-1.5">
-          {SUGGESTED_QUESTIONS.map(q => (
+          {suggestedQuestions.map(q => (
             <button key={q} onClick={() => handleSend(q)}
               className="text-[10px] font-bold px-2.5 py-1.5 rounded border border-border-soft bg-surface text-text-tertiary hover:text-olive hover:border-olive/40 hover:bg-neon-surface transition-colors text-left">
               {q}
@@ -279,7 +279,7 @@ function ChatPanel({ articles }: { articles: Article[] }) {
 function BibliotecaPage() {
   const { data: articles = [] }                  = useArticles()
   const { data: suggestedQuestions = [] }        = useSuggestedQuestions()
-  const SUGGESTED_QUESTIONS = suggestedQuestions.length > 0 ? suggestedQuestions : FALLBACK_QUESTIONS
+  const chatQuestions = suggestedQuestions.length > 0 ? suggestedQuestions : FALLBACK_QUESTIONS
   const [search, setSearch]           = useState('')
   const [areaFilter, setAreaFilter]   = useState<ArticleArea|'all'>('all')
   const [typeFilter, setTypeFilter]   = useState<ArticleType|'all'>('all')
@@ -417,8 +417,8 @@ function BibliotecaPage() {
           ) : (
             <div className="flex flex-col gap-3 pb-6">
               {filtered.map(article => {
-                const areaCfg = AREA_CFG[article.area]
-                const typeCfg = TYPE_CFG[article.type]
+                const areaCfg = AREA_CFG[article.area as ArticleArea]
+                const typeCfg = TYPE_CFG[article.type as ArticleType]
                 const isOpen  = expanded === article.id
                 const isSaved = savedIds.has(article.id)
 
@@ -508,7 +508,7 @@ function BibliotecaPage() {
       <div className={`hidden lg:flex flex-col border-l border-border-soft bg-surface-low transition-all duration-300 overflow-hidden ${
         chatOpen ? 'lg:w-[45%]' : 'lg:w-0'
       }`}>
-        {chatOpen && <ChatPanel articles={filtered} />}
+        {chatOpen && <ChatPanel articles={filtered} suggestedQuestions={chatQuestions} />}
       </div>
 
       {/* ── Chat mobile (overlay) ──────────────────────────────────────────── */}
@@ -521,7 +521,7 @@ function BibliotecaPage() {
             <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">Assistente Clínico</p>
           </div>
           <div className="flex-1 overflow-hidden">
-            <ChatPanel articles={filtered} />
+            <ChatPanel articles={filtered} suggestedQuestions={chatQuestions} />
           </div>
         </div>
       )}

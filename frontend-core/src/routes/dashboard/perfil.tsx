@@ -45,7 +45,7 @@ const ALL_SPECIALTIES = [
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 function PerfilPage() {
-  const { data: profile } = useProfile()
+  const { data: profile, isLoading, isError } = useProfile()
   const updateProfile = useUpdateProfile()
 
   // ── Dados pessoais ──────────────────────────────────────────────────────────
@@ -68,7 +68,7 @@ function PerfilPage() {
 
   // ── Horários de atendimento ─────────────────────────────────────────────────
   const [workSlots, setWorkSlots] = useState<WorkSlot[]>(
-    profile?.workSlots ?? [
+    (profile?.workSlots ?? [
       { day: 'seg', active: false, start: '08:00', end: '18:00' },
       { day: 'ter', active: false, start: '08:00', end: '18:00' },
       { day: 'qua', active: false, start: '08:00', end: '18:00' },
@@ -76,7 +76,7 @@ function PerfilPage() {
       { day: 'sex', active: false, start: '08:00', end: '18:00' },
       { day: 'sab', active: false, start: '09:00', end: '12:00' },
       { day: 'dom', active: false, start: '09:00', end: '12:00' },
-    ]
+    ]) as WorkSlot[]
   )
 
   function updateSlot(day: WeekDay, patch: Partial<WorkSlot>) {
@@ -86,6 +86,31 @@ function PerfilPage() {
   // ── Modo edição ──────────────────────────────────────────────────────────────
   const [editMode, setEditMode] = useState(false)
   const [toast, setToast] = useState(false)
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="flex items-center gap-3">
+          <div className="w-4 h-4 border-2 border-olive border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm text-text-tertiary">Carregando perfil...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="card p-6">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <span className="material-symbols-outlined text-3xl text-error">error</span>
+            <p className="text-sm font-bold text-text-primary">Erro ao carregar perfil</p>
+            <p className="text-xs text-text-tertiary">Tente novamente mais tarde.</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   function handleSave() {
     updateProfile.mutate({
