@@ -51,7 +51,6 @@ test.describe('Frontend — Auth Guard', () => {
       '/dashboard/laudos',
       '/dashboard/linha-do-tempo',
       '/dashboard/mais',
-      '/dashboard/marketing',
       '/dashboard/materiais',
       '/dashboard/onboarding',
       '/dashboard/pacientes',

@@ -14,7 +14,6 @@ const DASHBOARD_ROUTES = [
   { path: '/dashboard/laudos', name: 'laudos' },
   { path: '/dashboard/linha-do-tempo', name: 'linha-do-tempo' },
   { path: '/dashboard/mais', name: 'mais' },
-  { path: '/dashboard/marketing', name: 'marketing' },
   { path: '/dashboard/materiais', name: 'materiais' },
   { path: '/dashboard/onboarding', name: 'onboarding' },
   { path: '/dashboard/pacientes', name: 'pacientes' },
@@ -74,7 +73,6 @@ test.describe('Dashboard — Modules with h1 title', () => {
     { path: '/dashboard/billing', title: /billing|assinatura|plano/i },
     { path: '/dashboard/teleconsulta', title: /teleconsulta/i },
     { path: '/dashboard/perfil', title: /perfil/i },
-    { path: '/dashboard/marketing', title: /marketing/i },
     { path: '/dashboard/mais', title: /mais/i },
   ]
 

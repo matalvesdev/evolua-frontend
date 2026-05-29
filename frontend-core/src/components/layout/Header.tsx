@@ -20,7 +20,6 @@ const ROUTE_META: Record<string, { title: string; parent?: string; icon: string 
   '/dashboard/caa':           { title: 'CAA',            icon: 'communication',     parent: 'Dashboard' },
   '/dashboard/materiais':     { title: 'Materiais',      icon: 'folder',            parent: 'Dashboard' },
   '/dashboard/biblioteca':    { title: 'Biblioteca',     icon: 'menu_book',         parent: 'Dashboard' },
-  '/dashboard/marketing':     { title: 'Marketing',      icon: 'campaign',          parent: 'Dashboard' },
   '/dashboard/tarefas':       { title: 'Tarefas',        icon: 'task_alt',          parent: 'Dashboard' },
   '/dashboard/configuracoes': { title: 'Configurações',  icon: 'settings',          parent: 'Dashboard' },
   '/dashboard/perfil':        { title: 'Meu Perfil',     icon: 'person',            parent: 'Dashboard' },
@@ -45,7 +44,6 @@ const QUICK_LINKS = [
   { label: 'CAA',              to: '/dashboard/caa',           icon: 'communication',  group: 'Páginas'    },
   { label: 'Materiais',        to: '/dashboard/materiais',     icon: 'folder',         group: 'Recursos'   },
   { label: 'Biblioteca',       to: '/dashboard/biblioteca',    icon: 'menu_book',      group: 'Recursos'   },
-  { label: 'Marketing',        to: '/dashboard/marketing',     icon: 'campaign',       group: 'Recursos'   },
   { label: 'Configurações',    to: '/dashboard/configuracoes', icon: 'settings',       group: 'Sistema'    },
   { label: 'Meu Perfil',       to: '/dashboard/perfil',        icon: 'person',         group: 'Sistema'    },
 ]

@@ -4,7 +4,7 @@ import { useTodayAppointments, usePendingReports } from '@/hooks/use-dashboard'
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
 
-type ModalId = 'novo-paciente' | 'agendar' | 'relatorio' | 'financeiro' | 'caa' | 'biblioteca' | 'marketing' | 'tarefas' | null
+type ModalId = 'novo-paciente' | 'agendar' | 'relatorio' | 'financeiro' | 'caa' | 'biblioteca' | 'tarefas' | null
 
 // ── Overlay base ──────────────────────────────────────────────────────────────
 
@@ -593,116 +593,6 @@ function ModalBiblioteca({ open, onClose }: { open: boolean; onClose: () => void
   )
 }
 
-// ── Modal: Marketing ──────────────────────────────────────────────────────────
-
-function ModalMarketing({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [tab, setTab] = useState<'post' | 'gerar'>('post')
-  const [form, setForm] = useState({ rede: 'instagram', formato: 'carrossel', tema: '', legenda: '' })
-  const [gerado, setGerado] = useState('')
-  const [gerando, setGerando] = useState(false)
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setForm(f => ({ ...f, [k]: e.target.value }))
-
-  async function gerar() {
-    if (!form.tema) return
-    setGerando(true)
-    setGerado('')
-    try {
-      const { api } = await import('@/lib/api')
-      const res = await api.post<{ content: string }>('/api/ai/marketing/generate', {
-        topic: form.tema,
-        platform: form.rede,
-        format: form.formato,
-      })
-      setGerado(res.content)
-    } catch {
-      setGerado('Geração de conteúdo com IA temporariamente indisponível. Configure manualmente sua publicação ou aguarde a integração.')
-    }
-    setGerando(false)
-  }
-
-  function handleClose() { setForm({ rede:'instagram', formato:'carrossel', tema:'', legenda:'' }); setGerado(''); onClose() }
-
-  return (
-    <Modal open={open} onClose={handleClose} title="Marketing" subtitle="Criar e programar conteúdo" icon="campaign" wide>
-      <div className="p-5 flex flex-col gap-4">
-        {/* Tabs */}
-        <div className="flex rounded overflow-hidden border border-border-soft">
-          {[{ id: 'post', label: 'Novo post' }, { id: 'gerar', label: 'Gerar com IA' }].map(t => (
-            <button key={t.id} onClick={() => setTab(t.id as typeof tab)}
-              className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${tab === t.id ? 'bg-dark text-neon' : 'bg-surface text-text-tertiary hover:bg-surface-high'}`}>
-              {t.label}
-            </button>
-          ))}
-        </div>
-
-        {tab === 'post' && (
-          <>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="label">Rede social</label>
-                <select className="input w-full" value={form.rede} onChange={set('rede')}>
-                  <option value="instagram">Instagram</option>
-                  <option value="facebook">Facebook</option>
-                  <option value="linkedin">LinkedIn</option>
-                  <option value="tiktok">TikTok</option>
-                </select>
-              </div>
-              <div>
-                <label className="label">Formato</label>
-                <select className="input w-full" value={form.formato} onChange={set('formato')}>
-                  <option value="carrossel">Carrossel</option>
-                  <option value="feed">Foto / Feed</option>
-                  <option value="reels">Reels / Vídeo</option>
-                  <option value="stories">Stories</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <label className="label">Legenda</label>
-              <textarea className="input w-full resize-none" rows={4} placeholder="Escreva a legenda do post..." value={form.legenda} onChange={set('legenda')} />
-            </div>
-            <p className="text-[10px] text-text-tertiary text-right">{form.legenda.length}/2200 caracteres</p>
-          </>
-        )}
-
-        {tab === 'gerar' && (
-          <>
-            <div>
-              <label className="label">Tema ou área clínica</label>
-              <input className="input w-full" placeholder="Ex: gagueira, voz, TEA, disfagia..." value={form.tema} onChange={set('tema')} />
-            </div>
-            <button onClick={gerar} disabled={!form.tema || gerando}
-              className="btn-primary flex items-center justify-center gap-2 disabled:opacity-40">
-              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: '"FILL" 1' }}>
-                {gerando ? 'hourglass_top' : 'auto_awesome'}
-              </span>
-              {gerando ? 'Gerando...' : 'Gerar legenda com IA'}
-            </button>
-            {gerado && (
-              <div className="flex flex-col gap-2">
-                <label className="label">Legenda gerada</label>
-                <textarea className="input w-full resize-none font-mono text-[11px]" rows={7} value={gerado} onChange={e => setGerado(e.target.value)} />
-                <button onClick={() => { navigator.clipboard.writeText(gerado) }}
-                  className="flex items-center gap-1.5 text-[10px] font-bold text-olive hover:underline self-start">
-                  <span className="material-symbols-outlined text-sm">content_copy</span> Copiar legenda
-                </button>
-              </div>
-            )}
-          </>
-        )}
-
-        <div className="flex gap-3 pt-2">
-          <button onClick={handleClose} className="btn-ghost flex-1">Cancelar</button>
-          <Link to="/dashboard/marketing" onClick={handleClose} className="btn-primary flex-1 text-center">
-            Ir para Marketing
-          </Link>
-        </div>
-      </div>
-    </Modal>
-  )
-}
-
 // ── Modal: Tarefas ────────────────────────────────────────────────────────────
 
 function ModalTarefas({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -806,7 +696,6 @@ const ACTIONS: {
   { id: 'financeiro',    icon: 'payments',      label: 'Financeiro'    },
   { id: 'caa',           icon: 'grid_view',     label: 'Painel CAA'    },
   { id: 'biblioteca',    icon: 'library_books', label: 'Biblioteca', badge: 'IA' },
-  { id: 'marketing',     icon: 'campaign',      label: 'Marketing'     },
   { id: 'tarefas',       icon: 'task_alt',      label: 'Tarefas'       },
 ]
 
@@ -838,7 +727,6 @@ export function QuickActions() {
       <ModalFinanceiro   open={activeModal === 'financeiro'}    onClose={close} />
       <ModalCAA          open={activeModal === 'caa'}           onClose={close} />
       <ModalBiblioteca   open={activeModal === 'biblioteca'}    onClose={close} />
-      <ModalMarketing    open={activeModal === 'marketing'}     onClose={close} />
       <ModalTarefas      open={activeModal === 'tarefas'}       onClose={close} />
 
       <div className="card p-0 overflow-hidden border border-border-soft flex flex-col h-full">

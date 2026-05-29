@@ -24,7 +24,7 @@ const FEATURES = [
       { icon:'grid_view',    label:'Painel CAA',   desc:'Pictogramas e construtor de frases interativo',   to:'/dashboard/caa',        badge:'Novo' },
       { icon:'folder',       label:'Materiais',    desc:'Biblioteca de protocolos, escalas e atividades',  to:'/dashboard/materiais',  badge:''     },
       { icon:'local_library',label:'Biblioteca',   desc:'Artigos, diretrizes e protocolos científicos',    to:'/dashboard/biblioteca', badge:''     },
-      { icon:'campaign',     label:'Marketing',    desc:'Templates de posts e geração de conteúdo com IA', to:'/dashboard/marketing',  badge:''     },
+
       { icon:'task_alt',     label:'Tarefas',      desc:'Lista de tarefas e pendências administrativas',   to:'/dashboard/tarefas',    badge:''     },
     ],
   },

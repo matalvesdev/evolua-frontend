@@ -29,8 +29,7 @@ services:
       - SENTRY_DSN=${SENTRY_DSN}
     entrypoint: |
       sh -c '
-        echo "0 7 * * 1 node /scripts/cronjob-semanal.js --sem-upload" > /etc/crontabs/root
-        echo "17 3 * * * node /scripts/db-healthcheck.js" >> /etc/crontabs/root
+        echo "17 3 * * * node /scripts/db-healthcheck.js" > /etc/crontabs/root
         echo "0 10 * * 3 node /scripts/send-newsletter.js" >> /etc/crontabs/root
         crond -f -l 2
       '
