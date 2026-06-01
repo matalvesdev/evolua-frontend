@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && node scripts/generate-lead-magnets.mjs && node scripts/generate-sitemap.mjs && vite build",
-    "build:skip-sitemap": "tsc -b && vite build",
+    "build": "node scripts/generate-lead-magnets.mjs && node scripts/generate-sitemap.mjs && vite build && tsc -b",
+    "build:skip-sitemap": "vite build && tsc -b",
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "preview": "vite preview"

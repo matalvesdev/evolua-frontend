@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm -F ./landing-core build
+        run: pnpm -F ./landing-core build:skip-sitemap
 
       - name: TypeCheck
         run: pnpm -F ./landing-core typecheck
