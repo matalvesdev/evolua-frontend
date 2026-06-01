@@ -12,7 +12,8 @@ name: Deploy Supabase migrations
 #   - Execuções seguintes aplicam apenas migrations novas, em transação.
 #
 # Pré-requisito (Settings → Secrets and variables → Actions):
-#   - SUPABASE_DB_URL : connection string DIRETA do Postgres (porta 5432)
+#   - DIRECT_URL : connection string DIRETA do Postgres (porta 5432, sem
+#                  ?pgbouncer=true — o pooler 6543 é rejeitado pelo psql)
 #
 # Gate: environment "production".
 
@@ -54,5 +55,5 @@ jobs:
 
       - name: Apply migrations
         env:
-          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          SUPABASE_DB_URL: ${{ secrets.DIRECT_URL }}
         run: bash scripts/apply-supabase-migrations.sh
