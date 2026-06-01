@@ -23,6 +23,7 @@
     { "source": "/cadastro", "destination": "https://app.useevolua.com.br/cadastro", "permanent": false }
   ],
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://api.useevolua.com.br/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
