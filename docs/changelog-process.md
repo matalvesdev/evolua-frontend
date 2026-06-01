@@ -22,21 +22,27 @@ mudanças invisíveis ao usuário final.
    timestamp `YYYYMMDDHHMMSS_changelog_vX_Y_Z.sql`.
 2. Conteúdo da migration: `INSERT ... ON CONFLICT (versao) DO UPDATE SET ...`
    na tabela `public.changelog_entries`.
-3. Campos obrigatórios:
-   - `versao` (text, UNIQUE) — ex: `v2.6.0`
-   - `data_lancamento` (date)
+3. Campos (nomes reais das colunas — ver `supabase/migrations/007_changelog.sql`):
+   - `versao` (text, UNIQUE) — ex: `v2.7.0`
+   - `data` (date) — data de lançamento
    - `tipo` — um de: `Feature`, `Melhoria`, `Correção`, `Major Release`, `Seguranca`
    - `titulo` (text)
    - `descricao` (text)
-   - `destaques` (text[]) — lista de bullets curtos
-   - `ordem` (int) — usar timestamp epoch ou contador crescente para ordenar
-4. Rodar `supabase db push` (ou aplicar via CI) para enviar a migration.
+   - `itens` (text[]) — lista de bullets curtos
+   - `ordem` (int) — desempate quando `data` igual (epoch crescente)
+   - `publicado` (bool, default true)
+4. Aplicar em produção: ao dar push da migration em `main`, o workflow
+   **`.github/workflows/deploy-supabase-migrations.yml`** roda
+   `scripts/apply-supabase-migrations.sh`, que aplica apenas migrations novas
+   (ledger `public._supabase_sql_migrations`). Também é possível disparar
+   manualmente via `workflow_dispatch` (input `DEPLOY`). A página `/changelog`
+   lê direto do Supabase — não precisa de redeploy da landing.
 
 ## Exemplo
 
 ```sql
 insert into public.changelog_entries
-  (versao, data_lancamento, tipo, titulo, descricao, destaques, ordem)
+  (versao, data, tipo, titulo, descricao, itens, ordem)
 values (
   'v2.6.0',
   '2026-05-18',
@@ -51,12 +57,13 @@ values (
   2026051800
 )
 on conflict (versao) do update set
-  data_lancamento = excluded.data_lancamento,
-  tipo            = excluded.tipo,
-  titulo          = excluded.titulo,
-  descricao       = excluded.descricao,
-  destaques       = excluded.destaques,
-  ordem           = excluded.ordem;
+  data       = excluded.data,
+  tipo       = excluded.tipo,
+  titulo     = excluded.titulo,
+  descricao  = excluded.descricao,
+  itens      = excluded.itens,
+  ordem      = excluded.ordem,
+  publicado  = true;
 ```
 
 ## Onde aparece
