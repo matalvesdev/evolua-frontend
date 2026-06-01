@@ -34,14 +34,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build
+        run: pnpm -F ./landing-core build
+
       - name: TypeCheck
         run: pnpm -F ./landing-core typecheck
 
       - name: Lint
         run: pnpm -F ./landing-core lint
-
-      - name: Build
-        run: pnpm -F ./landing-core build
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
