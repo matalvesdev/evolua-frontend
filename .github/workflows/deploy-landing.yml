@@ -25,8 +25,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - uses: actions/setup-node@v4
         with:
@@ -37,13 +35,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: TypeCheck
-        run: pnpm -F landing-core typecheck
+        run: pnpm -F ./landing-core typecheck
 
       - name: Lint
-        run: pnpm -F landing-core lint
+        run: pnpm -F ./landing-core lint
 
       - name: Build
-        run: pnpm -F landing-core build
+        run: pnpm -F ./landing-core build
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
