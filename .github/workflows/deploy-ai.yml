@@ -1,0 +1,74 @@
+name: Deploy AI Service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend-core/apps/ai/**"
+      - "backend-core/contracts/src/ai.ts"
+      - ".github/workflows/deploy-ai.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ai-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy AI service to Render
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://ai.useevolua.com.br
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build contracts
+        run: pnpm --filter @evolua/contracts build
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend-core/apps/ai/pyproject.toml
+
+      - name: Install Python dependencies
+        working-directory: backend-core/apps/ai
+        run: |
+          pip install --upgrade pip
+          pip install ".[dev]"
+
+      - name: Lint with ruff
+        working-directory: backend-core/apps/ai
+        run: ruff check .
+
+      - name: Trigger Render deploy hook
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_AI }}"
+
+      - name: Smoke test
+        run: |
+          for i in $(seq 1 12); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://ai.useevolua.com.br/healthz || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed (status=$STATUS)"
+              exit 0
+            fi
+            echo "Attempt $i: health check returned $STATUS, retrying in 10s..."
+            sleep 10
+          done
+          echo "Health check failed after 12 attempts"
+          exit 1

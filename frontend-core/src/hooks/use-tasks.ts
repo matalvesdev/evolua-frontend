@@ -18,7 +18,10 @@ export interface TaskItem {
 export function useTasks() {
   return useQuery<TaskItem[]>({
     queryKey: ['tasks'],
-    queryFn: () => api.get<TaskItem[]>('/api/tasks'),
+    queryFn: async () => {
+      const res = await api.get<{ data: TaskItem[] } | TaskItem[]>('/api/tasks')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 30_000,
   })
 }

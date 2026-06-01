@@ -23,7 +23,10 @@ export interface Goal {
 export function useTherapeuticGoals() {
   return useQuery<Goal[]>({
     queryKey: ['therapeutic-goals'],
-    queryFn: () => api.get<Goal[]>('/api/goals'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Goal[] } | Goal[]>('/api/goals')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 30_000,
   })
 }

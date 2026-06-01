@@ -84,10 +84,10 @@ function SessaoPage() {
   const transcriptionPoll = useAudioTranscription(audioSessionId)
   const generateEvolution = useGenerateEvolution()
 
-  const patient = patients.find(p => p.id === effectivePatientId)
-
   // Auto-select first patient if none selected
   const effectivePatientId = patientId || (patients.length > 0 ? patients[0]!.id : '')
+
+  const patient = patients.find(p => p.id === effectivePatientId)
 
   // ── Visualizador de volume ───────────────────────────────────────────────
   function tick() {

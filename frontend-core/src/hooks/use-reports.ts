@@ -16,7 +16,10 @@ export interface Report {
 export function useReports() {
   return useQuery<Report[]>({
     queryKey: ['reports'],
-    queryFn: () => api.get<Report[]>('/api/reports'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Report[] } | Report[]>('/api/reports')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 30_000,
   })
 }

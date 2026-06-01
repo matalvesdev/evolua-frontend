@@ -18,7 +18,10 @@ export interface Article {
 export function useArticles() {
   return useQuery<Article[]>({
     queryKey: ['articles'],
-    queryFn: () => api.get<Article[]>('/api/articles'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Article[] } | Article[]>('/api/articles')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 60_000,
   })
 }

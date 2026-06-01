@@ -16,7 +16,10 @@ export interface Document {
 export function useDocuments() {
   return useQuery<Document[]>({
     queryKey: ['documents'],
-    queryFn: () => api.get<Document[]>('/api/documents'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Document[] } | Document[]>('/api/documents')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 30_000,
   })
 }

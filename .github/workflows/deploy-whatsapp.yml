@@ -1,0 +1,63 @@
+name: Deploy WhatsApp Gateway
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend-core/apps/services/whatsapp/**"
+      - ".github/workflows/deploy-whatsapp.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-whatsapp-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy WhatsApp gateway to EC2
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://wa.useevolua.com.br
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache-dependency-path: backend-core/apps/services/whatsapp/go.sum
+
+      - name: Vet
+        working-directory: backend-core/apps/services/whatsapp
+        run: go vet ./...
+
+      - name: Build
+        working-directory: backend-core/apps/services/whatsapp
+        run: go build ./...
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /home/${{ secrets.SSH_USERNAME }}/evolua
+            git pull origin main
+            docker-compose build whatsapp
+            docker-compose up -d --no-deps whatsapp
+
+      - name: Health check
+        run: |
+          for i in $(seq 1 12); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://wa.useevolua.com.br/healthz || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed (status=$STATUS)"
+              exit 0
+            fi
+            echo "Attempt $i: health check returned $STATUS, retrying in 10s..."
+            sleep 10
+          done
+          echo "Health check failed after 12 attempts"
+          exit 1

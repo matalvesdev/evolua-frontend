@@ -14,7 +14,10 @@ export interface BlogPost {
 export function useBlogPosts() {
   return useQuery<BlogPost[]>({
     queryKey: ['blog-posts'],
-    queryFn: () => api.get<BlogPost[]>('/api/blog/posts'),
+    queryFn: async () => {
+      const res = await api.get<{ data: BlogPost[] } | BlogPost[]>('/api/blog/posts')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 300_000,
   })
 }

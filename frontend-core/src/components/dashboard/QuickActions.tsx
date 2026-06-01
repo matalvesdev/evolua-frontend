@@ -527,7 +527,7 @@ function ModalBiblioteca({ open, onClose }: { open: boolean; onClose: () => void
     setChatReply('')
     try {
       const { api } = await import('@/lib/api')
-      const res = await api.post<{ content: string }>('/api/ai/rag/library', { question: chatInput.trim() })
+      const res = await api.post<{ content: string }>('/api/ai/chat', { question: chatInput.trim() })
       setChatReply(res.content)
     } catch {
       setChatReply('Assistente temporariamente indisponível. Acesse a Biblioteca para consultar as referências cadastradas.')

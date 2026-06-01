@@ -15,7 +15,10 @@ export interface Exercise {
 export function useExercises() {
   return useQuery<Exercise[]>({
     queryKey: ['exercises'],
-    queryFn: () => api.get<Exercise[]>('/api/exercises'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Exercise[] } | Exercise[]>('/api/exercises')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 60_000,
   })
 }

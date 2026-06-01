@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 
-// Schemas alinhados com backend-core/contracts. Mantemos tipos locais aqui
-// até `@evolua/contracts` ser consumido também pelo frontend.
+// ── Types ─────────────────────────────────────────────────────────────────────
+
 export interface Transaction {
   id: string
   clinicId: string
@@ -31,10 +31,20 @@ export interface FinancesSummary {
   overdueIncome: string
 }
 
+export interface FinancialMetric {
+  month: string
+  revenue: number
+  expenses: number
+  profit: number
+  sessions: number
+}
+
 interface ListResponse<T> {
   data: T[]
   pagination: { page: number; pageSize: number; total: number; totalPages: number }
 }
+
+// ── GET /api/finances/summary ──────────────────────────────────────────────────
 
 export function useFinancesSummary(params: { startDate?: string; endDate?: string } = {}) {
   const usp = new URLSearchParams()
@@ -47,6 +57,8 @@ export function useFinancesSummary(params: { startDate?: string; endDate?: strin
     staleTime: 60_000,
   })
 }
+
+// ── GET /api/finances/transactions ────────────────────────────────────────────
 
 export function useTransactions(params: {
   page?: number
@@ -67,6 +79,8 @@ export function useTransactions(params: {
   })
 }
 
+// ── POST /api/finances/transactions ───────────────────────────────────────────
+
 export function useCreateTransaction() {
   const qc = useQueryClient()
   return useMutation({
@@ -78,6 +92,8 @@ export function useCreateTransaction() {
   })
 }
 
+// ── POST /api/finances/transactions/:id/pay ───────────────────────────────────
+
 export function useMarkTransactionPaid() {
   const qc = useQueryClient()
   return useMutation({
@@ -86,5 +102,18 @@ export function useMarkTransactionPaid() {
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['finances'] })
     },
+  })
+}
+
+// ── GET /api/finances/metrics ─────────────────────────────────────────────────
+
+export function useFinancialMetrics() {
+  return useQuery<FinancialMetric[]>({
+    queryKey: ['financial-metrics'],
+    queryFn: async () => {
+      const res = await api.get<{ data: FinancialMetric[] } | FinancialMetric[]>('/api/finances/metrics')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
+    staleTime: 60_000,
   })
 }

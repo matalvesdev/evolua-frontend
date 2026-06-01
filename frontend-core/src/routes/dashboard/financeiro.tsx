@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
-import { useTransactions, useCreateTransaction, useFinancesSummary } from '@/hooks/use-finances'
-import { useFinancialMetrics } from '@/hooks/use-financial'
+import { useTransactions, useCreateTransaction, useFinancesSummary, useFinancialMetrics } from '@/hooks/use-finances'
 import { transactionToVM, type TransactionVM as Transaction } from '@/lib/view-models'
 
 export const Route = createFileRoute('/dashboard/financeiro')({

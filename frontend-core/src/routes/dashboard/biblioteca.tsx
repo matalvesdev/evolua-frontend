@@ -23,7 +23,7 @@ interface ChatMessage {
 
 async function generateChatResponse(question: string, _articles: Article[]): Promise<{ content: string; sources: string[] }> {
   try {
-    const result = await api.post<{ content: string; sources: string[] }>('/api/ai/rag/library', { question })
+    const result = await api.post<{ content: string; sources: string[] }>('/api/ai/chat', { question })
     return result
   } catch {
     return {
@@ -125,7 +125,8 @@ function ChatPanel({ articles, suggestedQuestions }: { articles: Article[]; sugg
   }
 
   // Renderiza markdown simples
-  function renderContent(text: string) {
+  function renderContent(text: string | undefined | null) {
+    if (!text) return null
     const lines = text.split('\n')
     return lines.map((line, i) => {
       if (line.startsWith('**') && line.endsWith('**')) {

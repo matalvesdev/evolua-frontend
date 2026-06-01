@@ -404,7 +404,7 @@ function ProntuarioPage() {
               <div className="flex flex-col gap-4">
                 <p className="font-display font-bold text-sm text-text-primary uppercase tracking-wide">Objetivos terapêuticos</p>
                 <div className="flex flex-col gap-2">
-                  {selected.objectives.map((obj, i) => (
+                  {(selected.objectives ?? []).map((obj, i) => (
                     <div key={i} className="flex items-center gap-3 px-4 py-3 bg-surface-low border border-border-soft">
                       <span className="flex items-center justify-center w-5 h-5 bg-neon text-dark text-[10px] font-bold rounded-full shrink-0">{i+1}</span>
                       <p className="text-sm text-text-primary flex-1">{obj}</p>

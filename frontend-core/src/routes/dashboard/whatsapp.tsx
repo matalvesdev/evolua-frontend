@@ -73,7 +73,8 @@ function WhatsAppPage() {
 
   function sendManual() {
     if (!manualForm.text.trim()) return
-    sendMessage.mutate({ patientId: '', text: manualForm.text, type: 'manual' })
+    const patient = patientsRes?.data?.find(p => p.name === manualForm.patient)
+    sendMessage.mutate({ patientId: patient?.id ?? '', text: manualForm.text, type: 'manual' })
     setManualForm(f => ({...f, text:''}))
     setSent(true)
     setTimeout(() => setSent(false), 2500)

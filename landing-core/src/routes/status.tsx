@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
 import { motion } from 'motion/react'
 import { SeoHead } from '../components/seo/SeoHead'
+import { statusQueryOptions } from '../queries/status'
 
 export const Route = createFileRoute('/status')({
   component: StatusPage,
@@ -11,28 +13,44 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const } },
 }
 
-type ServiceStatus = 'operational' | 'degraded' | 'outage'
-
-const services: { nome: string; status: ServiceStatus; uptime: string }[] = [
-  { nome: 'Plataforma Web', status: 'operational', uptime: '99.98%' },
-  { nome: 'API Principal', status: 'operational', uptime: '99.97%' },
-  { nome: 'IA de Sessão (Transcrição)', status: 'operational', uptime: '99.91%' },
-  { nome: 'WhatsApp Automático', status: 'operational', uptime: '99.95%' },
-  { nome: 'App do Paciente', status: 'operational', uptime: '99.99%' },
-  { nome: 'Teleconsulta', status: 'operational', uptime: '99.89%' },
-  { nome: 'Pagamentos (Gateway)', status: 'operational', uptime: '100%' },
-  { nome: 'E-mail Transacional', status: 'operational', uptime: '99.96%' },
-]
+type ServiceStatus = 'operational' | 'degraded' | 'outage' | 'unknown'
 
 const statusConfig: Record<ServiceStatus, { label: string; dot: string; text: string }> = {
   operational: { label: 'Operacional', dot: 'bg-[#22c55e]', text: 'text-[#16a34a]' },
   degraded:    { label: 'Degradado',   dot: 'bg-[#f59e0b]', text: 'text-[#b45309]' },
   outage:      { label: 'Fora do ar',  dot: 'bg-rose',       text: 'text-rose' },
+  unknown:     { label: 'Desconhecido', dot: 'bg-neutral',    text: 'text-neutral' },
 }
 
-const allOperational = services.every((s) => s.status === 'operational')
-
 function StatusPage() {
+  const { data: services, isLoading, isError } = useQuery(statusQueryOptions())
+
+  if (isLoading) {
+    return (
+      <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-24 bg-canvas">
+        <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[40vh]">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <span className="text-sm text-muted">Verificando serviços...</span>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (isError) {
+    return (
+      <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-24 bg-canvas">
+        <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[40vh]">
+          <p className="text-sm text-rose">Não foi possível verificar o status dos serviços. Tente novamente mais tarde.</p>
+        </div>
+      </section>
+    )
+  }
+
+  const allOperational = (services ?? []).every((s) => s.status === 'operational')
+  const someDegraded = (services ?? []).some((s) => s.status === 'degraded' || s.status === 'outage')
+
   return (
     <>
       <SeoHead
@@ -64,7 +82,7 @@ function StatusPage() {
           >
             <div className={`w-2.5 h-2.5 rounded-full ${allOperational ? 'bg-[#22c55e]' : 'bg-[#f59e0b]'} animate-pulse`} />
             <span className={`font-headline font-bold text-sm uppercase tracking-tight ${allOperational ? 'text-[#16a34a]' : 'text-[#b45309]'}`}>
-              {allOperational ? 'Todos os sistemas operando normalmente' : 'Alguns sistemas com instabilidade'}
+              {allOperational ? 'Todos os sistemas operando normalmente' : someDegraded ? 'Alguns sistemas com instabilidade' : 'Verificando...'}
             </span>
           </motion.div>
         </div>
@@ -74,11 +92,11 @@ function StatusPage() {
       <section className="px-5 md:px-12 pb-20 md:pb-32 bg-canvas">
         <div className="max-w-3xl mx-auto">
           <div className="divide-y divide-outline-variant">
-            {services.map((service, i) => {
+            {(services ?? []).map((service, i) => {
               const cfg = statusConfig[service.status]
               return (
                 <motion.div
-                  key={i}
+                  key={service.service}
                   initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-20px' }}
                   transition={{ duration: 0.4, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] as const }}
@@ -86,11 +104,11 @@ function StatusPage() {
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${cfg.dot} shrink-0`} />
-                    <span className="font-body text-sm md:text-base text-ink">{service.nome}</span>
+                    <span className="font-body text-sm md:text-base text-ink">{service.label}</span>
                   </div>
                   <div className="flex items-center gap-6">
                     <span className="font-label text-[10px] font-bold tracking-[0.2em] uppercase text-muted hidden sm:block">
-                      {service.uptime} uptime (90d)
+                      {service.uptime ?? '--'} uptime (90d)
                     </span>
                     <span className={`font-label text-[10px] font-bold tracking-[0.2em] uppercase ${cfg.text}`}>
                       {cfg.label}

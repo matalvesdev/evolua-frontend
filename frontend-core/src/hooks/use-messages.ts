@@ -22,7 +22,10 @@ export interface Automation {
 export function useMessages() {
   return useQuery<Message[]>({
     queryKey: ['messages'],
-    queryFn: () => api.get<Message[]>('/api/messages'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Message[] } | Message[]>('/api/messages')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 30_000,
   })
 }
@@ -30,7 +33,10 @@ export function useMessages() {
 export function useAutomations() {
   return useQuery<Automation[]>({
     queryKey: ['automations'],
-    queryFn: () => api.get<Automation[]>('/api/automations/whatsapp'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Automation[] } | Automation[]>('/api/messages/automations/whatsapp')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 60_000,
   })
 }
@@ -48,7 +54,7 @@ export function useToggleAutomation() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: ({ id, active }: { id: string; active: boolean }) =>
-      api.patch(`/api/automations/whatsapp/${id}`, { active }),
+      api.patch(`/api/messages/automations/whatsapp/${id}`, { active }),
     onSuccess: () => { void qc.invalidateQueries({ queryKey: ['automations'] }) },
   })
 }

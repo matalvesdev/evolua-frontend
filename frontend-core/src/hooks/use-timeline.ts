@@ -15,7 +15,10 @@ export interface TimelineEvent {
 export function useTimeline(patientId: string | undefined) {
   return useQuery<TimelineEvent[]>({
     queryKey: ['timeline', patientId],
-    queryFn: () => api.get<TimelineEvent[]>(`/api/patients/${patientId}/timeline`),
+    queryFn: async () => {
+      const res = await api.get<{ data: TimelineEvent[] } | TimelineEvent[]>(`/api/patients/${patientId}/timeline`)
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     enabled: Boolean(patientId),
     staleTime: 30_000,
   })

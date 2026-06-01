@@ -12,7 +12,10 @@ export interface FinancialMetric {
 export function useFinancialMetrics() {
   return useQuery<FinancialMetric[]>({
     queryKey: ['financial-metrics'],
-    queryFn: () => api.get<FinancialMetric[]>('/api/finances/metrics'),
+    queryFn: async () => {
+      const res = await api.get<{ data: FinancialMetric[] } | FinancialMetric[]>('/api/finances/metrics')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 60_000,
   })
 }

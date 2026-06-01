@@ -25,7 +25,10 @@ export interface CreateTeleSessionInput {
 export function useTeleSessions() {
   return useQuery<TeleSession[]>({
     queryKey: ['teleconsulta-sessions'],
-    queryFn: () => api.get<TeleSession[]>('/api/teleconsulta/sessions'),
+    queryFn: async () => {
+      const res = await api.get<{ data: TeleSession[] } | TeleSession[]>('/api/teleconsulta/sessions')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 30_000,
   })
 }

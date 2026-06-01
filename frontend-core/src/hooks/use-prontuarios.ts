@@ -19,7 +19,24 @@ export interface Prontuario {
 export function useProntuarios() {
   return useQuery<Prontuario[]>({
     queryKey: ['prontuarios'],
-    queryFn: () => api.get<Prontuario[]>('/api/patients/records'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Record<string, unknown>[] } | Record<string, unknown>[]>('/api/patients/records')
+      const rows = Array.isArray(res) ? res : (res?.data ?? [])
+      return rows.map((r) => ({
+        id: r.id as string,
+        patient: typeof r.patientName === 'string' ? r.patientName as string : (r.patient as { name?: string })?.name ?? '',
+        dob: '',
+        area: '',
+        diagnosis: r.title as string ?? '',
+        created: r.createdAt as string ?? '',
+        lastSession: r.createdAt as string ?? '',
+        sessions: 0,
+        scales: {},
+        anamnese: '',
+        objectives: [],
+        evolution: r.content as string ?? '',
+      }))
+    },
     staleTime: 30_000,
   })
 }

@@ -16,7 +16,10 @@ export interface Laudo {
 export function useLaudos() {
   return useQuery<Laudo[]>({
     queryKey: ['laudos'],
-    queryFn: () => api.get<Laudo[]>('/api/reports/laudos'),
+    queryFn: async () => {
+      const res = await api.get<{ data: Laudo[] } | Laudo[]>('/api/reports/laudos')
+      return Array.isArray(res) ? res : (res?.data ?? [])
+    },
     staleTime: 30_000,
   })
 }
