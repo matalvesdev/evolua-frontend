@@ -165,6 +165,30 @@ pnpm --filter @evolua/api test
 - ❌ `setState` síncrono no corpo de `useEffect` (`react-hooks/set-state-in-effect`) — usar lazy initializer no `useState(() => ...)` para estado inicial derivado, ou envolver a lógica do effect em função async interna (`const run = async () => {...}; run()`)
 - ❌ Exportar funções utilitárias junto com componentes no mesmo arquivo (`react-refresh/only-export-components`) — mover helpers (ex: `extractTocItems`) para arquivo `*-utils.ts` separado
 - ❌ Lint nunca rodado localmente antes de habilitar gate de CI — erros pré-existentes (13 na landing) só aparecem quando o CI liga o passo Lint; rodar `pnpm -F ./<app> lint` localmente antes
+- ❌ `psql`/libpq contra a URL do **pooler** Supabase (`:6543?pgbouncer=true`) — falha com `invalid URI query parameter: "pgbouncer"`; para DDL/migrations usar SEMPRE a conexão DIRETA (`DIRECT_URL`, `:5432`, sem o param); o pooler é só para o runtime da app (Prisma `DATABASE_URL`)
+- ❌ Aplicar `supabase/migrations/**` re-rodando TODOS os arquivos a cada deploy — várias migrations NÃO são idempotentes (ex: `010_reseed.sql` apaga/reseed dados); usar ledger (`public._supabase_sql_migrations`) que na 1ª execução ADOTA o estado atual como baseline (registra sem executar) e depois aplica só os arquivos novos, cada um em transação única (`psql --single-transaction -f file -c "insert ledger"`)
+- ❌ Não existir CI para `supabase/migrations/**` (só havia `deploy-migrations.yml` para Prisma `backend-core/prisma/**`) — migrations SQL puras (changelog, RLS, blog/RAG) ficavam aplicadas só manualmente; criado `deploy-supabase-migrations.yml` (push em `supabase/migrations/**` + `workflow_dispatch`, env `production`, usa `DIRECT_URL`)
+- ❌ Disparar o baseline-adopt do ledger no MESMO push que introduz uma migration nova — ela seria adotada-sem-executar; semear o baseline ANTES via `workflow_dispatch` único, depois deixar os pushes de migration rodarem normalmente
+- ❌ Changelog público (`changelog_entries`): doc citava colunas erradas (`data_lancamento`/`destaques`); nomes reais são `data`/`itens` (ver `007_changelog.sql`); upsert por `on conflict (versao)`
+
+## Blog Content Standards (obrigatório)
+
+### Cadência
+- **1 post por dia**, sem exceção. Cada post deve ser de **alta qualidade, com potencial viral e resolver uma dor real** da fonoaudióloga (atração/retenção de pacientes, gestão de clínica, documentação clínica, produtividade, marketing).
+- Posts em `docs/content-assets/02-blog-posts/` (markdown) → publicados na tabela `blog_posts` (Supabase). Sem mock; conteúdo real.
+
+### Descoberta de pauta (processo padrão)
+Toda pauta editorial deve ser gerada com o método das **3 skills gratuitas do Claude**:
+> "Como usar 3 skills gratuitas do Claude pra mapear o conteúdo dos seus concorrentes, encontrar lacunas e gerar pauta editorial em uma tarde."
+
+Fluxo (mapear → encontrar lacunas → gerar pauta):
+1. **Mapear conteúdo dos concorrentes** — skill `competitor-profiling` (+ `docs/competitive-intelligence/` já existente: iClinic, Ninsaúde, Simples Dental, Holmed).
+2. **Encontrar lacunas** — skill `content-strategy` + `customer-research`: o que os concorrentes NÃO cobrem e que a fono busca.
+3. **Gerar pauta editorial** — calendário de temas priorizados por dor + volume de busca (alimenta `docs/calendario-editorial.md`).
+
+### Materiais / Lead Magnets
+- **Permitidos:** ebooks, infográficos, guias visuais, mini-cursos, templates de conteúdo visual. Produzir com as skills de documentos (`pdf`, `pptx`, `canvas-design`) e brand kit (`docs/BRAND-KIT.md`).
+- **Proibidos (datados — não criar novos):** planilhas (`.xlsx`), checklists, "templates" de formulário. _Legado em `landing-core/public/lead-magnets/` (`checklist-gestao.pdf`, `planilha-financeiro.xlsx`) não deve ser expandido; substituir gradualmente por ebooks/infográficos._
 
 ## Active Session — Dashboard Module Audit & Fixes
 
