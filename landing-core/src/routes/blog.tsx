@@ -186,11 +186,12 @@ function PostsSkeleton() {
 function BlogPage() {
   const matches = useRouterState({ select: (s) => s.matches })
   const isPostPage = matches.some((m) => m.routeId === '/blog/$slug')
-  if (isPostPage) return <Outlet />
 
   const [categoriaAtiva, setCategoriaAtiva] = useState<string>('Todos')
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterStatus, setNewsletterStatus] = useState<NewsletterStatus>('idle')
+
+  if (isPostPage) return <Outlet />
 
   async function handleNewsletter(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

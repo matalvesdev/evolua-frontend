@@ -1,16 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const COOKIE_CONSENT_KEY = 'evolua-cookie-consent'
 
 export function CookieConsent() {
-  const [visible, setVisible] = useState(false)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const stored = localStorage.getItem(COOKIE_CONSENT_KEY)
-    if (!stored) setVisible(true)
-    setLoading(false)
-  }, [])
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return !localStorage.getItem(COOKIE_CONSENT_KEY)
+  })
 
   function accept() {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted')
@@ -28,7 +24,7 @@ export function CookieConsent() {
     setVisible(false)
   }
 
-  if (loading || !visible) return null
+  if (!visible) return null
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6">

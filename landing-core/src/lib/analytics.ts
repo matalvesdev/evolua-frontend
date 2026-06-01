@@ -1,12 +1,17 @@
 const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID
 
+interface GtagWindow {
+  dataLayer: unknown[]
+  gtag: (...args: unknown[]) => void
+}
+
 export function initAnalytics() {
   if (!GA_ID) return
   if (typeof window === 'undefined') return
 
-  const win = window as any
+  const win = window as unknown as GtagWindow
   win.dataLayer = win.dataLayer || []
-  win.gtag = function gtag() { win.dataLayer.push(arguments) }
+  win.gtag = function gtag(...args: unknown[]) { win.dataLayer.push(args) }
   win.gtag('js', new Date())
 
   const consent = localStorage.getItem('evolua-cookie-consent')
@@ -26,7 +31,7 @@ export function initAnalytics() {
 type EventParams = Record<string, string | number | boolean | undefined>
 
 export function trackEvent(name: string, params?: EventParams) {
-  const win = window as any
+  const win = window as unknown as GtagWindow
   if (typeof win.gtag === 'function') {
     win.gtag('event', name, params)
   }

@@ -7,7 +7,8 @@ import { postBySlugQueryOptions, postsQueryOptions } from '../../queries/posts'
 import { SeoHead } from '../../components/seo/SeoHead'
 import { blogPostingJsonLd } from '../../components/seo/jsonld'
 import { ReadingProgress } from '../../components/blog/ReadingProgress'
-import { TableOfContents, extractTocItems } from '../../components/blog/TableOfContents'
+import { TableOfContents } from '../../components/blog/TableOfContents'
+import { extractTocItems } from '../../components/blog/toc-utils'
 import { ShareButtons } from '../../components/blog/ShareButtons'
 import { LeadMagnetInline } from '../../components/blog/LeadMagnetInline'
 import { FeatureHighlight } from '../../components/blog/FeatureHighlight'
@@ -81,36 +82,21 @@ function PostContent() {
   const { data: post } = useSuspenseQuery(postBySlugQueryOptions(slug))
   const { data: allPosts } = useSuspenseQuery(postsQueryOptions())
 
-  if (!post) return <PostNotFound />
-
-  const relacionados = allPosts
-    .filter((p) => p.id !== post.id && p.categoria === post.categoria)
-    .slice(0, 3)
-
-  const dataFormatada = new Date(post.data).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  })
-
-  const sections = useMemo(() => splitIntoSections(post.corpo), [post.corpo])
-  const tocItems = useMemo(() => extractTocItems(post.corpo), [post.corpo])
-  const placementData = PLACEMENT_BY_CATEGORY[post.categoria] ?? PLACEMENT_BY_CATEGORY.Tecnologia
+  const sections = useMemo(() => splitIntoSections(post?.corpo ?? ''), [post?.corpo])
+  const tocItems = useMemo(() => extractTocItems(post?.corpo ?? ''), [post?.corpo])
   const hasMultipleSections = sections.length > 1
-
-  const bodySections = hasMultipleSections ? sections : []
   const introHtml = useMemo(() => (sections[0] ? renderMarkdown(sections[0]) : ''), [sections])
 
   const renderedBodySections = useMemo(() => {
     if (!hasMultipleSections) return [] as string[]
 
     const result: string[] = []
-    const total = bodySections.length
+    const total = sections.length
 
     const leadMagnetIndex = Math.max(1, Math.floor(total * 0.35))
     const featureIndex = Math.max(2, Math.floor(total * 0.7))
 
-    bodySections.forEach((sec, i) => {
+    sections.forEach((sec, i) => {
       result.push(renderMarkdown(sec))
 
       const index = i + 1
@@ -123,7 +109,21 @@ function PostContent() {
     })
 
     return result
-  }, [bodySections, hasMultipleSections])
+  }, [sections, hasMultipleSections])
+
+  if (!post) return <PostNotFound />
+
+  const relacionados = allPosts
+    .filter((p) => p.id !== post.id && p.categoria === post.categoria)
+    .slice(0, 3)
+
+  const dataFormatada = new Date(post.data).toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  })
+
+  const placementData = PLACEMENT_BY_CATEGORY[post.categoria] ?? PLACEMENT_BY_CATEGORY.Tecnologia
 
   const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
 

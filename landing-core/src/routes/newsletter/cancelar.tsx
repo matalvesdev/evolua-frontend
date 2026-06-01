@@ -18,25 +18,28 @@ type Status = 'loading' | 'success' | 'error'
 function CancelarInscricao() {
   const params = new URLSearchParams(window.location.search)
   const email = params.get('email')
-  const [status, setStatus] = useState<Status>('loading')
+  const [status, setStatus] = useState<Status>(() => (email ? 'loading' : 'error'))
 
   useEffect(() => {
-    if (!email) {
-      setStatus('error')
-      return
+    if (!email) return
+    let cancelled = false
+
+    const run = async () => {
+      try {
+        const client = ensureSupabase()
+        const { error } = await client
+          .from('newsletter_subscribers')
+          .update({ status: 'cancelled', unsubscribed_at: new Date().toISOString() })
+          .eq('email', email)
+        if (!cancelled) setStatus(error ? 'error' : 'success')
+      } catch {
+        if (!cancelled) setStatus('error')
+      }
     }
 
-    try {
-      const client = ensureSupabase()
-      client
-        .from('newsletter_subscribers')
-        .update({ status: 'cancelled', unsubscribed_at: new Date().toISOString() })
-        .eq('email', email)
-        .then(({ error }: { error: unknown }) => {
-          setStatus(error ? 'error' : 'success')
-        })
-    } catch {
-      setStatus('error')
+    run()
+    return () => {
+      cancelled = true
     }
   }, [email])
 
