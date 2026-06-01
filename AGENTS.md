@@ -155,7 +155,6 @@ pnpm --filter @evolua/api test
 - ❌ Sentry installed but not wired in component ErrorBoundary — always add `Sentry.captureException`
 
 ## Active Session — Dashboard Module Audit & Fixes
-## Active Session — Dashboard Module Audit & Fixes
 
 ### Goal
 Auditar todos os 26 módulos do dashboard (frontend-core) — checando UI, hooks, backend routes, alinhamento de API e estados de loading/error/empty — e aplicar correções nos módulos com problemas críticos.
@@ -167,40 +166,36 @@ Auditar todos os 26 módulos do dashboard (frontend-core) — checando UI, hooks
 - **Fix: `mais.tsx`** — 2 links quebrados corrigidos:
   - WhatsApp: `/dashboard/pacientes` → `/dashboard/whatsapp`
   - Teleconsulta: `/dashboard/sessao` → `/dashboard/teleconsulta`
-- **Fix: `marketing.tsx`** — refatoração completa:
-  - Criado `src/hooks/use-marketing.ts` com `useGenerateMarketing()` mutation (React Query)
-  - Substituído `api.post()` inline por mutation com loading/error states
-  - Convertido arrays mock `TEMPLATES`/`SCHEDULED` de `const` para `useState`
-  - Botão "Salvar template" agora adiciona template gerado à lista local
-  - Botão "Copiar" funcional com `navigator.clipboard`
-  - Extração automática de hashtags e inferência de categoria/título
-  - Removida importação direta de `api` da página
+- **Remoção: `marketing`** — feature obsoleta descontinuada por completo:
+  - Deletados `frontend-core` (rota + `use-marketing.ts`), `contracts/src/marketing.ts`, `apps/ai/app/routers/marketing.py`
+  - Removidos rota `/marketing/generate` e `generateMarketingContent` em `ai.routes.ts`/`ai.service.ts`
+  - Removidos export em `contracts/index.ts` e registro em `apps/ai/app/main.py`
+  - `git grep marketing` → zero referências remanescentes no código
 - **Tabela de auditoria completa** gerada com saúde (✅/⚠️/❌) para cada módulo
 
 ### Audit Result Summary
 | Status | Count | Modules |
 |--------|-------|---------|
-| ✅ Saudáveis | 17 | analytics, biblioteca, billing, caa, encaminhamentos, exercicios, financeiro, index, laudos, linha-do-tempo, materiais, onboarding, pacientes, plano-terapeutico, prontuario, relatorios, sessao, tarefas, whatsapp |
-| ⚠️ Issues menores | 3 | agenda (sem loading/error), configuracoes (sem loading), perfil (sem loading) |
-| ❌ Críticos (corrigidos) | 2 | **marketing** (mock data → hook + estado local), **mais** (links quebrados → corrigidos) |
-| ❌ Críticos (pendentes) | 1 | **teleconsulta** — inline hooks + sem backend module |
+| ✅ Saudáveis | 20 | agenda, analytics, biblioteca, billing, caa, configuracoes, encaminhamentos, exercicios, financeiro, index, laudos, linha-do-tempo, materiais, onboarding, pacientes, perfil, plano-terapeutico, prontuario, relatorios, sessao, tarefas, whatsapp |
+| ✅ Resolvidos | 2 | **teleconsulta** (backend module + Prisma + migration + hook React Query), **mais** (links quebrados → corrigidos) |
+| 🗑️ Removidos | 1 | **marketing** — feature obsoleta, removida por completo (front + backend + AI service + contracts) |
 
 ### Fixes Applied
 1. **mais.tsx**: Links WhatsApp e Teleconsulta apontando para rotas erradas → corrigidos
-2. **use-marketing.ts** (novo hook): Mutation React Query para `/api/ai/marketing/generate`
-3. **marketing.tsx**: Mock data eliminado — arrays viraram estado, "Salvar template" funcional, erro exibido, copy-to-clipboard implementado
+2. **teleconsulta**: módulo backend completo (`teleconsulta.routes.ts` + `teleconsulta.service.ts`), contracts Zod (`teleconsulta.ts`), model Prisma `TeleSession` (tabela `tele_sessions`), migration `014_tele_sessions.sql` (aplicada + idempotente com `DROP POLICY IF EXISTS`), e hook `use-teleconsulta.ts` (React Query) — sem inline fetch
+3. **relatorios.tsx**: `GenerateReportModal` (IA: paciente + template + transcrição) + edição completa de conteúdo no `ReportDrawer` persistindo `{content, status}` via `useUpdateReport`, com estado `saving` e erro inline
+4. **biblioteca (RAG)**: migration pgvector aplicada, hooks `use-library.ts`, ingestão por URL, chat ligado ao backend (`res.answer`/`citations`)
+5. **marketing REMOVIDO** (obsoleto): deletados `contracts/src/marketing.ts` + `apps/ai/app/routers/marketing.py`; removidos rota `/marketing/generate` e `generateMarketingContent` de `ai.routes.ts`/`ai.service.ts`, export em `contracts/index.ts`, e registro em `main.py`
+6. **Loading/error states** (`agenda.tsx`, `configuracoes.tsx`, `perfil.tsx`): os três já possuem early-return de `isLoading` (spinner) e `isError` (card de erro) ligados a `useAppointments`/`useSettings`/`useProfile` — verificado e confirmado
 
 ### Still Pending
-- **teleconsulta.tsx**: Usa inline `useQuery` (anti-pattern), chama `/api/teleconsulta/sessions` sem backend module correspondente
-- **marketing.tsx**: Templates e agendamentos salvos apenas em estado local (sem persistência backend) — precisa de módulo `marketing/` no backend com CRUD
-- **agenda.tsx**: Adicionar `apptQuery.isLoading` e `apptQuery.isError`
-- **configuracoes.tsx**: Adicionar loading state do `useSettings`
-- **perfil.tsx**: Adicionar loading state do `useProfile`
+- _(nenhum)_ — todos os módulos do dashboard auditados estão saudáveis ou resolvidos
 
 ### Anti-Patterns Added
 - ❌ `mais.tsx` links hardcoded pointing to wrong dashboard routes (/dashboard/pacientes instead of /dashboard/whatsapp) — always verify route paths when adding navigation items
-- ❌ `marketing.tsx` hardcoded empty arrays masquerading as real data — never ship UI that shows permanent empty states; use state or hook so data can be populated
-- ❌ `marketing.tsx` inline fetch without React Query mutation — always extract API calls to hooks in `src/hooks/`
+- ❌ Frontend hook chamando endpoint backend inexistente (`/api/teleconsulta/sessions` sem module) — sempre criar o module backend + contract + migration junto com o hook
+- ❌ `CREATE POLICY` sem `DROP POLICY IF EXISTS` — migrations de RLS devem ser idempotentes para re-aplicação segura
+- ❌ Deixar código de feature obsoleta (marketing) espalhado em múltiplas camadas — ao descontinuar, remover front + backend + AI service + contracts + registros de rota numa única passada
 
 ## Installed Agent Skills (181 skills)
 

@@ -9,7 +9,8 @@ import {
   type SoapEvolution,
 } from '@/hooks/use-audio-session'
 import { uploadAudioBlob } from '@/lib/storage'
-import { api } from '@/lib/api'
+import { useProfile } from '@/hooks/use-profile'
+import { useCreateReport } from '@/hooks/use-reports'
 
 export const Route = createFileRoute('/dashboard/sessao')({
   component: SessaoPage,
@@ -83,6 +84,8 @@ function SessaoPage() {
   const requestTranscription = useRequestTranscription()
   const transcriptionPoll = useAudioTranscription(audioSessionId)
   const generateEvolution = useGenerateEvolution()
+  const { data: profile } = useProfile()
+  const createReport = useCreateReport()
 
   // Auto-select first patient if none selected
   const effectivePatientId = patientId || (patients.length > 0 ? patients[0]!.id : '')
@@ -262,13 +265,16 @@ function SessaoPage() {
     if (!draft || signing) return
     setSigning(true)
     try {
-      await api.post('/api/reports', {
+      const patientName = patient?.name ?? 'Paciente'
+      const today = new Date().toLocaleDateString('pt-BR')
+      await createReport.mutateAsync({
         patientId: effectivePatientId,
-        reportType: 'EVOLUTION',
+        patientName,
+        therapistName: profile?.name ?? 'Terapeuta',
+        therapistCrfa: profile?.crfa ?? '',
+        type: 'evolution',
+        title: `Evolução — ${patientName} — ${today}`,
         content: draft,
-        sessionType,
-        audioSessionId,
-        signedAt: new Date().toISOString(),
       })
       setPhase('signed')
     } catch (e) {

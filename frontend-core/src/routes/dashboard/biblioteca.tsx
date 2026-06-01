@@ -1,8 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState, useRef, useEffect } from 'react'
-import { api } from '@/lib/api'
 import { useArticles, type Article } from '@/hooks/use-articles'
 import { useSuggestedQuestions } from '@/hooks/use-suggested-questions'
+import {
+  useLibraryChat,
+  useIngestLibraryUrl,
+  type ChatCitation,
+  type ChatHistoryMessage,
+} from '@/hooks/use-library'
 
 export const Route = createFileRoute('/dashboard/biblioteca')({
   component: BibliotecaPage,
@@ -21,16 +26,13 @@ interface ChatMessage {
   timestamp: Date
 }
 
-async function generateChatResponse(question: string, _articles: Article[]): Promise<{ content: string; sources: string[] }> {
-  try {
-    const result = await api.post<{ content: string; sources: string[] }>('/api/ai/chat', { question })
-    return result
-  } catch {
-    return {
-      content: 'A assistente de estudos está temporariamente indisponível. Tente novamente mais tarde.',
-      sources: [],
-    }
-  }
+/** Converte citações estruturadas do RAG em strings legíveis para a UI. */
+function formatCitations(citations: ChatCitation[]): string[] {
+  return citations.map((c) => {
+    const title = c.title || c.source || 'Documento'
+    const page = c.page ? ` (p. ${c.page})` : ''
+    return `${title}${page}`
+  })
 }
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -66,13 +68,14 @@ function ChatPanel({ articles, suggestedQuestions }: { articles: Article[]; sugg
     {
       id: '0',
       role: 'assistant',
-      content: 'Olá! A assistente de estudos clínicos será ativada em breve. Quando integrada ao backend, ela poderá responder dúvidas baseando-se nas referências da sua biblioteca.',
+      content: 'Olá! Sou a assistente de estudos clínicos. Pergunte sobre qualquer tema, caso ou referência — respondo com base nos documentos indexados na sua biblioteca e cito as fontes.',
       sources: [],
       timestamp: new Date(),
     }
   ])
   const [input, setInput] = useState('')
-  const [loading, setLoading] = useState(false)
+  const chat = useLibraryChat()
+  const loading = chat.isPending
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef  = useRef<HTMLTextAreaElement>(null)
 
@@ -90,17 +93,22 @@ function ChatPanel({ articles, suggestedQuestions }: { articles: Article[]; sugg
       content: q,
       timestamp: new Date(),
     }
+
+    // Histórico para o modelo (exclui a mensagem de boas-vindas e a pergunta atual).
+    const history: ChatHistoryMessage[] = messages
+      .filter((m) => m.id !== '0')
+      .map((m) => ({ role: m.role, content: m.content }))
+
     setMessages(prev => [...prev, userMsg])
     setInput('')
-    setLoading(true)
 
     try {
-      const { content, sources } = await generateChatResponse(q, articles)
+      const res = await chat.mutateAsync({ question: q, history })
       const assistantMsg: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        content,
-        sources,
+        content: res.answer,
+        sources: formatCitations(res.citations),
         timestamp: new Date(),
       }
       setMessages(prev => [...prev, assistantMsg])
@@ -108,13 +116,12 @@ function ChatPanel({ articles, suggestedQuestions }: { articles: Article[]; sugg
       const errorMsg: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        content: 'Erro ao consultar a assistente. Tente novamente.',
+        content: 'A assistente está temporariamente indisponível. Tente novamente em instantes.',
         sources: [],
         timestamp: new Date(),
       }
       setMessages(prev => [...prev, errorMsg])
     }
-    setLoading(false)
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -275,6 +282,86 @@ function ChatPanel({ articles, suggestedQuestions }: { articles: Article[]; sugg
   )
 }
 
+// ── Modal: adicionar documento à biblioteca (ingestão por URL) ──────────────────
+
+function AddDocumentModal({ onClose }: { onClose: () => void }) {
+  const ingest = useIngestLibraryUrl()
+  const [sourceUrl, setSourceUrl] = useState('')
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [specialty, setSpecialty] = useState('')
+
+  const canSubmit = sourceUrl.trim().startsWith('http') && title.trim().length > 0
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!canSubmit || ingest.isPending) return
+    ingest.mutate(
+      {
+        source_url: sourceUrl.trim(),
+        title: title.trim(),
+        author: author.trim() || undefined,
+        specialty: specialty.trim() || undefined,
+      },
+      { onSuccess: () => onClose() },
+    )
+  }
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div className="card w-full max-w-md p-5 flex flex-col gap-4" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <h2 className="font-display font-bold text-lg uppercase tracking-wide text-text-primary">Adicionar à biblioteca</h2>
+          <button onClick={onClose} className="text-text-tertiary hover:text-text-primary">
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <p className="text-xs text-text-secondary -mt-2">
+          Indexe um PDF público (URL https) para que a assistente possa citá-lo nas respostas.
+        </p>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">URL do documento *</label>
+            <input value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)}
+              placeholder="https://exemplo.com/diretriz.pdf" className="input w-full" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">Título *</label>
+            <input value={title} onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ex.: Diretriz de avaliação de deglutição" className="input w-full" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">Autor</label>
+              <input value={author} onChange={(e) => setAuthor(e.target.value)} className="input w-full" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">Especialidade</label>
+              <input value={specialty} onChange={(e) => setSpecialty(e.target.value)}
+                placeholder="Ex.: deglutição" className="input w-full" />
+            </div>
+          </div>
+
+          {ingest.isError && (
+            <p className="text-xs text-danger bg-danger-surface rounded px-3 py-2">
+              Não foi possível indexar o documento. Verifique a URL e tente novamente.
+            </p>
+          )}
+
+          <div className="flex gap-2 justify-end mt-1">
+            <button type="button" onClick={onClose} className="btn-ghost text-xs px-3 py-2">Cancelar</button>
+            <button type="submit" disabled={!canSubmit || ingest.isPending}
+              className="btn-primary text-xs px-4 py-2 disabled:opacity-40 disabled:cursor-not-allowed">
+              {ingest.isPending ? 'Indexando...' : 'Indexar documento'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
 // ── Página principal ──────────────────────────────────────────────────────────
 
 function BibliotecaPage() {
@@ -288,6 +375,7 @@ function BibliotecaPage() {
   const [expanded, setExpanded]       = useState<string|null>(null)
   const [savedIds, setSavedIds]       = useState<Set<string>>(new Set())
   const [chatOpen, setChatOpen]       = useState(true)
+  const [addOpen, setAddOpen]         = useState(false)
 
   const filtered = articles.filter(a => {
     const matchSearch = search === '' ||
@@ -331,7 +419,7 @@ function BibliotecaPage() {
                 <span className="material-symbols-outlined text-sm" style={{fontVariationSettings:`"FILL" ${savedFilter ? 1 : 0}`}}>bookmark</span>
                 {savedIds.size}
               </button>
-              <button className="btn-primary flex items-center gap-2 text-xs px-3 py-2">
+              <button onClick={() => setAddOpen(true)} className="btn-primary flex items-center gap-2 text-xs px-3 py-2">
                 <span className="material-symbols-outlined text-sm">add</span>
                 Adicionar
               </button>
@@ -526,6 +614,9 @@ function BibliotecaPage() {
           </div>
         </div>
       )}
+
+      {/* ── Modal adicionar documento ──────────────────────────────────────── */}
+      {addOpen && <AddDocumentModal onClose={() => setAddOpen(false)} />}
 
     </div>
   )

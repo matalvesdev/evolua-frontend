@@ -1,6 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 
+// Alinhado a backend-core/contracts/src/report.ts (ReportTypeSchema)
+export type ReportType =
+  | 'evolution'
+  | 'evaluation'
+  | 'reevaluation'
+  | 'discharge'
+  | 'referral'
+  | 'treatment_plan'
+  | 'progress'
+  | 'other'
+
 export interface Report {
   id: string
   patientId: string
@@ -11,6 +22,21 @@ export interface Report {
   status: 'draft' | 'final'
   createdAt: string
   updatedAt: string
+}
+
+/** Payload aceito por POST /api/reports (CreateReportSchema). */
+export interface CreateReportInput {
+  patientId: string
+  patientName: string
+  therapistName: string
+  therapistCrfa?: string
+  type: ReportType
+  title: string
+  content?: string
+  sections?: unknown
+  appointmentId?: string | null
+  periodStartDate?: string | null
+  periodEndDate?: string | null
 }
 
 export function useReports() {
@@ -27,7 +53,7 @@ export function useReports() {
 export function useCreateReport() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: Partial<Report>) => api.post<Report>('/api/reports', body),
+    mutationFn: (body: CreateReportInput) => api.post<Report>('/api/reports', body),
     onSuccess: () => { void qc.invalidateQueries({ queryKey: ['reports'] }) },
   })
 }

@@ -47,6 +47,7 @@ CREATE TRIGGER update_tele_sessions_updated_at
 ALTER TABLE "tele_sessions" ENABLE ROW LEVEL SECURITY;
 
 -- RLS policies
+DROP POLICY IF EXISTS "tele_sessions_clinic_isolation" ON "tele_sessions";
 CREATE POLICY "tele_sessions_clinic_isolation"
     ON "tele_sessions"
     USING (clinic_id IN (

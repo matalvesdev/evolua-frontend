@@ -23,10 +23,13 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   // Usa o access_token da sessão ativa — token e user confirmados no mesmo ciclo
   const token = session?.access_token
 
+  // FormData define seu próprio Content-Type (com boundary); não sobrescrever.
+  const isFormData = init?.body instanceof FormData
+
   const res = await fetch(`${BASE_URL}${path}`, {
     ...init,
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init?.headers ?? {}),
     },
@@ -37,12 +40,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(text || `HTTP ${res.status}`)
   }
 
+  // 204 No Content não tem corpo JSON.
+  if (res.status === 204) return undefined as T
   return res.json() as Promise<T>
 }
 
 export const api = {
   get:    <T>(path: string)               => request<T>(path),
   post:   <T>(path: string, body: unknown) => request<T>(path, { method: 'POST',   body: JSON.stringify(body) }),
+  postForm: <T>(path: string, form: FormData) => request<T>(path, { method: 'POST', body: form }),
   patch:  <T>(path: string, body: unknown) => request<T>(path, { method: 'PATCH',  body: JSON.stringify(body) }),
   put:    <T>(path: string, body: unknown) => request<T>(path, { method: 'PUT',    body: JSON.stringify(body) }),
   delete: <T>(path: string)               => request<T>(path, { method: 'DELETE' }),
