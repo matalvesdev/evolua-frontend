@@ -153,6 +153,7 @@ pnpm --filter @evolua/api test
 - ❌ Mock data in analytics — use `useQuery` hooks with empty state handling, not hardcoded empty arrays
 - ❌ Orphaned TODO comments in production UI — remove placeholders when feature is implemented
 - ❌ Sentry installed but not wired in component ErrorBoundary — always add `Sentry.captureException`
+- ❌ HF probes apontando para `api-inference.huggingface.co` (host descontinuado, não resolve) — health/warmup devem usar o mesmo `huggingface_base_url` (`router.huggingface.co`) das chamadas reais de inferência (`hf_client.py`); divergência causa `/readyz` falso-`degraded`
 
 ## Active Session — Dashboard Module Audit & Fixes
 
@@ -190,6 +191,15 @@ Auditar todos os 26 módulos do dashboard (frontend-core) — checando UI, hooks
 
 ### Still Pending
 - _(nenhum)_ — todos os módulos do dashboard auditados estão saudáveis ou resolvidos
+
+### Infra Pendente
+- **DNS `ai.useevolua.com.br`**: o custom domain do AI service não resolve (DNS timeout). O serviço está no ar apenas via URL default do Render (`evolua-ai.onrender.com`); a API o consome internamente, então não há impacto funcional. Pendência: configurar o custom domain no Render + registro DNS. Referências que assumem o domínio: `backend-core/render.yaml`, `.github/workflows/deploy-ai.yml`, `README.md`, `openspec/specs/infra/spec.md`.
+
+### Deploy Validation (último deploy)
+- Frontend `app.useevolua.com.br` → HTTP 200 · Landing `useevolua.com.br` → HTTP 200
+- API `/healthz` → `ok` · `/readyz` → `ready, db:up`
+- AI `/healthz` → `ok` · `/readyz` → `ready` (após fix dos probes HF)
+- Fix aplicado: probes de warmup/readyz migrados de `api-inference.huggingface.co` (descontinuado) para `router.huggingface.co` — `/readyz` deixou de reportar falso-`degraded`
 
 ### Anti-Patterns Added
 - ❌ `mais.tsx` links hardcoded pointing to wrong dashboard routes (/dashboard/pacientes instead of /dashboard/whatsapp) — always verify route paths when adding navigation items
