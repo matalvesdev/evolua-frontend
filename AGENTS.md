@@ -154,6 +154,17 @@ pnpm --filter @evolua/api test
 - ❌ Orphaned TODO comments in production UI — remove placeholders when feature is implemented
 - ❌ Sentry installed but not wired in component ErrorBoundary — always add `Sentry.captureException`
 - ❌ HF probes apontando para `api-inference.huggingface.co` (host descontinuado, não resolve) — health/warmup devem usar o mesmo `huggingface_base_url` (`router.huggingface.co`) das chamadas reais de inferência (`hf_client.py`); divergência causa `/readyz` falso-`degraded`
+- ❌ pnpm workspace root corrompido (`package.json`/`pnpm-workspace.yaml`/`pnpm-lock.yaml` inconsistentes) — manter `packages:` só com apps commitados no repo do CI (`frontend-core`, `landing-core`); `backend-core` é repo git SEPARADO e ausente no checkout do CI → `--frozen-lockfile` nunca casaria se incluído
+- ❌ Filtro pnpm por nome de pacote em CI (`-F frontend-core`) quando o nome ≠ diretório (pkg names são `system-core`/`landing-v2`) — usar filtro por path (`-F ./frontend-core`, `-F ./landing-core`) para desacoplar de pkg name
+- ❌ Ordem de CI TypeCheck/Lint antes de Build — `routeTree.gen.ts` (TanStack Router) é gitignored e gerado pelo `@tanstack/router-plugin` durante `vite build`; rodar Build PRIMEIRO, depois TypeCheck → Lint
+- ❌ `tsc -b &&` no início do script `build` da landing — em checkout limpo do CI o tsc roda antes do vite gerar `routeTree.gen.ts` → TS2307/TS2345; mover `tsc -b` para o FIM do `build`; CI gate usa `build:skip-sitemap` (sem env Supabase)
+- ❌ Secrets Vercel ausentes no repo (`VERCEL_ORG_ID`, `VERCEL_PROJECT_ID_FRONTEND`, `VERCEL_PROJECT_ID_LANDING`, `VERCEL_TOKEN`) — extrair org/project de `.vercel/project.json`; sem eles o `amondnet/vercel-action` falha no deploy
+- ❌ `amondnet/vercel-action@v25` (CLI 25.1.0) rejeitado pela API Vercel que exige CLI ≥47.2.2 — usar `@v42` + `vercel-version: latest`
+- ❌ Phantom dependency (`framer-motion` usado mas não declarado, vinha só transitivo via `motion`) — rolldown/vite falha em CI limpo; declarar explicitamente em `package.json`
+- ❌ Hooks (`useState`/`useMemo`) chamados após early-return condicional (`if (!post) return ...`) — viola `react-hooks/rules-of-hooks`; declarar TODOS os hooks no topo (com optional chaining quando o dado pode ser null), early-return só DEPOIS
+- ❌ `setState` síncrono no corpo de `useEffect` (`react-hooks/set-state-in-effect`) — usar lazy initializer no `useState(() => ...)` para estado inicial derivado, ou envolver a lógica do effect em função async interna (`const run = async () => {...}; run()`)
+- ❌ Exportar funções utilitárias junto com componentes no mesmo arquivo (`react-refresh/only-export-components`) — mover helpers (ex: `extractTocItems`) para arquivo `*-utils.ts` separado
+- ❌ Lint nunca rodado localmente antes de habilitar gate de CI — erros pré-existentes (13 na landing) só aparecem quando o CI liga o passo Lint; rodar `pnpm -F ./<app> lint` localmente antes
 
 ## Active Session — Dashboard Module Audit & Fixes
 
