@@ -36,8 +36,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   })
 
   if (!res.ok) {
-    const text = await res.text().catch(() => res.statusText)
-    throw new Error(text || `HTTP ${res.status}`)
+    let detail = `HTTP ${res.status}`
+    try {
+      const body = await res.json() as { error?: string; message?: string }
+      detail = body.error ?? body.message ?? detail
+    } catch {
+      detail = res.statusText || detail
+    }
+    throw new Error(detail)
   }
 
   // 204 No Content não tem corpo JSON.

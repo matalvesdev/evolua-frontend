@@ -3,15 +3,14 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 
 const FILE_INFO: Record<string, { ext: string; label: string }> = {
   pdf: { ext: 'PDF', label: 'Documento PDF' },
-  xlsx: { ext: 'XLSX', label: 'Planilha Excel' },
-  docx: { ext: 'DOCX', label: 'Documento Word' },
 }
 
 const LEAD_MAGNETS: Record<string, { title: string; file: string }> = {
-  'checklist-gestao': { title: 'Checklist de Gestão Clínica', file: '/lead-magnets/checklist-gestao.pdf' },
-  'planilha-financeiro': { title: 'Planilha de Controle Financeiro', file: '/lead-magnets/planilha-financeiro.xlsx' },
   'ebook-tendencias': { title: 'E-book: Tendências em Fonoaudiologia 2026', file: '/lead-magnets/ebook-tendencias.pdf' },
-  'template-relatorio': { title: 'Template de Relatório Clínico', file: '/lead-magnets/template-relatorio.docx' },
+  'ebook-protocolos': { title: 'E-book: Guia de Protocolos Clínicos', file: '/lead-magnets/ebook-protocolos.pdf' },
+  'ebook-mkt-digital-fono': { title: 'E-book: Marketing Digital para Fonoaudiólogas', file: '/lead-magnets/ebook-mkt-digital-fono.pdf' },
+  'infografico-marcos-fala': { title: 'Infográfico: Marcos do Desenvolvimento da Fala', file: '/lead-magnets/infografico-marcos-fala.pdf' },
+  'infografico-montar-clinica': { title: 'Infográfico: Como Montar sua Clínica de Fonoaudiologia', file: '/lead-magnets/infografico-montar-clinica.pdf' },
 }
 
 export const Route = createFileRoute('/materiais/$magnetId')({

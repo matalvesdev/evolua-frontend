@@ -10,20 +10,6 @@ interface LeadMagnet {
 }
 
 const ALL_MAGNETS: Record<string, LeadMagnet> = {
-  'checklist-gestao': {
-    id: 'checklist-gestao',
-    title: 'Checklist de Gestão Clínica',
-    description: '20 itens essenciais para organizar seu consultório de fonoaudiologia.',
-    icon: 'checklist',
-    tipo: 'checklist',
-  },
-  'planilha-financeiro': {
-    id: 'planilha-financeiro',
-    title: 'Planilha de Controle Financeiro',
-    description: 'Controle mensal de receitas, despesas e fluxo de caixa.',
-    icon: 'table_chart',
-    tipo: 'planilha',
-  },
   'ebook-tendencias': {
     id: 'ebook-tendencias',
     title: 'E-book: Tendências em Fonoaudiologia 2026',
@@ -31,20 +17,39 @@ const ALL_MAGNETS: Record<string, LeadMagnet> = {
     icon: 'menu_book',
     tipo: 'ebook',
   },
-  'template-relatorio': {
-    id: 'template-relatorio',
-    title: 'Template de Relatório Clínico',
-    description: 'Modelo pronto no padrão CFoF — é só preencher.',
-    icon: 'description',
-    tipo: 'template',
+  'ebook-protocolos': {
+    id: 'ebook-protocolos',
+    title: 'E-book: Guia de Protocolos Clínicos',
+    description: 'MBGR, DOSS, GRBAS e FOIS — guia prático para sua documentação clínica.',
+    icon: 'menu_book',
+    tipo: 'ebook',
+  },
+  'ebook-mkt-digital-fono': {
+    id: 'ebook-mkt-digital-fono',
+    title: 'E-book: Marketing Digital para Fonoaudiólogas',
+    description: 'Estratégias para atrair, converter e reter pacientes organicamente.',
+    icon: 'campaign',
+    tipo: 'ebook',
+  },
+  'infografico-marcos-fala': {
+    id: 'infografico-marcos-fala',
+    title: 'Infográfico: Marcos do Desenvolvimento da Fala',
+    description: 'Marcos da fala e linguagem dos 0 aos 6 anos, por faixa etária.',
+    icon: 'info',
+    tipo: 'infografico',
+  },
+  'infografico-montar-clinica': {
+    id: 'infografico-montar-clinica',
+    title: 'Infográfico: Como Montar sua Clínica de Fonoaudiologia',
+    description: 'Passo a passo visual para estruturar sua clínica do zero.',
+    icon: 'home_health',
+    tipo: 'infografico',
   },
 }
 
 const TIPO_LABEL: Record<string, string> = {
-  checklist: 'Checklist',
-  planilha: 'Planilha',
   ebook: 'E-book',
-  template: 'Template',
+  infografico: 'Infográfico',
 }
 
 interface LeadMagnetInlineProps {

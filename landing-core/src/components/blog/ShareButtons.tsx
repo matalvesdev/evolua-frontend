@@ -10,9 +10,9 @@ export function ShareButtons({ url, title, text }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
 
   const encodedUrl = encodeURIComponent(url)
-  const encodedText = encodeURIComponent(`${title} — ${text}`)
+  const encodedCta = encodeURIComponent(`${title}\n\n${text}\n\n📖 Leia o artigo completo no Evolua Blog:`)
 
-  const whatsappUrl = `https://wa.me/?text=${encodedText}%0A${encodedUrl}`
+  const whatsappUrl = `https://wa.me/?text=${encodedCta}%0A${encodedUrl}`
   const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
 
   async function handleCopy() {

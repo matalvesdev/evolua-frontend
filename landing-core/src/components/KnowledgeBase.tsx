@@ -37,13 +37,13 @@ export function KnowledgeBase() {
     <div className="flex flex-col gap-6">
       {/* Search */}
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-tertiary text-sm">search</span>
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-sm">search</span>
         <input
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Buscar na base de conhecimento..."
-          className="w-full border border-border pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors"
+          className="w-full border border-outline-variant pl-10 pr-4 py-3 text-sm bg-surface text-ink placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors"
         />
       </div>
 
@@ -53,8 +53,8 @@ export function KnowledgeBase() {
           <button
             key={cat}
             onClick={() => setCategory(cat)}
-            className={`px-3 py-1.5 text-xs font-bold transition-colors ${
-              category === cat ? 'bg-deep text-neon' : 'bg-surface border border-border text-text-secondary hover:border-primary'
+            className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors ${
+              category === cat ? 'bg-primary text-white' : 'bg-surface border border-outline-variant text-on-surface-variant hover:border-primary'
             }`}
           >
             {cat}
@@ -65,27 +65,26 @@ export function KnowledgeBase() {
       {/* Articles */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {filtered.map(article => (
-          <a
+          <div
             key={article.id}
-            href={`/ajuda/${article.id}`}
-            className="flex items-start gap-4 p-4 border border-border hover:border-primary/50 transition-all group bg-surface"
+            className="flex items-start gap-4 p-4 border border-outline-variant hover:border-primary/50 transition-all group bg-surface"
           >
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 bg-primary/10 flex items-center justify-center shrink-0">
               <span className="material-symbols-outlined text-primary text-lg" style={{ fontVariationSettings: '"FILL" 1' }}>{article.icon}</span>
             </div>
             <div className="min-w-0">
               <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{article.category}</span>
-              <h3 className="font-display font-bold text-sm text-text-primary mt-0.5 group-hover:text-primary transition-colors">{article.title}</h3>
-              <p className="text-xs text-text-secondary mt-1 leading-relaxed">{article.excerpt}</p>
+              <h3 className="font-headline font-bold text-sm text-ink mt-0.5 group-hover:text-primary transition-colors">{article.title}</h3>
+              <p className="text-xs text-on-surface-variant mt-1 leading-relaxed">{article.excerpt}</p>
             </div>
-          </a>
+          </div>
         ))}
       </div>
 
       {filtered.length === 0 && (
         <div className="text-center py-12">
-          <span className="material-symbols-outlined text-3xl text-text-tertiary mb-2">search_off</span>
-          <p className="text-sm text-text-secondary">Nenhum artigo encontrado para "{search}"</p>
+          <span className="material-symbols-outlined text-3xl text-outline-variant mb-2 block">search_off</span>
+          <p className="text-sm text-on-surface-variant">Nenhum artigo encontrado para "{search}"</p>
         </div>
       )}
     </div>
@@ -117,7 +116,7 @@ export function InAppSupport() {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-6 w-80 bg-surface border border-border shadow-xl z-50 flex flex-col">
+        <div className="fixed bottom-24 right-6 w-80 bg-surface border border-outline-variant shadow-xl z-50 flex flex-col">
           {/* Header */}
           <div className="bg-deep text-neon px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -133,22 +132,22 @@ export function InAppSupport() {
           <div className="p-4 min-h-[200px] flex flex-col justify-end">
             {sent ? (
               <div className="text-center py-6">
-                <span className="material-symbols-outlined text-success text-2xl" style={{ fontVariationSettings: '"FILL" 1' }}>check_circle</span>
-                <p className="text-sm text-text-primary mt-2 font-bold">Mensagem enviada!</p>
-                <p className="text-xs text-text-secondary mt-1">Responderemos em até 2 horas em horário comercial.</p>
+                <span className="material-symbols-outlined text-primary text-2xl" style={{ fontVariationSettings: '"FILL" 1' }}>check_circle</span>
+                <p className="text-sm text-ink mt-2 font-bold">Mensagem enviada!</p>
+                <p className="text-xs text-on-surface-variant mt-1">Responderemos em até 2 horas em horário comercial.</p>
                 <button onClick={() => setSent(false)} className="text-xs text-primary mt-3 hover:underline">
                   Enviar outra
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                <p className="text-xs text-text-secondary">Olá! Como podemos ajudar?</p>
+                <p className="text-xs text-on-surface-variant">Olá! Como podemos ajudar?</p>
                 <textarea
                   value={message}
                   onChange={e => setMessage(e.target.value)}
                   placeholder="Descreva sua dúvida..."
                   rows={3}
-                  className="w-full border border-border px-3 py-2 text-sm focus:outline-none focus:border-primary resize-none"
+                  className="w-full border border-outline-variant px-3 py-2 text-sm bg-surface text-ink placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary resize-none"
                 />
                 <button
                   type="submit"

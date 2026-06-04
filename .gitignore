@@ -75,11 +75,15 @@ Thumbs.db
 .netlify
 
 # ──────────────────────────────────────────────────────────────────────
+# Design reference images (temp)
+*.webp
+
 # Terraform
 # ──────────────────────────────────────────────────────────────────────
 *.tfstate
 *.tfstate.*
 *.tfvars
+tfplan*
 .terraform/
 .terraform.lock.hcl
 crash.log

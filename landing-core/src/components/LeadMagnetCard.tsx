@@ -7,30 +7,12 @@ interface LeadMagnet {
   title: string
   description: string
   icon: string
-  tipo: 'checklist' | 'planilha' | 'ebook' | 'template'
+  tipo: 'ebook' | 'infografico'
   cor: 'text-primary' | 'text-lavender-deep'
   corBg: 'bg-primary/10' | 'bg-lavender'
 }
 
 const LEAD_MAGNETS: LeadMagnet[] = [
-  {
-    id: 'checklist-gestao',
-    title: 'Checklist de Gestão Clínica',
-    description: '20 itens essenciais para organizar seu consultório de fonoaudiologia — de agenda a prontuário.',
-    icon: 'checklist',
-    tipo: 'checklist',
-    cor: 'text-primary',
-    corBg: 'bg-primary/10',
-  },
-  {
-    id: 'planilha-financeiro',
-    title: 'Planilha de Controle Financeiro',
-    description: 'Controle mensal de receitas, despesas e fluxo de caixa para fonoaudiólogas autônomas.',
-    icon: 'table_chart',
-    tipo: 'planilha',
-    cor: 'text-lavender-deep',
-    corBg: 'bg-lavender',
-  },
   {
     id: 'ebook-tendencias',
     title: 'E-book: Tendências em Fonoaudiologia 2026',
@@ -41,21 +23,46 @@ const LEAD_MAGNETS: LeadMagnet[] = [
     corBg: 'bg-primary/10',
   },
   {
-    id: 'template-relatorio',
-    title: 'Template de Relatório Clínico',
-    description: 'Modelo pronto de relatório no padrão CFoF (Resolução 427/2013) — é só preencher.',
-    icon: 'description',
-    tipo: 'template',
+    id: 'ebook-protocolos',
+    title: 'E-book: Guia de Protocolos Clínicos',
+    description: 'MBGR, DOSS, GRBAS e FOIS — guia prático para estruturar sua documentação clínica com protocolos validados.',
+    icon: 'menu_book',
+    tipo: 'ebook',
     cor: 'text-lavender-deep',
     corBg: 'bg-lavender',
+  },
+  {
+    id: 'ebook-mkt-digital-fono',
+    title: 'E-book: Marketing Digital para Fonoaudiólogas',
+    description: 'Estratégias de marketing digital para atrair, converter e reter pacientes orgânica e digitalmente.',
+    icon: 'campaign',
+    tipo: 'ebook',
+    cor: 'text-primary',
+    corBg: 'bg-primary/10',
+  },
+  {
+    id: 'infografico-marcos-fala',
+    title: 'Infográfico: Marcos do Desenvolvimento da Fala',
+    description: 'Guia visual com os marcos do desenvolvimento da fala e linguagem dos 0 aos 6 anos, por faixa etária.',
+    icon: 'info',
+    tipo: 'infografico',
+    cor: 'text-lavender-deep',
+    corBg: 'bg-lavender',
+  },
+  {
+    id: 'infografico-montar-clinica',
+    title: 'Infográfico: Como Montar sua Clínica de Fonoaudiologia',
+    description: 'Passo a passo visual para estruturar sua clínica: documentação, espaço, equipamentos, fluxo de pacientes e muito mais.',
+    icon: 'home_health',
+    tipo: 'infografico',
+    cor: 'text-primary',
+    corBg: 'bg-primary/10',
   },
 ]
 
 const TIPO_LABEL: Record<string, string> = {
-  checklist: 'Checklist',
-  planilha: 'Planilha',
   ebook: 'E-book',
-  template: 'Template',
+  infografico: 'Infográfico',
 }
 
 export function LeadMagnetCard({ magnet, index = 0 }: { magnet: LeadMagnet; index?: number }) {

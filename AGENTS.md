@@ -177,6 +177,11 @@ pnpm --filter @evolua/api test
 - **1 post por dia**, sem exceção. Cada post deve ser de **alta qualidade, com potencial viral e resolver uma dor real** da fonoaudióloga (atração/retenção de pacientes, gestão de clínica, documentação clínica, produtividade, marketing).
 - Posts em `docs/content-assets/02-blog-posts/` (markdown) → publicados na tabela `blog_posts` (Supabase). Sem mock; conteúdo real.
 
+### Schema real de `blog_posts` (colunas em INGLÊS — não confiar em nomes pt)
+- `id` (uuid), `title`, `slug` (unique), `excerpt`, `content` (HTML, não markdown), `cover_image`, `author` (default 'Equipe Evolua'), `category` (check: Marketing/Gestão/Clínica/Carreira/Tecnologia/Fonoaudiologia), `read_time` (int), `featured` (bool), `status` ('published'/'draft'), `published_at`, `created_at`, `updated_at`. RLS: SELECT público só `status='published'`; escrita só service_role.
+- Insert via REST: `POST /rest/v1/blog_posts` com `apikey`+`Authorization: Bearer <service_role>`, `Prefer: return=representation`. `content` deve ser **HTML** (`<p>`/`<h2>`/`<blockquote>`/`<ul>`), não markdown — o frontend renderiza HTML direto.
+- ❌ Anti-pattern: assumir colunas pt (`titulo`/`corpo`/`data`/`imagem`/`tempo_leitura`/`destaque`) — elas NÃO existem; o schema é inglês (`title`/`content`/`published_at`/`cover_image`/`read_time`/`featured`).
+
 ### Descoberta de pauta (processo padrão)
 Toda pauta editorial deve ser gerada com o método das **3 skills gratuitas do Claude**:
 > "Como usar 3 skills gratuitas do Claude pra mapear o conteúdo dos seus concorrentes, encontrar lacunas e gerar pauta editorial em uma tarde."
@@ -188,7 +193,13 @@ Fluxo (mapear → encontrar lacunas → gerar pauta):
 
 ### Materiais / Lead Magnets
 - **Permitidos:** ebooks, infográficos, guias visuais, mini-cursos, templates de conteúdo visual. Produzir com as skills de documentos (`pdf`, `pptx`, `canvas-design`) e brand kit (`docs/BRAND-KIT.md`).
-- **Proibidos (datados — não criar novos):** planilhas (`.xlsx`), checklists, "templates" de formulário. _Legado em `landing-core/public/lead-magnets/` (`checklist-gestao.pdf`, `planilha-financeiro.xlsx`) não deve ser expandido; substituir gradualmente por ebooks/infográficos._
+- **Proibidos:** planilhas (`.xlsx`), checklists, "templates" de formulário.
+- **Catálogo atual (5 materiais):**
+  - `ebook-tendencias` — E-book: Tendências em Fonoaudiologia 2026
+  - `ebook-protocolos` — E-book: Guia de Protocolos Clínicos
+  - `ebook-mkt-digital-fono` — E-book: Marketing Digital para Fonoaudiólogas
+  - `infografico-marcos-fala` — Infográfico: Marcos do Desenvolvimento da Fala
+  - `infografico-montar-clinica` — Infográfico: Como Montar sua Clínica de Fonoaudiologia
 
 ## Active Session — Dashboard Module Audit & Fixes
 

@@ -13,7 +13,7 @@ export interface CategoryPlacement {
 
 export const PLACEMENT_BY_CATEGORY: Record<string, CategoryPlacement> = {
   Marketing: {
-    leadMagnetId: 'checklist-gestao',
+    leadMagnetId: 'ebook-mkt-digital-fono',
     feature: {
       title: 'Automacão de Marketing no WhatsApp',
       description: 'O Evolua dispara mensagens automáticas, lembra pacientes e organiza filas de transmissão sem você levantar um dedo.',
@@ -23,7 +23,7 @@ export const PLACEMENT_BY_CATEGORY: Record<string, CategoryPlacement> = {
     },
   },
   Gestão: {
-    leadMagnetId: 'planilha-financeiro',
+    leadMagnetId: 'infografico-montar-clinica',
     feature: {
       title: 'Gestão Financeira Automática',
       description: 'Controle de receitas, despesas, inadimplência e fluxo de caixa integrado ao prontuário e à agenda.',
@@ -33,7 +33,7 @@ export const PLACEMENT_BY_CATEGORY: Record<string, CategoryPlacement> = {
     },
   },
   Clínica: {
-    leadMagnetId: 'template-relatorio',
+    leadMagnetId: 'ebook-protocolos',
     feature: {
       title: 'Prontuário Digital Completo',
       description: 'Registros clínicos, evoluções, anamnese, CAA e relatórios CFoF em um só lugar — acessível de qualquer lugar.',
@@ -43,7 +43,7 @@ export const PLACEMENT_BY_CATEGORY: Record<string, CategoryPlacement> = {
     },
   },
   Carreira: {
-    leadMagnetId: 'ebook-tendencias',
+    leadMagnetId: 'ebook-protocolos',
     feature: {
       title: 'Encaminhamentos Inteligentes',
       description: 'Receba encaminhamentos de pacientes compatíveis com seu perfil, especialidade e região de atendimento.',
@@ -53,7 +53,7 @@ export const PLACEMENT_BY_CATEGORY: Record<string, CategoryPlacement> = {
     },
   },
   Tecnologia: {
-    leadMagnetId: 'ebook-tendencias',
+    leadMagnetId: 'ebook-protocolos',
     feature: {
       title: 'IA + WhatsApp + Gestão',
       description: 'O Evolua une inteligência artificial, automação de WhatsApp e gestão clínica em uma plataforma integrada.',

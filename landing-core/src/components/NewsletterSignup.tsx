@@ -39,20 +39,22 @@ export function NewsletterSignup({ variant = 'default' }: { variant?: 'default' 
     )
   }
 
-  const inputClass = variant === 'footer'
-    ? 'w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 px-3 py-2 text-xs focus:outline-none focus:border-primary transition-colors'
-    : 'flex-1 bg-white border border-outline-variant px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors'
+  const isFooter = variant === 'footer'
 
-  const btnClass = variant === 'footer'
+  const inputClass = isFooter
+    ? 'w-full bg-white/10 border border-white/20 text-white placeholder:text-white/40 px-3 py-2 text-xs focus:outline-none focus:border-primary transition-colors'
+    : 'min-w-0 flex-1 bg-white border border-outline-variant px-4 py-3 text-sm text-ink placeholder:text-on-surface-variant/60 focus:outline-none focus:border-primary transition-colors'
+
+  const btnClass = isFooter
     ? 'bg-neon text-ink font-bold px-4 py-2 text-xs hover:bg-neon/90 transition-colors'
-    : 'bg-deep text-neon font-bold px-6 py-3 text-sm hover:bg-ink transition-colors'
+    : 'bg-deep text-neon font-bold px-6 py-3 text-sm hover:bg-ink transition-colors whitespace-nowrap'
 
   return (
-    <form onSubmit={handleSubmit} className={variant === 'footer' ? 'flex gap-2' : 'flex flex-col gap-3'}>
-      {variant !== 'footer' && (
+    <form onSubmit={handleSubmit} className={isFooter ? 'flex gap-2' : 'flex flex-col gap-3'}>
+      {!isFooter && (
         <p className="font-label text-[10px] font-bold tracking-[0.3em] uppercase text-primary">Fono em Foco</p>
       )}
-      <div className={variant === 'default' ? 'flex gap-2' : 'flex gap-2'}>
+      <div className="flex gap-2">
         <input
           type="email"
           value={email}

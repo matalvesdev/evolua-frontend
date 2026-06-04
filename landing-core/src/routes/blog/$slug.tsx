@@ -90,13 +90,15 @@ function PostContent() {
   const renderedBodySections = useMemo(() => {
     if (!hasMultipleSections) return [] as string[]
 
-    const result: string[] = []
-    const total = sections.length
+    const bodySections = sections.slice(1)
+    const total = bodySections.length
+    if (total === 0) return [] as string[]
 
+    const result: string[] = []
     const leadMagnetIndex = Math.max(1, Math.floor(total * 0.35))
     const featureIndex = Math.max(2, Math.floor(total * 0.7))
 
-    sections.forEach((sec, i) => {
+    bodySections.forEach((sec, i) => {
       result.push(renderMarkdown(sec))
 
       const index = i + 1
@@ -125,8 +127,6 @@ function PostContent() {
 
   const placementData = PLACEMENT_BY_CATEGORY[post.categoria] ?? PLACEMENT_BY_CATEGORY.Tecnologia
 
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
-
   const siteUrl = 'https://useevolua.com.br'
   const postUrl = `${siteUrl}/blog/${post.slug}`
 
@@ -154,7 +154,7 @@ function PostContent() {
         <div className="max-w-3xl mx-auto">
           <Link
             to="/blog"
-            className="group inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-on-surface-variant hover:text-primary transition-all mb-8 md:mb-12 border border-outline-variant hover:border-primary px-4 py-2 rounded-full"
+            className="group flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase text-on-surface-variant hover:text-primary transition-all mb-8 md:mb-12 border border-outline-variant hover:border-primary px-4 py-2 rounded-full w-fit"
           >
             <span className="material-symbols-outlined text-base group-hover:-translate-x-1 transition-transform">arrow_back</span>
             Voltar ao Blog
@@ -235,13 +235,9 @@ function PostContent() {
               )
             })}
 
-            {/* Fallback: single-section post */}
-            {!hasMultipleSections && introHtml && (
+            {/* Fallback: single-section post — only placements, intro already rendered above */}
+            {!hasMultipleSections && !renderedBodySections.length && introHtml && (
               <>
-                <div
-                  className="prose prose-lg prose-evolua max-w-none text-on-surface-variant leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: introHtml }}
-                />
                 <hr className="border-t border-outline-variant my-10 md:my-12" />
                 <LeadMagnetInline magnetId={placementData.leadMagnetId} />
                 <hr className="border-t border-outline-variant my-10 md:my-12" />
@@ -308,7 +304,7 @@ function PostContent() {
               {/* Share buttons */}
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-on-surface-variant mb-3">Compartilhar</p>
-                <ShareButtons url={currentUrl} title={post.titulo} text={post.subtitulo} />
+                <ShareButtons url={postUrl} title={post.titulo} text={post.subtitulo} />
               </div>
 
               {/* TOC */}
@@ -324,7 +320,7 @@ function PostContent() {
       {/* Mobile share bar — fixed at bottom */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-outline-variant px-5 py-3 flex items-center justify-between">
         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Compartilhar</span>
-        <ShareButtons url={currentUrl} title={post.titulo} text={post.subtitulo} />
+        <ShareButtons url={postUrl} title={post.titulo} text={post.subtitulo} />
       </div>
 
       {/* Related posts */}

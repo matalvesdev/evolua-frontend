@@ -31,20 +31,11 @@ const planos = [
     descricao: 'Tudo que uma fonoaudióloga autônoma precisa para organizar a clínica, encher a agenda e atender com total tranquilidade — sem planilha, sem papel, sem gambiarra.',
     recursos: [
       'Prontuário nativo para fono (não adaptado de médico)',
-      'Protocolos clínicos validados: MBGR, DOSS, FOIS, GRBAS, VHI-10 e mais',
       'Agenda online com link de agendamento público',
-      'Lembretes automáticos por WhatsApp incluso (sem custo extra)',
-      'Confirmação, lembrete 24h/1h e link de reagendamento automáticos',
+      'Lembretes automáticos por WhatsApp (sem custo extra)',
       'Assinatura digital com validade jurídica inclusa',
       'Teleconsulta integrada — sem Zoom, sem Meet externo',
       'Controle financeiro: Pix, boleto, recibos e emissão de NF',
-      'Relatórios e laudos no padrão CFoF (Resolução 427/2013)',
-      'Planos de tratamento com metas e progresso por sessão',
-      'Histórico de evolução clínica por paciente',
-      'Sincronização bidirecional com Google Calendar',
-      'Conformidade LGPD: log de auditoria e consentimentos',
-      'Dashboard com KPIs da clínica',
-      'Suporte por chat em horário comercial',
     ],
     cta: 'Testar 14 dias grátis',
     ctaStyle: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
@@ -63,18 +54,10 @@ const planos = [
     recursos: [
       'Tudo do plano Só Você',
       'Até 5 profissionais (preço por clínica, não por profissional)',
-      'Agenda compartilhada por sala e por profissional',
       'IA de sessão: grava, transcreve em tempo real e rascunha a evolução',
       'App do paciente: exercícios domiciliares com vídeo + push diário',
-      'Aderência dos pacientes em tempo real no painel da terapeuta',
       'WhatsApp CRM: histórico completo de conversas por paciente',
-      'Financeiro consolidado por profissional e por clínica',
       'Faturamento TISS simplificado para convênios',
-      'Relatórios avançados: diagnósticos, aderência por faixa etária, risco de abandono',
-      'CAA (Comunicação Aumentativa e Alternativa): pranchas e materiais',
-      'Biblioteca de materiais terapêuticos',
-      'Gestão de tarefas vinculadas a pacientes e agendamentos',
-      'Suporte prioritário com resposta em até 2h',
     ],
     cta: 'Testar 14 dias grátis',
     ctaStyle: 'bg-surface text-ink hover:bg-neon hover:text-ink',
@@ -95,12 +78,8 @@ const planos = [
       'Profissionais ilimitadas',
       'Múltiplas unidades no mesmo painel',
       'Onboarding dedicado com setup guiado',
-      'Treinamento presencial ou remoto da equipe',
       'Integrações customizadas via API',
-      'SLA garantido em contrato',
-      'Gerente de conta exclusivo',
-      'Relatórios personalizados por unidade',
-      'Configuração de permissões por perfil de acesso',
+      'SLA garantido + gerente de conta exclusivo',
     ],
     cta: 'Falar com especialista',
     ctaStyle: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
@@ -248,7 +227,7 @@ function PlanosPage() {
               <motion.div
                 key={plano.id}
                 variants={fadeUp}
-                className={`flex flex-col p-8 md:p-10 lg:p-14 relative ${
+                className={`flex flex-col p-6 md:p-8 lg:p-10 relative ${
                   plano.destaque ? 'bg-primary text-white' : 'bg-surface-low text-ink'
                 }`}
               >
@@ -258,19 +237,19 @@ function PlanosPage() {
                   </div>
                 )}
 
-                <div className="mb-8 md:mb-10">
+                <div className="mb-6 md:mb-8">
                   <span className={`font-headline font-black text-4xl md:text-5xl leading-none ${plano.destaque ? 'text-white/10' : 'text-ink/10'}`}>
                     {plano.numero}
                   </span>
-                  <h2 className="font-headline font-black text-2xl md:text-3xl uppercase tracking-tighter mt-2">
+                  <h2 className="font-headline font-black text-2xl md:text-3xl uppercase tracking-tighter mt-1">
                     {plano.nome}
                   </h2>
-                  <p className={`font-label text-[10px] font-bold tracking-[0.3em] uppercase mt-2 ${plano.destaque ? 'text-neon' : 'text-primary'}`}>
+                  <p className={`font-label text-[10px] font-bold tracking-[0.3em] uppercase mt-1 ${plano.destaque ? 'text-neon' : 'text-primary'}`}>
                     {plano.tagline}
                   </p>
                 </div>
 
-                <div className="mb-8 md:mb-10">
+                <div className="mb-6 md:mb-8">
                   <div className="flex items-end gap-1">
                     <span className="font-headline font-black text-3xl md:text-4xl tracking-tighter">
                       {anual ? plano.precoAnual : plano.precoMensal}
@@ -284,12 +263,12 @@ function PlanosPage() {
                       Cobrado anualmente · economize 20%
                     </p>
                   )}
-                  <p className={`text-sm mt-3 leading-relaxed ${plano.destaque ? 'text-lavender' : 'text-ink-soft/80'}`}>
+                  <p className={`text-sm mt-2 leading-relaxed ${plano.destaque ? 'text-lavender' : 'text-ink-soft/80'}`}>
                     {plano.descricao}
                   </p>
                 </div>
 
-                <ul className="flex-1 space-y-3 md:space-y-4 mb-10 md:mb-12">
+                <ul className="flex-1 space-y-2.5 md:space-y-3 mb-8 md:mb-10">
                   {plano.recursos.map((r) => (
                     <li key={r} className="flex items-start gap-3">
                       <span className={`material-symbols-outlined text-base mt-0.5 shrink-0 ${plano.destaque ? 'text-neon' : 'text-primary'}`}>
@@ -304,7 +283,7 @@ function PlanosPage() {
 
                 <Link
                   to="/cadastro"
-                  className={`block w-full text-center py-4 md:py-5 btn-text text-sm transition-all duration-200 ${plano.ctaStyle}`}
+                  className={`block w-full text-center py-3.5 md:py-4 btn-text text-sm transition-all duration-200 ${plano.ctaStyle}`}
                 >
                   {plano.cta}
                 </Link>
