@@ -1,450 +1,423 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meta Ads — Julho 2026 | Evolua</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #0A0A14;
-      font-family: 'Inter', -apple-system, sans-serif;
-      color: #fff;
+      background: #F8F8FF;
+      font-family: 'DM Sans', system-ui, sans-serif;
       padding: 40px 24px;
-    }
-    .container { max-width: 1200px; margin: 0 auto; }
-    .header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-    .header h1 {
-      font-size: 32px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #8B5CF6, #C4F135);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .header p {
-      color: rgba(255,255,255,.5);
-      font-size: 14px;
-      margin-top: 8px;
-    }
-    .badge {
-      display: inline-block;
-      background: rgba(139,92,246,.15);
-      color: #8B5CF6;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 100px;
-      letter-spacing: .03em;
-      text-transform: uppercase;
-    }
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin: 48px 0 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-title span {
-      background: #8B5CF6;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 10px;
-      border-radius: 100px;
-    }
-
-    /* ===== FEED GRID ===== */
-    .feed-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    @media (max-width: 900px) {
-      .feed-grid { grid-template-columns: 1fr; }
-    }
-
-    /* ===== AD CARD ===== */
-    .ad-card {
-      background: #120D1E;
-      border: 1px solid rgba(139,92,246,.15);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: border-color .2s;
-    }
-    .ad-card:hover { border-color: rgba(139,92,246,.4); }
-    .ad-card .mock-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      color: rgba(255,255,255,.25);
-      padding: 8px 16px 0;
-    }
-
-    /* Visual */
-    .ad-visual {
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .ad-visual--light {
-      background: #F5F3FF;
-      color: #120D1E;
-    }
-    .ad-visual--dark {
-      background: #0A0A14;
-      color: #fff;
-    }
-    .ad-visual--cards {
-      background: #F5F3FF;
-    }
-
-    /* Feed 1: abstract geometric */
-    .geo-abstract {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-    .geo-abstract .circle {
-      position: absolute;
-      border-radius: 50%;
-      opacity: .15;
-    }
-    .geo-abstract .c1 {
-      width: 120px; height: 120px;
-      background: #8B5CF6;
-      top: -30px; left: -30px;
-    }
-    .geo-abstract .c2 {
-      width: 80px; height: 80px;
-      background: #C4F135;
-      bottom: -20px; right: -20px;
-    }
-    .geo-abstract .c3 {
-      width: 50px; height: 50px;
-      background: #8B5CF6;
-      bottom: 30px; left: 40px;
-    }
-    .geo-abstract .logo-mark {
-      font-weight: 800;
-      font-size: 18px;
-      color: #8B5CF6;
-    }
-    .geo-abstract .icon-clock {
-      font-size: 40px;
-      opacity: .4;
-    }
-
-    /* Feed 2: cards */
-    .cards-preview {
-      display: flex;
-      gap: 8px;
-      padding: 20px;
-    }
-    .cards-preview .minicard {
-      flex: 1;
-      background: #fff;
-      border-radius: 8px;
-      padding: 12px 8px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
-      font-size: 10px;
-      font-weight: 600;
-      color: #120D1E;
-    }
-    .cards-preview .minicard .ico {
-      font-size: 20px;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    /* Feed 3: dark with neon */
-    .neon-accent {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-    .neon-accent .big-number {
-      font-size: 52px;
-      font-weight: 800;
-      color: #C4F135;
-      text-shadow: 0 0 30px rgba(196,241,53,.3);
-    }
-    .neon-accent .sub {
-      font-size: 12px;
-      color: rgba(255,255,255,.6);
-      margin-top: 4px;
-    }
-
-    /* Content area */
-    .ad-content {
-      padding: 16px;
-    }
-    .ad-content .headline {
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-    .ad-content .primary-text {
-      font-size: 13px;
-      line-height: 1.5;
-      color: rgba(255,255,255,.7);
-      margin-bottom: 12px;
-    }
-    .ad-content .cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #8B5CF6;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 8px 18px;
-      border-radius: 100px;
-      text-decoration: none;
-    }
-    .ad-content .meta-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,.06);
-      font-size: 11px;
-      color: rgba(255,255,255,.3);
-    }
-    .ad-content .meta-footer .actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    /* ===== STORIES ===== */
-    .story-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-      max-width: 600px;
-    }
-    @media (max-width: 500px) {
-      .story-grid { grid-template-columns: 1fr; }
-    }
-    .story-card {
-      background: #120D1E;
-      border: 1px solid rgba(139,92,246,.15);
-      border-radius: 24px;
-      overflow: hidden;
-      aspect-ratio: 9 / 16;
-      max-width: 300px;
       display: flex;
       flex-direction: column;
-      transition: border-color .2s;
+      align-items: center;
     }
-    .story-card:hover { border-color: rgba(139,92,246,.4); }
-    .story-visual {
-      flex: 1;
+    h1 {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: #1A1A2E;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #8888AA;
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 15px;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+      max-width: 1120px;
+    }
+    .section-label {
+      width: 100%;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: #4A4A6A;
+      margin-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #E0DFEF;
+    }
+    .section-label:not(:first-of-type) { margin-top: 24px; }
+
+    /* ===== Feed Ad Card ===== */
+    .feed-ad {
+      width: 360px;
+      border-radius: 2px;
+      overflow: hidden;
+      background: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(26,26,46,0.08);
+    }
+    .feed-ad .visual {
+      padding: 28px 24px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .feed-ad .visual.var1 { background: #F8F8FF; }
+    .feed-ad .visual.var2 { background: #FFFFFF; }
+    .feed-ad .visual.var3 { background: #2D2B55; }
+
+    .feed-ad .headline {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .feed-ad .headline.ink { color: #1A1A2E; }
+    .feed-ad .headline.neon { color: #C4F135; }
+    .feed-ad .headline.white { color: #FFFFFF; }
+
+    .feed-ad .body-text {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+    .feed-ad .body-text.ink-soft { color: #4A4A6A; }
+    .feed-ad .body-text.muted { color: #8888AA; }
+    .feed-ad .body-text.white-80 { color: rgba(255,255,255,0.82); }
+
+    .feed-ad .cta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .feed-ad .btn-cta {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 22px;
+      border-radius: 2px;
+      border: none;
+      cursor: default;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .feed-ad .btn-cta.deep-neon {
+      background: #2D2B55;
+      color: #C4F135;
+    }
+    .feed-ad .btn-cta.primary-white {
+      background: #6C63FF;
+      color: #FFFFFF;
+    }
+    .feed-ad .btn-cta.neon-ink {
+      background: #C4F135;
+      color: #1A1A2E;
+    }
+    .feed-ad .meta-indicator {
+      font-size: 11px;
+      color: #8888AA;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .feed-ad .meta-indicator::before {
+      content: '';
+      display: inline-block;
+      width: 14px; height: 14px;
+      background: #6C63FF;
+      border-radius: 50%;
+    }
+
+    /* Feature cards for Feed 2 */
+    .feature-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .feature-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #F8F8FF;
+      border-radius: 2px;
+      border-left: 3px solid #6C63FF;
+    }
+    .feature-card .icon {
+      width: 32px; height: 32px;
+      border-radius: 2px;
+      background: #EAE8FF;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      text-align: center;
-      background: linear-gradient(135deg, #120D1E 0%, #1a1230 100%);
-      position: relative;
-    }
-    .story-visual--light {
-      background: linear-gradient(135deg, #F5F3FF 0%, #e8e0ff 100%);
-      color: #120D1E;
-    }
-    .story-text {
-      font-size: 22px;
+      font-size: 16px;
+      color: #6C63FF;
       font-weight: 700;
-      line-height: 1.3;
-      max-width: 220px;
     }
-    .story-text .emoji { font-size: 28px; }
-    .story-footer {
-      padding: 12px 16px;
-      border-top: 1px solid rgba(255,255,255,.06);
+    .feature-card .label {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #1A1A2E;
+    }
+
+    /* Visual stats for Feed 3 */
+    .stat-highlight {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+      margin-bottom: 20px;
     }
-    .story-footer .cta-story {
-      background: #8B5CF6;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 100px;
-      text-decoration: none;
-    }
-    .story-footer .label {
-      font-size: 11px;
-      color: rgba(255,255,255,.3);
-    }
-    .story-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0,0,0,.5);
-      backdrop-filter: blur(8px);
-      font-size: 9px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 100px;
+    .stat-number {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 48px;
       color: #C4F135;
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+    }
+    .stat-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+    .stat-bar .fill {
+      width: 60%;
+      height: 100%;
+      background: #C4F135;
+      border-radius: 2px;
+    }
+
+    /* ===== Story Ad Card ===== */
+    .story-ad {
+      width: 240px;
+      height: 420px;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(26,26,46,0.12);
+    }
+    .story-ad .bg-deep {
+      position: absolute;
+      inset: 0;
+      background: #2D2B55;
+    }
+    .story-ad .accent-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: #6C63FF;
+    }
+    .story-ad .accent-corner {
+      position: absolute;
+      top: 40px; right: -40px;
+      width: 160px; height: 160px;
+      background: rgba(108,99,255,0.08);
+      border-radius: 50%;
+    }
+    .story-ad .logo {
+      position: absolute;
+      top: 24px; left: 24px;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #C4F135;
+      letter-spacing: 0.05em;
+    }
+    .story-ad .story-text {
+      position: absolute;
+      top: 100px;
+      left: 24px;
+      right: 24px;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.2;
+      color: #C4F135;
+    }
+    .story-ad .story-sub {
+      position: absolute;
+      top: 220px;
+      left: 24px;
+      right: 24px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      color: rgba(255,255,255,0.7);
+    }
+    .story-ad .story-cta {
+      position: absolute;
+      bottom: 60px;
+      left: 24px;
+      right: 24px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      padding: 14px 0;
+      border-radius: 2px;
+      background: #C4F135;
+      color: #1A1A2E;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .story-ad .swipe-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+    }
+    .story-ad .swipe-indicator .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+    .story-ad .swipe-indicator .dot.active {
+      background: #C4F135;
+      width: 20px;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="badge">Meta Ads • Julho 2026</div>
-      <h1>Campanha Evolua</h1>
-      <p>3 criativos Feed + 2 Stories • 7 dias de rotação</p>
-    </div>
+  <h1>Meta Ads — Julho 2026</h1>
+  <p class="subtitle">3 Feed Ads + 2 Story Ads · Evolua Design System v5.0</p>
 
-    <!-- ===== FEED ===== -->
-    <div class="section-title">
-      📱 Feed
-      <span>3 criativos</span>
-    </div>
+  <div class="gallery">
 
-    <div class="feed-grid">
+    <!-- ==================== FEED ADS SECTION ==================== -->
+    <span class="section-label">Feed Ads</span>
 
-      <!-- FEED 1 — Chega de papelada -->
-      <div class="ad-card">
-        <div class="mock-label">Feed — Versão A</div>
-        <div class="ad-visual ad-visual--light">
-          <div class="geo-abstract">
-            <div class="circle c1"></div>
-            <div class="circle c2"></div>
-            <div class="circle c3"></div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1;position:relative;">
-              <span class="icon-clock">⚡</span>
-              <span class="logo-mark">evolua</span>
-            </div>
-          </div>
+    <!-- Feed 1: "Chega de papelada" -->
+    <div class="feed-ad">
+      <div class="visual var1">
+        <div style="margin-bottom: 18px;">
+          <span style="display:inline-block;width:40px;height:4px;background:#6C63FF;border-radius:2px;margin-bottom:18px;"></span>
+          <div class="headline ink" style="font-size:22px;">Chega de papelada.</div>
+          <div class="headline ink" style="font-size:18px;">Seu prontuário em 30 segundos.</div>
         </div>
-        <div class="ad-content">
-          <div class="headline">Chega de papelada. Seu prontuário em 30 segundos.</div>
-          <div class="primary-text">
-            Enquanto você atende, o Evolua preenche o prontuário com IA. Laudo pronto em 2 cliques. WhatsApp integrado. Teste grátis.
-          </div>
-          <a href="#" class="cta">Testar Grátis →</a>
-          <div class="meta-footer">
-            <span>Evolua • Patrocinado</span>
-            <div class="actions">
-              <span>👍</span><span>💬</span><span>🔗</span>
-            </div>
-          </div>
+        <div class="body-text ink-soft">
+          Enquanto você atende, o Evolua preenche o prontuário com IA. Laudo pronto em 2 cliques. WhatsApp integrado. Teste grátis.
+        </div>
+        <div class="cta-row">
+          <button class="btn-cta deep-neon">TESTAR GRÁTIS</button>
+          <span class="meta-indicator">Patrocinado</span>
         </div>
       </div>
-
-      <!-- FEED 2 — O CRM que entende de Fono -->
-      <div class="ad-card">
-        <div class="mock-label">Feed — Versão B</div>
-        <div class="ad-visual ad-visual--cards">
-          <div class="cards-preview">
-            <div class="minicard"><span class="ico">📋</span>Prontuário</div>
-            <div class="minicard"><span class="ico">📅</span>Agenda</div>
-            <div class="minicard"><span class="ico">💬</span>WhatsApp</div>
-            <div class="minicard"><span class="ico">💳</span>Cobrança</div>
-            <div class="minicard"><span class="ico">📹</span>Tele</div>
-          </div>
-        </div>
-        <div class="ad-content">
-          <div class="headline">CRM feito para fonoaudiólogas</div>
-          <div class="primary-text">
-            Prontuário, agenda, WhatsApp, cobrança e teleconsulta em um só lugar. Não é um sistema genérico — é feito para você.
-          </div>
-          <a href="#" class="cta">Quero Conhecer →</a>
-          <div class="meta-footer">
-            <span>Evolua • Patrocinado</span>
-            <div class="actions">
-              <span>👍</span><span>💬</span><span>🔗</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- FEED 3 — Dado que convence -->
-      <div class="ad-card">
-        <div class="mock-label">Feed — Versão C</div>
-        <div class="ad-visual ad-visual--dark">
-          <div class="neon-accent" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-            <div class="big-number">60%</div>
-            <div class="sub">fecham em 5 anos</div>
-          </div>
-        </div>
-        <div class="ad-content">
-          <div class="headline">60% fecham em 5 anos. Você não precisa ser estatística.</div>
-          <div class="primary-text">
-            Gestão financeira é o que separa consultórios que crescem dos que fecham. Evolua te dá controle total.
-          </div>
-          <a href="#" class="cta">Começar Grátis →</a>
-          <div class="meta-footer">
-            <span>Evolua • Patrocinado</span>
-            <div class="actions">
-              <span>👍</span><span>💬</span><span>🔗</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- ===== STORIES ===== -->
-    <div class="section-title">
-      📲 Stories
-      <span>2 criativos</span>
-    </div>
-
-    <div class="story-grid">
-
-      <!-- STORY 1 -->
-      <div class="story-card">
-        <div class="story-visual story-visual--light">
-          <div class="story-badge">Story</div>
-          <div class="story-text">
-            <span class="emoji">✨</span><br>
-            Prontuário em<br>30 segundos<br>com IA
+    <!-- Feed 2: "CRM feito para fono" -->
+    <div class="feed-ad">
+      <div class="visual var2">
+        <div class="headline ink" style="font-size:19px;margin-bottom:4px;">CRM feito para</div>
+        <div class="headline ink" style="font-size:22px;margin-bottom:18px;">fonoaudiólogas</div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="icon">&#9997;</div>
+            <span class="label">Prontuário digital com IA</span>
+          </div>
+          <div class="feature-card">
+            <div class="icon">&#128197;</div>
+            <span class="label">Agenda inteligente</span>
+          </div>
+          <div class="feature-card">
+            <div class="icon">&#128172;</div>
+            <span class="label">WhatsApp nativo</span>
+          </div>
+          <div class="feature-card">
+            <div class="icon">&#128179;</div>
+            <span class="label">Cobrança PIX / Cartão</span>
           </div>
         </div>
-        <div class="story-footer">
-          <span class="label">Evolua</span>
-          <a href="#" class="cta-story">Teste grátis →</a>
+        <div class="body-text ink-soft" style="font-size:13px;">
+          Não é genérico — é feito para você.
+        </div>
+        <div class="cta-row" style="margin-top:10px;">
+          <button class="btn-cta primary-white">QUERO CONHECER</button>
+          <span class="meta-indicator">Patrocinado</span>
         </div>
       </div>
+    </div>
 
-      <!-- STORY 2 -->
-      <div class="story-card">
-        <div class="story-visual" style="background:linear-gradient(135deg, #0A0A14 0%, #1a1040 100%);">
-          <div class="story-badge">Story</div>
-          <div class="story-text" style="color:#fff;">
-            <span class="emoji">💬</span><br>
-            Agenda, lembrete<br>e cobrança pelo<br>WhatsApp
-          </div>
+    <!-- Feed 3: "60% fecham em 5 anos" -->
+    <div class="feed-ad">
+      <div class="visual var3">
+        <div class="stat-highlight">
+          <div class="stat-number">60%</div>
+          <div class="stat-label">fecham em 5 anos</div>
         </div>
-        <div class="story-footer">
-          <span class="label">Evolua</span>
-          <a href="#" class="cta-story">Saiba mais →</a>
+        <div class="stat-bar"><div class="fill"></div></div>
+        <div class="headline white" style="font-size:17px;margin-bottom:12px;">
+          Você não precisa ser estatística.
+        </div>
+        <div class="body-text white-80" style="font-size:13px;">
+          Gestão financeira é o que separa consultórios que crescem dos que fecham. Evolua te dá controle total.
+        </div>
+        <div class="cta-row" style="margin-top:14px;">
+          <button class="btn-cta neon-ink">COMEÇAR GRÁTIS</button>
+          <span class="meta-indicator" style="color:rgba(255,255,255,0.5);">Patrocinado</span>
         </div>
       </div>
-
     </div>
 
-    <div style="margin-top:64px;padding:24px;background:#120D1E;border-radius:12px;border:1px solid rgba(139,92,246,.12);font-size:13px;color:rgba(255,255,255,.5);text-align:center;">
-      Rotação: trocar criativos a cada 7 dias • Pixel Meta instalado • CTA unificado para landing page /testar-gratis
+    <!-- ==================== STORY ADS SECTION ==================== -->
+    <span class="section-label">Story Ads</span>
+
+    <!-- Story 1: "Prontuário em 30s" -->
+    <div class="story-ad">
+      <div class="bg-deep"></div>
+      <div class="accent-line"></div>
+      <div class="accent-corner"></div>
+      <div class="logo">EVOLUA</div>
+      <div class="story-text">
+        PRONTUÁRIO<br>EM 30<br>SEGUNDOS<br>COM IA
+      </div>
+      <div class="story-sub">
+        Enquanto você fala, o Evolua documenta. Laudo em 2 cliques.
+      </div>
+      <div class="story-cta">TESTE GRÁTIS →</div>
+      <div class="swipe-indicator">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
     </div>
+
+    <!-- Story 2: "WhatsApp integrado" -->
+    <div class="story-ad">
+      <div class="bg-deep"></div>
+      <div class="accent-line"></div>
+      <div class="accent-corner"></div>
+      <div class="logo">EVOLUA</div>
+      <div class="story-text">
+        AGENDA,<br>LEMBRETE E<br>COBRANÇA<br>PELO WHATSAPP
+      </div>
+      <div class="story-sub">
+        Tudo que você precisa pra gerenciar sua clínica direto do celular.
+      </div>
+      <div class="story-cta">SAIBA MAIS</div>
+      <div class="swipe-indicator">
+        <div class="dot"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
   </div>
 </body>
 </html>

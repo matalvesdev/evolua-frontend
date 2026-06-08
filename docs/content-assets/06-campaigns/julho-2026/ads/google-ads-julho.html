@@ -1,326 +1,324 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Ads — Julho 2026 | Evolua</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #0A0A14;
-      font-family: 'Inter', -apple-system, sans-serif;
-      color: #fff;
+      background: #F8F8FF;
+      font-family: 'DM Sans', system-ui, sans-serif;
       padding: 40px 24px;
-    }
-    .container { max-width: 1000px; margin: 0 auto; }
-    .header { text-align: center; margin-bottom: 56px; }
-    .header h1 {
-      font-size: 32px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #8B5CF6, #C4F135);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .header p { color: rgba(255,255,255,.5); font-size: 14px; margin-top: 8px; }
-    .badge {
-      display: inline-block;
-      background: rgba(139,92,246,.15);
-      color: #8B5CF6;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 100px;
-      letter-spacing: .03em;
-      text-transform: uppercase;
-    }
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin: 48px 0 24px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
     }
-    .section-title span {
-      background: #8B5CF6;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 10px;
-      border-radius: 100px;
+    h1 {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: #1A1A2E;
+      text-align: center;
+      margin-bottom: 8px;
     }
-
-    /* ===== SEARCH ADS ===== */
-    .search-list { display: flex; flex-direction: column; gap: 20px; }
-    .search-ad {
-      background: #120D1E;
-      border: 1px solid rgba(139,92,246,.15);
-      border-radius: 12px;
-      padding: 20px 24px;
-      transition: border-color .2s;
+    .subtitle {
+      color: #8888AA;
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 15px;
     }
-    .search-ad:hover { border-color: rgba(139,92,246,.4); }
-    .search-ad .ad-label {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      color: #C4F135;
-      margin-bottom: 6px;
-    }
-    .search-ad .ad-url {
-      font-size: 12px;
-      color: rgba(255,255,255,.4);
-      margin-bottom: 4px;
-    }
-    .search-ad .ad-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: #8B5CF6;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      margin-bottom: 6px;
-      cursor: pointer;
-    }
-    .search-ad .ad-desc {
-      font-size: 14px;
-      line-height: 1.5;
-      color: rgba(255,255,255,.7);
-    }
-    .search-ad .ad-cta {
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #C4F135;
-    }
-    .search-ad .extensions {
+    .cards {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
+      gap: 32px;
+      justify-content: center;
+      max-width: 1120px;
     }
-    .search-ad .extensions span {
-      background: rgba(139,92,246,.1);
-      color: rgba(255,255,255,.5);
-      font-size: 10px;
-      padding: 3px 10px;
-      border-radius: 100px;
+    .section-label {
+      width: 100%;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      color: #4A4A6A;
+      margin-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #E0DFEF;
     }
 
-    /* ===== YOUTUBE ===== */
-    .yt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-    @media (max-width: 700px) { .yt-grid { grid-template-columns: 1fr; } }
-    .yt-card {
-      background: #120D1E;
-      border: 1px solid rgba(139,92,246,.15);
-      border-radius: 16px;
+    /* ===== Search Ad Card ===== */
+    .search-ad {
+      width: 480px;
+      border-radius: 2px;
+      background: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(26,26,46,0.08);
       overflow: hidden;
-      transition: border-color .2s;
     }
-    .yt-card:hover { border-color: rgba(139,92,246,.4); }
-    .yt-preview {
-      aspect-ratio: 16 / 9;
-      background: #0A0A14;
+    .search-ad .header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid #E0DFEF;
+    }
+    .search-ad .url-line {
+      font-size: 12px;
+      color: #8888AA;
+      margin-bottom: 4px;
+    }
+    .search-ad .url-line strong {
+      color: #1A1A2E;
+    }
+    .search-ad .title {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: #6C63FF;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .search-ad .description {
+      font-size: 14px;
+      color: #4A4A6A;
+      line-height: 1.5;
+    }
+    .search-ad .description .highlight {
+      color: #1A1A2E;
+      font-weight: 700;
+    }
+    .search-ad .footer {
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #F8F8FF;
+      font-size: 12px;
+      color: #8888AA;
+    }
+    .search-ad .footer .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #EAE8FF;
+      border-radius: 2px;
+      font-weight: 500;
+      color: #6C63FF;
+      font-size: 11px;
+    }
+
+    /* ===== YouTube Ad Card ===== */
+    .yt-ad {
+      width: 480px;
+      border-radius: 2px;
+      background: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(26,26,46,0.08);
+      overflow: hidden;
+    }
+    .yt-ad .thumbnail {
+      height: 200px;
+      background: #2D2B55;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
     }
-    .yt-preview .play-btn {
-      width: 56px;
-      height: 56px;
+    .yt-ad .thumbnail .play-btn {
+      width: 64px; height: 64px;
       border-radius: 50%;
-      background: rgba(139,92,246,.9);
+      background: rgba(196,241,53,0.9);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      color: #fff;
-      cursor: pointer;
-      transition: transform .15s;
+      font-size: 28px;
+      color: #1A1A2E;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    .yt-preview .play-btn:hover { transform: scale(1.08); }
-    .yt-preview .yt-label {
+    .yt-ad .thumbnail .brand {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0,0,0,.7);
-      backdrop-filter: blur(6px);
-      font-size: 9px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 100px;
+      top: 16px; left: 20px;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 14px;
       color: #C4F135;
+      letter-spacing: 0.05em;
     }
-    .yt-preview .yt-duration {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(0,0,0,.75);
-      font-size: 11px;
+    .yt-ad .meta {
+      padding: 16px 20px;
+    }
+    .yt-ad .meta .title {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
       font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-    .yt-content {
-      padding: 16px;
-    }
-    .yt-content .yt-title {
       font-size: 15px;
-      font-weight: 600;
+      color: #1A1A2E;
       margin-bottom: 6px;
     }
-    .yt-content .yt-desc {
+    .yt-ad .meta .desc {
       font-size: 13px;
+      color: #4A4A6A;
       line-height: 1.5;
-      color: rgba(255,255,255,.6);
+      margin-bottom: 10px;
     }
-    .yt-content .yt-meta {
+    .yt-ad .meta .channel {
       display: flex;
-      gap: 12px;
-      margin-top: 10px;
-      font-size: 11px;
-      color: rgba(255,255,255,.3);
-    }
-    .yt-content .yt-cta {
-      display: inline-block;
-      margin-top: 10px;
-      background: #8B5CF6;
-      color: #fff;
+      align-items: center;
+      gap: 8px;
       font-size: 12px;
-      font-weight: 600;
-      padding: 6px 18px;
-      border-radius: 100px;
-      text-decoration: none;
+      color: #8888AA;
+    }
+    .yt-ad .meta .channel .avatar {
+      width: 24px; height: 24px;
+      border-radius: 2px;
+      background: #6C63FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .yt-ad .overlay-cta {
+      position: absolute;
+      bottom: 16px; right: 20px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 8px 16px;
+      background: #C4F135;
+      color: #1A1A2E;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .variations {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 0 24px 20px;
+    }
+    .variations .pill {
+      padding: 4px 10px;
+      background: #EAE8FF;
+      border-radius: 2px;
+      font-size: 11px;
+      color: #6C63FF;
+      font-weight: 500;
+    }
+    .variations .pill-label {
+      font-size: 11px;
+      color: #8888AA;
+      font-weight: 500;
+      padding-right: 4px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="badge">Google Ads • Julho 2026</div>
-      <h1>Campanha Evolua</h1>
-      <p>3 Search Ads + 2 YouTube Pre-roll</p>
-    </div>
+  <h1>Google Ads — Julho 2026</h1>
+  <p class="subtitle">3 Search Ads + 2 YouTube Ads · Evolua Design System v5.0</p>
 
-    <!-- ===== SEARCH ===== -->
-    <div class="section-title">
-      🔍 Search Ads
-      <span>3 anúncios</span>
-    </div>
+  <div class="cards">
 
-    <div class="search-list">
+    <!-- ==================== SEARCH ADS ==================== -->
+    <span class="section-label">Search Ads</span>
 
-      <div class="search-ad">
-        <div class="ad-label">Anúncio • Search 1</div>
-        <div class="ad-url">🔗 www.useevolua.com.br /crm-para-fonoaudiologa</div>
-        <div class="ad-title">CRM para Fonoaudióloga — Evolua | Prontuário + WhatsApp Nativo</div>
-        <div class="ad-desc">
-          Prontuário digital, agenda inteligente, WhatsApp nativo e teleconsulta em um só lugar. Teste grátis por 7 dias. Sistema feito por fonoaudiólogas, para fonoaudiólogas.
-        </div>
-        <div class="extensions">
-          <span>📞 Ligar agora</span>
-          <span>📄 Teste grátis</span>
-          <span>⭐ 4.9 avaliações</span>
-        </div>
-        <div class="ad-cta">Testar Grátis →</div>
-      </div>
-
-      <div class="search-ad">
-        <div class="ad-label">Anúncio • Search 2</div>
-        <div class="ad-url">🔗 www.useevolua.com.br /testar-gratis</div>
-        <div class="ad-title">Sistema para Fonoaudiologia | Teste Grátis por 7 Dias</div>
-        <div class="ad-desc">
-          Gerencie sua clínica de fonoaudiologia com um sistema completo: prontuário, agenda, financeiro e WhatsApp. Não precisa de cartão de crédito. Comece agora.
-        </div>
-        <div class="extensions">
-          <span>📅 Agende uma demo</span>
-          <span>💬 WhatsApp</span>
-          <span>🔒 Dados seguros</span>
-        </div>
-        <div class="ad-cta">Começar Grátis →</div>
-      </div>
-
-      <div class="search-ad">
-        <div class="ad-label">Anúncio • Search 3</div>
-        <div class="ad-url">🔗 www.useevolua.com.br /laudo-fonoaudiologia</div>
-        <div class="ad-title">Laudo de Fonoaudiologia | Pronto em 2 Cliques com IA</div>
-        <div class="ad-desc">
-          Cancele horas de papelada. O Evolua usa IA para gerar laudos completos em segundos. Prontuário, anamnese e evolução integrados. Teste grátis.
-        </div>
-        <div class="extensions">
-          <span>⚡ Geração com IA</span>
-          <span>📋 Modelos prontos</span>
-          <span>✅ CRM completo</span>
-        </div>
-        <div class="ad-cta">Testar Grátis →</div>
-      </div>
-
-    </div>
-
-    <!-- ===== YOUTUBE ===== -->
-    <div class="section-title">
-      ▶️ YouTube Pre-roll
-      <span>2 vídeos</span>
-    </div>
-
-    <div class="yt-grid">
-
-      <div class="yt-card">
-        <div class="yt-preview">
-          <div class="yt-label">Pre-roll • 15s</div>
-          <div class="play-btn">▶</div>
-          <div class="yt-duration">0:15</div>
-        </div>
-        <div class="yt-content">
-          <div class="yt-title">30 minutos de papelada? O Evolua faz em 30 segundos.</div>
-          <div class="yt-desc">
-            Enquanto você atende, o Evolua preenche o prontuário com IA. Laudo, anamnese e evolução em segundos. Teste grátis.
-          </div>
-          <div class="yt-meta">
-            <span>Evolua</span>
-            <span>15 segundos</span>
-            <span>🔊 com áudio</span>
-          </div>
-          <a href="#" class="yt-cta">Testar Grátis</a>
+    <!-- Search 1 -->
+    <div class="search-ad">
+      <div class="header">
+        <div class="url-line"><strong>Anúncio</strong> · app.useevolua.com.br</div>
+        <div class="title">CRM para Fonoaudióloga — Evolua | Prontuário + WhatsApp Nativo</div>
+        <div class="description">
+          Sistema completo para sua clínica de fonoaudiologia. <span class="highlight">Prontuário com IA</span>, agenda inteligente, WhatsApp integrado e cobrança PIX/Cartão. Teste grátis por 7 dias.
         </div>
       </div>
-
-      <div class="yt-card">
-        <div class="yt-preview" style="background: linear-gradient(135deg, #0A0A14 0%, #1a1040 100%);">
-          <div class="yt-label">Pre-roll • 20s</div>
-          <div class="play-btn">▶</div>
-          <div class="yt-duration">0:20</div>
-        </div>
-        <div class="yt-content">
-          <div class="yt-title">O CRM que entende de fonoaudiologia. Teste grátis.</div>
-          <div class="yt-desc">
-            Prontuário, agenda, WhatsApp, cobrança e teleconsulta em um lugar só. Não é genérico — é feito para fonoaudiólogas.
-          </div>
-          <div class="yt-meta">
-            <span>Evolua</span>
-            <span>20 segundos</span>
-            <span>🔊 com áudio</span>
-          </div>
-          <a href="#" class="yt-cta">Quero Conhecer</a>
-        </div>
-      </div>
-
-    </div>
-
-    <div style="margin-top:64px;padding:24px;background:#120D1E;border-radius:12px;border:1px solid rgba(139,92,246,.12);">
-      <div style="font-size:14px;font-weight:600;margin-bottom:8px;color:#C4F135;">📌 Configurações da Campanha Google</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:rgba(255,255,255,.6);">
-        <div>Rede: Pesquisa + Display + YouTube</div>
-        <div>Budget: R$ 100-150/dia</div>
-        <div>Palavras-chave: CRM fonoaudiologia, sistema clínica fono, prontuário digital fono, laudo fonoaudiologia, gestão clínica fono</div>
-        <div>Segmentação: Fonoaudiólogas, 25-50 anos, Brasil</div>
-        <div>Extensões: Sitelink, Callout, Structured Snippet</div>
-        <div>Conversion Tracking: Google Ads + Meta Pixel</div>
+      <div class="footer">
+        <span class="badge">&#9733; Teste grátis</span>
+        <span>app.useevolua.com.br</span>
       </div>
     </div>
+
+    <!-- Search 2 -->
+    <div class="search-ad">
+      <div class="header">
+        <div class="url-line"><strong>Anúncio</strong> · app.useevolua.com.br</div>
+        <div class="title">Sistema para Fonoaudiologia | Teste Grátis por 7 Dias</div>
+        <div class="description">
+          O sistema que mais cresce entre fonoaudiólogas no Brasil. <span class="highlight">Prontuário digital</span>, teleconsulta, laudo com IA e gestão financeira. Cadastre-se grátis.
+        </div>
+      </div>
+      <div class="footer">
+        <span class="badge">&#9733; 7 dias grátis</span>
+        <span>app.useevolua.com.br</span>
+      </div>
+    </div>
+
+    <!-- Search 3 -->
+    <div class="search-ad">
+      <div class="header">
+        <div class="url-line"><strong>Anúncio</strong> · app.useevolua.com.br</div>
+        <div class="title">Laudo de Fonoaudiologia | Pronto em 2 Cliques com IA</div>
+        <div class="description">
+          Gera laudos completos com inteligência artificial enquanto você atende. <span class="highlight">Economize 30 minutos por paciente</span>. Teste grátis o Evolua.
+        </div>
+      </div>
+      <div class="footer">
+        <span class="badge">&#9733; IA gratuita no teste</span>
+        <span>app.useevolua.com.br</span>
+      </div>
+    </div>
+
+    <!-- Variantes Search -->
+    <div style="width:480px;margin-top:-20px;">
+      <div class="variations">
+        <span class="pill-label">Variações A/B:</span>
+        <span class="pill">CRM fonoaudióloga → "CRM para fono"</span>
+        <span class="pill">Teste grátis → "Comece grátis"</span>
+        <span class="pill">Laudo IA → "Prontuário automático"</span>
+      </div>
+    </div>
+
+    <!-- ==================== YOUTUBE ADS ==================== -->
+    <span class="section-label">YouTube Ads</span>
+
+    <!-- YouTube 1 -->
+    <div class="yt-ad">
+      <div class="thumbnail">
+        <div class="brand">EVOLUA</div>
+        <div class="play-btn">&#9654;</div>
+        <div class="overlay-cta">TESTE GRÁTIS</div>
+      </div>
+      <div class="meta">
+        <div class="title">30 minutos de papelada por paciente? O Evolua faz em 30 segundos.</div>
+        <div class="desc">
+          Veja como a IA do Evolua preenche o prontuário enquanto você atende. Laudo pronto em 2 cliques. Adeus papelada.
+        </div>
+        <div class="channel">
+          <div class="avatar">E</div>
+          <span>Evolua · <strong>11 mil visualizações</strong> · há 3 dias</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- YouTube 2 -->
+    <div class="yt-ad">
+      <div class="thumbnail">
+        <div class="brand">EVOLUA</div>
+        <div class="play-btn">&#9654;</div>
+        <div class="overlay-cta">TESTE GRÁTIS</div>
+      </div>
+      <div class="meta">
+        <div class="title">O CRM que entende de fonoaudiologia. Teste grátis.</div>
+        <div class="desc">
+          Prontuário, agenda, WhatsApp, teleconsulta e cobrança em um só lugar. Não é genérico — é o CRM feito para fonoaudiólogas.
+        </div>
+        <div class="channel">
+          <div class="avatar">E</div>
+          <span>Evolua · <strong>8,2 mil visualizações</strong> · há 1 semana</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </body>
 </html>

@@ -1,165 +1,142 @@
-# Campanha Evolua — Julho 2026
+# Campanha Julho 2026 — Evolua Ads
 
-> CRM para Fonoaudiólogas | Prontuário + WhatsApp Nativo + IA
+## Configuração Geral
 
----
-
-## 1. Objetivo
-
-Gerar leads qualificadas (fonoaudiólogas) para teste grátis de 7 dias do Evolua, com CPL <= R$ 8,00 e taxa de conversão > 3%.
-
----
-
-## 2. Budget
-
-| Canal        | Custo/Dia     | Custo Total (31 dias) | Distribuição |
-|-------------|---------------|-----------------------|--------------|
-| Meta Ads    | R$ 80 - 120   | R$ 2.480 - 3.720     | 45%          |
-| Google Ads  | R$ 100 - 150  | R$ 3.100 - 4.650     | 55%          |
-| **Total**   | **R$ 180-270**| **R$ 5.580 - 8.370** | 100%         |
+| Item | Valor |
+|------|-------|
+| **Período** | 01/07/2026 a 31/07/2026 |
+| **Público-alvo** | Fonoaudiólogas, 25–50 anos, Brasil |
+| **Idioma** | Português (Brasil) |
+| **Fuso horário** | BRT (UTC−3) |
+| **UTM padrão** | `utm_source=meta&utm_medium=cpc&utm_campaign=julho2026` |
 
 ---
 
-## 3. Público-Alvo
+## Meta Ads
 
-### Demografia
-- **Profissão:** Fonoaudiólogas (CLT, autônomas, donas de clínica)
-- **Faixa etária:** 25 - 50 anos
-- **Localização:** Brasil (todas as regiões)
-- **Gênero:** Feminino (predominante na profissão)
+### Orçamento
 
-### Segmentação Meta Ads
-- Interesses: Fonoaudiologia, Terapia da Fala, Saúde, Gestão de Clínicas, Empreendedorismo Feminino
-- Comportamento: Engajamento com páginas de saúde/terapia, clínicas e consultórios
-- Lookalike: 1% e 3% a partir de leads convertidas
+| Tipo | Budget diário |
+|------|--------------|
+| Feed Ads | R$ 60–90 |
+| Story Ads | R$ 20–30 |
+| **Total Meta** | **R$ 80–120/dia** |
 
-### Segmentação Google Ads
-- Palavras-chave (consulta | correspondência de frase):
-  - `"crm para fonoaudióloga"`
-  - `"sistema para fonoaudiologia"`
-  - `"prontuário digital fono"`
-  - `"laudo fonoaudiologia"`
-  - `"gestão de clínica fono"`
-  - `"software fonoaudiologia"`
-  - `"agenda digital fono"`
-  - `"whatsapp fonoaudiologia"`
+### Segmentação
 
-- Palavras-chave negativas:
-  - `curso`, `faculdade`, `pós-graduação`, `emprego`, `vaga`, `grátis` (isolado), `baixar`, `tutorial`
+- **Interesses**: Fonoaudiologia, Terapia da Fala, Clínica, Saúde, Educação Especial
+- **Comportamentos**: Pequenas empresárias, Profissionais de saúde autônomos
+- **Exclusões**: Profissionais de saúde fora fonoaudiologia, Público < 25 anos
+- **Posicionamento**: Feed + Stories (Instagram e Facebook)
 
-### Segmentação por Dispositivo
-| Dispositivo | Meta Ads | Google Ads |
-|-------------|----------|------------|
-| Mobile      | 70%      | 65%        |
-| Desktop     | 25%      | 30%        |
-| Tablet      | 5%       | 5%         |
+### Criativos
 
----
+| ID | Tipo | Headline | CTA | Título variações A/B |
+|----|------|----------|-----|----------------------|
+| FEED-01 | Feed | Chega de papelada. Seu prontuário em 30 segundos. | Testar Grátis | "Prontuário em 30s com IA" / "Chega de papelada" / "Laudo em 2 cliques" |
+| FEED-02 | Feed | CRM feito para fonoaudiólogas | Quero Conhecer | "CRM para fono" / "O sistema que entende de fono" / "Tudo em um lugar só" |
+| FEED-03 | Feed | 60% fecham em 5 anos. Você não precisa ser estatística. | Começar Grátis | "Não seja estatística" / "Gestão financeira que funciona" / "Controle total do seu consultório" |
+| STORY-01 | Story | PRONTUÁRIO EM 30 SEGUNDOS COM IA | TESTE GRÁTIS → | Variação visual: fundo com gradiente |
+| STORY-02 | Story | AGENDA, LEMBRETE E COBRANÇA PELO WHATSAPP | SAIBA MAIS | Variação visual: fundo com ilustração |
 
-## 4. Agenda
+### Landing Pages
 
-| Evento                | Data                        |
-|-----------------------|-----------------------------|
-| Lançamento campanha   | 01/07/2026 (quarta-feira)  |
-| Rotação criativo #1   | 01/07 - 07/07              |
-| Rotação criativo #2   | 08/07 - 14/07              |
-| Rotação criativo #3   | 15/07 - 21/07              |
-| Rotação criativo #4   | 22/07 - 28/07              |
-| Última semana         | 29/07 - 31/07 (otimização) |
-| Encerramento          | 31/07/2026                 |
+| Anúncio | URL de destino |
+|---------|---------------|
+| FEED-01 | `https://app.useevolua.com.br/cadastro?utm_source=meta&utm_medium=cpc&utm_campaign=julho2026&utm_content=feed01` |
+| FEED-02 | `https://app.useevolua.com.br/cadastro?utm_source=meta&utm_medium=cpc&utm_campaign=julho2026&utm_content=feed02` |
+| FEED-03 | `https://app.useevolua.com.br/cadastro?utm_source=meta&utm_medium=cpc&utm_campaign=julho2026&utm_content=feed03` |
+| STORY-01 | `https://app.useevolua.com.br/cadastro?utm_source=meta&utm_medium=cpc&utm_campaign=julho2026&utm_content=story01` |
+| STORY-02 | `https://app.useevolua.com.br/cadastro?utm_source=meta&utm_medium=cpc&utm_campaign=julho2026&utm_content=story02` |
 
 ---
 
-## 5. Criativos
+## Google Ads
 
-### Meta Ads
+### Orçamento
 
-| ID    | Formato | Headline | Visual | CTA |
-|-------|---------|----------|--------|-----|
-| F1-A  | Feed    | "Chega de papelada. Seu prontuário em 30 segundos." | Fundo claro + ilustração geométrica | Testar Grátis |
-| F2-B  | Feed    | "CRM feito para fonoaudiólogas" | Cards de funcionalidades | Quero Conhecer |
-| F3-C  | Feed    | "60% fecham em 5 anos. Você não precisa ser estatística." | Fundo escuro + neon green | Começar Grátis |
-| S1-A  | Story   | "Prontuário em 30 segundos com IA ✨" | Fundo claro | Teste grátis → |
-| S2-B  | Story   | "Agenda, lembrete e cobrança pelo WhatsApp" | Fundo escuro | Saiba mais |
+| Tipo | Budget diário |
+|------|--------------|
+| Search Ads | R$ 70–100 |
+| YouTube Ads | R$ 30–50 |
+| **Total Google** | **R$ 100–150/dia** |
 
-### Google Ads
+### Palavras-chave
 
-| ID    | Tipo     | Headline                                    | Extensões |
-|-------|----------|---------------------------------------------|-----------|
-| G-S1  | Search   | CRM para Fonoaudióloga — Evolua | Prontuário + WhatsApp Nativo | Sitelink, Callout, Snippet |
-| G-S2  | Search   | Sistema para Fonoaudiologia | Teste Grátis por 7 Dias | Sitelink, Callout, Snippet |
-| G-S3  | Search   | Laudo de Fonoaudiologia | Pronto em 2 Cliques com IA | Sitelink, Callout, Snippet |
-| G-Y1  | YouTube  | 30 minutos de papelada? O Evolua faz em 30 segundos. (15s) | CTA sobreposto |
-| G-Y2  | YouTube  | O CRM que entende de fonoaudiologia. Teste grátis. (20s) | CTA sobreposto |
+| Grupo | Palavras-chave |
+|-------|---------------|
+| **CRM fonoaudiologia** | crm para fonoaudióloga, crm fonoaudiologia, sistema para fonoaudióloga, software gestão clínica fono |
+| **Sistema clínica** | sistema para clínica de fonoaudiologia, prontuário digital fonoaudiologia, agenda fonoaudióloga online |
+| **Prontuário digital** | prontuário digital fono, laudo fonoaudiologia online, prontuário eletrônico fonoaudióloga |
+| **WhatsApp / gestão** | whatsapp para fonoaudióloga, gestão de clínica fono, agendamento online fonoaudiologia |
+| **Palavras negativas** | curso fonoaudiologia, faculdade fonoaudiologia, pós-graduação fono, emprego fono |
 
----
+### Search Ads
 
-## 6. KPIs
+| ID | Título (máx. 30) | Descrição (máx. 90) | Caminho exibição |
+|----|------------------|---------------------|------------------|
+| SEA-01 | CRM para Fonoaudióloga — Evolua | Sistema completo com prontuário IA + WhatsApp nativo + gestão financeira. Teste grátis 7 dias. | /crm-fono |
+| SEA-02 | Sistema para Fonoaudiologia | Prontuário digital, teleconsulta, laudo com IA e agenda inteligente. Cadastre-se grátis. | /sistema-fono |
+| SEA-03 | Laudo de Fonoaudiologia com IA | Gera laudos completos em 2 cliques enquanto você atende. Economize 30 min por paciente. | /laudo-ia |
 
-| Métrica              | Meta               | Alerta (revisão)    |
-|----------------------|--------------------|---------------------|
-| CPL (Custo por Lead) | <= R$ 8,00         | > R$ 12,00          |
-| CTR (Meta Ads)       | > 2,5%             | < 1,0%              |
-| CTR (Google Search)  | > 4,0%             | < 2,0%              |
-| CTR (YouTube)        | > 1,5%             | < 0,8%              |
-| Taxa de Conversão    | > 3,0%             | < 1,5%              |
-| CPC (Meta)           | <= R$ 1,80         | > R$ 2,50           |
-| CPC (Google)         | <= R$ 2,50         | > R$ 4,00           |
-| ROAS (vida útil)     | > 5x               | < 3x                |
+**Variações A/B**: 3 títulos alternativos por anúncio, 2 descrições alternativas.
 
----
+### YouTube Ads
 
-## 7. Landing Pages
-
-| Anúncio              | Landing Page                     |
-|----------------------|----------------------------------|
-| Todos Meta Ads       | `/testar-gratis` (com UTM)      |
-| Google Search 1      | `/crm-para-fonoaudiologa`       |
-| Google Search 2      | `/testar-gratis`                 |
-| Google Search 3      | `/laudo-fonoaudiologia`         |
-| YouTube Pre-roll     | `/testar-gratis` (com UTM)      |
-
-### Parâmetros UTM
-
-```
-utm_source={facebook|google|youtube}
-utm_medium={social|cpc|video}
-utm_campaign=julho-2026
-utm_content={feed-a|feed-b|feed-c|story-a|story-b|search-1|search-2|search-3|yt-1|yt-2}
-```
+| ID | Título | Descrição | Formato |
+|----|--------|-----------|---------|
+| YT-01 | 30 minutos de papelada por paciente? O Evolua faz em 30 segundos. | In-stream skippable, 15–30s. Showcase IA prontuário + laudo. | In-stream |
+| YT-02 | O CRM que entende de fonoaudiologia. Teste grátis. | In-stream skippable, 15–30s. Showcase funcionalidades. | In-stream |
 
 ---
 
-## 8. Tracking
+## KPIs e Metas
 
-### Meta Pixel
-- Evento `Lead` no formulário de cadastro
-- Evento `ViewContent` na landing page
-- Evento `CompleteRegistration` no fim do trial
-
-### Google Ads Conversion Tracking
-- Conversão: cadastro concluído
-- Conversão: início do trial (7 dias)
-- Remarketing tag em todas as páginas
-
----
-
-## 9. Observações
-
-- **Rotação de criativos:** a cada 7 dias para evitar fadiga. Manter 2-3 variações ativas por vez.
-- **Horários de maior conversão:** 10h-12h e 18h-21h (horário comercial + pós-expediente). Ajustar programação de entrega.
-- **Criativos com desempenho abaixo da média:** pausar e substituir (CTR < 1% ou CPC > 2x da média).
-- **Teste A/B:** Manter sempre 1 teste ativo (headline vs. visual vs. CTA).
-- **Remarketing:** Criar audiência de 7 dias para quem visitou mas não converteu. Audience 1: visitantes landing page. Audience 2: clicou no anúncio mas não converteu.
+| Métrica | Meta |
+|---------|------|
+| **CPL (Custo por Lead)** | ≤ R$ 8,00 |
+| **CTR (Meta)** | > 2,5% |
+| **CTR (Google Search)** | > 4,0% |
+| **CTR (YouTube)** | > 1,2% |
+| **CPM (Meta)** | ≤ R$ 25,00 |
+| **Taxa de conversão (lead → cadastro)** | > 15% |
+| **Orçamento total mensal** | R$ 5.400 – R$ 8.100 |
 
 ---
 
-## 10. Riscos
+## Teste A/B
 
-| Risco                          | Mitigação                                    |
-|--------------------------------|----------------------------------------------|
-| CPL acima da meta             | Revisar segmentação e criativos              |
-| Fadiga criativa               | Rotação semanal obrigatória                  |
-| Baixo volume de busca         | Expandir para Display + YouTube remarketing |
-| Conversão baixa na landing    | Teste A/B de copy e formulário               |
-| Concorrência sazonal          | Aumentar bid em horários de pico             |
+Cada anúncio terá 3 variações de criativo rodando simultaneamente por 7 dias. Ao final do período, a variação vencedora (menor CPL) receberá 80% do budget.
+
+| Variação | Elemento testado | Anúncios |
+|----------|-----------------|----------|
+| **Headline** | Título principal | FEED-01, FEED-02, FEED-03, SEA-01, SEA-02, SEA-03 |
+| **Visual** | Fundo / layout | FEED-01, FEED-02, FEED-03 |
+| **CTA** | Texto do botão | FEED-01, FEED-02, FEED-03 |
+
+---
+
+## Cronograma de Ativação
+
+| Data | Ação |
+|------|------|
+| 25/06 | Revisão e aprovação dos criativos |
+| 28/06 | Setup das campanhas no Gerenciador de Anúncios + Google Ads |
+| 30/06 | Review final e agendamento |
+| 01/07 | **Lançamento** — início da campanha |
+| 07/07 | 1ª avaliação de desempenho (7 dias) |
+| 14/07 | 2ª avaliação + ajustes de budget |
+| 21/07 | 3ª avaliação + definição vencedores A/B |
+| 28/07 | Última semana — otimização final |
+| 31/07 | Encerramento + relatório de resultados |
+| 03/08 | Post-mortem e lições para Agosto/2026 |
+
+---
+
+## Observabilidade e Rastreio
+
+- Eventos Meta Pixel: `Lead`, `ViewContent`, `AddToCart` (cadastro)
+- Google Ads Conversion Tracking: `cadastro_completo`, `trial_activated`
+- UTMs em todos os links
+- Planilha de acompanhamento diário: `docs/operations/tracking/julho-2026-ads.csv`
+- Relatório semanal com CPL, CTR, CAC, leads por anúncio

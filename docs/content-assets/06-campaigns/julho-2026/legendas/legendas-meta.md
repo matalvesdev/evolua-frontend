@@ -1,123 +1,160 @@
-# Legendas Meta Ads — Julho 2026
+# Legendas — Meta Ads | Julho 2026
 
-> Prontas para copiar e colar no Gerenciador de Anúncios.
-
----
-
-## Feed 1 — "Chega de papelada"
-
-**Headline:**
-Chega de papelada. Seu prontuário em 30 segundos.
-
-**Primary text:**
-Enquanto você atende, o Evolua preenche o prontuário com IA. Laudo pronto em 2 cliques. WhatsApp integrado. Teste grátis.
-
-**CTA:** Testar Grátis
-
-**Variações de primary text:**
-
-A. Enquanto você atende, o Evolua preenche o prontuário com IA. Laudo pronto em 2 cliques. WhatsApp integrado. Teste grátis.
-
-B. 30 minutos de papelada por paciente? Com IA do Evolua, seu prontuário fica pronto em 30 segundos. Laudo, anamnese e evolução. Teste grátis por 7 dias.
-
-C. O prontuário que se preenche sozinho. Enquanto você foca no paciente, a IA do Evolua documenta tudo. Teste grátis — não precisa de cartão.
+> Legendas prontas para copiar e colar no Gerenciador de Anúncios (Meta).
 
 ---
 
-## Feed 2 — "O CRM que entende de Fono"
+## FEED-01 — "Chega de papelada"
 
-**Headline:**
-CRM feito para fonoaudiólogas
+### Variação A
+Chega de papelada 🚫
 
-**Primary text:**
-Prontuário, agenda, WhatsApp, cobrança e teleconsulta em um só lugar. Não é um sistema genérico — é feito para você.
+Enquanto você atende, o Evolua preenche o prontuário com inteligência artificial. Laudo pronto em 2 cliques. WhatsApp integrado para lembrete e cobrança.
 
-**CTA:** Quero Conhecer
+Teste grátis por 7 dias — sem compromisso.
 
-**Variações de primary text:**
-
-A. Prontuário, agenda, WhatsApp, cobrança e teleconsulta em um só lugar. Não é um sistema genérico — é feito para você.
-
-B. Todo sistema diz que é "completo". O Evolua foi construído POR fonoaudiólogas PARA fonoaudiólogas. Prontuário, agenda, WhatsApp, financeiro e teleconsulta nativos.
-
-C. Chega de usar 3 sistemas diferentes. Com o Evolua, você agenda, atende, cobra e documenta tudo em um único lugar. CRM nativo para fonoaudiologia.
+#Fonoaudiologia #ProntuarioDigital #CRM #Fono #GestaoClinica
 
 ---
 
-## Feed 3 — "Dado que convence"
+### Variação B
+Prontuário em 30 segundos com IA ⚡
 
-**Headline:**
-60% fecham em 5 anos. Você não precisa ser estatística.
+Você sabia que dá para eliminar a papelada do seu consultório? O Evolua usa IA para documentar a sessão enquanto você foca no paciente.
 
-**Primary text:**
-Gestão financeira é o que separa consultórios que crescem dos que fecham. Evolua te dá controle total.
+✅ Laudo em 2 cliques
+✅ WhatsApp integrado
+✅ Agenda inteligente
 
-**CTA:** Começar Grátis
+Teste grátis → link na bio
 
-**Variações de primary text:**
-
-A. Gestão financeira é o que separa consultórios que crescem dos que fecham. Evolua te dá controle total de contas a receber, inadimplência e fluxo de caixa.
-
-B. 6 em cada 10 consultórios fecham nos primeiros 5 anos — e a principal causa é má gestão financeira. Evolua te ajuda a não ser mais uma estatística. Teste grátis.
-
-C. Sabia que a maioria dos consultórios de fono fecha por falta de gestão? Com Evolua, você controla recebimentos, emissão de cobranças e relatórios financeiros em minutos.
+#Fonoaudiologia #Inovacao #ProntuarioIA
 
 ---
 
-## Story 1 — "Prontuário em 30s"
+### Variação C
+Laudo em 2 cliques. Sem digitar nada. 😮
 
-**Texto na tela:**
-Prontuário em 30 segundos com IA ✨
+O Evolua transcreve a sessão com IA e gera o laudo automaticamente. Chega de passar 30 minutos depois de cada atendimento.
 
-**CTA do botão:** Teste grátis →
+Teste grátis por 7 dias.
 
-**Link:** https://useevolua.com.br/testar-gratis
-
-**Variação de texto na tela:**
-A. Prontuário em 30 segundos com IA ✨
-B. Chega de papelada. Prontuário com IA ⚡
-C. Enquanto você atende, a IA preenche o prontuário 🤖
+#Fono #Fonoaudiologia #ProntuarioDigital #IA
 
 ---
 
-## Story 2 — "WhatsApp integrado"
+## FEED-02 — "CRM feito para fono"
 
-**Texto na tela:**
-Agenda, lembrete e cobrança pelo WhatsApp 💬
+### Variação A
+CRM feito para fonoaudiólogas 🎯
 
-**CTA do botão:** Saiba mais
+Não é um sistema genérico adaptado. É feito para você.
 
-**Link:** https://useevolua.com.br/testar-gratis
+📋 Prontuário digital com IA
+📅 Agenda inteligente
+💬 WhatsApp nativo
+💳 Cobrança PIX / Cartão
 
-**Variação de texto na tela:**
-A. Agenda, lembrete e cobrança pelo WhatsApp 💬
-B. WhatsApp nativo: agende, lembre e cobre sem sair do CRM 📲
-C. Seus pacientes confirmam consulta pelo WhatsApp. Você cobra pelo WhatsApp. Tudo integrado.
+Tudo em um só lugar. Teste grátis.
 
----
-
-## Resumo rápido de variações
-
-| Criativo | Var. | Diferencial |
-|----------|------|-------------|
-| Feed 1   | A    | Original |
-| Feed 1   | B    | Foco em tempo economizado |
-| Feed 1   | C    | Foco em automação |
-| Feed 2   | A    | Original |
-| Feed 2   | B    | Prova social "feito por fono" |
-| Feed 2   | C    | Dor de múltiplos sistemas |
-| Feed 3   | A    | Original |
-| Feed 3   | B    | Foco em dado/estatística |
-| Feed 3   | C    | Foco em funcionalidades financeiras |
-| Story 1  | A-C  | Variação de tom (formal → divertido) |
-| Story 2  | A-C  | Variação de benefício (lembrete → cobrança) |
+#CRMParaFono #Fonoaudiologia #GestaoClinica
 
 ---
 
-## Observações para copy
+### Variação B
+O sistema que entende de fonoaudiologia ✅
 
-- **Sempre usar "fonoaudióloga" no feminino.** A base é ~95% mulheres.
-- **Evitar jargão técnico de tecnologia.** Falar de "prontuário", "laudo", "paciente", "agenda".
-- **Tom de especialista que fala COM a fono**, não de empresa de tech vendendo solução.
-- **Nunca usar "inovador", "revolucionário", "disruptivo".** Preferir "feito para", "enquanto você", "em 30 segundos".
-- **CTA sempre em primeira pessoa ou imperativo suave:** "Testar Grátis", "Quero Conhecer", "Começar Grátis".
+Prontuário, agenda, WhatsApp, teleconsulta e cobrança integrados. Você não precisa de 5 sistemas diferentes.
+
+Um só. Feito para fono.
+
+Quer conhecer? Teste grátis por 7 dias.
+
+#Fonoaudiologia #SistemaParaFono #CRM
+
+---
+
+### Variação C
+Tudo em um lugar só 📱
+
+📌 Prontuário com IA
+📌 Agenda que envia lembrete automático
+📌 WhatsApp sem sair do sistema
+📌 Cobrança PIX e Cartão
+
+O Evolua unifica tudo que você precisa. Teste grátis.
+
+#GestaoClinica #Fonoaudiologia #CRMFono
+
+---
+
+## FEED-03 — "60% fecham em 5 anos"
+
+### Variação A
+60% dos consultórios fecham em 5 anos. Você não precisa ser estatística. 📉
+
+Gestão financeira é o que separa consultórios que crescem dos que fecham. Com o Evolua, você tem:
+
+💰 Controle de recebimentos
+📊 Relatórios financeiros
+💳 Cobrança automatizada PIX/Cartão
+📆 Fluxo de caixa
+
+Comece grátis e invista no futuro do seu consultório.
+
+#GestaoFinanceira #Fonoaudiologia #ConsultorioFono
+
+---
+
+### Variação B
+Não seja estatística. 💪
+
+60% fecham em 5 anos — mas você não precisa ser mais um número. O Evolua te dá controle total da gestão do seu consultório.
+
+Deixe a burocracia com a gente e foque no que importa: seus pacientes.
+
+Começar grátis → link na bio
+
+#Fonoaudiologia #EmpreendedorismoFono #Gestao
+
+---
+
+### Variação C
+Controle total do seu consultório 🚀
+
+📈 Gestão financeira
+📋 Prontuário digital com IA
+💬 WhatsApp integrado
+💳 Cobrança PIX e Cartão
+
+O Evolua é o CRM que cuida do seu negócio enquanto você cuida dos pacientes.
+
+Teste grátis por 7 dias.
+
+#CRM #Fonoaudiologia #GestaoClinica #Empreendedorismo
+
+---
+
+## STORY-01 — "Prontuário em 30s"
+
+### Texto da Story
+PRONTUÁRIO EM 30 SEGUNDOS COM IA ⚡
+
+Enquanto você fala, o Evolua documenta. Laudo em 2 cliques.
+
+🔗 Teste grátis — link na bio
+
+#Fonoaudiologia #ProntuarioDigital #IA
+
+---
+
+## STORY-02 — "WhatsApp integrado"
+
+### Texto da Story
+AGENDA, LEMBRETE E COBRANÇA PELO WHATSAPP 💬
+
+Sem precisar sair do sistema. Tudo nativo.
+
+🔗 Saiba mais — link na bio
+
+#Fonoaudiologia #WhatsAppFono #CRM
