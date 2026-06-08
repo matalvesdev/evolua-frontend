@@ -194,7 +194,8 @@ Fluxo (mapear → encontrar lacunas → gerar pauta):
 ### Materiais / Lead Magnets
 - **Permitidos:** ebooks, infográficos, guias visuais, mini-cursos, templates de conteúdo visual. Produzir com as skills de documentos (`pdf`, `pptx`, `canvas-design`) e brand kit (`docs/BRAND-KIT.md`).
 - **Proibidos:** planilhas (`.xlsx`), checklists, "templates" de formulário.
-- **Catálogo atual (5 materiais):**
+- **Catálogo atual (6 materiais):**
+  - `ebook-whatsapp-profissional` — E-book: WhatsApp Profissional para Fonoaudiólogas
   - `ebook-tendencias` — E-book: Tendências em Fonoaudiologia 2026
   - `ebook-protocolos` — E-book: Guia de Protocolos Clínicos
   - `ebook-mkt-digital-fono` — E-book: Marketing Digital para Fonoaudiólogas
@@ -253,6 +254,60 @@ Auditar todos os 26 módulos do dashboard (frontend-core) — checando UI, hooks
 - ❌ `CREATE POLICY` sem `DROP POLICY IF EXISTS` — migrations de RLS devem ser idempotentes para re-aplicação segura
 - ❌ Deixar código de feature obsoleta (marketing) espalhado em múltiplas camadas — ao descontinuar, remover front + backend + AI service + contracts + registros de rota numa única passada
 
+## Active Session — Content Automation Pipeline
+
+### Goal
+Automatizar o pipeline completo de conteúdo: blog (pesquisa → criação → publicação no Supabase) e redes sociais (pesquisa → criação → email para postagem manual).
+
+### Done
+- **Criado pipeline em `scripts/content-pipeline/pipeline.mjs`**:
+  - `--topic "texto"`: tópico customizado
+  - `--skip-blog`: só redes sociais
+  - `--skip-social`: só blog
+  - `--dry-run`: gera arquivos sem publicar/enviar
+- **Módulo `research`**: usa OpenRouter (GPT-4o) para pesquisar o tema com keywords, dores, dados, ângulos
+- **Módulo `createBlogPost`**: gera post completo (HTML + SEO) seguindo calendário semanal (seg-sex: Marketing/Gestão/Tecnologia/Clínica/Carreira)
+- **Módulo `publishToSupabase`**: publica via REST na tabela `blog_posts` com service_role key
+- **Módulo `createSocialPosts`**: gera posts para LinkedIn, Instagram (carrossel 5 slides), Threads (5 tweets) e X (280 chars)
+- **Módulo `emailSocialPosts`**: envia os posts sociais via Resend para contatouseevolua@gmail.com com HTML formatado
+- **Seed de calendário em `config.json`**: cadência diária com pilares por dia da semana
+- **Workflow GitHub**: `.github/workflows/content-pipeline.yml` — agendado seg-sex 06:00 BRT + `workflow_dispatch` com inputs
+- **Scripts npm**: `pnpm content:pipeline`, `pnpm content:dry-run`, `pnpm content:blog-only`, `pnpm content:social-only`
+
+### Arquitetura
+```
+Pipeline (pesquisa + criação)
+    │
+    ├─► Blog: Supabase REST → blog_posts (publicado automático)
+    └─► Social: Resend Email → contatouseevolua@gmail.com (postagem manual)
+```
+
+### Env Vars Necessárias
+- `OPENROUTER_API_KEY` — geração de conteúdo via AI
+- `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` — publicação no blog
+- `RESEND_API_KEY` — email de posts sociais
+
+### Uso
+```bash
+# Pipeline completo (tema auto do calendário)
+pnpm content:pipeline
+
+# Tópico customizado
+node scripts/content-pipeline/pipeline.mjs --topic "teleconsulta para fonoaudiólogas"
+
+# Só blog (sem redes sociais)
+pnpm content:blog-only
+
+# Teste sem publicar
+pnpm content:dry-run
+```
+
+### Próximos Passos
+1. Adicionar env vars no GitHub Secrets (`OPENROUTER_API_KEY`, `RESEND_API_KEY`)
+2. Configurar Render Cron Job para rodar o pipeline diariamente
+3. Gerar imagens dos carrosséis automaticamente (via DALL-E / Canva API)
+4. Integrar postagem automática no LinkedIn via API
+
 ## Installed Agent Skills (181 skills)
 
 ### Organização AI-Native (13 skills)
@@ -289,6 +344,28 @@ Document creation (docx, pptx, xlsx, pdf), frontend design, webapp-testing (Play
 
 ### Supabase — 2 skills
 PostgreSQL best practices (skill loaded via supabase skill)
+
+## Active Session — Notifica Removal & Social Posts Package
+
+### Goal
+Remover completamente o serviço Notifica (substituir por Resend) e gerar pacote .zip com posts de redes sociais prontos para publicação, enviado por email.
+
+### Done
+- **Notifica removido de TODO o código**: 0 referências restantes em código de aplicação
+  - `scripts/send-newsletter.js`: migrado de Notifica → Resend (envio individual por subscriber)
+  - `scripts/content-pipeline/pipeline.mjs`: envio social migrado Notifica → Resend
+  - `.github/workflows/content-pipeline.yml`: env vars migradas (`NOTIFICA_*` → `RESEND_API_KEY`)
+  - `AGENTS.md`: todas as 4 referências Notifica atualizadas para Resend
+  - `docker-compose.cron.yml`: env vars migradas Notifica → Resend
+  - `.env` já não continha mais NOTIFICA (removido anteriormente)
+- **Pacote `redes-sociais-para-postar.zip`** criado com 2 campanhas completas:
+  - `01-gestao-consultorio/`: LinkedIn + Instagram (carrossel 5 slides + legenda) + Threads (6 tweets) + X
+  - `02-dicas-instagram-fono/`: LinkedIn + Instagram (carrossel 5 slides + legenda) + Threads (5 tweets) + X
+  - `README.txt` com instruções de postagem
+- **Email enviado** com sucesso via Resend para contatouseevolua@gmail.com (ID: b5b5e972-7c4f-4d94-9fd9-e8cb1843ec29)
+
+### Anti-Patterns Added
+- ❌ Notifica removido do `.env` mas não dos scripts/CI/docs — sempre fazer `grep` completo por todo o repositório após migração de serviço de terceiros
 
 ## Feedback Loop
 1. Before any task: read relevant spec in `openspec/specs/`

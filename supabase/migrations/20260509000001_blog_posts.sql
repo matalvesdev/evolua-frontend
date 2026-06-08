@@ -66,7 +66,7 @@ insert into public.blog_posts (slug, titulo, subtitulo, categoria, autor, data, 
   '2024-01-15',
   8,
   true,
-  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+  'https://images.pexels.com/photos/7654128/pexels-photo-7654128.jpeg?w=800&q=80',
   $body$
 <p>Encher a agenda sem gastar com tráfego pago é possível — e mais comum do que você imagina. A gente conversou com mais de 80 fonoaudiólogas que passaram de agendas pela metade para listas de espera em 30 a 60 dias. Esse texto sintetiza o que <em>realmente</em> funciona e descarta o que vende curso, mas não vende sessão.</p>
 
@@ -105,7 +105,7 @@ $body$
   '2024-01-22',
   5,
   false,
-  'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',
+  'https://images.pexels.com/photos/4386366/pexels-photo-4386366.jpeg?w=800&q=80',
   $body$
 <p>Faltas custam caro. Cada sessão não confirmada é uma vaga que poderia ter ido para outro paciente, um furo no faturamento e — mais importante — uma quebra no protocolo terapêutico. Mas o problema raramente é o paciente: é a forma como ele é lembrado.</p>
 
@@ -146,7 +146,7 @@ $body$
   '2024-02-01',
   12,
   false,
-  'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80',
+  'https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?w=800&q=80',
   $body$
 <p>A maior parte das fonoaudiólogas que conhecemos cobra menos do que vale. Não por incompetência — por medo. Medo de perder paciente, medo de "ser cara demais", medo de comparar com a colega da rua de baixo. Esse texto é um manual para quebrar esse padrão com método, não com achismo.</p>
 
@@ -196,7 +196,7 @@ $body$
   '2024-02-10',
   10,
   true,
-  'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80',
+  'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?w=800&q=80',
   $body$
 <p>"IA vai substituir fonoaudiólogo." Não vai. Mas IA <em>está</em> substituindo a parte chata do trabalho — anotação burocrática, transcrição manual, revisão de evolução, relatório padrão. E quem não usar nos próximos 24 meses vai pagar caro em produtividade.</p>
 
@@ -244,7 +244,7 @@ $body$
   '2024-02-18',
   7,
   false,
-  'https://images.unsplash.com/photo-1609220136736-443140cfeaa6?w=800&q=80',
+  'https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?w=800&q=80',
   $body$
 <p>Burnout é a palavra da moda — e a realidade silenciosa da fonoaudiologia clínica. Profissão emocional, mal remunerada na média, com carga administrativa absurda e isolamento social. Esse texto não é motivacional. É um mapa para identificar onde você está e o que mudar.</p>
 
@@ -300,7 +300,7 @@ $body$
   '2024-02-25',
   6,
   false,
-  'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
+  'https://images.pexels.com/photos/4386366/pexels-photo-4386366.jpeg?w=800&q=80',
   $body$
 <p>Em 2025, ainda existe fonoaudióloga com prontuário em pasta de papel. E a CFFa nem proíbe diretamente — mas o ambiente regulatório (LGPD, Resolução 491/2017) torna o papel cada vez mais arriscado e ineficiente. Esse texto é sobre desfazer as objeções que ainda te seguram.</p>
 

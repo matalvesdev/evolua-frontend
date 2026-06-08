@@ -55,7 +55,7 @@ Não é um CRM genérico adaptado para fonoaudiologia. Foi construído por pesso
 ### Comece agora
 
 O Evolua está em fase de lançamento e você pode testar gratuitamente. Crie sua conta em [useevolua.com.br](https://useevolua.com.br) e descubra como a tecnologia pode transformar sua clínica.',
-  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80',
+  'https://images.pexels.com/photos/7654128/pexels-photo-7654128.jpeg?w=1200&q=80',
   'Equipe Evolua',
   'Fonoaudiologia',
   4,

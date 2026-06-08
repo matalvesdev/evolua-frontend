@@ -42,12 +42,11 @@
 
 ### Lead Magnets (para campanhas de tráfego pago)
 
-| Material | Tema | Oferta |
-|----------|------|--------|
-| Checklist de Gestão Clínica | Organização | 20 itens essenciais |
-| Planilha Financeira | Finanças | Controle mensal pronto |
-| E-book Tendências 2026 | Tecnologia | Guia completo de tendências |
-| Template Relatório CFoF | Burocracia | Modelo padrão do conselho |
+| ID | Material | Tema | Oferta | Status |
+|----|----------|------|--------|--------|
+| `ebook-whatsapp-profissional` | WhatsApp Profissional para Fonoaudiólogas | WhatsApp + Gestão | E-book com roteiro de 7 dias para automatizar agenda, cobrança e laudos | ✅ Publicado |
+| `ebook-tendencias` | Tendências em Fonoaudiologia 2026 | Tecnologia | Guia completo de tendências | 📋 Planejado |
+| `ebook-mkt-digital-fono` | Marketing Digital para Fonoaudiólogas | Marketing | Guia de marketing para atrair pacientes | 📋 Planejado |
 
 ### Métricas de Conteúdo (OKRs)
 

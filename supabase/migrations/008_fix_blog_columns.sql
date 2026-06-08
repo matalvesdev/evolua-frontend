@@ -140,7 +140,7 @@ E como somos brasileiros e entendemos o SUS, a ANS e a realidade dos convênios,
 ### Teste grátis
 
 O Evolua está disponível em **useevolua.com.br**. Crie sua conta gratuita e descubra como a tecnologia pode transformar sua clínica — sem curva de aprendizado, sem complicação.',
-  'https://images.unsplash.com/photo-1576669801945-7a346954da5a?w=1200&q=80',
+  'https://images.pexels.com/photos/7578828/pexels-photo-7578828.jpeg?w=1200&q=80',
   'Equipe Evolua',
   'Fonoaudiologia',
   6,

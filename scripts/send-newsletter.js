@@ -3,7 +3,7 @@
  * Newsletter sender — triggered by cron every Wednesday 10:00 BRT.
  *
  * Reads subscribers from `newsletter_subscribers` table and sends
- * the latest blog post via Notifica (transactional email).
+ * the latest blog post via Resend (transactional email).
  *
  * Usage:
  *   node scripts/send-newsletter.js [--dry-run]
@@ -11,13 +11,12 @@
 
 const SUPABASE_URL = process.env.SUPABASE_URL
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
-const NOTIFICA_API_KEY = process.env.NOTIFICA_API_KEY
-const NOTIFICA_API_URL = (process.env.NOTIFICA_API_URL || 'https://app.usenotifica.com.br/v1').replace(/\/$/, '')
-const NOTIFICA_FROM = process.env.NOTIFICA_FROM_EMAIL || 'newsletter@useevolua.com.br'
+const RESEND_API_KEY = process.env.RESEND_API_KEY
+const RESEND_FROM = process.env.RESEND_FROM_EMAIL || 'noreply@useevolua.com.br'
 const DRY_RUN = process.argv.includes('--dry-run')
 
-if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !NOTIFICA_API_KEY) {
-  console.error('Missing required env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, NOTIFICA_API_KEY')
+if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY || !RESEND_API_KEY) {
+  console.error('Missing required env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY')
   process.exit(1)
 }
 
@@ -70,7 +69,7 @@ async function main() {
     return
   }
 
-  // Send individually via Notifica API for per-recipient unsubscribe link
+  // Send individually via Resend API for per-recipient unsubscribe link
   let sent = 0
   let failed = 0
   for (const sub of subscribers) {
@@ -91,21 +90,18 @@ async function main() {
     `
     const textBody = `${post.title}\n\n${post.excerpt || ''}\n\nLeia em: https://useevolua.com.br/blog/${post.slug}\n\nPara cancelar: ${unsubscribeUrl}`
 
-    const sendRes = await fetch(`${NOTIFICA_API_URL}/notifications`, {
+    const sendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${NOTIFICA_API_KEY}`,
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        channel: 'email',
-        recipient: sub.email,
-        payload: {
-          from: NOTIFICA_FROM,
-          subject: `Fono em Foco: ${post.title}`,
-          html_body: htmlBody,
-          text_body: textBody,
-        },
+        from: RESEND_FROM,
+        to: [sub.email],
+        subject: `Fono em Foco: ${post.title}`,
+        html: htmlBody,
+        text: textBody,
       }),
     })
 

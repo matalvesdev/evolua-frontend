@@ -84,7 +84,7 @@ SELECT
 
 <p><strong>Resumindo:</strong> nicho claro + Google Meu Negócio + conteúdo que prova competência + indicação ativa + médicos parceiros. Aplicado por 30 dias, dificilmente sua agenda continua igual.</p>
 $body$,
-  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+  'https://images.pexels.com/photos/7654128/pexels-photo-7654128.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Marketing',
   8,
@@ -128,7 +128,7 @@ SELECT
 
 <p><strong>Faltar é hábito.</strong> Lembrete bem feito quebra o hábito.</p>
 $body$,
-  'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',
+  'https://images.pexels.com/photos/4386366/pexels-photo-4386366.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Gestão',
   5,
@@ -181,7 +181,7 @@ SELECT
 
 <p><strong>Cobrar bem é o primeiro ato de cuidado clínico.</strong> Profissional cansada e endividada não cuida bem de ninguém.</p>
 $body$,
-  'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80',
+  'https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Carreira',
   12,
@@ -232,7 +232,7 @@ SELECT
 
 <p><strong>IA é alavanca, não substituição.</strong> Quem usar bem ganha 1-2 horas livres por dia. Quem ignorar vai trabalhar mais que o concorrente — e produzir o mesmo.</p>
 $body$,
-  'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80',
+  'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Tecnologia',
   10,
@@ -291,7 +291,7 @@ SELECT
 
 <p><strong>Cuidar de quem cuida é trabalho.</strong> E o primeiro passo é reconhecer que a vontade de sumir não é fraqueza — é dado.</p>
 $body$,
-  'https://images.unsplash.com/photo-1609220136736-443140cfeaa6?w=800&q=80',
+  'https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Carreira',
   7,
@@ -343,7 +343,7 @@ SELECT
 
 <p><strong>Não é "se", é "quando".</strong> E quando é antes da próxima fiscalização da ANPD ou do próximo paciente que você perde por desorganização.</p>
 $body$,
-  'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
+  'https://images.pexels.com/photos/4386366/pexels-photo-4386366.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Gestão',
   6,
@@ -460,7 +460,7 @@ Sem cartão de crédito. Sem instalação. Em 5 minutos você já está usando o
 
 *Este artigo foi escrito pela equipe da Evolua — o CRM inteligente para fonoaudiólogas. Transforme sua gestão clínica com protocolos nativos, WhatsApp integrado e relatórios automáticos. [Saiba mais em useevolua.com.br](https://useevolua.com.br)*
   $markdown$,
-  'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80',
+  'https://images.pexels.com/photos/7654128/pexels-photo-7654128.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Clínica',
   8,
@@ -612,7 +612,7 @@ Ou se preferir, **[cadastre-se diretamente aqui](https://app.useevolua.com.br/re
 
 *Este artigo foi escrito pela equipe da Evolua — o CRM inteligente que gera relatórios escolares automaticamente para fonoaudiólogas. Menos tempo com papel, mais tempo com seus pacientes. [useevolua.com.br](https://useevolua.com.br)*
   $markdown$,
-  'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80',
+  'https://images.pexels.com/photos/4386366/pexels-photo-4386366.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Gestão',
   6,
@@ -762,7 +762,7 @@ Sem cartão de crédito. Cadastro em 2 minutos. Suporte humano do dia 1.
 
 *Este artigo foi escrito pela equipe da Evolua — o CRM inteligente que transforma a gestão da sua clínica de fonoaudiologia. Agende, atenda, fatura e acompanhe tudo em um só lugar. [useevolua.com.br](https://useevolua.com.br)*
   $markdown$,
-  'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80',
+  'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Tecnologia',
   7,
@@ -941,7 +941,7 @@ Ou se preferir, **[inicie o teste direto](https://app.useevolua.com.br/register)
 
 *Este artigo foi escrito pela equipe da Evolua — o CRM inteligente que mantém sua documentação em dia com o CFFa. Menos burocracia, mais clínica. [useevolua.com.br](https://useevolua.com.br)*
   $markdown$,
-  'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80',
+  'https://images.pexels.com/photos/7578828/pexels-photo-7578828.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Clínica',
   9,
@@ -1112,7 +1112,7 @@ Compare você mesma — e veja qual sistema faz mais sentido para a sua clínica
 
 *Este artigo foi escrito pela equipe da Evolua. Comparativo baseado em informações públicas consultadas em maio de 2026. Preços sujeitos a alteração. [useevolua.com.br](https://useevolua.com.br)*
   $markdown$,
-  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+  'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Tecnologia',
   8,
@@ -1321,7 +1321,7 @@ Sem cartão de crédito. Sem surpresas. Teste e decida.
 
 *Este artigo foi escrito pela equipe da Evolua — o CRM inteligente para fonoaudiólogas. Use nosso checklist para avaliar qualquer sistema e descubra por que centenas de fonoaudiólogas já escolheram o Evolua. [useevolua.com.br](https://useevolua.com.br)*
   $markdown$,
-  'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80',
+  'https://images.pexels.com/photos/4386366/pexels-photo-4386366.jpeg?w=800&q=80',
   'Equipe Evolua',
   'Gestão',
   8,

@@ -2,5 +2,43 @@
   "name": "evolua-v2",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@9.15.9"
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "content:pipeline": "node scripts/content-pipeline/pipeline.mjs",
+    "content:dry-run": "node scripts/content-pipeline/pipeline.mjs --dry-run",
+    "content:blog-only": "node scripts/content-pipeline/pipeline.mjs --skip-social",
+    "content:social-only": "node scripts/content-pipeline/pipeline.mjs --skip-blog",
+    "daily": "node scripts/run-daily.mjs",
+    "daily:dry-run": "node scripts/run-daily.mjs --dry-run",
+    "daily:blog": "node scripts/run-daily.mjs --skip-visual",
+    "daily:visual": "node scripts/run-daily.mjs --skip-blog",
+    "daily:topic": "node scripts/run-daily.mjs --topic"
+  },
+  "description": "CRM brasileiro para fonoaudiólogas com WhatsApp nativo, AI-powered content automation e billing (PIX/Cartão).",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "eslint": "^10.4.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-scope": "^9.1.2",
+    "eslint-visitor-keys": "^5.0.1",
+    "playwright": "^1.60.0",
+    "prettier": "^3.8.3",
+    "typescript-eslint": "^8.60.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matalvesdev/evolua-frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/matalvesdev/evolua-frontend/issues"
+  },
+  "homepage": "https://github.com/matalvesdev/evolua-frontend#readme"
 }

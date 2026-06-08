@@ -20,9 +20,8 @@ services:
       # Set in production via your secret manager
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
-      - NOTIFICA_API_KEY=${NOTIFICA_API_KEY}
-      - NOTIFICA_API_URL=${NOTIFICA_API_URL:-https://app.usenotifica.com.br/v1}
-      - NOTIFICA_FROM_EMAIL=${NOTIFICA_FROM_EMAIL:-newsletter@useevolua.com.br}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-noreply@useevolua.com.br}
       - GMAIL_USER=${GMAIL_USER}
       - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
       - EMAIL_DESTINO=${EMAIL_DESTINO}
