@@ -178,14 +178,23 @@ function PostContent() {
 
       {/* Cover image */}
       <div className="px-5 md:px-12">
-        <div className="max-w-5xl mx-auto aspect-[16/7] max-h-[420px] overflow-hidden rounded-2xl shadow-sm bg-surface-container-high relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-surface-container-high to-surface-container-high" />
+        <div className="max-w-5xl mx-auto aspect-[16/7] max-h-[420px] overflow-hidden rounded-2xl shadow-sm relative"
+          style={{ background: 'linear-gradient(135deg, #EAE8FF 0%, #C5C1FF 50%, #EAE8FF 100%)' }}
+        >
           <img
             src={post.imagem}
             alt={post.titulo}
-            className="w-full h-full object-cover relative z-10 opacity-0 transition-opacity duration-500"
+            className="w-full h-full object-cover relative z-10"
             fetchPriority="high"
-            onLoad={e => (e.currentTarget.style.opacity = '1')}
+            onLoad={e => {
+              e.currentTarget.style.opacity = '1'
+              e.currentTarget.parentElement?.style.setProperty('background', 'none')
+            }}
+            onError={e => {
+              if (!e.currentTarget.src.includes('data:image/svg+xml')) {
+                e.currentTarget.style.display = 'none'
+              }
+            }}
           />
         </div>
       </div>
@@ -330,20 +339,25 @@ function PostContent() {
             <h2 className="font-headline font-black text-3xl md:text-4xl uppercase tracking-tighter mb-10 md:mb-16">
               Continue lendo<span className="text-primary">.</span>
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-outline-variant">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {relacionados.map((p) => (
                 <Link
                   key={p.id}
                   to="/blog/$slug"
                   params={{ slug: p.slug }}
-                  className="group block bg-white hover:bg-surface-container transition-colors"
+                  className="group block bg-surface border border-outline-variant hover:border-primary transition-colors duration-300"
                 >
-                  <div className="aspect-[16/9] overflow-hidden">
+                  <div className="aspect-[16/9] overflow-hidden bg-[#EAE8FF]">
                     <img
                       src={p.imagem}
                       alt={p.titulo}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       loading="lazy"
+                      onError={e => {
+                        if (!e.currentTarget.src.includes('data:image/svg+xml')) {
+                          e.currentTarget.style.display = 'none'
+                        }
+                      }}
                     />
                   </div>
                   <div className="p-6 md:p-8">

@@ -35,9 +35,10 @@ function mapRow(row: Record<string, unknown>): BlogPost {
 }
 
 const ALLOWED_IMAGE_HOSTS = [
-  'images.unsplash.com',
   'cdn.evolua.app',
   'images.pexels.com',
+  'diiaoaboykraaiavgdqs.supabase.co',
+  'supabase.co',
 ]
 
 export function isSafeImageUrl(url: string): boolean {

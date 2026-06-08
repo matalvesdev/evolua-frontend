@@ -27,6 +27,16 @@ const stagger = {
 
 const CATEGORIAS = ['Todos', 'Marketing', 'Gestão', 'Clínica', 'Carreira', 'Tecnologia'] as const
 
+const FALLBACK_GRADIENT = 'data:image/svg+xml,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 16 9"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#EAE8FF"/><stop offset="100%" stop-color="#C5C1FF"/></linearGradient></defs><rect width="16" height="9" fill="url(#g)"/><text x="8" y="5.2" text-anchor="middle" fill="#8B85FF" font-size="0.8" font-family="sans-serif" font-weight="bold">evolua</text></svg>'
+)
+
+function handleImgError(e: React.SyntheticEvent<HTMLImageElement>) {
+  if (e.currentTarget.src !== FALLBACK_GRADIENT) {
+    e.currentTarget.src = FALLBACK_GRADIENT
+  }
+}
+
 function PostCard({ post, destaque = false }: { post: BlogPost; destaque?: boolean }) {
   const dataFormatada = new Date(post.data).toLocaleDateString('pt-BR', {
     day: '2-digit',
@@ -42,11 +52,12 @@ function PostCard({ post, destaque = false }: { post: BlogPost; destaque?: boole
         className="group block md:col-span-2 bg-surface border border-outline-variant hover:border-primary transition-colors duration-300"
       >
         <div className="grid grid-cols-1 md:grid-cols-2">
-          <div className="aspect-[16/9] md:aspect-auto overflow-hidden">
+          <div className="aspect-[16/9] md:aspect-auto overflow-hidden bg-[#EAE8FF]">
             <img
               src={post.imagem}
               alt={post.titulo}
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+              onError={handleImgError}
+              className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
             />
           </div>
           <div className="p-8 md:p-12 flex flex-col justify-between">
@@ -79,11 +90,12 @@ function PostCard({ post, destaque = false }: { post: BlogPost; destaque?: boole
       params={{ slug: post.slug }}
       className="group block bg-surface border border-outline-variant hover:border-primary transition-colors duration-300"
     >
-      <div className="aspect-[16/9] overflow-hidden">
+      <div className="aspect-[16/9] overflow-hidden bg-[#EAE8FF]">
         <img
           src={post.imagem}
           alt={post.titulo}
-          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+          onError={handleImgError}
+          className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
         />
       </div>
       <div className="p-6 md:p-8">
@@ -93,7 +105,7 @@ function PostCard({ post, destaque = false }: { post: BlogPost; destaque?: boole
         <h3 className="font-headline font-black text-xl md:text-2xl uppercase tracking-tighter leading-[0.95] mb-3 text-ink group-hover:text-primary transition-colors">
           {post.titulo}
         </h3>
-        <p className="text-ink-soft/80 text-sm md:text-base leading-relaxed mb-6">{post.subtitulo}</p>
+        <p className="text-ink-soft/80 text-sm md:text-base leading-relaxed mb-6 line-clamp-2">{post.subtitulo}</p>
         <div className="flex items-center justify-between pt-4 border-t border-outline-variant">
           <span className="font-label text-[10px] font-bold tracking-[0.2em] uppercase text-muted">
             {dataFormatada}
@@ -132,17 +144,16 @@ function PostsGrid({ categoria }: { categoria: string }) {
       variants={stagger}
       initial="hidden"
       animate="visible"
-      className="space-y-px bg-outline-variant"
     >
       {destaques.length > 0 && (
-        <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 gap-px bg-outline-variant">
+        <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           {destaques.map((post) => (
             <PostCard key={post.id} post={post} destaque />
           ))}
         </motion.div>
       )}
       {visibleResto.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-outline-variant">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleResto.map((post) => (
             <motion.div key={post.id} variants={fadeUp}>
               <PostCard post={post} />
@@ -154,7 +165,7 @@ function PostsGrid({ categoria }: { categoria: string }) {
         <div className="flex justify-center pt-12 pb-4">
           <button
             onClick={() => setVisibleCount(c => c + POSTS_PER_PAGE)}
-            className="group inline-flex items-center gap-2 px-6 py-3 border border-outline-variant hover:border-primary text-xs font-bold tracking-[0.2em] uppercase text-ink-soft hover:text-primary transition-all duration-200 bg-surface"
+            className="group inline-flex items-center gap-2 px-6 py-3 border border-outline-variant hover:bg-lavender hover:border-primary text-xs font-bold tracking-[0.2em] uppercase text-ink-soft hover:text-primary transition-all duration-200 bg-surface"
           >
             <span>Carregar mais</span>
             <span className="material-symbols-outlined text-base group-hover:translate-y-0.5 transition-transform">expand_more</span>
@@ -167,15 +178,15 @@ function PostsGrid({ categoria }: { categoria: string }) {
 
 function PostsSkeleton() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-outline-variant">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="bg-surface animate-pulse">
-          <div className="aspect-[16/9] bg-outline-variant" />
+        <div key={i} className="bg-surface border border-outline-variant animate-pulse">
+          <div className="aspect-[16/9] bg-[#EAE8FF]" />
           <div className="p-6 md:p-8 space-y-3">
-            <div className="h-4 w-20 bg-outline-variant" />
-            <div className="h-6 w-full bg-outline-variant" />
-            <div className="h-4 w-4/5 bg-outline-variant" />
-            <div className="h-4 w-3/5 bg-outline-variant" />
+            <div className="h-4 w-20 bg-[#EAE8FF]" />
+            <div className="h-6 w-full bg-[#EAE8FF]" />
+            <div className="h-4 w-4/5 bg-[#EAE8FF]" />
+            <div className="h-4 w-3/5 bg-[#EAE8FF]" />
           </div>
         </div>
       ))}
@@ -320,7 +331,7 @@ function BlogPage() {
                       onChange={(e) => setNewsletterEmail(e.target.value)}
                       required
                       aria-required="true"
-                      placeholder="seu@email.com.br"
+                      placeholder="Seu melhor email"
                       className="flex-1 px-5 py-5 bg-deep-mid text-white placeholder:text-lavender-mid/60 font-body text-base border border-deep-light focus:outline-none focus:border-neon transition-colors"
                     />
                     <button
