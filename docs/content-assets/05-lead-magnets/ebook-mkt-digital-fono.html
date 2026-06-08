@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing Digital para Fonoaudiólogas - Evolua</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #F5F3FF; color: #0A0A14; line-height: 1.6; }
+  .ebook { max-width: 840px; margin: 0 auto; padding: 0; }
+  @media print { body { background: #fff; } .no-print { display: none !important; } .ebook { max-width: 100%; } }
+  .cover { background: linear-gradient(135deg, #0A0A14 0%, #120D1E 50%, #1a1530 100%); color: #fff; padding: 80px 48px; text-align: center; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: -50%; right: -30%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%); }
+  .cover::after { content: ''; position: absolute; bottom: -30%; left: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(196,241,53,0.08) 0%, transparent 70%); }
+  .cover-content { position: relative; z-index: 1; }
+  .logo { font-size: 14px; text-transform: uppercase; letter-spacing: 4px; color: #C4F135; margin-bottom: 32px; font-weight: 700; }
+  .cover h1 { font-size: 42px; font-weight: 900; line-height: 1.15; margin-bottom: 16px; letter-spacing: -1px; }
+  .cover h1 span { color: #8B5CF6; }
+  .cover .subtitle { font-size: 20px; color: rgba(255,255,255,0.7); margin-bottom: 8px; font-weight: 400; }
+  .cover .tag { display: inline-block; background: #8B5CF6; color: #fff; padding: 8px 24px; border-radius: 100px; font-size: 14px; font-weight: 600; margin-top: 24px; letter-spacing: 1px; }
+  .cover .meta { margin-top: 32px; font-size: 13px; color: rgba(255,255,255,0.4); }
+  .section { padding: 48px; background: #fff; border-bottom: 1px solid #eee; }
+  .section:nth-child(even) { background: #F5F3FF; }
+  .section h2 { font-size: 28px; font-weight: 800; color: #120D1E; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .section .ch { font-size: 13px; font-weight: 600; color: #8B5CF6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .section p { font-size: 16px; color: #333; margin-bottom: 16px; }
+  .section ul { list-style: none; margin-bottom: 16px; }
+  .section ul li { padding: 8px 0 8px 28px; position: relative; font-size: 15px; color: #333; }
+  .section ul li::before { content: '▸'; position: absolute; left: 0; color: #8B5CF6; font-weight: 700; }
+  .section table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+  .section table th { background: #0A0A14; color: #fff; padding: 12px 16px; text-align: left; }
+  .section table td { padding: 12px 16px; border-bottom: 1px solid #ddd; }
+  .section table tr:nth-child(even) td { background: #f9f9ff; }
+  .section table .yes { color: #16a34a; font-weight: 600; }
+  .section table .no { color: #dc2626; font-weight: 600; }
+  .highlight-box { background: linear-gradient(135deg, #0A0A14, #120D1E); color: #fff; border-radius: 12px; padding: 28px; margin: 24px 0; }
+  .highlight-box p { color: rgba(255,255,255,0.9); margin-bottom: 0; font-size: 15px; }
+  .highlight-box strong { color: #C4F135; }
+  .data-box { background: #C4F135; color: #0A0A14; border-radius: 12px; padding: 24px; margin: 24px 0; text-align: center; }
+  .data-box .number { font-size: 48px; font-weight: 900; line-height: 1; }
+  .data-box .label { font-size: 14px; font-weight: 600; margin-top: 4px; opacity: 0.8; }
+  .conclusion { background: linear-gradient(135deg, #8B5CF6, #7c4ced); color: #fff; padding: 48px; text-align: center; }
+  .conclusion h2 { color: #fff; }
+  .conclusion p { color: rgba(255,255,255,0.85); font-size: 16px; margin-bottom: 16px; }
+  .cta { display: inline-block; background: #C4F135; color: #0A0A14; padding: 16px 40px; border-radius: 100px; font-size: 18px; font-weight: 700; text-decoration: none; margin-top: 16px; transition: transform 0.2s; }
+  .cta:hover { transform: scale(1.05); }
+  .toc { padding: 40px 48px; background: #fff; }
+  .toc h3 { font-size: 14px; font-weight: 600; color: #8B5CF6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+  .toc ol { list-style: none; counter-reset: item; }
+  .toc ol li { counter-increment: item; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 15px; color: #333; }
+  .toc ol li::before { content: counter(item) '.'; color: #8B5CF6; font-weight: 700; margin-right: 8px; }
+  .footer { text-align: center; padding: 24px; font-size: 13px; color: #888; }
+  @media (max-width: 640px) { .cover { padding: 48px 24px; } .cover h1 { font-size: 28px; } .section { padding: 32px 24px; } .section h2 { font-size: 22px; } .conclusion { padding: 32px 24px; } .toc { padding: 32px 24px; } }
+</style>
+</head>
+<body>
+<div class="ebook">
+
+<div class="cover">
+  <div class="cover-content">
+    <div class="logo">Evolua</div>
+    <h1>Marketing Digital<br>para <span>Fonoaudiólogas</span></h1>
+    <p class="subtitle">Atraia mais pacientes com ética e estratégia</p>
+    <div class="tag">Guia Completo 2026</div>
+    <p class="meta">Público gratuito · Evolua CRM para Fonoaudiólogas</p>
+  </div>
+</div>
+
+<div class="toc">
+  <h3>Sumário</h3>
+  <ol>
+    <li>Por que marketing digital em 2026?</li>
+    <li>O que o CFFA permite e proíbe</li>
+    <li>Instagram para fonoaudiólogas</li>
+    <li>LinkedIn profissional</li>
+    <li>Blog e conteúdo SEO</li>
+    <li>Funil de vendas ético</li>
+    <li>Métricas que importam</li>
+    <li>Conclusão</li>
+  </ol>
+</div>
+
+<div class="section">
+  <h2>Por que marketing digital em 2026?</h2>
+  <p>O paciente de 2026 não busca mais fonoaudiólogo apenas por indicação. Antes de ligar, ele pesquisa no Google, olha o Instagram, lê avaliações e compara opções. Se sua clínica não tem presença digital, ela simplesmente não existe para esse paciente.</p>
+  <p>Isso não é sobre "virar influencer". É sobre ser encontrada por quem precisa de você. Mães de crianças com atraso de fala, idosos com disfagia, adultos com gagueira — todos estão online buscando respostas. O marketing digital é a ponte entre sua expertise e quem precisa dela.</p>
+  <p>A boa notícia: você não precisa de grandes investimentos. Com estratégia, consistência e ética, é possível construir uma presença digital que atrai pacientes de forma orgânica e sustentável.</p>
+  <div class="data-box">
+    <div class="number">93%</div>
+    <div class="label">Dos pacientes pesquisam online antes de escolher um profissional de saúde</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="ch">Capítulo 1</div>
+  <h2>O que o CFFA permite e proíbe</h2>
+  <p>Antes de qualquer estratégia, você precisa conhecer as regras. O Código de Ética do CFFA (Resolução nº 400/2020) e a Resolução CFFA nº 437/2021 regulam a publicidade e o marketing na fonoaudiologia. Aqui está o resumo prático:</p>
+  <table>
+    <thead>
+      <tr><th>Prática</th><th>Permitido</th><th>Observação</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Divulgar especialidades e áreas de atuação</td><td class="yes">Sim</td><td>Desde que registradas no CFFA</td></tr>
+      <tr><td>Postar fotos do consultório</td><td class="yes">Sim</td><td>Sem identificar pacientes</td></tr>
+      <tr><td>Compartilhar depoimentos de pacientes</td><td class="no">Não</td><td>Vedado pelo Código de Ética</td></tr>
+      <tr><td>Usar títulos como "melhor" ou "referência"</td><td class="no">Não</td><td>Caráter sensacionalista</td></tr>
+      <tr><td>Postar antes/depois de pacientes</td><td class="no">Não</td><td>Quebra de sigilo e vedado</td></tr>
+      <tr><td>Criar conteúdo educativo (textos, vídeos)</td><td class="yes">Sim</td><td>Incentivado! É a melhor estratégia</td></tr>
+      <tr><td>Anunciar no Google Ads</td><td class="yes">Sim</td><td>Desde que respeite as regras</td></tr>
+      <tr><td>Divulgar valores e preços</td><td class="no">Não</td><td>É vedada a mercantilização</td></tr>
+      <tr><td>Ter site profissional</td><td class="yes">Sim</td><td>Obrigatório ter CFFA visível</td></tr>
+    </tbody>
+  </table>
+  <div class="highlight-box">
+    <p><strong>Regra de ouro:</strong> Tudo que você publica deve ter caráter educativo e informativo, nunca sensacionalista ou mercantilista. Seu objetivo é informar, não "vender" saúde. Conteúdo de qualidade atrai pacientes sem precisar apelar.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="ch">Capítulo 2</div>
+  <h2>Instagram para Fonoaudiólogas</h2>
+  <p>O Instagram é a principal vitrine digital para profissionais de saúde. Com mais de 110 milhões de usuários brasileiros, é onde suas pacientes em potencial passam tempo.</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">Bio otimizada</h3>
+  <p>Sua bio deve responder em segundos: quem você é, o que você faz e como te encontrar. Exemplo: "Fonoaudióloga | Especialista em Linguagem Infantil | Ajudo crianças a se comunicarem com confiança | Atendimento em [Cidade] | CRFa XX/XXX | Agende pelo link:"</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">Tipos de conteúdo que funcionam</h3>
+  <ul>
+    <li><strong>Educativo:</strong> Explicação de distúrbios, marcos do desenvolvimento, dicas para pais</li>
+    <li><strong>Bastidores:</strong> Como é uma sessão, organização do consultório, materiais usados</li>
+    <li><strong>Mitos e verdades:</strong> "Meu filho de 2 anos não fala, é normal?"</li>
+    <li><strong>Profissional:</strong> Congressos, cursos, atualizações da área</li>
+    <li><strong>Vídeos curtos (Reels):</strong> Alcance orgânico muito maior que fotos</li>
+  </ul>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">Frequência ideal</h3>
+  <p>Poste 3-5 vezes por semana. Não sacrifique qualidade por quantidade. Um post excelente por semana vale mais que 7 posts genéricos. Use Stories diariamente para engajamento — responda dúvidas rápidas, mostre o dia a dia, faça enquetes.</p>
+  <div class="highlight-box">
+    <p><strong>Dica de ouro:</strong> Crie uma série de posts educativos. Exemplo: "5 sinais de que seu filho pode precisar de fono". Esse tipo de conteúdo é salvo e compartilhado, aumentando muito o alcance orgânico.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="ch">Capítulo 3</div>
+  <h2>LinkedIn Profissional</h2>
+  <p>Se o Instagram é para atrair pacientes, o LinkedIn é para construir autoridade entre pares e gerar indicações de outros profissionais. Médicos, pediatras, dentistas e educadores usam o LinkedIn para encontrar fonoaudiólogas de confiança para encaminhar pacientes.</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">Perfil que gera autoridade</h3>
+  <ul>
+    <li>Foto profissional (jaleco ou traje social, fundo neutro)</li>
+    <li>Headline clara: "Fonoaudióloga | Especialista em Disfagia | Atendimento Adulto e Pediátrico"</li>
+    <li>Sobre: conte sua história, sua abordagem, seus diferenciais. Use 1ª pessoa.</li>
+    <li>Seção de serviços: liste suas áreas de atuação</li>
+  </ul>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">Posts que engajam</h3>
+  <ul>
+    <li>Compartilhe artigos e novidades científicas com seu comentário</li>
+    <li>Fale sobre desafios da profissão (com equilíbrio)</li>
+    <li>Poste sobre casos de sucesso sem identificar pacientes</li>
+    <li>Comente em posts de médicos e outros profissionais de saúde</li>
+  </ul>
+  <p>A frequência ideal no LinkedIn é 2-3 posts por semana. O tom deve ser mais técnico que no Instagram, mas não menos acolhedor.</p>
+</div>
+
+<div class="section">
+  <div class="ch">Capítulo 4</div>
+  <h2>Blog e Conteúdo SEO</h2>
+  <p>Um blog bem estruturado é o maior motor de pacientes qualificados a longo prazo. Diferente das redes sociais, o conteúdo do blog continua sendo encontrado meses e anos depois — via Google.</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">O que publicar</h3>
+  <p>Responda às perguntas que suas pacientes digitam no Google: "Meu filho fala errado, o que fazer?", "Gagueira infantil tem cura?", "O que cai na prova de fonoaudiologia?", "Exercícios para disfagia em idosos". Cada artigo deve resolver uma dúvida real e mostrar sua autoridade no assunto.</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">Otimização SEO básica</h3>
+  <ul>
+    <li>Use a palavra-chave no título, subtítulos e ao longo do texto</li>
+    <li>Escreva pelo menos 800 palavras por post</li>
+    <li>Adicione imagens otimizadas com texto alternativo</li>
+    <li>Links internos para outros posts do seu blog</li>
+    <li>Links externos para fontes confiáveis (artigos científicos, CFFA)</li>
+  </ul>
+  <div class="highlight-box">
+    <p><strong>SEO local:</strong> Inclua sua cidade no título. "Fonoaudióloga em [Cidade]: como escolher a melhor profissional" tem muito mais chance de aparecer na busca local do Google.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="ch">Capítulo 5</div>
+  <h2>Funil de Vendas Ético</h2>
+  <p>Marketing digital para saúde não é "vender" — é educar, relacionar e converter naturalmente. O funil ético tem três estágios:</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">1. Educar (topo do funil)</h3>
+  <p>Conteúdo gratuito e acessível: posts no Instagram, artigos no blog, vídeos no YouTube. A pessoa descobre que tem um problema (ex.: "meu filho não fala") e encontra sua resposta.</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">2. Relacionar (meio do funil)</h3>
+  <p>Materiais mais profundos: e-books, infográficos, guias. A pessoa já confia no seu conteúdo e quer aprender mais. É aqui que ela fornece o contato em troca de um material rico (lead magnet).</p>
+  <h3 style="font-size:18px;font-weight:700;margin:20px 0 10px;color:#120D1E;">3. Converter (fundo do funil)</h3>
+  <p>A pessoa agende uma consulta. O contato foi feito por WhatsApp, formulário no site ou agendamento online. Aqui o relacionamento já existe — a conversão é consequência natural do valor entregue.</p>
+  <p>Essa abordagem respeita o paciente, constrói confiança e atrai pessoas realmente interessadas no seu trabalho.</p>
+</div>
+
+<div class="section">
+  <div class="ch">Capítulo 6</div>
+  <h2>Métricas que Importam</h2>
+  <p>O que não é medido não é gerenciado. Mas na fonoaudiologia, menos é mais — foque nas métricas que realmente impactam seu consultório.</p>
+  <ul>
+    <li><strong>Pacientes novos por mês:</strong> Quantos vieram pelo digital? Por qual canal?</li>
+    <li><strong>Custo por paciente novo:</strong> Quanto você investiu (tempo + anúncios) dividido por quantos agendaram</li>
+    <li><strong>Taxa de conversão:</strong> De cada 10 pessoas que entram em contato, quantas agendam?</li>
+    <li><strong>Taxa de retenção:</strong> Quantos pacientes continuam o tratamento após o primeiro mês?</li>
+    <li><strong>Alcance e engajamento:</strong> Nas redes sociais, quantas pessoas veem e interagem com seu conteúdo?</li>
+  </ul>
+  <div class="highlight-box">
+    <p><strong>Dica Evolua:</strong> Não precisa de métricas complexas. Uma planilha simples com pacientes novos, canal de origem e taxa de conversão já é suficiente para começar. Ajuste sua estratégia a cada mês baseado nos dados.</p>
+  </div>
+</div>
+
+<div class="conclusion">
+  <h2>Comece hoje, colha sempre</h2>
+  <p>Marketing digital não é um bicho de sete cabeças. Você não precisa ser influenciadora nem gastar rios de dinheiro em anúncios. Basta começar com o que você já sabe — fonoaudiologia — e compartilhar esse conhecimento de forma estratégica.</p>
+  <p>Cada post, artigo ou vídeo é um degrau na construção da sua autoridade digital. Com o tempo, você não só atrai mais pacientes: você atrai os pacientes certos, que confiam no seu trabalho antes mesmo de te conhecer pessoalmente.</p>
+  <p>E para te ajudar nessa jornada, a Evolua integra seu WhatsApp, agenda, prontuário e cobrança em um só lugar — liberando seu tempo para o que realmente importa: cuidar de quem precisa de você.</p>
+  <a href="https://useevolua.com.br" class="cta">Comece grátis com a Evolua →</a>
+  <p style="margin-top:16px;font-size:14px;opacity:0.7;">CRM inteligente para fonoaudiólogas</p>
+</div>
+
+<div class="footer">
+  Evolua CRM — Feito por fonoaudiólogas, para fonoaudiólogas<br>
+  © 2026 Evolua. Todos os direitos reservados.
+</div>
+
+</div>
+</body>
+</html>

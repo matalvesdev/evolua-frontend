@@ -58,6 +58,33 @@ const LEAD_MAGNETS: LeadMagnet[] = [
     cor: 'text-primary',
     corBg: 'bg-primary/10',
   },
+  {
+    id: 'ebook-whatsapp',
+    title: 'E-book: WhatsApp Profissional para Fonoaudiólogas',
+    description: 'Guia completo de configuração, LGPD, cobrança e integração com CRM para turbinar sua clínica.',
+    icon: 'chat',
+    tipo: 'ebook',
+    cor: 'text-lavender-deep',
+    corBg: 'bg-lavender',
+  },
+  {
+    id: 'infografico-precos',
+    title: 'Infográfico: Estratégia de Preços para Fonoaudiólogas',
+    description: 'Guia visual para definir o valor da sua sessão, fórmula de precificação e quando reajustar.',
+    icon: 'attach_money',
+    tipo: 'infografico',
+    cor: 'text-primary',
+    corBg: 'bg-primary/10',
+  },
+  {
+    id: 'infografico-humanizado',
+    title: 'Infográfico: Atendimento Humanizado na Fonoaudiologia',
+    description: 'Pilares do atendimento humanizado, checklist para primeira consulta e tecnologia a favor do cuidado.',
+    icon: 'favorite',
+    tipo: 'infografico',
+    cor: 'text-lavender-deep',
+    corBg: 'bg-lavender',
+  },
 ]
 
 const TIPO_LABEL: Record<string, string> = {
@@ -138,7 +165,7 @@ export function LeadMagnetCard({ magnet, index = 0 }: { magnet: LeadMagnet; inde
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="seu@email.com.br"
+            placeholder="Seu melhor email"
             required
             disabled={loading}
             className="w-full border border-outline-variant px-3 py-2 text-sm text-ink bg-canvas focus:outline-none focus:border-primary disabled:opacity-50"

@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Posts — Evolua · Julho 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: #F5F3FF;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 48px;
+      max-width: 800px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0A0A14;
+      letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+      color: #6B7280;
+      font-size: 15px;
+      margin-top: 8px;
+      font-weight: 400;
+    }
+
+    .page-header .brand {
+      color: #8B5CF6;
+    }
+
+    .feed { max-width: 680px; width: 100%; display: flex; flex-direction: column; gap: 40px; }
+
+    .linkedin-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px 12px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .avatar-evolua {
+      background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+    }
+
+    .author-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .author-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #0A0A14;
+    }
+
+    .author-name span { color: #6B7280; font-weight: 400; }
+
+    .author-meta {
+      font-size: 12px;
+      color: #6B7280;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dot { width: 3px; height: 3px; border-radius: 50%; background: #6B7280; display: inline-block; }
+
+    /* Post Banner */
+    .post-banner {
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .post-banner h2 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      line-height: 1.2;
+    }
+
+    .post-banner .subtitle {
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 8px;
+      position: relative;
+      z-index: 2;
+      opacity: 0.85;
+    }
+
+    /* Geometric decorative elements */
+    .geo-shapes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+
+    .geo-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.12;
+    }
+
+    .geo-rect {
+      position: absolute;
+      border-radius: 4px;
+      opacity: 0.08;
+      transform: rotate(15deg);
+    }
+
+    .geo-line {
+      position: absolute;
+      height: 2px;
+      opacity: 0.06;
+      border-radius: 2px;
+    }
+
+    /* Theme: Violet */
+    .theme-violet .post-banner { background: linear-gradient(135deg, #120D1E 0%, #2D1B69 50%, #8B5CF6 100%); }
+    .theme-violet .post-banner h2 { color: #fff; }
+    .theme-violet .post-banner .subtitle { color: #C4B5FD; }
+    .theme-violet .geo-circle { background: #8B5CF6; }
+    .theme-violet .geo-rect { background: #C4F135; }
+
+    /* Theme: Neon */
+    .theme-neon .post-banner { background: linear-gradient(135deg, #0A0A14 0%, #1a1a2e 50%, #3d3d5c 100%); }
+    .theme-neon .post-banner h2 { color: #C4F135; }
+    .theme-neon .post-banner .subtitle { color: #a3a3b8; }
+    .theme-neon .geo-circle { background: #C4F135; }
+    .theme-neon .geo-rect { background: #8B5CF6; }
+
+    /* Theme: Deep */
+    .theme-deep .post-banner { background: linear-gradient(135deg, #0A0A14 0%, #120D1E 50%, #1E1B3A 100%); }
+    .theme-deep .post-banner h2 { color: #F5F3FF; }
+    .theme-deep .post-banner .subtitle { color: #A78BFA; }
+    .theme-deep .geo-circle { background: #8B5CF6; }
+    .theme-deep .geo-rect { background: #C4F135; }
+
+    /* Theme: Ink */
+    .theme-ink .post-banner { background: linear-gradient(135deg, #0A0A14 0%, #120D1E 100%); }
+    .theme-ink .post-banner h2 { color: #F5F3FF; }
+    .theme-ink .post-banner .subtitle { color: #8B5CF6; }
+    .theme-ink .geo-circle { background: #C4F135; }
+    .theme-ink .geo-rect { background: #8B5CF6; }
+
+    /* Theme: Canvas + Violet accent */
+    .theme-canvas .post-banner { background: linear-gradient(135deg, #EDE9FE 0%, #F5F3FF 50%, #E8E0FE 100%); }
+    .theme-canvas .post-banner h2 { color: #120D1E; }
+    .theme-canvas .post-banner .subtitle { color: #6D28D9; }
+    .theme-canvas .geo-circle { background: #8B5CF6; }
+    .theme-canvas .geo-rect { background: #120D1E; }
+
+    /* Theme: Gradient Duo (Violet → Green) */
+    .theme-duo .post-banner { background: linear-gradient(135deg, #8B5CF6 0%, #C4F135 100%); }
+    .theme-duo .post-banner h2 { color: #0A0A14; }
+    .theme-duo .post-banner .subtitle { color: #120D1E; font-weight: 600; }
+    .theme-duo .geo-circle { background: #0A0A14; }
+    .theme-duo .geo-rect { background: #F5F3FF; }
+
+    /* Post Body */
+    .post-body { padding: 16px 18px 12px; }
+    .post-body p { font-size: 14.5px; line-height: 1.65; color: #1C1C1C; margin-bottom: 10px; }
+    .post-body p:last-of-type { margin-bottom: 0; }
+
+    .post-body .highlight-box {
+      background: #F5F3FF;
+      border-left: 3px solid #8B5CF6;
+      padding: 12px 14px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 14px;
+    }
+
+    .post-body ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    .post-body ul li {
+      padding: 5px 0 5px 20px;
+      position: relative;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #1C1C1C;
+    }
+
+    .post-body ul li::before {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 11px;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      opacity: 0.7;
+    }
+
+    .theme-violet ul li::before { background: #8B5CF6; }
+    .theme-neon ul li::before { background: #C4F135; }
+    .theme-deep ul li::before { background: #8B5CF6; }
+    .theme-ink ul li::before { background: #C4F135; }
+    .theme-canvas ul li::before { background: #6D28D9; }
+    .theme-duo ul li::before { background: #8B5CF6; }
+
+    .post-body .emoji-inline { font-size: 15px; }
+
+    .post-body .check-list { margin: 10px 0; }
+
+    .post-body .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .check-item .icon-check, .check-item .icon-x {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    .check-item .icon-check { background: #DCFCE7; color: #16A34A; }
+    .check-item .icon-x { background: #FEE2E2; color: #DC2626; }
+
+    .post-body .cta-comment {
+      background: #F5F3FF;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      font-weight: 500;
+      font-size: 14px;
+      color: #6D28D9;
+      border: 1px solid #E8E0FE;
+    }
+
+    .post-body .cta-link {
+      display: inline-block;
+      margin-top: 4px;
+      font-weight: 600;
+      color: #8B5CF6;
+    }
+
+    .post-body .formula-box {
+      background: #0A0A14;
+      color: #C4F135;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      margin: 12px 0;
+      letter-spacing: -0.2px;
+    }
+
+    .post-body .case-quote {
+      border-left: 3px solid #8B5CF6;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-style: italic;
+      color: #4B5563;
+      font-size: 14px;
+      background: #FAFAFA;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .post-body .stat-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+
+    .stat-row .stat-badge {
+      background: #F5F3FF;
+      border: 1px solid #E8E0FE;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #1C1C1C;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .stat-row .stat-badge strong {
+      display: block;
+      font-size: 16px;
+      color: #6D28D9;
+    }
+
+    .post-body .inline-code {
+      background: #F3F4F6;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: 'Inter', monospace;
+      color: #6D28D9;
+    }
+
+    /* Hashtags */
+    .post-hashtags {
+      padding: 6px 18px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .post-hashtags span {
+      font-size: 13px;
+      font-weight: 500;
+      color: #8B5CF6;
+    }
+
+    /* Post Actions */
+    .post-actions {
+      display: flex;
+      align-items: center;
+      padding: 6px 18px 12px;
+      gap: 16px;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6B7280;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .action-btn:hover { background: #F3F4F6; }
+
+    .action-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+
+    .copy-btn {
+      margin-left: auto;
+      background: #8B5CF6;
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .copy-btn:hover { background: #7C3AED; }
+    .copy-btn.copied { background: #16A34A; }
+
+    /* Post number badge */
+    .post-number {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(139, 92, 246, 0.1);
+      color: #8B5CF6;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .card-footer-spacer { height: 4px; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      body { padding: 20px 12px; }
+      .post-banner { height: 160px; padding: 24px 18px; }
+      .post-banner h2 { font-size: 24px; }
+      .stat-row .stat-badge { min-width: 100px; }
+      .card-header { padding: 14px 14px 10px; }
+      .post-body { padding: 12px 14px; }
+      .post-hashtags { padding: 4px 14px 10px; }
+      .post-actions { padding: 4px 14px 10px; flex-wrap: wrap; }
+      .copy-btn { margin-left: 0; }
+    }
+
+    /* Toast message */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #0A0A14;
+      color: #C4F135;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 999;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <h1>📱 LinkedIn Posts <span class="brand">Evolua</span></h1>
+    <p>6 posts prontos para publicação · Julho 2026 · Brand: Violet · Ink · Neon</p>
+  </div>
+
+  <div class="feed" id="feed">
+
+    <!-- POST 1 — Diagnóstico Financeiro -->
+    <div class="linkedin-card theme-violet">
+      <div class="post-number">1 / 6</div>
+      <div class="card-header">
+        <div class="avatar avatar-evolua">EV</div>
+        <div class="author-info">
+          <div class="author-name">Evolua <span>· Gestão Inteligente para Fonoaudiólogas</span></div>
+          <div class="author-meta">483 seguidores · 3 h <span class="dot"></span> <span>🌐</span></div>
+        </div>
+      </div>
+
+      <div class="post-banner">
+        <div class="geo-shapes">
+          <div class="geo-circle" style="width:180px;height:180px;top:-60px;right:-40px;"></div>
+          <div class="geo-circle" style="width:100px;height:100px;bottom:-30px;left:-20px;"></div>
+          <div class="geo-rect" style="width:60px;height:60px;top:20px;left:30px;"></div>
+          <div class="geo-rect" style="width:40px;height:40px;bottom:30px;right:40px;"></div>
+          <div class="geo-line" style="width:120px;top:50%;left:10%;"></div>
+        </div>
+        <h2>Quanto vale<br />a sua sessão?</h2>
+        <div class="subtitle">Diagnóstico Financeiro</div>
+      </div>
+
+      <div class="post-body">
+        <p>60% dos consultórios de fonoaudiologia fecham em até 5 anos (Sebrae). O motivo? <strong>Falta de gestão financeira.</strong></p>
+        <p>Você sabe qual é o custo real de cada sessão? Não é só o seu tempo.</p>
+        <div class="highlight-box">
+          <div class="check-item"><span class="icon-x">✕</span> Aluguel + contas</div>
+          <div class="check-item"><span class="icon-x">✕</span> Material clínico</div>
+          <div class="check-item"><span class="icon-x">✕</span> Impostos</div>
+          <div class="check-item"><span class="icon-x">✕</span> Software / ferramentas</div>
+          <div class="check-item"><span class="icon-x">✕</span> Tempo administrativo</div>
+        </div>
+        <p>Se você cobra <strong>R$ 120</strong> por sessão mas gasta 30 min com papelada, seu lucro real é menor do que parece.</p>
+        <p>Um CRM especializado corta o tempo administrativo em <strong>80%</strong>. É gestão, não é gasto.</p>
+        <p><span class="cta-link">Link na bio para teste grátis →</span></p>
+      </div>
+
+      <div class="post-hashtags">
+        <span>#Fonoaudiologia</span><span>#GestaoClinica</span><span>#Fonoaudióloga</span><span>#EmpreendedorismoFono</span>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M7 22V4l14 7-14 7z"/></svg> Like</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comment</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share</button>
+        <button class="copy-btn" data-post="1">Copiar Post</button>
+      </div>
+      <div class="card-footer-spacer"></div>
+    </div>
+
+    <!-- POST 2 — Marketing Digital Ético -->
+    <div class="linkedin-card theme-neon">
+      <div class="post-number">2 / 6</div>
+      <div class="card-header">
+        <div class="avatar avatar-evolua">EV</div>
+        <div class="author-info">
+          <div class="author-name">Evolua <span>· Gestão Inteligente para Fonoaudiólogas</span></div>
+          <div class="author-meta">483 seguidores · 3 h <span class="dot"></span> <span>🌐</span></div>
+        </div>
+      </div>
+
+      <div class="post-banner">
+        <div class="geo-shapes">
+          <div class="geo-circle" style="width:160px;height:160px;top:-50px;left:-30px;"></div>
+          <div class="geo-circle" style="width:90px;height:90px;bottom:-20px;right:-10px;"></div>
+          <div class="geo-rect" style="width:70px;height:70px;top:30px;right:20px;"></div>
+          <div class="geo-rect" style="width:35px;height:35px;bottom:40px;left:30px;"></div>
+        </div>
+        <h2>O que o CFFA<br />permite no digital?</h2>
+        <div class="subtitle">Marketing Ético</div>
+      </div>
+
+      <div class="post-body">
+        <p>Muita fonoaudióloga tem medo de postar e levar advertência do Conselho. Vamos esclarecer:</p>
+        <div class="check-list">
+          <div class="check-item"><span class="icon-check">✓</span> Posts educativos (desenvolvimento da fala, marcos, dicas)</div>
+          <div class="check-item"><span class="icon-check">✓</span> Cases clínicos SEM identificar o paciente</div>
+          <div class="check-item"><span class="icon-check">✓</span> Divulgação de especialidades e áreas de atuação</div>
+          <div class="check-item"><span class="icon-check">✓</span> Conteúdo sobre gestão de clínica</div>
+        </div>
+        <div class="check-list" style="margin-top:6px;">
+          <div class="check-item"><span class="icon-x">✕</span> Prometer cura</div>
+          <div class="check-item"><span class="icon-x">✕</span> Sensacionalismo</div>
+          <div class="check-item"><span class="icon-x">✕</span> Divulgar imagem de paciente sem autorização</div>
+          <div class="check-item"><span class="icon-x">✕</span> Autopromoção exacerbada</div>
+        </div>
+        <p>O digital é seu maior aliado para atrair pacientes — desde que feito com ética.</p>
+        <div class="cta-comment">Quer um guia completo? Comenta <strong>"ÉTICA"</strong> que eu envio o link.</div>
+      </div>
+
+      <div class="post-hashtags">
+        <span>#CFFA</span><span>#MarketingParaFono</span><span>#Fonoaudiologia</span><span>#ÉticaProfissional</span>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M7 22V4l14 7-14 7z"/></svg> Like</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comment</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share</button>
+        <button class="copy-btn" data-post="2">Copiar Post</button>
+      </div>
+      <div class="card-footer-spacer"></div>
+    </div>
+
+    <!-- POST 3 — Automatização com IA -->
+    <div class="linkedin-card theme-deep">
+      <div class="post-number">3 / 6</div>
+      <div class="card-header">
+        <div class="avatar avatar-evolua">EV</div>
+        <div class="author-info">
+          <div class="author-name">Evolua <span>· Gestão Inteligente para Fonoaudiólogas</span></div>
+          <div class="author-meta">483 seguidores · 3 h <span class="dot"></span> <span>🌐</span></div>
+        </div>
+      </div>
+
+      <div class="post-banner">
+        <div class="geo-shapes">
+          <div class="geo-circle" style="width:200px;height:200px;top:-70px;right:-60px;"></div>
+          <div class="geo-circle" style="width:80px;height:80px;bottom:-10px;left:30%;"></div>
+          <div class="geo-rect" style="width:50px;height:50px;top:20px;left:20px;"></div>
+          <div class="geo-rect" style="width:30px;height:30px;bottom:50px;right:60px;"></div>
+        </div>
+        <h2>Quanto tempo você<br />gasta com papelada?</h2>
+        <div class="subtitle">Automatização com IA</div>
+      </div>
+
+      <div class="post-body">
+        <p>Uma fonoaudióloga atende em média <strong>6 pacientes por dia</strong>. São 6 prontuários, 6 receitas, 6 relatórios.</p>
+        <div class="stat-row">
+          <div class="stat-badge"><strong>1h/dia</strong>só em burocracia</div>
+          <div class="stat-badge"><strong>20h/mês</strong>perdidas</div>
+          <div class="stat-badge"><strong>240h/ano</strong>em papelada</div>
+        </div>
+        <p>Agora imagina:</p>
+        <ul>
+          <li>Prontuário preenchido por IA enquanto você atende</li>
+          <li>Laudo pronto em 2 cliques</li>
+          <li>Lembrete automático no WhatsApp</li>
+          <li>Relatório financeiro mensal em segundos</li>
+        </ul>
+        <p><strong>Isso não é futuro.</strong> É o que o Evolua já faz.</p>
+        <p><span class="cta-link">Teste grátis por 7 dias. Link na bio.</span></p>
+      </div>
+
+      <div class="post-hashtags">
+        <span>#IAparaFono</span><span>#Fonoaudiologia</span><span>#TecnologiaNaSaude</span><span>#GestaoClinica</span>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M7 22V4l14 7-14 7z"/></svg> Like</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comment</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share</button>
+        <button class="copy-btn" data-post="3">Copiar Post</button>
+      </div>
+      <div class="card-footer-spacer"></div>
+    </div>
+
+    <!-- POST 4 — Teleconsulta -->
+    <div class="linkedin-card theme-duo">
+      <div class="post-number">4 / 6</div>
+      <div class="card-header">
+        <div class="avatar avatar-evolua">EV</div>
+        <div class="author-info">
+          <div class="author-name">Evolua <span>· Gestão Inteligente para Fonoaudiólogas</span></div>
+          <div class="author-meta">483 seguidores · 3 h <span class="dot"></span> <span>🌐</span></div>
+        </div>
+      </div>
+
+      <div class="post-banner">
+        <div class="geo-shapes">
+          <div class="geo-circle" style="width:150px;height:150px;top:-40px;left:-20px;"></div>
+          <div class="geo-circle" style="width:120px;height:120px;bottom:-50px;right:-30px;"></div>
+          <div class="geo-rect" style="width:55px;height:55px;top:15px;right:25px;"></div>
+          <div class="geo-rect" style="width:35px;height:35px;bottom:25px;left:40px;"></div>
+        </div>
+        <h2>Teleconsulta: como fazer<br />da forma certa</h2>
+        <div class="subtitle">A resolução do CFFA permite. Mas tem regras.</div>
+      </div>
+
+      <div class="post-body">
+        <p>A teleconsulta veio pra ficar — e a resolução do CFFA permite. Mas tem regras:</p>
+        <ul>
+          <li>Ambiente adequado (sem ruído, boa iluminação)</li>
+          <li>Consentimento do paciente ou responsável</li>
+          <li>Plataforma com LGPD (nada de WhatsApp pessoal)</li>
+          <li>Registro no prontuário como teleconsulta</li>
+          <li>Cuidado redobrado com pacientes de voz e audição</li>
+        </ul>
+        <p><strong>Benefícios reais:</strong></p>
+        <div class="stat-row">
+          <div class="stat-badge"><strong>−40%</strong>redução de faltas</div>
+          <div class="stat-badge"><strong>+cidades</strong>alcance geográfico</div>
+          <div class="stat-badge"><strong>+flex</strong>na agenda</div>
+        </div>
+        <p>O Evolua tem teleconsulta integrada com agendamento e prontuário. Tudo num lugar só.</p>
+        <div class="cta-comment">Comenta <strong>"TELECONSULTA"</strong> que eu mando o guia.</div>
+      </div>
+
+      <div class="post-hashtags">
+        <span>#Teleconsulta</span><span>#Fonoaudiologia</span><span>#SaudeDigital</span><span>#LGPD</span>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M7 22V4l14 7-14 7z"/></svg> Like</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comment</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share</button>
+        <button class="copy-btn" data-post="4">Copiar Post</button>
+      </div>
+      <div class="card-footer-spacer"></div>
+    </div>
+
+    <!-- POST 5 — Precificação Inteligente -->
+    <div class="linkedin-card theme-ink">
+      <div class="post-number">5 / 6</div>
+      <div class="card-header">
+        <div class="avatar avatar-evolua">EV</div>
+        <div class="author-info">
+          <div class="author-name">Evolua <span>· Gestão Inteligente para Fonoaudiólogas</span></div>
+          <div class="author-meta">483 seguidores · 3 h <span class="dot"></span> <span>🌐</span></div>
+        </div>
+      </div>
+
+      <div class="post-banner">
+        <div class="geo-shapes">
+          <div class="geo-circle" style="width:170px;height:170px;top:-50px;right:-40px;"></div>
+          <div class="geo-circle" style="width:100px;height:100px;bottom:-30px;left:-10px;"></div>
+          <div class="geo-rect" style="width:45px;height:45px;top:40px;left:35px;"></div>
+          <div class="geo-rect" style="width:50px;height:50px;bottom:20px;right:30px;"></div>
+        </div>
+        <h2>Quanto cobrar<br />por sessão?</h2>
+        <div class="subtitle">Precificação Inteligente</div>
+      </div>
+
+      <div class="post-body">
+        <p>Essa é a pergunta que mais ouvimos. E a resposta é: <strong>depende.</strong></p>
+        <p>Para precificar direito, você precisa saber:</p>
+        <div class="highlight-box">
+          <div style="margin-bottom:6px;"><strong>1. CUSTOS FIXOS</strong> <span class="emoji-inline">📋</span></div>
+          <div style="font-size:13px;color:#4B5563;">Aluguel + condomínio · Contas (luz, água, internet) · Material clínico · Ferramentas (CRM, agenda)</div>
+        </div>
+        <div class="highlight-box">
+          <div style="margin-bottom:6px;"><strong>2. CUSTOS VARIÁVEIS</strong> <span class="emoji-inline">📊</span></div>
+          <div style="font-size:13px;color:#4B5563;">Impostos ~15% · Taxa de cartão ~3% · Cancelamentos ~10%</div>
+        </div>
+        <div class="highlight-box">
+          <div style="margin-bottom:6px;"><strong>3. SEU TEMPO</strong> <span class="emoji-inline">⏱️</span></div>
+          <div style="font-size:13px;color:#4B5563;">Atendimento 50 min + Prontuário 10 min = 1h por paciente</div>
+        </div>
+        <div class="formula-box">
+          (Custos Mensais ÷ Pacientes/Dia ÷ Dias Úteis) + Margem + Impostos
+        </div>
+        <p>O Evolua gera esse cálculo automaticamente no relatório financeiro. <span class="cta-link">Teste grátis.</span></p>
+      </div>
+
+      <div class="post-hashtags">
+        <span>#Precificacao</span><span>#Fonoaudiologia</span><span>#GestaoFinanceira</span><span>#Empreendedorismo</span>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M7 22V4l14 7-14 7z"/></svg> Like</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comment</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share</button>
+        <button class="copy-btn" data-post="5">Copiar Post</button>
+      </div>
+      <div class="card-footer-spacer"></div>
+    </div>
+
+    <!-- POST 6 — Case / Prova Social -->
+    <div class="linkedin-card theme-canvas">
+      <div class="post-number">6 / 6</div>
+      <div class="card-header">
+        <div class="avatar avatar-evolua">EV</div>
+        <div class="author-info">
+          <div class="author-name">Evolua <span>· Gestão Inteligente para Fonoaudiólogas</span></div>
+          <div class="author-meta">483 seguidores · 3 h <span class="dot"></span> <span>🌐</span></div>
+        </div>
+      </div>
+
+      <div class="post-banner">
+        <div class="geo-shapes">
+          <div class="geo-circle" style="width:180px;height:180px;top:-60px;left:-40px;"></div>
+          <div class="geo-circle" style="width:100px;height:100px;bottom:-40px;right:-20px;"></div>
+          <div class="geo-rect" style="width:65px;height:65px;top:10px;right:15px;"></div>
+          <div class="geo-rect" style="width:40px;height:40px;bottom:35px;left:25px;"></div>
+        </div>
+        <h2>Ela economizou<br />4h por semana</h2>
+        <div class="subtitle">Case de Sucesso</div>
+      </div>
+
+      <div class="post-body">
+        <p>A <strong>Dra. Carla M.</strong>, fonoaudióloga em SP, atendia 25 pacientes por semana e passava <strong>10h em burocracia</strong>.</p>
+        <p><strong>Com o Evolua:</strong></p>
+        <div class="stat-row">
+          <div class="stat-badge"><strong>10min → 30s</strong>prontuário com IA</div>
+          <div class="stat-badge"><strong>zero ligações</strong>agendamento WhatsApp</div>
+          <div class="stat-badge"><strong>1 clique</strong>relatórios prontos</div>
+        </div>
+        <div class="stat-row" style="margin-top:4px;">
+          <div class="stat-badge"><strong>+20%</strong>ticket médio</div>
+          <div class="stat-badge"><strong>4h/semana</strong>devolvidas</div>
+        </div>
+        <div class="case-quote">
+          "O Evolua me deu meu tempo de volta. Hoje não consigo imaginar voltar atrás."<br />
+          <span style="font-style:normal;font-weight:500;">— Dra. Carla M.</span>
+        </div>
+        <p><span class="cta-link">Teste grátis por 7 dias. Link na bio.</span></p>
+      </div>
+
+      <div class="post-hashtags">
+        <span>#CaseDeSucesso</span><span>#Fonoaudiologia</span><span>#Evolua</span><span>#GestaoClinica</span>
+      </div>
+
+      <div class="post-actions">
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M7 22V4l14 7-14 7z"/></svg> Like</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Comment</button>
+        <button class="action-btn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg> Share</button>
+        <button class="copy-btn" data-post="6">Copiar Post</button>
+      </div>
+      <div class="card-footer-spacer"></div>
+    </div>
+
+  </div>
+
+  <div class="toast" id="toast">Texto copiado para a área de transferência!</div>
+
+  <script>
+    (function() {
+      const postsCopy = {
+        1: `60% dos consultórios de fonoaudiologia fecham em até 5 anos (Sebrae). O motivo? Falta de gestão financeira.
+
+Você sabe qual é o custo real de cada sessão? Não é só o seu tempo.
+
+✕ Aluguel + contas
+✕ Material clínico
+✕ Impostos
+✕ Software / ferramentas
+✕ Tempo administrativo
+
+Se você cobra R$ 120 por sessão mas gasta 30 min com papelada, seu lucro real é menor do que parece.
+
+Um CRM especializado corta o tempo administrativo em 80%. É gestão, não é gasto.
+
+Link na bio para teste grátis →
+
+#Fonoaudiologia #GestaoClinica #Fonoaudióloga #EmpreendedorismoFono`,
+
+        2: `O que o CFFA permite no digital? Muita fonoaudióloga tem medo de postar e levar advertência do Conselho. Vamos esclarecer:
+
+✅ PERMITIDO:
+• Posts educativos (desenvolvimento da fala, marcos, dicas)
+• Cases clínicos SEM identificar o paciente
+• Divulgação de especialidades e áreas de atuação
+• Conteúdo sobre gestão de clínica
+
+❌ VEDADO:
+• Prometer cura
+• Sensacionalismo
+• Divulgar imagem de paciente sem autorização
+• Autopromoção exacerbada
+
+O digital é seu maior aliado para atrair pacientes — desde que feito com ética.
+
+Quer um guia completo? Comenta "ÉTICA" que eu envio o link.
+
+#CFFA #MarketingParaFono #Fonoaudiologia #ÉticaProfissional`,
+
+        3: `Quanto tempo você gasta com papelada?
+
+Uma fonoaudióloga atende em média 6 pacientes por dia. São 6 prontuários, 6 receitas, 6 relatórios.
+
+Se cada prontuário leva 10min:
+→ 1h/dia só em burocracia
+→ 20h/mês perdidas
+→ 240h/ano em papelada
+
+Agora imagina:
+• Prontuário preenchido por IA enquanto você atende
+• Laudo pronto em 2 cliques
+• Lembrete automático no WhatsApp
+• Relatório financeiro mensal em segundos
+
+Isso não é futuro. É o que o Evolua já faz.
+
+Teste grátis por 7 dias. Link na bio.
+
+#IAparaFono #Fonoaudiologia #TecnologiaNaSaude #GestaoClinica`,
+
+        4: `Teleconsulta: como fazer da forma certa
+
+A teleconsulta veio pra ficar — e a resolução do CFFA permite. Mas tem regras:
+
+1. Ambiente adequado (sem ruído, boa iluminação)
+2. Consentimento do paciente ou responsável
+3. Plataforma com LGPD (nada de WhatsApp pessoal)
+4. Registro no prontuário como teleconsulta
+5. Cuidado redobrado com pacientes de voz e audição
+
+Benefícios reais:
+• Redução de faltas em 40%
+• Alcance pacientes em outras cidades
+• Mais flexibilidade na agenda
+
+O Evolua tem teleconsulta integrada com agendamento e prontuário. Tudo num lugar só.
+
+Comenta "TELECONSULTA" que eu mando o guia.
+
+#Teleconsulta #Fonoaudiologia #SaudeDigital #LGPD`,
+
+        5: `Quanto cobrar por sessão?
+
+Essa é a pergunta que mais ouvimos. E a resposta é: depende.
+
+PARA PRECIFICAR DIREITO:
+
+1. CUSTOS FIXOS 📋
+   Aluguel + condomínio · Contas (luz, água, internet) · Material clínico · Ferramentas (CRM, agenda)
+
+2. CUSTOS VARIÁVEIS 📊
+   Impostos ~15% · Taxa de cartão ~3% · Cancelamentos ~10%
+
+3. SEU TEMPO ⏱️
+   Atendimento 50min + Prontuário 10min = 1h por paciente
+
+FÓRMULA:
+(Custos Mensais ÷ Pacientes/Dia ÷ Dias Úteis) + Margem + Impostos
+
+O Evolua gera esse cálculo automaticamente no relatório financeiro. Teste grátis.
+
+#Precificacao #Fonoaudiologia #GestaoFinanceira #Empreendedorismo`,
+
+        6: `Case de Sucesso: Ela economizou 4h por semana
+
+A Dra. Carla M., fonoaudióloga em SP, atendia 25 pacientes por semana e passava 10h em burocracia.
+
+COM O EVOLUA:
+• Prontuário: de 10min para 30 segundos (IA)
+• Agendamento: zero ligações (WhatsApp automático)
+• Relatórios: 1 clique em vez de 1 tarde inteira
+• Faturamento: ticket médio subiu 20%
+
+RESULTADO: 4h por semana DEVOLVIDAS
+
+"O Evolua me deu meu tempo de volta. Hoje não consigo imaginar voltar atrás." — Dra. Carla M.
+
+Teste grátis por 7 dias. Link na bio.
+
+#CaseDeSucesso #Fonoaudiologia #Evolua #GestaoClinica`
+      };
+
+      const toast = document.getElementById('toast');
+      let toastTimer = null;
+
+      function showToast(text) {
+        toast.textContent = text || 'Texto copiado para a área de transferência!';
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+      }
+
+      document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const postId = this.getAttribute('data-post');
+          const text = postsCopy[postId];
+          if (!text) return;
+
+          try {
+            await navigator.clipboard.writeText(text);
+            this.textContent = 'Copiado ✓';
+            this.classList.add('copied');
+            showToast('Post copiado para a área de transferência!');
+            setTimeout(() => {
+              this.textContent = 'Copiar Post';
+              this.classList.remove('copied');
+            }, 2000);
+          } catch (err) {
+            // fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('Post copiado!');
+          }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -11,6 +11,9 @@ const LEAD_MAGNETS: Record<string, { title: string; file: string }> = {
   'ebook-mkt-digital-fono': { title: 'E-book: Marketing Digital para Fonoaudiólogas', file: '/lead-magnets/ebook-mkt-digital-fono.pdf' },
   'infografico-marcos-fala': { title: 'Infográfico: Marcos do Desenvolvimento da Fala', file: '/lead-magnets/infografico-marcos-fala.pdf' },
   'infografico-montar-clinica': { title: 'Infográfico: Como Montar sua Clínica de Fonoaudiologia', file: '/lead-magnets/infografico-montar-clinica.pdf' },
+  'ebook-whatsapp': { title: 'E-book: WhatsApp Profissional para Fonoaudiólogas', file: '/lead-magnets/ebook-whatsapp.pdf' },
+  'infografico-precos': { title: 'Infográfico: Estratégia de Preços para Fonoaudiólogas', file: '/lead-magnets/infografico-precos.pdf' },
+  'infografico-humanizado': { title: 'Infográfico: Atendimento Humanizado na Fonoaudiologia', file: '/lead-magnets/infografico-atendimento-humanizado.pdf' },
 }
 
 export const Route = createFileRoute('/materiais/$magnetId')({

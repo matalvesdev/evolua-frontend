@@ -1,0 +1,10 @@
+[
+  {"id": "ebook-tendencias", "type": "ebook", "title": "Tendências em Fonoaudiologia 2026", "file": "ebook-tendencias-2026.html"},
+  {"id": "ebook-protocolos", "type": "ebook", "title": "Guia de Protocolos Clínicos", "file": "ebook-protocolos.html"},
+  {"id": "ebook-whatsapp", "type": "ebook", "title": "WhatsApp Profissional para Fonoaudiólogas", "file": "ebook-whatsapp-profissional.html"},
+  {"id": "ebook-mkt-digital", "type": "ebook", "title": "Marketing Digital para Fonoaudiólogas", "file": "ebook-mkt-digital-fono.html"},
+  {"id": "infografico-marcos", "type": "infographic", "title": "Marcos do Desenvolvimento da Fala", "file": "infraco-marcos-fala.html"},
+  {"id": "infografico-clinica", "type": "infographic", "title": "Como Montar sua Clínica de Fonoaudiologia", "file": "infraco-fluxo-atendimento.html"},
+  {"id": "infografico-precos", "type": "infographic", "title": "Estratégia de Preços para Fonoaudiólogas", "file": "infraco-estrategia-precos.html"},
+  {"id": "infografico-humanizado", "type": "infographic", "title": "Atendimento Humanizado na Fonoaudiologia", "file": "infraco-atendimento-humanizado.html"}
+]
