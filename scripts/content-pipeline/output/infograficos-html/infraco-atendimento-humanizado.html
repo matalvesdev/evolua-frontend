@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#F8F8FF;color:#1A1A2E;display:flex;justify-content:center;padding:20px;line-height:1.6}
+.infra{max-width:480px;width:100%;background:#FFFFFF}
+.header{background:#2D2B55;padding:48px 28px 40px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-60%;right:-40%;width:400px;height:400px;background:rgba(108,99,255,0.08);border-radius:50%}
+.header::after{content:'';position:absolute;bottom:-40%;left:-30%;width:300px;height:300px;background:rgba(196,241,53,0.04);border-radius:50%}
+.h-content{position:relative;z-index:1}
+.h-badge{font-family:'Space Grotesk',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:3px;color:#C4F135;font-weight:700;margin-bottom:12px}
+.h-title{font-size:28px;color:#fff;line-height:1.2;margin-bottom:8px;font-family:'Space Grotesk',sans-serif;font-weight:700}
+.h-title span{color:#C4F135}
+.h-sub{font-size:14px;color:rgba(255,255,255,0.7);font-family:'DM Sans',sans-serif}
+.section{padding:28px 24px}
+.section:nth-child(even){background:#F8F8FF}
+.section h2{font-size:18px;color:#1A1A2E;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600}
+.pillars{display:flex;flex-direction:column;gap:12px}
+.pillar{display:flex;align-items:flex-start;gap:14px;padding:16px;background:#FFFFFF;border:1px solid #E0DFEF}
+.p-icon{width:44px;height:44px;background:#EAE8FF;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px}
+.p-content{flex:1}
+.p-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:#1A1A2E;margin-bottom:2px}
+.p-desc{font-size:13px;color:#4A4A6A}
+.checklist{list-style:none}
+.checklist li{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #E0DFEF;font-size:14px;color:#4A4A6A}
+.checklist li:last-child{border-bottom:none}
+.cb{width:22px;height:22px;background:#C4F135;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#1A1A2E;font-weight:700;font-size:12px}
+.comp-box{background:#FFFFFF;padding:20px;border:1px solid #E0DFEF;margin-bottom:12px}
+.comp-box:last-child{margin-bottom:0}
+.cb-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:#1A1A2E;margin-bottom:8px}
+.cb-title .cb-icon{vertical-align:middle;margin-right:6px}
+.comp-box p{font-size:13px;color:#4A4A6A}
+.comp-box ul{list-style:none;margin-top:8px}
+.comp-box ul li{padding:4px 0 4px 20px;position:relative;font-size:13px;color:#4A4A6A}
+.comp-box ul li::before{content:'';position:absolute;left:4px;top:50%;transform:translateY(-50%);width:4px;height:4px;background:#6C63FF}
+.hybrid-tech{display:flex;gap:12px;margin-bottom:16px}
+.ht-item{flex:1;padding:16px;text-align:center}
+.ht-item:first-child{background:#EAE8FF}
+.ht-item:last-child{background:#2D2B55;color:#fff}
+.ht-icon{font-size:28px;margin-bottom:4px}
+.ht-item:last-child .ht-icon{color:#C4F135}
+.ht-label{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.ht-desc{font-size:11px;margin-top:4px;opacity:0.7}
+.quote{background:#EAE8FF;padding:16px 20px;margin:16px 0;font-style:italic;font-size:14px;color:#1A1A2E}
+.quote .q-author{font-style:normal;font-family:'Space Grotesk',sans-serif;font-weight:600;color:#6C63FF;margin-top:8px;font-size:13px}
+.dica-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #E0DFEF;font-size:13px;color:#4A4A6A}
+.dica-item:last-child{border-bottom:none}
+.dica-star{color:#6C63FF;font-size:18px;flex-shrink:0}
+.footer{text-align:center;padding:20px 24px;background:#2D2B55;color:#fff}
+.footer .f-name{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#C4F135}
+.footer .f-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
+@media(max-width:480px){.hybrid-tech{flex-direction:column}.section{padding:24px 20px}}
+</style></head><body>
+<div class="infra">
+
+<div class="header">
+  <div class="h-content">
+    <div class="h-badge">Evolua · Lead Magnet</div>
+    <div class="h-title">Atendimento<br><span>Humanizado</span></div>
+    <div class="h-sub">Como acolher, comunicar e cuidar com excelência</div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>❤️ Pilares do Atendimento Humanizado</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="p-icon">👂</div>
+      <div class="p-content">
+        <div class="p-title">Escuta Ativa</div>
+        <div class="p-desc">Mais que ouvir, é compreender. Faça perguntas abertas, valide sentimentos. O silêncio também é ferramenta clínica.</div>
+      </div>
+    </div>
+    <div class="pillar">
+      <div class="p-icon">🤝</div>
+      <div class="p-content">
+        <div class="p-title">Acolhimento</div>
+        <div class="p-desc">A primeira consulta define o vínculo. Receba com sorriso, explique o que vai acontecer, use linguagem acessível.</div>
+      </div>
+    </div>
+    <div class="pillar">
+      <div class="p-icon">💬</div>
+      <div class="p-content">
+        <div class="p-title">Linguagem Clara</div>
+        <div class="p-desc">Substitua jargões por explicações simples. O paciente só confia no que entende.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>✅ Checklist para Primeira Consulta</h2>
+  <ul class="checklist">
+    <li><span class="cb">✓</span> Ambiente limpo, organizado e com materiais visíveis</li>
+    <li><span class="cb">✓</span> Recepcionar usando o nome do paciente</li>
+    <li><span class="cb">✓</span> Explicar duração e formato antes de começar</li>
+    <li><span class="cb">✓</span> Perguntar sobre rotina, escola, histórico familiar</li>
+    <li><span class="cb">✓</span> Validar as queixas: "Entendo sua preocupação"</li>
+    <li><span class="cb">✓</span> Combinar próximos passos por escrito</li>
+    <li><span class="cb">✓</span> Entregar resumo do que foi conversado</li>
+    <li><span class="cb">✓</span> Deixar canal de contato claro para dúvidas</li>
+    <li><span class="cb">✓</span> Perguntar se ficou alguma dúvida antes de encerrar</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>🧒 Crianças vs Adultos</h2>
+  <div class="comp-box">
+    <div class="cb-title"><span class="cb-icon">🧒</span> Atendimento Infantil</div>
+    <p>Estabeleça rapport primeiro com a criança — brinque, mostre materiais. Use linguagem lúdica: "Vamos brincar de fazer sons?" Inclua os pais com orientações claras.</p>
+    <ul>
+      <li>Sessões de 30 a 45 minutos</li>
+      <li>Jogos e histórias como ferramentas terapêuticas</li>
+      <li>Crie rotina previsível — a criança se sente segura</li>
+    </ul>
+  </div>
+  <div class="comp-box">
+    <div class="cb-title"><span class="cb-icon">🧑</span> Atendimento Adulto e Idoso</div>
+    <p>Valide a trajetória do paciente. Com idosos, fale pausadamente, confirme a compreensão, envolva acompanhantes sem infantilizar.</p>
+    <ul>
+      <li>Sessões de 40 a 50 minutos com pausas</li>
+      <li>Materiais impressos com fonte ampliada</li>
+      <li>Envolva o paciente nas decisões do tratamento</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2>👂 Escuta Ativa na Prática</h2>
+  <p style="font-size:14px;color:#4A4A6A;margin-bottom:16px">A escuta ativa é a habilidade mais subestimada na formação em saúde. Estar presente, sem julgar e sem preparar a resposta enquanto o outro fala.</p>
+  <div class="pillar" style="margin-bottom:8px">
+    <div class="p-icon">👁️</div>
+    <div class="p-content">
+      <div class="p-title">Contato visual e postura</div>
+      <div class="p-desc">Sente-se de frente, evite cruzar os braços. Pequenos sinais de abertura corporal fazem diferença.</div>
+    </div>
+  </div>
+  <div class="pillar" style="margin-bottom:8px">
+    <div class="p-icon">🔄</div>
+    <div class="p-content">
+      <div class="p-title">Parafraseie e valide</div>
+      <div class="p-desc">"Se entendi corretamente, você está preocupada porque..." — mostra que você ouviu.</div>
+    </div>
+  </div>
+  <div class="pillar">
+    <div class="p-icon">❓</div>
+    <div class="p-content">
+      <div class="p-title">Perguntas abertas</div>
+      <div class="p-desc">"Como tem sido o dia a dia?" abre mais espaço que "Melhorou ou piorou?".</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🤖 Tecnologia que Humaniza</h2>
+  <p style="font-size:14px;color:#4A4A6A;margin-bottom:16px">Tecnologia não desumaniza o atendimento — ela libera tempo para o que realmente importa: o contato humano.</p>
+  <div class="hybrid-tech">
+    <div class="ht-item">
+      <div class="ht-icon">⚡</div>
+      <div class="ht-label">Automação</div>
+      <div class="ht-desc">Lembretes, cobranças e agendamentos automáticos liberam horas</div>
+    </div>
+    <div class="ht-item">
+      <div class="ht-icon">❤️</div>
+      <div class="ht-label">Humanização</div>
+      <div class="ht-desc">Mais tempo para escutar, acolher e personalizar cada sessão</div>
+    </div>
+  </div>
+  <div class="quote">
+    <p>"A tecnologia bem aplicada não rouba o toque humano — ela devolve o tempo que a burocracia roubava."</p>
+    <div class="q-author">— Evolua CRM</div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>💡 Dicas Rápidas</h2>
+  <div class="dica-item"><span class="dica-star">⭐</span><span><strong>No primeiro contato</strong>, chame o paciente pelo nome. Isso cria conexão imediata.</span></div>
+  <div class="dica-item"><span class="dica-star">⭐</span><span><strong>Na devolutiva</strong>, comece pelos pontos fortes, depois aborde dificuldades.</span></div>
+  <div class="dica-item"><span class="dica-star">⭐</span><span><strong>Use exemplos concretos</strong> em vez de termos técnicos.</span></div>
+  <div class="dica-item"><span class="dica-star">⭐</span><span><strong>A cada sessão</strong>, pergunte "como foi a semana?" — o paciente importa além da queixa.</span></div>
+  <div class="dica-item"><span class="dica-star">⭐</span><span><strong>Lembre-se:</strong> o paciente não é um caso clínico. É uma pessoa que confiou sua saúde a você.</span></div>
+</div>
+
+<div class="footer">
+  <div class="f-name">Evolua</div>
+  <div class="f-sub">CRM inteligente para fonoaudiólogas · useevolua.com.br</div>
+</div>
+
+</div></body></html>

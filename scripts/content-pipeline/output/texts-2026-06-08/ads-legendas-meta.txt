@@ -1,0 +1,26 @@
+FEED 1 - "Chega de papelada"
+Headline: Chega de papelada. Seu prontuário em 30 segundos.
+Texto: Enquanto você atende, o Evolua preenche o prontuário com IA. Laudo pronto em 2 cliques. WhatsApp integrado. Teste grátis.
+CTA: Testar Grátis
+
+---
+FEED 2 - "CRM feito para fono"
+Headline: CRM feito para fonoaudiólogas
+Texto: Prontuário, agenda, WhatsApp, cobrança e teleconsulta em um só lugar. Não é genérico — é feito para você.
+CTA: Quero Conhecer
+
+---
+FEED 3 - "60% fecham em 5 anos"
+Headline: 60% fecham em 5 anos. Você não precisa ser estatística.
+Texto: Gestão financeira é o que separa consultórios que crescem dos que fecham.
+CTA: Começar Grátis
+
+---
+STORY 1 - Prontuário em 30s
+Texto: Prontuário em 30 segundos com IA
+CTA: TESTE GRÁTIS →
+
+---
+STORY 2 - WhatsApp integrado
+Texto: Agenda, lembrete e cobrança pelo WhatsApp
+CTA: SAIBA MAIS

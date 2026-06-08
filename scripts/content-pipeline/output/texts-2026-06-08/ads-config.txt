@@ -1,0 +1,86 @@
+CONFIGURAÇÃO DE CAMPANHA - EVOLUA
+Data: 07/06/2026
+Responsável: Equipe Marketing Evolua
+Objetivo: Aquisição de leads (fonoaudiólogas) para teste grátis do CRM
+
+---
+META ADS — FEED + STORIES
+Budget: R$ 80-120/dia (total Meta)
+Público: Fonoaudiólogas, 25-50 anos, Brasil
+Segmentação: Interesses > Fonoaudiologia, Saúde, Clínicas, Reabilitação, Educação Especial
+Exclusão: Quem já visitou o site (pixel) — exceto remarketing
+Agenda: 7 dias corridos, das 06h às 23h
+Formatos:
+  • Feed: Imagem estática 1080x1080px (JPG/PNG, <30MB) ou vídeo 4:5 até 60s
+  • Stories: Vídeo vertical 9:16 (1080x1920px), 15s ideal, máximo 60s
+  • Reels: Vídeo 9:16 (1080x1920px), 15-30s, com música tendência
+Placements: Feed + Stories + Reels (otimizado automático)
+CTA disponíveis: Testar Grátis / Quero Conhecer / Começar Agora / Saber Mais
+Links: useevolua.com.br/testar (com UTM)
+Pixel: Evento Lead + PageView + InitiateCheckout
+Campanhas:
+  • Prospecção (CBO) — 70% budget
+  • Remarketing (site + engajamento) — 30% budget
+
+---
+GOOGLE ADS — PESQUISA + DISPLAY + PMAX
+Budget: R$ 100-150/dia (total Google)
+Agenda: 7 dias corridos, 24h
+
+REDE DE PESQUISA (40% budget):
+  Formatos: Texto expansível (3 headlines x 30 chars + 2 descrições x 90 chars)
+  Palavras-chave:
+    • CRM fonoaudiologia, sistema para fonoaudiólogo, prontuário digital fono
+    • software clínica fonoaudiologia, agenda fonoaudióloga
+    • gestão de clínica de fonoaudiologia
+    • [marca] Evolua CRM
+  Correspondência: Exata + Frase + Modificada
+  Extensões: Sitelinks (+5 links), Callout (+3 textos), Snippet de estrutura (CRM), Ligação
+  Headlines (30 chars): CRM para Fono | Prontuário Digital | Gestão de Clínica | Teste Grátis |
+  Descrições (90 chars): O CRM feito para fonoaudiólogas. Prontuário, agenda e WhatsApp em um só lugar. Teste grátis 7 dias.
+
+REDE DE DISPLAY (30% budget):
+  Formatos: Responsivo (logotipo + imagens 1200x628 + headlines + descrições)
+  Segmentação: Palavras-chave + Público-alvo + Tópicos (Saúde, Negócios)
+  Exclusão: Sites de notícias gerais, conteúdo sensível
+
+PMAX (30% budget):
+  Assets: Até 20 imagens + 5 logotipos + 5 vídeos curtos
+  Grupos de produtos: CRM, Prontuário, Gestão, WhatsApp
+
+---
+YOUTUBE ADS — IN-STREAM + BUMPER
+Budget: R$ 60-80/dia (separado ou incluso no Google Ads)
+Agenda: 7 dias, segmentação por canal de fonoaudiologia + público-alvo
+
+IN-STREAM SKIPPABLE (TrueView):
+  • Formato: Vídeo 16:9 (1920x1080px), duração 15-30s (ideal: 20s)
+  • Call-to-action nos 5s finais
+  • Headline (texto do anúncio): até 30 chars
+  • CTA: Testar Grátis / Saiba Mais
+  • Script 20s: [0-5s] "Você perde horas com papelada?"
+                      [5-15s] "O Evolua é o CRM que preenche prontuário com IA, agenda pelo WhatsApp e cobra automaticamente."
+                      [15-20s] "Teste grátis por 7 dias. Link na descrição."
+
+BUMPER (não pulável, 6s):
+  • Formato: Vídeo 16:9 (1920x1080px), exatos 6s
+  • Texto na tela: "CRM para Fono. Teste Grátis."
+  • Script 6s: "CRM para fonoaudióloga. Teste grátis no evolua.com.br"
+  • Sem CTA clicável — usa card ou tela final
+
+IN-STREAM NON-SKIPPABLE (15s):
+  • Formato: Vídeo 16:9 (1920x1080px), exatos 15s
+  • Script 15s: [0-5s] "Chega de papelada no seu consultório."
+                      [5-12s] "Prontuário com IA, WhatsApp integrado, teleconsulta e gestão financeira."
+                      [12-15s] "Teste grátis. Evolua CRM."
+  • CTA: Saiba Mais (sobreposição)
+
+---
+KPIS
+  Meta: CPL ≤ R$8 | CTR > 2.5% | Taxa de Conversão Lead→Teste > 3%
+  Google: CTR > 3% | CPC < R$3 | Taxa de Conversão > 4%
+  YouTube: Taxa de visualização > 25% (instream) | Lembrança > 50% (bumper)
+  Geral: Custo por lead qualificado < R$12
+
+UTMs: utm_source=meta&utm_medium=cpc&utm_campaign=evolua_2026-06-08
+TESTE A/B: 3 variações de criativo por anúncio, 1 variação de público

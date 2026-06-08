@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#E0DFEF;display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px}
+.story{width:1080px;height:1920px;position:relative;overflow:hidden;border-radius:2px;flex-shrink:0;font-family:'Inter',system-ui,sans-serif}
+.bg-primary{background:#8B5CF6}.bg-deep{background:#0A0A14}.bg-surface{background:#FFFFFF}.bg-canvas{background:#F5F3FF}
+.story-content{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;height:100%;padding:80px 60px;position:relative}
+.logo{font-weight:700;font-size:24px;letter-spacing:-0.02em;text-transform:lowercase}
+.logo-neon{color:#C4F135}
+h1{font-weight:800;font-size:72px;line-height:1.1;letter-spacing:-0.04em;color:#FFFFFF;margin-bottom:24px}
+h1.dark{color:#0A0A14}
+.sub{font-weight:400;font-size:28px;color:rgba(255,255,255,0.8);line-height:1.5;max-width:800px}
+.sub.dark{color:#4A4A6A}
+.cta-btn{display:inline-block;background:#C4F135;color:#0A0A14;font-weight:700;font-size:24px;padding:20px 64px;border-radius:2px;margin-top:48px;letter-spacing:0.02em}
+.bottom-logo{position:absolute;bottom:60px;left:50%;transform:translateX(-50%)}
+.neon-dot{width:16px;height:16px;background:#C4F135;border-radius:50%;margin-bottom:32px}
+.neon-line{width:80px;height:4px;background:#C4F135;margin:24px auto}
+.icon-big{font-size:80px;margin-bottom:32px}
+.top-badge{font-weight:700;font-size:13px;letter-spacing:0.3em;color:#8B5CF6;text-transform:uppercase;margin-bottom:16px}.top-badge.light{color:#9D97F5}
+.steps{text-align:left;list-style:none;margin-top:24px;width:100%;max-width:700px}
+.steps li{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;font-weight:400;font-size:24px;color:rgba(255,255,255,0.85);line-height:1.4}
+.step-num{width:40px;height:40px;background:#C4F135;color:#0A0A14;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0}
+</style></head><body>
+
+<!-- STORY 1: Capa -->
+<div class="story bg-primary">
+  <div class="story-content">
+    <div class="icon-big">🌟</div>
+    <h1>Marketing Digital<br>com Propósito</h1>
+    <div class="neon-line"></div>
+    <div class="sub">Construa autoridade sem ferir o Código de Ética</div>
+    <div class="cta-btn">SAIBA MAIS →</div>
+    <div class="bottom-logo"><span class="logo logo-neon">evolua</span></div>
+  </div>
+</div>
+
+<!-- STORY 2: Conteúdo educativo -->
+<div class="story bg-deep">
+  <div class="story-content">
+    <div class="top-badge light">📚 CONTEÚDO QUE EDUCA</div>
+    <h1 style="font-size:56px">Ensine, não<br>venda</h1>
+    <ul class="steps">
+      <li><span class="step-num">1</span> Publique dicas sobre linguagem, voz, deglutição e TEA</li>
+      <li><span class="step-num">2</span> Mostre sua especialidade com registro no CFFa</li>
+      <li><span class="step-num">3</span> Responda dúvidas reais dos seus pacientes</li>
+    </ul>
+    <div class="bottom-logo"><span class="logo logo-neon">evolua</span></div>
+  </div>
+</div>
+
+<!-- STORY 3: O que é permitido -->
+<div class="story bg-surface">
+  <div class="story-content">
+    <div class="neon-dot"></div>
+    <h1 class="dark">O que a<br>resolução<br>permite ✅</h1>
+    <div class="sub dark">Posts educativos • Especialidades • Depoimentos autorizados • Ambiente de trabalho • Site com CRFa</div>
+    <div style="margin-top:32px;font-weight:700;font-size:11px;letter-spacing:0.3em;color:#8B5CF6;text-transform:uppercase">Resolução CFFa 600/2023</div>
+    <div class="bottom-logo"><span class="logo" style="color:#8B5CF6">evolua</span></div>
+  </div>
+</div>
+
+<!-- STORY 4: Autoridade -->
+<div class="story bg-primary">
+  <div class="story-content">
+    <div style="font-size:100px;margin-bottom:24px">🏅</div>
+    <h1>Construa<br>Autoridade</h1>
+    <div class="sub">Paciente informado valoriza a especialidade, não o preço.</div>
+    <div class="neon-line"></div>
+    <div style="font-weight:400;font-size:24px;color:rgba(255,255,255,0.6);margin-top:16px">Eduque → Gere confiança → Converta naturalmente</div>
+    <div class="bottom-logo"><span class="logo logo-neon">evolua</span></div>
+  </div>
+</div>
+
+<!-- STORY 5: CTA - Teste grátis -->
+<div class="story bg-deep">
+  <div class="story-content">
+    <div style="font-size:80px;margin-bottom:24px">🚀</div>
+    <h1>Teste Grátis</h1>
+    <div class="sub">7 dias. Sem compromisso.<br>Configure em 5 minutos.</div>
+    <div class="cta-btn">COMEÇAR AGORA</div>
+    <div style="margin-top:24px;font-weight:400;font-size:20px;color:rgba(255,255,255,0.4)">useevolua.com.br</div>
+    <div class="bottom-logo"><span class="logo logo-neon">evolua</span></div>
+  </div>
+</div>
+
+</body></html>

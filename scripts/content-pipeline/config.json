@@ -1,0 +1,26 @@
+{
+  "blog": {
+    "cadence": "daily",
+    "outputDir": "docs/content-assets/02-blog-posts",
+    "supabaseTable": "blog_posts",
+    "defaultAuthor": "Equipe Evolua",
+    "categories": ["Marketing", "Gestão", "Clínica", "Carreira", "Tecnologia", "Fonoaudiologia"],
+    "schedule": [
+      { "day": "segunda", "pilar": "Marketing Digital", "format": "guia-pratico" },
+      { "day": "terca", "pilar": "Gestão de Clínica", "format": "case-estudo" },
+      { "day": "quarta", "pilar": "Tecnologia", "format": "tutorial" },
+      { "day": "quinta", "pilar": "Clínica", "format": "artigo-tecnico" },
+      { "day": "sexta", "pilar": "Carreira", "format": "reflexao" }
+    ]
+  },
+  "social": {
+    "channels": ["linkedin", "instagram", "threads", "x"],
+    "emailRecipient": "contatouseevolua@gmail.com",
+    "emailSubject": "📱 Posts Sociais Evolua — Prontos para Publicação"
+  },
+  "ai": {
+    "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "temperature": 0.7,
+    "maxTokens": 4096
+  }
+}

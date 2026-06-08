@@ -1,0 +1,70 @@
+FORMATO: FEED (1080x1080px) — Imagem estática ou vídeo até 60s
+---
+FEED 1 - "Chega de papelada"
+Headline: Chega de papelada. Seu prontuário em 30 segundos.
+Body: Enquanto você atende, o Evolua preenche o prontuário com IA. Laudo pronto em 2 cliques. WhatsApp integrado. Teste grátis por 7 dias.
+CTA: Testar Grátis
+Imagem sugerida: Dashboard do Evolua mostrando prontuário sendo preenchido
+---
+FEED 2 - "CRM feito para fono"
+Headline: CRM feito para fonoaudiólogas
+Body: Prontuário, agenda, WhatsApp, cobrança e teleconsulta em um só lugar. Não é genérico — é feito para você.
+CTA: Quero Conhecer
+Imagem sugerida: Fonoaudióloga usando o app no celular
+---
+FEED 3 - "60% fecham em 5 anos"
+Headline: 60% dos consultórios fecham em 5 anos. Você não precisa ser estatística.
+Body: Gestão financeira é o que separa consultórios que crescem dos que fecham. Evolua te ajuda a não ser só mais uma.
+CTA: Começar Grátis
+Imagem sugerida: Gráfico de crescimento com a marca Evolua
+---
+FEED 4 - "WhatsApp integrado"
+Headline: Seu consultório no WhatsApp
+Body: Agenda, lembrete, cobrança e prontuário direto no WhatsApp dos seus pacientes. Tudo automatizado.
+CTA: Saber Mais
+Imagem sugerida: Print de conversa no WhatsApp com lembretes automáticos
+---
+FEED 5 - "Prontuário com IA"
+Headline: Prontuário em 30 segundos com IA
+Body: Enquanto você foca no paciente, o Evolua documenta tudo. Laudos, evoluções e relatórios automáticos.
+CTA: Teste Grátis
+Imagem sugerida: Antes/depois do tempo gasto com burocracia
+---
+FEED 6 - "Teleconsulta inclusa"
+Headline: Teleconsulta nativa e sem complicação
+Body: Atenda pacientes de qualquer lugar com videochamada integrada, agendamento sincronizado e prontuário compartilhado.
+CTA: Quero Conhecer
+Imagem sugerida: Tela de videochamada com paciente
+---
+FORMATO: STORY (1080x1920px) — Vídeo 15s ou imagem estática vertical
+---
+STORY 1 - Prontuário 30s
+Headline (texto na tela): Prontuário em 30 segundos
+Subtexto: Enquanto você atende, a IA documenta tudo.
+CTA: TESTE GRÁTIS →
+CTA Link: useevolua.com.br/testar
+---
+STORY 2 - WhatsApp integrado
+Headline: WhatsApp do paciente + seu CRM
+Subtexto: Agenda, cobrança e prontuário no mesmo lugar.
+CTA: SAIBA MAIS
+---
+STORY 3 - Economia de tempo
+Headline: +5h/semana devolvidas
+Subtexto: Chega de papelada. Foco no que importa: o paciente.
+CTA: QUERO ECONOMIZAR
+---
+STORY 4 - Case real
+Headline: "Nunca mais perdi paciente por falta de contato"
+Subtexto: Dra. Carla M. — Fonoaudióloga há 8 anos
+CTA: VER CASE
+---
+STORY 5 - Oferta
+Headline: 7 dias grátis. Sem compromisso.
+Subtexto: Teste o Evolua completo. Configure em 5 minutos.
+CTA: COMEÇAR AGORA
+---
+STORY 6 - Prova social
+Headline: +300 fonoaudiólogas já usam
+Subtexto: Junte-se à maior comunidade de fonoaudiologia do Brasil.
+CTA: QUERO PARTICIPAR
