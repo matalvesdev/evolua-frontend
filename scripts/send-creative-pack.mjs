@@ -156,7 +156,7 @@ try {
       'Authorization': `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      from: fromEmail,
+      from: 'Evolua <noreply@useevolua.com.br>',
       to: 'contatouseevolua@gmail.com',
       subject: '📦 Pack de Criativos Evolua — Julho 2026 | Pronto para Publicar',
       html: emailHtml,
