@@ -1,0 +1,54 @@
+{
+  "squad": "content-blog-fono",
+  "status": "idle",
+  "step": {
+    "current": 0,
+    "total": 5,
+    "label": "Aguardando início"
+  },
+  "agents": [
+    {
+      "id": "researcher",
+      "name": "Pesquisadora",
+      "icon": "🔍",
+      "gender": "female",
+      "status": "idle",
+      "desk": { "col": 1, "row": 1 }
+    },
+    {
+      "id": "strategist",
+      "name": "Estrategista",
+      "icon": "🧠",
+      "gender": "female",
+      "status": "idle",
+      "desk": { "col": 2, "row": 1 }
+    },
+    {
+      "id": "copywriter",
+      "name": "Redatora",
+      "icon": "✍️",
+      "gender": "female",
+      "status": "idle",
+      "desk": { "col": 3, "row": 1 }
+    },
+    {
+      "id": "designer",
+      "name": "Designer",
+      "icon": "🎨",
+      "gender": "male",
+      "status": "idle",
+      "desk": { "col": 1, "row": 2 }
+    },
+    {
+      "id": "reviewer",
+      "name": "Revisora",
+      "icon": "🧐",
+      "gender": "female",
+      "status": "idle",
+      "desk": { "col": 2, "row": 2 }
+    }
+  ],
+  "handoff": null,
+  "startedAt": null,
+  "updatedAt": null
+}

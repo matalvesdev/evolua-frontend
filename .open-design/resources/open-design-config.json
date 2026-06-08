@@ -1,0 +1,11 @@
+{
+  "appVersion": "0.9.0",
+  "daemonCliEntryRelative": "app/prebundled/daemon/daemon-cli.mjs",
+  "daemonSidecarEntryRelative": "app/prebundled/daemon/daemon-sidecar.mjs",
+  "webSidecarEntryRelative": "app/prebundled/web-sidecar.mjs",
+  "namespace": "release-stable-win",
+  "telemetryRelayUrl": "https://telemetry.open-design.ai/api/langfuse",
+  "posthogKey": "phc_u5dHWkwdqN626opkbbjDKk7xNzxR2UsJbdQqx3DncbjU",
+  "posthogHost": "https://us.i.posthog.com",
+  "webOutputMode": "standalone"
+}
