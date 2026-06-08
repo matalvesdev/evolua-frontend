@@ -1,210 +1,168 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estrategia de Precos para Fonoaudiologas - Evolua</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=DM+Sans:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', system-ui, sans-serif; background: #F8F8FF; color: #1A1A2E; line-height: 1.6; display: flex; justify-content: center; padding: 20px; }
-  h1, h2, h3 { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 600; }
-  .infographic { max-width: 480px; width: 100%; background: #FFFFFF; box-shadow: 0 4px 24px rgba(26,26,46,0.08); }
-  .header { background: #6C63FF; padding: 48px 28px 40px; text-align: center; position: relative; overflow: hidden; }
-  .header::before { content: ''; position: absolute; top: -60%; right: -40%; width: 400px; height: 400px; background: rgba(255,255,255,0.05); border-radius: 50%; }
-  .header::after { content: ''; position: absolute; bottom: -40%; left: -30%; width: 300px; height: 300px; background: rgba(196,241,53,0.06); border-radius: 50%; }
-  .header-content { position: relative; z-index: 1; }
-  .header .badge { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 3px; color: #C4F135; font-weight: 700; margin-bottom: 12px; }
-  .header h1 { font-size: 28px; color: #fff; line-height: 1.2; margin-bottom: 8px; }
-  .header h1 span { color: #C4F135; }
-  .header p { font-size: 14px; color: rgba(255,255,255,0.7); font-family: 'DM Sans', system-ui, sans-serif; }
-  .section { padding: 28px 24px; }
-  .section:nth-child(even) { background: #F8F8FF; }
-  .section h2 { font-size: 18px; color: #1A1A2E; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-  .section h2 .mat-icon { color: #6C63FF; font-size: 24px; }
-  .section h2 .mat-icon.neon { color: #C4F135; }
-  .price-card { background: #FFFFFF; padding: 20px; margin-bottom: 12px; border: 1px solid #E0DFEF; }
-  .price-card:last-child { margin-bottom: 0; }
-  .price-card .title { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 600; font-size: 16px; color: #1A1A2E; margin-bottom: 4px; }
-  .price-card .desc { font-size: 13px; color: #8888AA; margin-bottom: 8px; }
-  .price-card .value { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 24px; font-weight: 700; color: #6C63FF; }
-  .price-card .value small { font-family: 'DM Sans', system-ui, sans-serif; font-size: 13px; font-weight: 400; color: #8888AA; }
-  .formula-box { background: #1A1A2E; padding: 24px; color: #fff; text-align: center; }
-  .formula-box .formula { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 20px; font-weight: 700; color: #C4F135; margin: 12px 0; letter-spacing: 1px; }
-  .formula-box .step { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 8px; text-align: left; }
-  .formula-box .step strong { color: #fff; }
-  .region-list { list-style: none; }
-  .region-list li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #E0DFEF; font-size: 14px; }
-  .region-list li:last-child { border-bottom: none; }
-  .region-list .region-name { font-weight: 600; color: #1A1A2E; }
-  .region-list .region-price { font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 700; color: #6C63FF; }
-  .when-box { display: flex; flex-direction: column; gap: 10px; }
-  .when-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px; background: #FFFFFF; border: 1px solid #E0DFEF; }
-  .when-item .check { width: 22px; height: 22px; background: #C4F135; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #1A1A2E; font-family: 'Material Symbols Outlined'; font-size: 14px; }
-  .when-item .text { font-size: 13px; color: #4A4A6A; }
-  .when-item .text strong { color: #1A1A2E; }
-  .comparison { display: flex; gap: 12px; margin-bottom: 12px; }
-  .comparison .item { flex: 1; background: #FFFFFF; padding: 20px; text-align: center; border: 1px solid #E0DFEF; }
-  .comparison .item .mat-icon-big { font-size: 32px; color: #6C63FF; margin-bottom: 8px; }
-  .comparison .item .label-top { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 12px; font-weight: 600; color: #8888AA; text-transform: uppercase; letter-spacing: 1px; }
-  .comparison .item .value-big { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 22px; font-weight: 700; color: #1A1A2E; margin: 4px 0; }
-  .comparison .item .desc-small { font-size: 12px; color: #8888AA; }
-  .comparison .item.highlight { background: #F8F8FF; border-color: #6C63FF; }
-  .mat-icon { font-family: 'Material Symbols Outlined'; font-weight: 400; font-style: normal; font-size: 20px; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; word-wrap: normal; direction: ltr; -webkit-font-feature-settings: 'liga'; font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; vertical-align: middle; }
-  .footer-brand { text-align: center; padding: 20px; background: #1A1A2E; color: #fff; }
-  .footer-brand .evolua-name { font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 14px; font-weight: 700; color: #C4F135; }
-  .footer-brand .evolua-sub { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 4px; }
-  .disclaimer { font-size: 11px; color: #8888AA; text-align: center; margin-top: 8px; }
-  @media (max-width: 480px) { .comparison { flex-direction: column; } .section { padding: 24px 20px; } }
-</style>
-</head>
-<body>
-<div class="infographic">
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#F8F8FF;color:#1A1A2E;display:flex;justify-content:center;padding:20px;line-height:1.6}
+.infra{max-width:480px;width:100%;background:#FFFFFF}
+.header{background:#6C63FF;padding:48px 28px 40px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:-60%;right:-40%;width:400px;height:400px;background:rgba(255,255,255,0.05);border-radius:50%}
+.header::after{content:'';position:absolute;bottom:-40%;left:-30%;width:300px;height:300px;background:rgba(196,241,53,0.06);border-radius:50%}
+.h-content{position:relative;z-index:1}
+.h-badge{font-family:'Space Grotesk',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:3px;color:#C4F135;font-weight:700;margin-bottom:12px}
+.h-title{font-size:28px;color:#fff;line-height:1.2;margin-bottom:8px;font-family:'Space Grotesk',sans-serif;font-weight:700}
+.h-title span{color:#C4F135}
+.h-sub{font-size:14px;color:rgba(255,255,255,0.7);font-family:'DM Sans',sans-serif}
+.section{padding:28px 24px}
+.section:nth-child(even){background:#F8F8FF}
+.section h2{font-size:18px;color:#1A1A2E;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600}
+.price-card{background:#FFFFFF;padding:20px;margin-bottom:12px;border:1px solid #E0DFEF}
+.price-card:last-child{margin-bottom:0}
+.pc-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#1A1A2E;margin-bottom:4px}
+.pc-desc{font-size:13px;color:#8888AA;margin-bottom:8px}
+.pc-value{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;color:#6C63FF}
+.pc-value small{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:#8888AA}
+.formula-box{background:#2D2B55;padding:24px;color:#fff;text-align:center}
+.formula-box .f-head{font-size:12px;opacity:0.6;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.formula-box .f-body{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#C4F135;margin:12px 0;letter-spacing:1px}
+.formula-box .f-step{font-size:13px;color:rgba(255,255,255,0.7);margin-top:8px;text-align:left}
+.formula-box .f-step strong{color:#fff}
+.region-list{list-style:none}
+.region-list li{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #E0DFEF;font-size:14px}
+.region-list li:last-child{border-bottom:none}
+.r-name{font-weight:600;color:#1A1A2E}
+.r-price{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#6C63FF}
+.comp-grid{display:flex;gap:12px;margin-bottom:12px}
+.comp-item{flex:1;background:#FFFFFF;padding:20px;text-align:center;border:1px solid #E0DFEF}
+.comp-item.highlight{background:#F8F8FF;border-color:#6C63FF}
+.comp-icon{font-size:28px;margin-bottom:8px}
+.comp-label{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#8888AA;text-transform:uppercase;letter-spacing:1px}
+.comp-value{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#1A1A2E;margin:4px 0}
+.comp-desc{font-size:12px;color:#8888AA}
+.when-box{display:flex;flex-direction:column;gap:10px}
+.when-item{display:flex;align-items:flex-start;gap:12px;padding:14px;background:#FFFFFF;border:1px solid #E0DFEF}
+.when-check{width:22px;height:22px;background:#C4F135;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#1A1A2E;font-weight:700}
+.when-text{font-size:13px;color:#4A4A6A}
+.when-text strong{color:#1A1A2E}
+.err-list{list-style:none}
+.err-list li{padding:10px 0 10px 28px;position:relative;font-size:13px;color:#4A4A6A;border-bottom:1px solid #E0DFEF}
+.err-list li:last-child{border-bottom:none}
+.err-dot{position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;background:#8888AA}
+.footer{text-align:center;padding:20px;background:#2D2B55;color:#fff}
+.footer .f-name{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:#C4F135}
+.footer .f-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
+.disclaimer{font-size:11px;color:#8888AA;text-align:center;margin-top:8px}
+@media(max-width:480px){.comp-grid{flex-direction:column}.section{padding:24px 20px}}
+</style></head><body>
+<div class="infra">
 
 <div class="header">
-  <div class="header-content">
-    <div class="badge">Evolua · Lead Magnet</div>
-    <h1>Estrategia de<br><span>Precos</span></h1>
-    <p>Guia rapido para precificar seus servicos de fonoaudiologia com seguranca e rentabilidade</p>
+  <div class="h-content">
+    <div class="h-badge">Evolua · Lead Magnet</div>
+    <div class="h-title">Estratégia de<br><span>Preços</span></div>
+    <div class="h-sub">Guia rápido para precificar seus serviços de fonoaudiologia</div>
   </div>
 </div>
 
 <div class="section">
-  <h2><span class="mat-icon">attach_money</span> Quanto cobrar?</h2>
+  <h2>💰 Quanto cobrar?</h2>
   <div class="price-card">
-    <div class="title">Avaliacao Fonoaudiologica</div>
-    <div class="desc">Sessao inicial com anamnese, testes e devolutiva</div>
-    <div class="value">R$ 150 — R$ 350 <small>/ sessao</small></div>
+    <div class="pc-title">Avaliação Fonoaudiológica</div>
+    <div class="pc-desc">Sessão inicial com anamnese, testes e devolutiva</div>
+    <div class="pc-value">R$ 150 — R$ 350 <small>/ sessão</small></div>
   </div>
   <div class="price-card">
-    <div class="title">Terapia Individual (sessao)</div>
-    <div class="desc">Sessoes regulares de 30 a 50 minutos</div>
-    <div class="value">R$ 100 — R$ 250 <small>/ sessao</small></div>
+    <div class="pc-title">Terapia Individual (sessão)</div>
+    <div class="pc-desc">Sessões regulares de 30 a 50 minutos</div>
+    <div class="pc-value">R$ 100 — R$ 250 <small>/ sessão</small></div>
   </div>
   <div class="price-card">
-    <div class="title">Pacote Mensal (4 sessoes)</div>
-    <div class="desc">Valor fechado com desconto por fidelidade</div>
-    <div class="value">R$ 360 — R$ 880 <small>/ mes</small></div>
+    <div class="pc-title">Pacote Mensal (4 sessões)</div>
+    <div class="pc-desc">Valor fechado com desconto por fidelidade</div>
+    <div class="pc-value">R$ 360 — R$ 880 <small>/ mês</small></div>
   </div>
   <div class="price-card">
-    <div class="title">Relatorio / Parecer Tecnico</div>
-    <div class="desc">Documentacao para escola, plano de saude ou justica</div>
-    <div class="value">R$ 80 — R$ 200 <small>/ unidade</small></div>
+    <div class="pc-title">Relatório / Parecer Técnico</div>
+    <div class="pc-desc">Documentação para escola, plano de saúde ou justiça</div>
+    <div class="pc-value">R$ 80 — R$ 200 <small>/ unidade</small></div>
   </div>
   <div class="price-card">
-    <div class="title">Atendimento Domiciliar (adicional)</div>
-    <div class="desc">Acrescimo sobre o valor da sessao para deslocamento</div>
-    <div class="value">R$ 20 — R$ 60 <small>/ adicional</small></div>
+    <div class="pc-title">Atendimento Domiciliar (adicional)</div>
+    <div class="pc-desc">Acréscimo sobre o valor da sessão para deslocamento</div>
+    <div class="pc-value">R$ 20 — R$ 60 <small>/ adicional</small></div>
   </div>
 </div>
 
 <div class="section">
-  <h2><span class="mat-icon">calculate</span> Formula de precificacao</h2>
+  <h2>🧮 Fórmula de Precificação</h2>
   <div class="formula-box">
-    <p style="font-size:12px;opacity:0.6;text-transform:uppercase;letter-spacing:1px;">Preco ideal por sessao</p>
-    <div class="formula">(CV + CF + ML) / HAT</div>
-    <div class="step"><strong>CV</strong> = Custos variaveis (material, deslocamento, impostos sobre cada sessao)</div>
-    <div class="step"><strong>CF</strong> = Custos fixos (aluguel, energia, internet, planos de saude) dividido pelo numero de sessoes no mes</div>
-    <div class="step"><strong>ML</strong> = Margem de lucro desejada (20 a 40% sobre o custo total)</div>
-    <div class="step"><strong>HAT</strong> = Horas de atendimento por mes (considerando apenas horas uteis)</div>
+    <div class="f-head">Preço ideal por sessão</div>
+    <div class="f-body">(CV + CF + ML) ÷ HAT</div>
+    <div class="f-step"><strong>CV</strong> = Custos variáveis (material, deslocamento, impostos)</div>
+    <div class="f-step"><strong>CF</strong> = Custos fixos ÷ número de sessões no mês</div>
+    <div class="f-step"><strong>ML</strong> = Margem de lucro desejada (20 a 40%)</div>
+    <div class="f-step"><strong>HAT</strong> = Horas de atendimento por mês</div>
   </div>
 </div>
 
 <div class="section">
-  <h2><span class="mat-icon">map</span> Ticket medio por regiao</h2>
+  <h2>📍 Ticket médio por região</h2>
   <ul class="region-list">
-    <li><span class="region-name">Sao Paulo (capital)</span><span class="region-price">R$ 180 — R$ 350</span></li>
-    <li><span class="region-name">Rio de Janeiro</span><span class="region-price">R$ 150 — R$ 300</span></li>
-    <li><span class="region-name">Belo Horizonte</span><span class="region-price">R$ 130 — R$ 250</span></li>
-    <li><span class="region-name">Curitiba / Porto Alegre</span><span class="region-price">R$ 120 — R$ 240</span></li>
-    <li><span class="region-name">Cidades medias (100k-500k hab.)</span><span class="region-price">R$ 100 — R$ 200</span></li>
-    <li><span class="region-name">Interior / Pequenas cidades</span><span class="region-price">R$ 80 — R$ 150</span></li>
+    <li><span class="r-name">São Paulo (capital)</span><span class="r-price">R$ 180 — R$ 350</span></li>
+    <li><span class="r-name">Rio de Janeiro</span><span class="r-price">R$ 150 — R$ 300</span></li>
+    <li><span class="r-name">Belo Horizonte</span><span class="r-price">R$ 130 — R$ 250</span></li>
+    <li><span class="r-name">Curitiba / Porto Alegre</span><span class="r-price">R$ 120 — R$ 240</span></li>
+    <li><span class="r-name">Cidades médias (100k-500k hab.)</span><span class="r-price">R$ 100 — R$ 200</span></li>
+    <li><span class="r-name">Interior / Pequenas cidades</span><span class="r-price">R$ 80 — R$ 150</span></li>
   </ul>
-  <p class="disclaimer">* Valores referenciais para consultorio particular (sem convenio)</p>
+  <p class="disclaimer">* Valores referenciais para consultório particular (sem convênio)</p>
 </div>
 
 <div class="section">
-  <h2><span class="mat-icon">schedule</span> Valor hora vs Valor sessao</h2>
-  <div class="comparison">
-    <div class="item">
-      <div class="mat-icon-big">schedule</div>
-      <div class="label-top">Valor Hora</div>
-      <div class="value-big">R$ 80 — R$ 150</div>
-      <div class="desc-small">Usado para pareceres, assessorias e horarios avulsos</div>
+  <h2>⏰ Valor hora vs Valor sessão</h2>
+  <div class="comp-grid">
+    <div class="comp-item">
+      <div class="comp-icon">⏰</div>
+      <div class="comp-label">Valor Hora</div>
+      <div class="comp-value">R$ 80 — R$ 150</div>
+      <div class="comp-desc">Para pareceres, assessorias e horários avulsos</div>
     </div>
-    <div class="item highlight">
-      <div class="mat-icon-big">stethoscope</div>
-      <div class="label-top">Valor Sessao</div>
-      <div class="value-big">R$ 100 — R$ 250</div>
-      <div class="desc-small">Inclui preparo, atendimento e registro em prontuario</div>
+    <div class="comp-item highlight">
+      <div class="comp-icon">🩺</div>
+      <div class="comp-label">Valor Sessão</div>
+      <div class="comp-value">R$ 100 — R$ 250</div>
+      <div class="comp-desc">Inclui preparo, atendimento e registro</div>
     </div>
   </div>
-  <p class="disclaimer">Diferenca: a sessao inclui o trabalho indireto (preparo, registro) que a hora avulsa nao contempla</p>
+  <p class="disclaimer">A sessão inclui o trabalho indireto (preparo, registro) que a hora avulsa não contempla</p>
 </div>
 
 <div class="section">
-  <h2><span class="mat-icon">calendar_month</span> Quando reajustar</h2>
+  <h2>📅 Quando reajustar</h2>
   <div class="when-box">
-    <div class="when-item">
-      <div class="check">check</div>
-      <div class="text"><strong>Anualmente</strong> — Corrija pela inflacao (IPCA) + ganho real de 5-10% se houver demanda</div>
-    </div>
-    <div class="when-item">
-      <div class="check">check</div>
-      <div class="text"><strong>Nova especializacao</strong> — Curso, pos-graduacao ou certificacao concluida justifica aumento de 10-20%</div>
-    </div>
-    <div class="when-item">
-      <div class="check">check</div>
-      <div class="text"><strong>Mudanca de endereco</strong> — Bairro nobre, sala maior ou consultorio reformado</div>
-    </div>
-    <div class="when-item">
-      <div class="check">check</div>
-      <div class="text"><strong>Demanda maior que oferta</strong> — Se sua agenda esta lotada ha mais de 3 meses, esta na hora de reajustar</div>
-    </div>
-    <div class="when-item">
-      <div class="check">check</div>
-      <div class="text"><strong>Inadimplencia baixa</strong> — Pacientes que pagam em dia e valorizam seu trabalho suportam reajustes</div>
-    </div>
-    <div class="when-item">
-      <div class="check">check</div>
-      <div class="text"><strong>Ha mais de 2 anos sem reajuste</strong> — A inflacao acumulada ja corroeu seu poder de compra</div>
-    </div>
+    <div class="when-item"><div class="when-check">✓</div><div class="when-text"><strong>Anualmente</strong> — Corrija pela inflação (IPCA) + ganho real de 5-10%</div></div>
+    <div class="when-item"><div class="when-check">✓</div><div class="when-text"><strong>Nova especialização</strong> — Curso ou certificação justifica aumento de 10-20%</div></div>
+    <div class="when-item"><div class="when-check">✓</div><div class="when-text"><strong>Mudança de endereço</strong> — Bairro nobre ou consultório reformado</div></div>
+    <div class="when-item"><div class="when-check">✓</div><div class="when-text"><strong>Demanda maior que oferta</strong> — Agenda lotada há mais de 3 meses</div></div>
+    <div class="when-item"><div class="when-check">✓</div><div class="when-text"><strong>Inadimplência baixa</strong> — Pacientes que pagam em dia suportam reajustes</div></div>
+    <div class="when-item"><div class="when-check">✓</div><div class="when-text"><strong>+2 anos sem reajuste</strong> — Inflação acumulada corroeu seu poder de compra</div></div>
   </div>
 </div>
 
 <div class="section">
-  <h2><span class="mat-icon">warning</span> Erros comuns ao precificar</h2>
-  <ul style="list-style:none;">
-    <li style="padding:8px 0 8px 28px;position:relative;font-size:13px;color:#4A4A6A;border-bottom:1px solid #E0DFEF;">
-      <span style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;background:#8888AA;border-radius:2px;"></span>
-      <strong>Cobrar abaixo do mercado</strong> por medo de perder pacientes — desvaloriza seu trabalho
-    </li>
-    <li style="padding:8px 0 8px 28px;position:relative;font-size:13px;color:#4A4A6A;border-bottom:1px solid #E0DFEF;">
-      <span style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;background:#8888AA;border-radius:2px;"></span>
-      <strong>Nao considerar custos indiretos</strong> — impostos, ferias, reserva tecnica, capacitacao
-    </li>
-    <li style="padding:8px 0 8px 28px;position:relative;font-size:13px;color:#4A4A6A;border-bottom:1px solid #E0DFEF;">
-      <span style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;background:#8888AA;border-radius:2px;"></span>
-      <strong>Preco unico para todos os pacientes</strong> — pacotes, descontos por fidelidade e convenios devem ter tabelas distintas
-    </li>
-    <li style="padding:8px 0 8px 28px;position:relative;font-size:13px;color:#4A4A6A;border-bottom:1px solid #E0DFEF;">
-      <span style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;background:#8888AA;border-radius:2px;"></span>
-      <strong>Nao revisar precos periodicamente</strong> — o mercado muda, seus custos mudam, seus precos tambem devem mudar
-    </li>
-    <li style="padding:8px 0 0 28px;position:relative;font-size:13px;color:#4A4A6A;">
-      <span style="position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;background:#8888AA;border-radius:2px;"></span>
-      <strong>Divulgar precos publicamente</strong> — o CFFA veda a mercantilizacao, e precos expostos podem gerar infracoes eticas
-    </li>
+  <h2>⚠️ Erros comuns ao precificar</h2>
+  <ul class="err-list">
+    <li><span class="err-dot"></span><strong>Cobrar abaixo do mercado</strong> por medo — desvaloriza seu trabalho</li>
+    <li><span class="err-dot"></span><strong>Não considerar custos indiretos</strong> — impostos, férias, reserva técnica</li>
+    <li><span class="err-dot"></span><strong>Preço único para todos</strong> — pacotes e convênios devem ter tabelas distintas</li>
+    <li><span class="err-dot"></span><strong>Não revisar preços periodicamente</strong> — o mercado e seus custos mudam</li>
+    <li><span class="err-dot"></span><strong>Divulgar preços publicamente</strong> — CFFA veda mercantilização</li>
   </ul>
 </div>
 
-<div class="footer-brand">
-  <div class="evolua-name">Evolua</div>
-  <div class="evolua-sub">CRM inteligente para fonoaudiologas · useevolua.com.br</div>
+<div class="footer">
+  <div class="f-name">Evolua</div>
+  <div class="f-sub">CRM inteligente para fonoaudiólogas · useevolua.com.br</div>
 </div>
 
-</div>
-</body>
-</html>
+</div></body></html>

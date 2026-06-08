@@ -59,7 +59,7 @@ export function NewsletterSignup({ variant = 'default' }: { variant?: 'default' 
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="seu@email.com.br"
+          placeholder="Seu melhor email"
           required
           className={inputClass}
           aria-label="Email para newsletter"

@@ -134,7 +134,7 @@ export function LeadMagnetInline({ magnetId }: LeadMagnetInlineProps) {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="seu@email.com.br"
+                placeholder="Seu melhor email"
                 required
                 disabled={loading}
                 className="flex-1 border border-outline-variant px-3 py-2 text-sm text-ink bg-canvas focus:outline-none focus:border-primary disabled:opacity-50"

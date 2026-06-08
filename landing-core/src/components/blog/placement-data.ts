@@ -45,11 +45,11 @@ export const PLACEMENT_BY_CATEGORY: Record<string, CategoryPlacement> = {
   Carreira: {
     leadMagnetId: 'ebook-protocolos',
     feature: {
-      title: 'Encaminhamentos Inteligentes',
-      description: 'Receba encaminhamentos de pacientes compatíveis com seu perfil, especialidade e região de atendimento.',
-      cta: 'Quero receber pacientes',
+      title: 'Documentos Profissionais com IA',
+      description: 'Gere laudos, relatórios e encaminhamentos em segundos com inteligência artificial — documentos prontos para assinar e entregar.',
+      cta: 'Quero agilizar meus documentos',
       ctaLink: '/planos',
-      icon: 'group_add',
+      icon: 'description',
     },
   },
   Tecnologia: {
