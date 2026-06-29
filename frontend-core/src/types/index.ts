@@ -35,10 +35,12 @@ export interface Appointment {
   id: string
   patientId: string
   patientName: string
+  therapistName: string
   dateTime: string
   type: string
   status: 'scheduled' | 'confirmed' | 'completed' | 'cancelled' | 'no_show'
   modality?: 'presential' | 'teleconsult'
+  duration: number
   notes?: string
 }
 

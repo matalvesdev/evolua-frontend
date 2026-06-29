@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://useevolua.com.br/sitemap.xml

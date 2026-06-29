@@ -308,7 +308,7 @@ pnpm content:dry-run
 3. Gerar imagens dos carrosséis automaticamente (via DALL-E / Canva API)
 4. Integrar postagem automática no LinkedIn via API
 
-## Installed Agent Skills (181 skills)
+## Installed Agent Skills (187 skills)
 
 ### Organização AI-Native (13 skills)
 **Master skill:** `organizacao-ai-native` — carrega o framework organizacional completo (filosofia, princípios, camadas, operating model, formato de resposta).
@@ -319,13 +319,35 @@ pnpm content:dry-run
 - `product-experience-layer` — PM, UX Research, UX Design, UX Writer, Design System, Accessibility, Clinical Experience, Customer Voice
 - `engineering-layer` — Architecture, Backend, Frontend, Mobile, AI, QA, Performance, Security, Platform, DevOps, SRE, Observability
 - `data-ai-layer` — Data Engineering, Analytics, ML, AI Research, RAG, Prompt Engineering, AI Governance
-- `growth-marketing-layer` — Growth, Branding, CRM, SEO, Content, Social, Community, Performance Marketing, Market Intelligence
+- `growth-marketing-layer` — Growth, Branding, CRM, SEO, Content, Social, Community, Performance Marketing, Market Intelligence (now links to 6 sub-skills)
 - `customer-experience-layer` — Customer Success, Support, Onboarding, Churn Prevention, NPS Intelligence
 - `business-operations-layer` — Strategy, RevOps, Finance, Process Optimization, Automation
 - `people-culture-layer` — Talent, People Ops, Culture, L&D, Leadership Coaching
 - `legal-security-governance-layer` — Compliance, LGPD, Risk, Audit, IAM, Threat Intelligence
 - `research-innovation-layer` — Innovation, AI Trends, Startup Intelligence, Experimentation
 - `platform-infrastructure-layer` — Cloud, K8s, CI/CD, FinOps, Incident Response, DR
+
+### Evolua Marketing Department (6 department skills) — NOVAS
+Skills que transformam o OpenCode em um departamento de marketing completo, orquestrado por um Marketing Director:
+
+| Skill | Descrição |
+|-------|-----------|
+| `evolua-marketing-director` | Master skill de marketing — coordena 6 departamentos, workflow Content Engine, qualidade, multiplicação de conteúdo |
+| `market-intelligence` | Pesquisa de mercado, VOC, concorrentes, personas, tendências, fontes (Reclame Aqui, Reddit, LinkedIn, Google Reviews) |
+| `content-studio` | Estratégia editorial, SEO (incluindo AEO/GEO), blog posts, ebooks, newsletters, lead magnets, calendário editorial |
+| `creative-studio` | Design de marca, infográficos, carrosséis, posts sociais, criativos de anúncios, motion, brand guardian |
+| `social-media` | Estratégia multiplataforma (Instagram, LinkedIn, Facebook, TikTok), copy, comunidade, repurposing |
+| `paid-media` | Google Ads, Meta Ads, LinkedIn Ads, full-funnel, creative testing, tracking, budget management (referencia `ads-skills/` táticas) |
+| `growth-optimization` | CRO, landing pages, email marketing, funis, analytics, experimentação, retenção |
+
+Essas skills substituem agentes de marketing avulsos por um time coordenado. Use `evolua-marketing-director` como entry point para campanhas completas.
+
+### Ads Tactical Skills (17 skills) — `ads-skills/`
+Skills táticas de anúncios, referenciadas por `paid-media`. Mantidas como skills de execução detalhada.
+
+- `meta-ads-ad-copy`, `meta-ads-pixel-auditor`, `meta-ads-hook-optimizer`, `meta-ads-creative-analyzer`, `meta-ads-audience-builder`, `meta-ads-asc-auditor`
+- `google-ads-audit`, `google-ads-search-terms`, `google-ads-rsa-generator`, `google-ads-negative-keywords`, `google-ads-pmax-auditor`, `google-ads-shopping-feed`
+- `video-ad-script-writer`, `landing-page-auditor`, `ads-funnel-builder`, `ads-platform-selector`, `ads-report-generator`
 
 ### Marketing (coreyhaines31/marketingskills v2.0) — 41 skills
 Full marketing stack: CRO, copywriting, SEO (audit + AI + programmatic), ads, analytics, A/B testing, email, social, video, SMS, cold email, pricing, onboarding, churn prevention, referrals, co-marketing, community, launch, paywalls, popups, signup, site-architecture, schema, ASO, lead magnets, free tools, directory submissions, revops, sales enablement, competitors, marketing-ideas, marketing-psychology, product-marketing, content-strategy, customer-research, competitor-profiling
@@ -344,6 +366,56 @@ Document creation (docx, pptx, xlsx, pdf), frontend design, webapp-testing (Play
 
 ### Supabase — 2 skills
 PostgreSQL best practices (skill loaded via supabase skill)
+
+## Content Engine — Weekly Content Multiplication Pipeline
+
+### Goal
+Implementar o Content Multiplication Rule do Marketing Director: cada semana de conteúdo → 1 ebook + 3 infográficos + 10 carrosséis + 20 posts sociais + 10 stories + 5 reels + 5 ad creatives + 1 landing page + 1 email funnel.
+
+### Architecture
+```
+Daily Pipeline (Mon-Fri, 06:00 BRT)
+  → blog posts + social text + visuals
+  → scripts/run-daily.mjs
+
+Weekly Content Engine (Sat, 08:00 BRT)
+  → reads week's blog posts
+  → generates all multiplication assets
+  → scripts/content-engine/engine.mjs
+```
+
+### Files Created
+
+| File | Purpose |
+|------|---------|
+| `scripts/content-engine/engine.mjs` | Content Multiplication Engine — gera ebooks, infográficos, carrosséis, posts, stories, reels, ads, landing pages, email funis |
+| `scripts/content-engine/config.json` | Config: cadência semanal, multiplicação por tipo, output dirs |
+| `.github/workflows/content-pipeline.yml` | Dual schedule: daily (Mon-Fri) + weekly (Sat) |
+
+### npm Scripts
+```bash
+pnpm engine              # Run full content engine (needs OPENROUTER_API_KEY)
+pnpm engine:dry-run      # Test without email sending
+pnpm engine:topic        # Custom topic
+```
+
+### Content Multiplication Rule (implementado)
+Cada execução semanal gera:
+- **1 Ebook** (HTML, HTML salvo em `docs/content-assets/05-lead-magnets/`)
+- **3 Infográficos** (HTML, catalogados em `materials-catalog.json`)
+- **10 Carrosséis** (JSON + HTML para Instagram/LinkedIn)
+- **20 Posts Sociais** (texto por canal em `output/texts/`)
+- **10 Stories** (JSON + texto)
+- **5 Reels** (scripts completos)
+- **5 Ad Creatives** (Meta, Google, LinkedIn)
+- **1 Landing Page** (HTML de conversão)
+- **1 Email Funnel** (5 emails de nutrição)
+
+### Output
+Todos os ativos são salvos em `scripts/content-engine/output/YYYY-MM-DD/` e também nos diretórios de `docs/content-assets/`. Email de resumo enviado para contatouseevolua@gmail.com.
+
+### Anti-Patterns Added
+- ❌ Content Engine executando sem verificar se há posts da semana — o engine aborta graciosamente se não encontrar posts e sugere `--topic`
 
 ## Active Session — Notifica Removal & Social Posts Package
 
@@ -375,3 +447,9 @@ Remover completamente o serviço Notifica (substituir por Resend) e gerar pacote
 
 Skills provide specialized instructions and workflows for specific tasks.
 Use the skill tool to load a skill when a task matches its description.
+
+### Anti-Patterns
+- ❌ Duas pipelines com schedule sobreposto — daily roda seg-sex 06:00 BRT, engine roda sábado 08:00 BRT, NUNCA no mesmo dia
+- ❌ Content Engine sobrescrever blog posts — o engine é READ-ONLY para posts da semana, só gera novos ativos de multiplicação
+- ❌ Executar Engine sem OPENROUTER_API_KEY — o pipeline valida a chave antes de qualquer passo
+- ❌ Esquecer de commitar outputs do Engine — o CI commita automaticamente `scripts/content-engine/output/` e `docs/content-assets/`

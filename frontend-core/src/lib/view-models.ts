@@ -98,7 +98,7 @@ export function appointmentToVM(a: ApiAppointment): AppointmentVM {
   const dt = new Date(a.dateTime)
   const date = `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`
   const time = `${pad(dt.getHours())}:${pad(dt.getMinutes())}`
-  const end = new Date(dt.getTime() + 50 * 60_000)
+  const end = new Date(dt.getTime() + (a.duration ?? 50) * 60_000)
   const endTime = `${pad(end.getHours())}:${pad(end.getMinutes())}`
   const status: AppointmentVM['status'] =
     a.status === 'no_show' ? 'cancelled' : (a.status as AppointmentVM['status'])

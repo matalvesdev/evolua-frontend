@@ -1,0 +1,36 @@
+{
+  "engine": {
+    "cadence": "weekly",
+    "day": "sabado",
+    "hour": "08:00 BRT",
+    "maxInputPosts": 5
+  },
+  "multiplication": {
+    "ebook": { "enabled": true, "maxWords": 8000, "perBatch": 1 },
+    "infographic": { "enabled": true, "perEbook": 3, "perBatch": 3 },
+    "carousel": { "enabled": true, "perEbook": 10, "slidesPerCarousel": 7 },
+    "socialPosts": { "enabled": true, "perEbook": 20, "channels": ["linkedin", "instagram", "threads", "x", "facebook"] },
+    "stories": { "enabled": true, "perEbook": 10 },
+    "reels": { "enabled": true, "perEbook": 5 },
+    "adCreatives": { "enabled": true, "perEbook": 5, "platforms": ["meta-feed", "meta-stories", "google-display", "linkedin"] },
+    "landingPage": { "enabled": true, "perEbook": 1 },
+    "emailFunnel": { "enabled": true, "perEbook": 1, "emailsPerFunnel": 5 }
+  },
+  "output": {
+    "baseDir": "scripts/content-engine/output",
+    "ebooksDir": "docs/content-assets/05-lead-magnets",
+    "campaignsDir": "docs/content-assets/06-campaigns",
+    "socialDir": "docs/content-assets/01-social-posts",
+    "assetsDir": "docs/content-assets/assets"
+  },
+  "ai": {
+    "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "temperature": 0.7,
+    "maxTokens": 16384
+  },
+  "email": {
+    "enabled": true,
+    "recipient": "contatouseevolua@gmail.com",
+    "subject": "📦 Pacote Semanal de Conteúdos Educativos Evolua"
+  }
+}

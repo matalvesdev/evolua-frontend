@@ -1,9 +1,11 @@
-name: Daily Content Pipeline
+name: Content Pipeline
 
 on:
   schedule:
-    # Run every weekday at 06:00 BRT (09:00 UTC)
+    # Daily blog + social at 06:00 BRT (09:00 UTC) — Mon-Fri
     - cron: '0 9 * * 1-5'
+    # Weekly content engine at 08:00 BRT (11:00 UTC) — Saturday
+    - cron: '0 11 * * 6'
   workflow_dispatch:
     inputs:
       topic:
@@ -20,6 +22,16 @@ on:
         required: false
         type: boolean
         default: false
+      skip_engine:
+        description: 'Skip weekly content engine'
+        required: false
+        type: boolean
+        default: false
+      run_engine_only:
+        description: 'Run only the weekly content engine'
+        required: false
+        type: boolean
+        default: false
       dry_run:
         description: 'Dry run (no publish/send)'
         required: false
@@ -28,6 +40,7 @@ on:
 
 jobs:
   daily:
+    if: ${{ !inputs.run_engine_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -64,4 +77,38 @@ jobs:
           git config user.email "bot@useevolua.com.br"
           git add docs/content-assets/02-blog-posts/ scripts/content-pipeline/output/
           git diff --cached --quiet || git commit -m "chore(content): daily pipeline ${{ github.event.inputs.topic || 'auto' }} [skip ci]"
+          git push
+
+  weekly-engine:
+    if: ${{ github.event.schedule == '0 11 * * 6' || inputs.run_engine_only || always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Weekly Content Engine
+        run: |
+          ARGS=""
+          [ -n "${{ github.event.inputs.topic }}" ] && ARGS="$ARGS --topic '${{ github.event.inputs.topic }}'"
+          [ "${{ github.event.inputs.skip_engine }}" = "true" ] && ARGS="$ARGS --skip-email"
+          [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+          # On scheduled Sat runs, auto-detect topic from week's posts
+          # On manual dispatch, use custom topic if provided
+          node scripts/content-engine/engine.mjs $ARGS
+
+      - name: Commit engine outputs
+        run: |
+          git config user.name "Evolua Bot"
+          git config user.email "bot@useevolua.com.br"
+          git add scripts/content-engine/output/ docs/content-assets/05-lead-magnets/ docs/content-assets/06-campaigns/ docs/content-assets/01-social-posts/
+          git diff --cached --quiet || git commit -m "chore(content): weekly engine - $(date +%Y-%m-%d) [skip ci]"
           git push

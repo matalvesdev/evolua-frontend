@@ -1,0 +1,37 @@
+{
+  "id": "infografico-alicerce-etica-cffa-600",
+  "title": "O Alicerce: Ética e Resolução CFFA nº 600/2023",
+  "subtitle": "O guia visual para fonoaudiólogas construírem presença digital com segurança e conformidade",
+  "source_section": "1. O Alicerce: Ética e Resolução CFFA nº 600/2023",
+  "visual_style": "Clean, profissional e acolhedor. Uso de ícones minimalistas (linha fina), cards com sombras suaves e tipografia hierárquica. Foco em legibilidade mobile-first.",
+  "color_palette": [
+    "#006D77",  // Azul Petróleo Evolua (Principal)
+    "#83C5BE",  // Verde Água Claro (Secundário/Destaque)
+    "#FFDDD2",  // Pêssego Suave (Fundo/Alertas leves)
+    "#FFFFFF",  // Branco (Espaço negativo)
+    "#293241"   // Cinza Escuro (Textos)
+  ],
+  "elements": [
+    {
+      "type": "header",
+      "content": "Marketing Ético: Sua Licença para Crescer",
+      "icon": "Escudo com check verde + Estetoscópio digital"
+    },
+    {
+      "type": "stat",
+      "content": "Resolução CFFA nº 600/2023: O marco regulatório que modernizou a publicidade fonoaudiológica, permitindo divulgação de serviços com responsabilidade técnica.",
+      "icon": "Documento oficial com carimbo 'APROVADO'"
+    },
+    {
+      "type": "step",
+      "content": "O que PODE (✅): Divulgar especialidades, titulações, endereço, horários, convênios, fotos do ambiente/clínica, depoimentos de pacientes (com autorização por escrito), conteúdos educativos.",
+      "icon": "Lista de verificação verde"
+    },
+    {
+      "type": "step",
+      "content": "O que NÃO PODE (❌): Prometer cura/resultados garantidos, usar sensacionalismo ('melhor', 'único'), expor pacientes identificáveis sem consentimento, vender produtos como 'tratamento', anunciar equipamentos não registrados na ANVISA.",
+      "icon": "Sinal de proibição vermelho"
+    },
+    {
+      "type": "tip",
+      "content": "Regra de Ouro: Todo post deve passar pelo teste da 'Responsabilidade Técnica'. Pergunte: 'Isso informa ou promete? Isso protege o paciente o

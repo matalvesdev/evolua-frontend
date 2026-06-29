@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useAppointments, useCreateAppointment, useUpdateAppointment } from '@/hooks/use-appointments'
+import { usePatients } from '@/hooks/use-patients'
+import { useUser } from '@/hooks/use-auth'
 import { appointmentToVM, type AppointmentVM as CalEvent } from '@/lib/view-models'
 import { supabase } from '@/lib/supabase'
 
@@ -30,6 +32,31 @@ const STATUS_LABEL: Record<Status, string> = {
 }
 const MODALITY_ICON: Record<Modality, string> = {
   presencial: 'person', teleconsulta: 'video_call',
+}
+
+const TYPE_LABELS: Record<string, string> = {
+  evaluation: 'Avaliação',
+  session: 'Sessão Terapêutica',
+  reevaluation: 'Reavaliação',
+  family_meeting: 'Reunião Familiar',
+  other: 'Outro',
+}
+
+const TYPE_TO_BACKEND: Record<string, 'evaluation' | 'session' | 'reevaluation' | 'family_meeting' | 'other'> = {
+  'Avaliação': 'evaluation',
+  'Terapia de Linguagem': 'session',
+  'Atraso de Fala': 'session',
+  'Gagueira': 'session',
+  'TEA': 'session',
+  'Disfonia': 'session',
+  'Deglutição': 'session',
+  'Dislexia': 'session',
+  'Voz': 'session',
+  'Motricidade Orofacial': 'session',
+  'Sessão Terapêutica': 'session',
+  'Reavaliação': 'reevaluation',
+  'Reunião Familiar': 'family_meeting',
+  'Outro': 'other',
 }
 
 // ── Mock data ─────────────────────────────────────────────────────────────────
@@ -172,22 +199,44 @@ function NewAppointmentModal({
   onSave,
   defaultDate,
   syncToGCal,
+  saving,
 }: {
   onClose: () => void
-  onSave: (input: { patient: string; type: string; date: string; time: string; endTime: string; modality: Modality; notes: string; addToGCal: boolean }) => void
+  onSave: (input: { patientId: string; patient: string; type: string; date: string; time: string; endTime: string; modality: Modality; notes: string; addToGCal: boolean }) => void
   defaultDate: string
   syncToGCal: boolean
+  saving: boolean
 }) {
   const [form, setForm] = useState({
-    patient: '', type: 'Terapia de Linguagem', date: defaultDate,
+    patientId: '', patient: '', type: 'Sessão Terapêutica', date: defaultDate,
     time: '09:00', endTime: '09:50', modality: 'presencial' as Modality, notes: '', addToGCal: syncToGCal,
   })
+  const [search, setSearch] = useState('')
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const patientsQuery = usePatients({ search: search.length >= 2 ? search : undefined, pageSize: 10 })
+  const patients = patientsQuery.data?.data ?? []
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  function selectPatient(p: { id: string; name: string }) {
+    setForm(f => ({ ...f, patientId: p.id, patient: p.name }))
+    setSearch(p.name)
+    setOpen(false)
+  }
 
   function save() {
-    if (!form.patient.trim()) return
+    if (!form.patientId || !form.patient.trim() || saving) return
     onSave(form)
-    onClose()
   }
+
+  const isValid = form.patientId && form.patient.trim()
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
@@ -199,14 +248,46 @@ function NewAppointmentModal({
           </button>
         </div>
         <div className="p-6 flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
-          <div>
+          <div ref={ref} className="relative">
             <label className="section-label block mb-1.5">Paciente *</label>
             <input
-              value={form.patient}
-              onChange={e => setForm(f => ({...f, patient: e.target.value}))}
-              placeholder="Nome do paciente"
+              value={search}
+              onChange={e => { setSearch(e.target.value); setOpen(true); setForm(f => ({...f, patientId: '', patient: ''})) }}
+              onFocus={() => setOpen(true)}
+              placeholder="Buscar paciente..."
               className="input w-full"
             />
+            {open && search.length >= 2 && (
+              <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-surface border border-border-soft shadow-lg max-h-48 overflow-y-auto">
+                {patientsQuery.isLoading ? (
+                  <div className="p-3 text-xs text-text-tertiary text-center">Buscando...</div>
+                ) : patients.length === 0 ? (
+                  <div className="p-3 text-xs text-text-tertiary text-center">Nenhum paciente encontrado</div>
+                ) : (
+                  patients.map(p => (
+                    <button
+                      key={p.id}
+                      onClick={() => selectPatient(p)}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-surface-low transition-colors flex items-center gap-2"
+                    >
+                      <span className="w-6 h-6 rounded-full bg-neon-surface text-olive flex items-center justify-center text-[10px] font-bold">
+                        {p.name.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="font-medium text-text-primary truncate">{p.name}</p>
+                        <p className="text-[10px] text-text-tertiary truncate">{p.phone ?? p.email ?? '—'}</p>
+                      </div>
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+            {form.patient && !open && (
+              <div className="mt-1 flex items-center gap-2 px-2 py-1 bg-success-surface border border-success/20 text-xs text-success">
+                <span className="material-symbols-outlined text-sm">check_circle</span>
+                {form.patient}
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -234,8 +315,8 @@ function NewAppointmentModal({
               <select value={form.type}
                 onChange={e => setForm(f => ({...f, type: e.target.value}))}
                 className="input w-full">
-                {['Terapia de Linguagem','Atraso de Fala','Gagueira','TEA','Disfonia','Deglutição','Dislexia','Voz','Avaliação','Motricidade Orofacial'].map(t => (
-                  <option key={t}>{t}</option>
+                {Object.entries(TYPE_LABELS).map(([value, label]) => (
+                  <option key={value} value={label}>{label}</option>
                 ))}
               </select>
             </div>
@@ -287,9 +368,15 @@ function NewAppointmentModal({
 
           <div className="flex gap-3 pt-2">
             <button onClick={onClose} className="flex-1 btn-outline">Cancelar</button>
-            <button onClick={save} disabled={!form.patient.trim()} className="flex-1 btn-primary disabled:opacity-50">
-              Agendar
-              {form.addToGCal && <span className="ml-1 text-[10px] opacity-70">+ Google</span>}
+            <button onClick={save} disabled={!isValid || saving} className="flex-1 btn-primary disabled:opacity-50">
+              {saving ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Salvando...
+                </span>
+              ) : (
+                <>Agendar{form.addToGCal && <span className="ml-1 text-[10px] opacity-70">+ Google</span>}</>
+              )}
             </button>
           </div>
         </div>
@@ -303,12 +390,14 @@ function AgendaPage() {
   const today    = new Date()
   const navigate = useNavigate()
   const gcal     = useGoogleCalendar()
+  const { user } = useUser()
 
   const [view, setView]           = useState<'month'|'week'>('week')
   const [year, setYear]           = useState(today.getFullYear())
   const [month, setMonth]         = useState(today.getMonth())
   const [selectedDate, setSelectedDate] = useState(toDateStr(today.getFullYear(), today.getMonth(), today.getDate()))
   const [showModal, setShowModal] = useState(false)
+  const [errorMsg, setErrorMsg]   = useState<string | null>(null)
 
   // Janela de busca: 60 dias antes ↔ 90 dias depois para cobrir navegação razoável
   const range = useMemo(() => {
@@ -330,24 +419,43 @@ function AgendaPage() {
     [apptQuery.data],
   )
 
+  const therapistName = user?.user_metadata?.full_name ?? user?.user_metadata?.name ?? ''
+
   function cancelEvent(id: string) {
     if (!window.confirm('Cancelar esta sessão?')) return
     updateAppt.mutate({ id, body: { status: 'cancelled' } })
   }
 
-  function addEvent(input: { patient: string; type: string; date: string; time: string; endTime: string; modality: Modality; notes: string; addToGCal: boolean }) {
+  function addEvent(input: { patientId: string; patient: string; type: string; date: string; time: string; endTime: string; modality: Modality; notes: string; addToGCal: boolean }) {
+    setErrorMsg(null)
+    const backendType = TYPE_TO_BACKEND[input.type] ?? 'session'
     const dateTime = new Date(`${input.date}T${input.time}:00`).toISOString()
-    createAppt.mutate({
-      // patientId é obrigatório no backend — em fluxo real virá do select de paciente.
-      // Aqui passamos patientName e o backend fará o lookup ou rejeitará — UI atual assume input livre.
-      patientName: input.patient,
-      dateTime,
-      type: input.type,
-      modality: input.modality === 'teleconsulta' ? 'teleconsult' : 'presential',
-      status: 'scheduled',
-      notes: input.notes || undefined,
-    } as Parameters<typeof createAppt.mutate>[0])
-    setSelectedDate(input.date)
+    const duration = (() => {
+      const [h1, m1] = input.time.split(':').map(Number)
+      const [h2, m2] = input.endTime.split(':').map(Number)
+      return (h2 * 60 + m2) - (h1 * 60 + m1)
+    })()
+    createAppt.mutate(
+      {
+        patientId: input.patientId,
+        patientName: input.patient,
+        therapistName: therapistName || 'Profissional',
+        dateTime,
+        duration: Math.max(duration, 15),
+        type: backendType,
+        notes: input.notes || undefined,
+      },
+      {
+        onSuccess: () => {
+          setSelectedDate(input.date)
+          setShowModal(false)
+        },
+        onError: (err) => {
+          const message = err instanceof Error ? err.message : 'Erro ao criar agendamento'
+          setErrorMsg(message)
+        },
+      },
+    )
   }
 
   function prevMonth() { if (month === 0) { setMonth(11); setYear(y => y-1) } else setMonth(m => m-1) }
@@ -409,11 +517,22 @@ function AgendaPage() {
     <div className="flex flex-col gap-0 p-6">
       {showModal && (
         <NewAppointmentModal
-          onClose={() => setShowModal(false)}
+          onClose={() => { setShowModal(false); setErrorMsg(null) }}
           onSave={addEvent}
           defaultDate={selectedDate}
           syncToGCal={gcal.status === 'connected'}
+          saving={createAppt.isPending}
         />
+      )}
+
+      {errorMsg && (
+        <div className="mb-4 px-4 py-3 bg-danger-surface border border-danger/20 text-sm text-danger flex items-center gap-2">
+          <span className="material-symbols-outlined text-base">error</span>
+          <span>{errorMsg}</span>
+          <button onClick={() => setErrorMsg(null)} className="ml-auto text-danger/60 hover:text-danger">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
       )}
 
       {/* Google Calendar banner */}

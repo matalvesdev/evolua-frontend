@@ -12,7 +12,10 @@
     "daily:dry-run": "node scripts/run-daily.mjs --dry-run",
     "daily:blog": "node scripts/run-daily.mjs --skip-visual",
     "daily:visual": "node scripts/run-daily.mjs --skip-blog",
-    "daily:topic": "node scripts/run-daily.mjs --topic"
+    "daily:topic": "node scripts/run-daily.mjs --topic",
+    "engine": "node scripts/content-engine/engine.mjs",
+    "engine:dry-run": "node scripts/content-engine/engine.mjs --dry-run",
+    "engine:topic": "node scripts/content-engine/engine.mjs --topic"
   },
   "description": "CRM brasileiro para fonoaudiólogas com WhatsApp nativo, AI-powered content automation e billing (PIX/Cartão).",
   "main": "index.js",

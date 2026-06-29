@@ -1,0 +1,18 @@
+{
+  "id": "nutricao-ebook-marketing-etico-fono",
+  "name": "Nutrição - Ebook Marketing Digital Ético para Fonoaudiólogas",
+  "trigger": "Download do ebook 'Marketing Digital Ético para Fonoaudiólogas: Construa Sua Presença Online'",
+  "emails": [
+    {
+      "day": 1,
+      "subject": "Seu ebook chegou! 📖 (E o 1º passo para atrair pacientes éticos)",
+      "preview": "Baixe o material e descubra o erro nº1 que impede fonoaudiólogas de crescer no digital.",
+      "body": "<p>Oi, tudo bem?</p><p>Seu material <strong>\"Marketing Digital Ético para Fonoaudiólogas: Construa Sua Presença Online\"</strong> está pronto para leitura.</p><p><a href=\"[LINK_DOWNLOAD_EBOOK]\" target=\"_blank\"><strong>👉 Clique aqui para acessar seu ebook</strong></a></p><p>Antes de ir, uma pergunta rápida: <strong>qual seu maior desafio hoje para atrair pacientes pelo Instagram ou Google?</strong></p><p>Responda este email — eu leio pessoalmente.</p><p>Com carinho,<br>Equipe Evolua</p>",
+      "cta": "Ler meu ebook agora",
+      "cta_link": "[LINK_DOWNLOAD_EBOOK]"
+    },
+    {
+      "day": 3,
+      "subject": "O segredo do \"Boca a Boca Digital\" (sem ferir o Código de Ética) 🤫",
+      "preview": "Como transformar pacientes satisfeitos em indicações constantes no automático.",
+      "body": "<p>Oi, [NOME]!</p><p>No ebook, falamos sobre <strong>Presença Online</strong>. Mas tem um capítulo que as leitoras mais amam: <strong>Prova Social Ética.</strong></p><p>Muita fono acha que \"não pode pedir depoimento\". <strong>Pode sim</strong> — desde que siga as regras do CFFa (Resolução 603/2023).</p><p>No vídeo curto abaixo, mostro o <strong>roteiro exato</strong> que nossas clientes usam para pedir autorização de uso de imagem/depoimento sem constrangimento:</p><p style=\"text-align:center;\"><a href=\"[LINK_VIDEO_REELS_YOUTUBE]\" target=\"_blank\"><strong>▶ Ver roteiro de 60 segundos (Reels/Shorts)</strong></a></p><p>Dica: salve esse vídeo para usar na próxima alta de paciente! 😉</p><p>Até mais,<
