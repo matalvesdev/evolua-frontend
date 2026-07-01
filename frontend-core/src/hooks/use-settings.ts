@@ -26,7 +26,7 @@ export function useSettings() {
   return useQuery<Settings>({
     queryKey: ['settings'],
     queryFn: () => api.get<Settings>('/api/settings'),
-    staleTime: 60_000,
+    staleTime: 5 * 60_000,  // Settings muda raramente
   })
 }
 

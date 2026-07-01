@@ -17,7 +17,7 @@ export function useProfile() {
   return useQuery<Profile>({
     queryKey: ['profile'],
     queryFn: () => api.get<Profile>('/api/auth/profile'),
-    staleTime: 60_000,
+    staleTime: 5 * 60_000,  // Profile muda raramente
   })
 }
 
