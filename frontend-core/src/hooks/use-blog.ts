@@ -6,7 +6,7 @@ export interface BlogPost {
   title: string
   excerpt: string
   category: string
-  image: string
+  coverImage: string
   date: string
   readTime: string
 }
