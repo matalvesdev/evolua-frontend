@@ -29,12 +29,30 @@ function KPI({ icon, label, value, sub, color }: { icon: string; label: string; 
 
 function AnalyticsPage() {
   const [period, setPeriod] = useState<'7d'|'30d'|'90d'|'12m'>('30d')
-  const { data: analytics, isLoading } = useDashboardAnalytics(period)
+  const { data: analytics, isLoading, error } = useDashboardAnalytics(period)
   const SESSION_BY_AREA: SessionArea[] = analytics?.sessionByArea ?? []
   const MONTHLY: MonthlyEntry[] = analytics?.monthly ?? []
   const ADHERENCE_BY_AGE: AdherenceEntry[] = analytics?.adherenceByAge ?? []
   const NO_RETURN_PATIENTS: NoReturnEntry[] = analytics?.noReturnPatients ?? []
   const maxMonthly = MONTHLY.length ? Math.max(...MONTHLY.map(m => m.sessions)) : 1
+
+  if (error) {
+    return (
+      <div className="flex flex-col gap-6 p-6">
+        <div className="card p-8 text-center">
+          <span className="material-symbols-outlined text-4xl text-error">error</span>
+          <p className="text-sm text-text-secondary mt-2">Erro ao carregar analytics</p>
+          <p className="text-xs text-text-tertiary mt-1">{error.message}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-olive text-white rounded text-sm"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-6 p-6">
