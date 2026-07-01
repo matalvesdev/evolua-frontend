@@ -80,7 +80,7 @@ jobs:
           git push
 
   weekly-engine:
-    if: ${{ github.event.schedule == '0 11 * * 6' || inputs.run_engine_only || always() }}
+    if: ${{ github.event.schedule == '0 11 * * 6' || inputs.run_engine_only }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
