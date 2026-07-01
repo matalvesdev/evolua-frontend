@@ -42,6 +42,11 @@ jobs:
       - name: Generate Prisma client
         run: pnpm -F backend-core prisma:generate
 
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy --schema=backend-core/prisma/schema.prisma
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
       - name: Build contracts
         run: pnpm --filter @evolua/contracts build
 
