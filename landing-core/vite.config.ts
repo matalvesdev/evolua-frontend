@@ -21,6 +21,9 @@ export default defineConfig({
           if (id.includes('@tanstack/react-router') || id.includes('@tanstack/react-query')) {
             return 'vendor-tanstack'
           }
+          if (id.includes('node_modules/motion') || id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion'
+          }
           if (id.includes('src/components/blog/') || id.includes('src/queries/posts') || id.includes('src/lib/blog')) {
             return 'blog'
           }

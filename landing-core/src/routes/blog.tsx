@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useRouterState } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { Suspense, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { supabase } from '../lib/supabase'
 import { postsQueryOptions } from '../queries/posts'
 import { SeoHead } from '../components/seo/SeoHead'
@@ -57,6 +57,8 @@ function PostCard({ post, destaque = false }: { post: BlogPost; destaque?: boole
               src={post.imagem}
               alt={post.titulo}
               onError={handleImgError}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
             />
           </div>
@@ -95,6 +97,8 @@ function PostCard({ post, destaque = false }: { post: BlogPost; destaque?: boole
           src={post.imagem}
           alt={post.titulo}
           onError={handleImgError}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
         />
       </div>
