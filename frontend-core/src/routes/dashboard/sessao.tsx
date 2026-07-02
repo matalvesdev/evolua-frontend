@@ -5,9 +5,13 @@ import {
   useCreateAudioSession,
   useRequestTranscription,
   useAudioTranscription,
-  useGenerateEvolution,
-  type SoapEvolution,
 } from '@/hooks/use-audio-session'
+import {
+  useGenerateReport,
+  sectionsToText,
+  REPORT_TEMPLATES,
+  type ReportTemplate,
+} from '@/hooks/use-report-generation'
 import { uploadAudioBlob } from '@/lib/storage'
 import { useProfile } from '@/hooks/use-profile'
 import { useCreateReport } from '@/hooks/use-reports'
@@ -62,7 +66,7 @@ function SessaoPage() {
   const [patientId, setPatientId] = useState<string>('')
   const [sessionType, setSessionType] = useState('Terapia de Linguagem')
   const [audioSessionId, setAudioSessionId] = useState<string | null>(null)
-  const [evolution, setEvolution] = useState<SoapEvolution | null>(null)
+  const [selectedTemplate, setSelectedTemplate] = useState<ReportTemplate>('resumo')
   const [draft, setDraft] = useState('')
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [, startTransition] = useTransition()
@@ -83,7 +87,7 @@ function SessaoPage() {
   const createSession = useCreateAudioSession()
   const requestTranscription = useRequestTranscription()
   const transcriptionPoll = useAudioTranscription(audioSessionId)
-  const generateEvolution = useGenerateEvolution()
+  const generateReport = useGenerateReport()
   const { data: profile } = useProfile()
   const createReport = useCreateReport()
 
@@ -223,7 +227,7 @@ function SessaoPage() {
     }
   }
 
-  // ── Quando transcrição completar, gera evolução SOAP ─────────────────────
+  // ── Quando transcrição completar, gera relatório via template ───────────────
   useEffect(() => {
     if (phase !== 'processing') return
     if (!transcriptionPoll.data) return
@@ -236,30 +240,41 @@ function SessaoPage() {
       return
     }
     if (transcriptionStatus !== 'completed' || !transcription) return
-    if (generateEvolution.isPending || evolution) return
+    if (generateReport.isPending || draft) return
 
-      generateEvolution.mutate(
+    generateReport.mutate(
       {
-        patientId: effectivePatientId,
-        transcript: transcription,
+        transcription,
+        template: selectedTemplate,
+        patientName: patient?.name,
       },
       {
         onSuccess: (data) => {
-          setEvolution(data)
-          setDraft(renderDraft(data, patient?.name ?? 'Paciente', sessionType))
+          if (data.success && data.sections) {
+            setDraft(sectionsToText(data.sections, patient?.name))
+          } else {
+            setDraft(renderDraftFallback(transcription, patient?.name ?? 'Paciente', sessionType))
+          }
           setPhase('review')
         },
         onError: (e) => {
-          setErrorMsg(e instanceof Error ? e.message : 'Falha ao gerar evolução')
-          // Mesmo sem evolução IA, deixa o terapeuta editar a transcrição manualmente
+          setErrorMsg(e instanceof Error ? e.message : 'Falha ao gerar relatório')
           setDraft(renderDraftFallback(transcription, patient?.name ?? 'Paciente', sessionType))
           setPhase('review')
         },
       },
     )
-  }, [phase, transcriptionPoll.data, effectivePatientId, patient?.name, sessionType, generateEvolution, evolution])
+  }, [phase, transcriptionPoll.data, effectivePatientId, patient?.name, sessionType, generateReport, draft, selectedTemplate])
 
   const [signing, setSigning] = useState(false)
+
+  const TEMPLATE_TO_TYPE: Record<ReportTemplate, string> = {
+    'resumo': 'progress',
+    'evolucao-mensal': 'evolution',
+    'avaliacao-inicial': 'evaluation',
+    'encaminhamento': 'referral',
+    'alta': 'discharge',
+  }
 
   async function sign() {
     if (!draft || signing) return
@@ -272,8 +287,8 @@ function SessaoPage() {
         patientName,
         therapistName: profile?.name ?? 'Terapeuta',
         therapistCrfa: profile?.crfa ?? '',
-        type: 'evolution',
-        title: `Evolução — ${patientName} — ${today}`,
+        type: TEMPLATE_TO_TYPE[selectedTemplate] as any,
+        title: `${REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.label ?? 'Relatório'} — ${patientName} — ${today}`,
         content: draft,
       })
       setPhase('signed')
@@ -287,7 +302,6 @@ function SessaoPage() {
   function reset() {
     setPhase('pre')
     setAudioSessionId(null)
-    setEvolution(null)
     setDraft('')
     setErrorMsg(null)
     timer.reset()
@@ -351,11 +365,23 @@ function SessaoPage() {
               ))}
             </select>
           </div>
+          <div>
+            <label className="section-label block mb-1.5">Formato do relatório</label>
+            <select
+              value={selectedTemplate}
+              onChange={e => setSelectedTemplate(e.target.value as ReportTemplate)}
+              className="input w-full"
+            >
+              {REPORT_TEMPLATES.map(t => (
+                <option key={t.id} value={t.id}>{t.label} — {t.description}</option>
+              ))}
+            </select>
+          </div>
           <div className="px-4 py-3 bg-neon-surface border border-border-neon flex items-start gap-3">
             <span className="material-symbols-outlined text-olive text-lg shrink-0" style={{ fontVariationSettings:'"FILL" 1' }}>auto_awesome</span>
             <div>
               <p className="text-sm font-bold text-text-primary">IA ativada</p>
-              <p className="text-xs text-text-tertiary mt-0.5">A sessão será gravada, transcrita pelo Whisper e um rascunho SOAP será gerado automaticamente ao final.</p>
+              <p className="text-xs text-text-tertiary mt-0.5">A sessão será gravada, transcrita pelo Whisper e um relatório no formato selecionado será gerado automaticamente ao final.</p>
             </div>
           </div>
           <button
@@ -403,11 +429,13 @@ function SessaoPage() {
         <div className="card p-12 flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-neon border-t-transparent rounded-full animate-spin" />
           <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">
-            {transcriptionStatus === 'completed' ? 'Gerando evolução SOAP...' : 'Transcrevendo áudio com Whisper...'}
+            {transcriptionStatus === 'completed'
+              ? `Gerando ${REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.label ?? 'relatório'}...`
+              : 'Transcrevendo áudio com Whisper...'}
           </p>
           <p className="text-xs text-text-tertiary text-center max-w-xs">
             {transcriptionStatus === 'completed'
-              ? 'A IA está organizando a transcrição em formato SOAP.'
+              ? `A IA está formatando a transcrição no modelo ${REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.label ?? 'selecionado'}.`
               : 'Pode levar até 2 minutos (o serviço de IA pode estar iniciando).'}
           </p>
           {liveTranscript && (
@@ -429,18 +457,9 @@ function SessaoPage() {
             </div>
           </div>
 
-          {evolution?.nextSessionSuggestions && evolution.nextSessionSuggestions.length > 0 && (
-            <div className="card p-4">
-              <p className="section-label mb-2">Sugestões para próxima sessão</p>
-              <ul className="text-sm text-text-primary list-disc pl-5 space-y-1">
-                {evolution.nextSessionSuggestions.map((s, i) => <li key={i}>{s}</li>)}
-              </ul>
-            </div>
-          )}
-
           <div className="card p-0 overflow-hidden">
             <div className="px-4 py-3 bg-dark border-b border-dark-border flex items-center justify-between">
-              <p className="font-display font-bold text-xs uppercase tracking-widest text-neon">Evolução clínica</p>
+              <p className="font-display font-bold text-xs uppercase tracking-widest text-neon">Relatório clínico</p>
               <span className="text-[10px] text-white/40">{patient?.name ?? '—'} · {new Date().toLocaleDateString('pt-BR')}</span>
             </div>
             <textarea
@@ -472,7 +491,7 @@ function SessaoPage() {
           </div>
           <div>
             <p className="font-display font-bold text-lg uppercase tracking-wide text-text-primary">Sessão finalizada!</p>
-            <p className="text-sm text-text-secondary mt-1">Evolução salva no prontuário de {patient?.name ?? '—'}.</p>
+            <p className="text-sm text-text-secondary mt-1">Relatório salvo no prontuário de {patient?.name ?? '—'}.</p>
             <p className="text-xs text-text-tertiary mt-2">Relatório clínico salvo no prontuário</p>
           </div>
           <div className="flex gap-3 w-full max-w-xs">
@@ -490,30 +509,6 @@ function SessaoPage() {
 }
 
 // ── Helpers de template ──────────────────────────────────────────────────────
-
-function renderDraft(ev: SoapEvolution, patientName: string, sessionType: string): string {
-  const date = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' })
-  return [
-    `EVOLUÇÃO CLÍNICA — ${date}`,
-    `Paciente: ${patientName}`,
-    `Tipo: ${sessionType}`,
-    '',
-    'RESUMO:',
-    ev.summary || '—',
-    '',
-    'S — SUBJETIVO:',
-    ev.soap.subjective || '—',
-    '',
-    'O — OBJETIVO:',
-    ev.soap.objective || '—',
-    '',
-    'A — AVALIAÇÃO:',
-    ev.soap.assessment || '—',
-    '',
-    'P — PLANO:',
-    ev.soap.plan || '—',
-  ].join('\n')
-}
 
 function renderDraftFallback(transcript: string, patientName: string, sessionType: string): string {
   const date = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' })
