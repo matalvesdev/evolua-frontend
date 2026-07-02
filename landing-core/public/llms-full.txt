@@ -1,0 +1,196 @@
+# EVOLUA — Plataforma Completa de Gestão Clínica para Fonoaudiólogas
+
+## Visão Geral
+Evolua é uma plataforma SaaS brasileira de gestão clínica projetada especificamente para fonoaudiólogas. Fundada em 2024 por profissionais da área, resolve problemas reais do dia a dia de clínicas de fonoaudiologia — do agendamento ao prontuário eletrônico, do faturamento ao acompanhamento do paciente.
+
+## Fundação e História
+- Fundada em 2024 por fonoaudiólogos e engenheiros de software
+- Criada porque os sistemas existentes eram adaptados de medicina e não atendiam as necessidades específicas da fonoaudiologia
+- Primeira plataforma CRM feita do zero para fonoaudiologia no Brasil
+
+## Planos e Preços
+
+### Só Você — R$ 97/mês (ou R$ 78/mês no anual)
+Para fonoaudiólogas autônomas.
+- Prontuário nativo para fono (não adaptado de médico)
+- Agenda online com link de agendamento público
+- Lembretes automáticos por WhatsApp (sem custo extra)
+- Assinatura digital com validade jurídica inclusa
+- Teleconsulta integrada — sem Zoom, sem Meet externo
+- Controle financeiro: Pix, boleto, recibos e emissão de NF
+
+### Galera — R$ 197/mês (ou R$ 158/mês no anual)
+Para clínicas com até 5 profissionais.
+- Tudo do plano Só Você
+- Até 5 profissionais (preço por clínica, não por profissional)
+- IA de sessão: grava, transcreve em tempo real e rascunha a evolução
+- App do paciente: exercícios domiciliares com vídeo + push diário
+- WhatsApp CRM: histórico completo de conversas por paciente
+- Faturamento TISS simplificado para convênios
+- Relatórios avançados e KPIs de abandono
+- CAA e biblioteca de materiais
+
+### Gigante — Sob consulta
+Para clínicas grandes com múltiplas unidades.
+- Tudo do plano Galera
+- Profissionais ilimitadas
+- Múltiplas unidades no mesmo painel
+- Onboarding dedicado com setup guiado
+- Integrações customizadas via API
+- SLA garantido + gerente de conta exclusivo
+
+Todos os planos têm 14 dias grátis, sem cartão de crédito.
+
+## Lista Completa de Recursos
+
+### Prontuário Eletrônico
+- Prontuário nativo para fonoaudiologia (não adaptado de medicina)
+- Templates por especialidade: voz, disfagia, linguagem, motricidade orofacial, fluência, audiologia, CAA, TEA
+- Registro de sessão com campos clínicos específicos
+- Histórico completo do paciente com linha do tempo
+- Anexos (laudos, exames, fotos) vinculados ao prontuário
+- Busca full-text no prontuário
+
+### Protocolos Clínicos Validados
+- MBGR (Modified Barium Generals Impairment Rating)
+- DOSS (Dysphagia Outcome and Severity Scale)
+- FOIS (Functional Oral Intake Scale)
+- GRBAS (Grade, Roughness, Breathiness, Asthenia, Strain)
+- VHI-10 (Voice Handicap Index - 10)
+- MASA (Minimal Assessment of Speech Abilities)
+- Escalas automáticas com histórico de pontuação
+
+### Agenda e Agendamento
+- Agenda visual com visualização diária, semanal e mensal
+- Link de agendamento público (paciente agenda sozinho)
+- Bloqueio de horários e férias
+- Recorrência de sessões
+- Google Calendar sync (bidirecional)
+- Lembretes automáticos por WhatsApp (24h antes da sessão)
+
+### IA de Sessão
+- Gravação de áudio da sessão
+- Transcrição em tempo real
+- Geração automática de rascunho de evolução clínica
+- Resumo de sessão para o prontuário
+- Relatórios clínicos gerados por IA
+
+### App do Paciente
+- Exercícios domiciliares com vídeo demonstrativo
+- Push notifications de lembrete diário
+- Acompanhamento do progresso pelo profissional
+- Agendamento pelo app
+
+### WhatsApp CRM
+- Histórico completo de conversas por paciente
+- Envio de mensagens pelo sistema
+- Lembretes automáticos
+- Templates de mensagem
+- Integração com a agenda
+
+### Faturamento
+- Emissão de Pix, boleto e recibos
+- Emissão de Nota Fiscal
+- Faturamento TISS para convênios
+- Controle de pagamentos recebidos
+- Relatório financeiro por período
+
+### Teleconsulta
+- Videochamada integrada (sem necessidade de Zoom/Meet)
+- Agendamento de teleconsulta pela agenda
+- Gravação da sessão (com consentimento)
+- Prontuário integrado durante a chamada
+
+### Assinatura Digital
+- Documentos assinados digitalmente com validade jurídica
+- Termos de consentimento
+- Autorização de tratamento
+- Envio por WhatsApp ou email
+
+### Conformidade LGPD
+- Log de auditoria completo
+- Registro de consentimentos
+- Criptografia ponta a ponta (TLS 1.3 + AES-256)
+- Dados em servidores brasileiros
+- Backup automático com retenção de 90 dias
+- Controle de acesso por papel (admin, terapeuta, recepção)
+
+### CAA (Comunicação Aumentativa e Alternativa)
+- Biblioteca de materiais CAA
+- Criação de pranchas e comunicação por imagem
+- Integração com o prontuário
+
+### Biblioteca Clínica
+- Upload de artigos, protocolos e materiais de referência
+- Busca semântica por RAG (Retrieval-Augmented Generation)
+- Material vinculado a sessões e pacientes
+
+### Relatórios e KPIs
+- Relatório de evolução do paciente
+- KPIs de abandono e retenção
+- Relatório financeiro
+- Dashboard de produtividade
+
+## Especialidades Atendidas
+- **Voz e Disfonia**: prontuário específico, GRBAS, VHI-10
+- **Disfagia**: MBGR, DOSS, FOIS, protocolos de avaliação
+- **Linguagem** (infantil e adulta): protocolos de linguagem oral e escrita
+- **Motricidade Orofacial**: avaliação e planejamento de tratamento
+- **Fluência**: avaliação de gagueira e protocolos específicos
+- **Audiologia**: audiometria, protocolos de avaliação auditiva
+- **CAA**: materiais de comunicação alternativa
+- **TEA**: protocolos de avaliação e intervenção
+
+## Perguntas Frequentes
+
+### Conta e Acesso
+- **Como criar uma conta?** Acesse useevolua.com.br/cadastro, preencha seus dados e comece o teste de 14 dias.
+- **Esqueci minha senha?** Clique em "Esqueci minha senha" na tela de login. Você receberá um email com o link de redefinição.
+- **Posso usar o sistema em mais de um dispositivo?** Sim. O Evolua funciona em qualquer navegador moderno — computador, tablet e celular.
+
+### Planos e Pagamento
+- **Preciso de cartão de crédito para testar?** Não! Os 14 dias são completamente gratuitos, sem precisar cadastrar cartão.
+- **O que está desbloqueado no período de teste?** Tudo. Prontuário, protocolos clínicos, IA de sessão, app do paciente, WhatsApp automático, financeiro, teleconsulta — sem restrição.
+- **Posso cancelar quando quiser?** Sim, sem multa e sem burocracia. Você cancela pelo próprio painel com dois cliques.
+- **Posso mudar de plano depois?** Claro! Você faz upgrade ou downgrade a qualquer momento. O valor é ajustado proporcionalmente.
+- **O plano anual realmente economiza 20%?** Sim. No plano Galera, por exemplo: R$ 197/mês no mensal versus R$ 158/mês no anual.
+
+### Clínica e Pacientes
+- **O sistema funciona para qualquer área da fonoaudiologia?** Sim. Temos prontuários e protocolos específicos para voz, disfagia, linguagem infantil e adulta, motricidade orofacial e fluência.
+- **Posso cadastrar minha equipe?** Sim. No plano Galera, até 5 profissionais. No Gigante, ilimitadas.
+- **Os pacientes recebem lembretes?** Sim, automaticamente por WhatsApp 24 horas antes da sessão.
+- **Tem app para o paciente?** Sim. O app oferece exercícios domiciliares com vídeo, lembretes e agendamento.
+
+### IA e Tecnologia
+- **Como funciona a IA de sessão?** Durante a sessão, o sistema grava o áudio, transcreve em tempo real e gera um rascunho de evolução clínica. Você revisa e aprova.
+- **A IA substitui o julgamento clínico?** Não. A IA gera um rascunho para agilizar a documentação. O profissional sempre revisa e aprova o conteúdo antes de salvar no prontuário.
+
+### Segurança e LGPD
+- **Meus dados ficam seguros?** Sim. Criptografia ponta a ponta, servidores no Brasil, conformidade total com a LGPD — log de auditoria e registro de consentimentos inclusos em todos os planos.
+- **Onde meus dados são armazenados?** Em servidores brasileiros com replicação geográfica e backup automático.
+- **Posso exportar meus dados?** Sim. Você pode exportar todos os seus dados a qualquer momento.
+
+### Integrações
+- **Integra com Google Calendar?** Sim. Sincronização bidirecional — suas sessões aparecem no Google Calendar e vice-versa.
+- **Funciona com WhatsApp?** Sim. O sistema envia lembretes automáticos por WhatsApp sem custo extra.
+- **Tem API?** Sim. O plano Gigante oferece integrações customizadas via API.
+
+## Diferenciais vs Concorrência
+- **Feito do zero para fonoaudiologia** (não adaptado de sistemas médicos genéricos)
+- **Protocolos clínicos nativos** de fono (MBGR, DOSS, FOIS, GRBAS, VHI-10, MASA)
+- **IA treinada para relatórios clínicos** de fonoaudiologia
+- **App do paciente** com exercícios terapêuticos domiciliares
+- **WhatsApp CRM** com histórico completo por paciente
+- **Preço por clínica**, não por profissional (plano Galera)
+- **14 dias grátis** com sistema inteiro desbloqueado, sem cartão
+
+## Links Importantes
+- Site: https://useevolua.com.br
+- App: https://app.useevolua.com.br
+- Blog: https://useevolua.com.br/blog
+- Planos: https://useevolua.com.br/planos
+- Segurança e LGPD: https://useevolua.com.br/seguranca
+- Sobre: https://useevolua.com.br/sobre
+- Contato: suporte@useevolua.com.br
+- Central de Ajuda: https://useevolua.com.br/ajuda
+- Status do Sistema: https://useevolua.com.br/status

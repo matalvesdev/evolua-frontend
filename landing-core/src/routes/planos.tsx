@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { SeoHead } from '../components/seo/SeoHead'
+import { faqPageJsonLd, breadcrumbJsonLd } from '../components/seo/jsonld'
 
 export const Route = createFileRoute('/planos')({
   component: PlanosPage,
@@ -159,6 +160,13 @@ function PlanosPage() {
         title="Planos"
         description="Simples, justo e sem pegadinha. 14 dias grátis em qualquer plano. Sistema inteiro desbloqueado. Sem cartão de crédito."
         path="/planos"
+        jsonLd={[
+          faqPageJsonLd(faqs.map((f) => ({ question: f.pergunta, answer: f.resposta }))),
+          breadcrumbJsonLd([
+            { name: 'Início', path: '/' },
+            { name: 'Planos', path: '/planos' },
+          ]),
+        ]}
       />
       {/* Hero */}
       <section className="px-5 md:px-12 pt-16 md:pt-24 pb-16 md:pb-28 bg-canvas text-center">

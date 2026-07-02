@@ -14,6 +14,9 @@ export function organizationJsonLd() {
     name: 'EVOLUA',
     url: SITE.url,
     logo: `${SITE.url}/logo.png`,
+    description:
+      'Evolua é uma plataforma SaaS de gestão clínica para fonoaudiólogas brasileiras. Oferece prontuário eletrônico, agenda, WhatsApp, IA de transcrição e relatórios, faturamento e app do paciente.',
+    foundingDate: '2024',
     sameAs: [
       'https://www.instagram.com/useevolua/',
       'https://www.linkedin.com/company/useevolua/',
@@ -25,6 +28,19 @@ export function organizationJsonLd() {
       email: 'suporte@useevolua.com.br',
       availableLanguage: ['Portuguese'],
     },
+    areaServed: {
+      '@type': 'Country',
+      name: 'Brazil',
+    },
+    knowsAbout: [
+      'Fonoaudiologia',
+      'Prontuário Eletrônico',
+      'Gestão de Clínica',
+      'CRM para Fonoaudiólogas',
+      'Comunicação Aumentativa e Alternativa',
+      'Teleconsulta',
+      'IA para Saúde',
+    ],
   }
 }
 
@@ -102,6 +118,26 @@ export function faqPageJsonLd(items: FaqItemLd[]) {
         '@type': 'Answer',
         text: item.answer,
       },
+    })),
+  }
+}
+
+/* ─── BreadcrumbList (for internal pages) ─── */
+
+export interface BreadcrumbItem {
+  name: string
+  path: string
+}
+
+export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: item.path.startsWith('http') ? item.path : `${SITE.url}${item.path}`,
     })),
   }
 }

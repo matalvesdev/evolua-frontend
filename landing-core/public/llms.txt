@@ -1,0 +1,52 @@
+# EVOLUA — CRM para Fonoaudiólogas
+
+## Sobre
+Evolua é uma plataforma SaaS de gestão clínica para fonoaudiólogas brasileiras. Oferece prontuário eletrônico, agenda, WhatsApp, IA de transcrição e relatórios, faturamento e app do paciente.
+
+## Fundação
+Criada em 2024 por fonoaudiólogos, para fonoaudiólogos.
+
+## Planos e Preços
+- Só Você: R$ 97/mês — para fonoaudiólogas autônomas
+- Galera: R$ 197/mês — para clínicas com até 5 profissionais
+- Gigante: Sob consulta — para clínicas grandes com múltiplas unidades
+- Todos os planos têm 14 dias grátis, sem cartão de crédito
+
+## Recursos Principais
+- Prontuário eletrônico nativo para fonoaudiologia (não adaptado de médico)
+- Protocolos clínicos validados: MBGR, DOSS, FOIS, GRBAS, VHI-10, MASA
+- Agenda online com link de agendamento público
+- Lembretes automáticos por WhatsApp (sem custo extra)
+- IA de sessão: gravação, transcrição em tempo real e geração de relatórios
+- App do paciente com exercícios domiciliares e push notifications
+- WhatsApp CRM com histórico completo de conversas por paciente
+- Faturamento simplificado: Pix, boleto, recibos e emissão de NF
+- Teleconsulta integrada
+- Assinatura digital com validade jurídica
+- Conformidade total com LGPD (log de auditoria + consentimentos)
+- Google Calendar sync
+- Planos de tratamento e metas terapêuticas
+- CAA (Comunicação Aumentativa e Alternativa)
+- Biblioteca clínica com busca por RAG
+
+## Especialidades Atendidas
+- Voz e Disfonia
+- Disfagia
+- Linguagem (infantil e adulta)
+- Motricidade Orofacial
+- Fluência
+- Audiologia
+- CAA
+- TEA (Transtorno do Espectro Autista)
+
+## Links Importantes
+- Site: https://useevolua.com.br
+- App: https://app.useevolua.com.br
+- Blog: https://useevolua.com.br/blog
+- Planos: https://useevolua.com.br/planos
+- Segurança e LGPD: https://useevolua.com.br/seguranca
+- Contato: suporte@useevolua.com.br
+- Central de Ajuda: https://useevolua.com.br/ajuda
+
+## Concorrência
+Evolua é a primeira plataforma CRM feita especificamente para fonoaudiologia no Brasil. Diferenciais: protocolos clínicos nativos de fono, IA treinada para relatórios clínicos, app do paciente com exercícios terapêuticos.
