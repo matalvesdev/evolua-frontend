@@ -4,6 +4,7 @@ import { Sidebar }   from '@/components/layout/Sidebar'
 import { Header }    from '@/components/layout/Header'
 import { MobileNav } from '@/components/layout/MobileNav'
 import { supabase }  from '@/lib/supabase'
+import * as Sentry from '@sentry/react'
 
 export const Route = createFileRoute('/dashboard')({
   // ── Auth guard ────────────────────────────────────────────────────────────
@@ -18,8 +19,52 @@ export const Route = createFileRoute('/dashboard')({
       })
     }
   },
+  errorComponent: DashboardError,
   component: DashboardLayout,
 })
+
+function DashboardError({ error, reset }: { error: Error; reset: () => void }) {
+  Sentry.captureException(error)
+  return (
+    <div className="min-h-screen flex bg-canvas">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+        <Header />
+        <main className="flex-1 flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-surface border-2 border-outline-variant p-8 space-y-6">
+            <div className="space-y-2">
+              <h1 className="font-display text-2xl text-deep">Algo deu errado</h1>
+              <p className="text-sm text-ink-soft">
+                Ocorreu um erro inesperado nesta página. Tente recarregar ou volte ao início do painel.
+              </p>
+            </div>
+            {import.meta.env.DEV && (
+              <pre className="text-xs bg-canvas border border-outline-variant p-3 overflow-auto max-h-40 text-rose">
+                {error.message}
+              </pre>
+            )}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={reset}
+                className="flex-1 bg-surface border-2 border-deep text-deep px-4 py-2 font-medium hover:bg-lavender transition-colors"
+              >
+                Tentar novamente
+              </button>
+              <Link
+                to="/dashboard"
+                className="flex-1 bg-deep text-neon px-4 py-2 font-medium hover:bg-ink transition-colors text-center"
+              >
+                Painel
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+      <MobileNav />
+    </div>
+  )
+}
 
 // ── Quick Notes FAB ───────────────────────────────────────────────────────────
 // Notas rápidas temporárias — usa sessionStorage (limpo ao fechar a aba).
