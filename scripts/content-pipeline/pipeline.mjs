@@ -177,7 +177,10 @@ const COVER_IMAGES = {
 async function createBlogPost(research, pilar) {
   log('BLOG', 'Creating blog post...')
   const category = pilar === 'Marketing Digital' ? 'Marketing' : pilar.includes('Gestão') ? 'Gestão' : pilar.includes('Tecnologia') ? 'Tecnologia' : pilar.includes('Clínica') ? 'Clínica' : 'Carreira'
+  const currentYear = new Date().getFullYear()
   const prompt = `Você é uma redatora especializada em fonoaudiologia para o blog da Evolua (plataforma CRM para fonoaudiólogas).
+
+IMPORTANTE: O ano atual é ${currentYear}. NUNCA use anos anteriores (como 2024, 2023, etc.) em títulos ou conteúdo.
 
 Diretrizes obrigatórias:
 1. CONTEÚDO VERDADEIRO — Toda informação deve ser factual, baseada em evidências científicas ou em boas práticas reconhecidas pela CFFa (Conselho Federal de Fonoaudiologia). Nunca invente dados, pesquisas ou estudos.
@@ -187,10 +190,10 @@ Diretrizes obrigatórias:
 
 Gere um post de blog completo em JSON puro (sem markdown):
 {
-  "title": "Título SEO otimizado (máx 60 chars)",
+  "title": "Título SEO otimizado (máx 60 chars) — use o ano ${currentYear} se necessário",
   "slug": "slug-amigavel",
   "excerpt": "Resumo de 2 linhas (máx 160 chars)",
-  "content_html": "Conteúdo completo em HTML válido (<p>, <h2>, <h3>, <blockquote>, <ul>, <li>, <strong>, <em>). Mínimo 800 palavras.",
+  "content_html": "Conteúdo completo em HTML válido (<p>, <h2>, <h3>, <blockquote>, <ul>, <li>, <strong>, <em>). Mínimo 800 palavras. Use ano ${currentYear}.",
   "author": "Equipe Evolua",
   "category": "Marketing|Gestão|Clínica|Carreira|Tecnologia|Fonoaudiologia",
   "cover_image": "URL da imagem de destaque do Pexels (ex: https://images.pexels.com/photos/..., w=800, q=80). Escolha uma imagem relevante ao tema do post.",
@@ -203,7 +206,8 @@ Regras de tom:
 - Incluir CTA sutil para teste grátis da Evolua no final
 - Categoria deve ser "${category}"
 - Slug em PT-BR, sem acentos, hífens entre palavras
-- Título deve ser honesto e representar fielmente o conteúdo do post`
+- Título deve ser honesto e representar fielmente o conteúdo do post
+- Use sempre o ano ${currentYear} em títulos e conteúdo`
 
   let raw = await callAI(
     [{ role: 'user', content: `Pesquisa:\n${JSON.stringify(research, null, 2)}\n\nCrie o post para o blog.` }],

@@ -10,10 +10,23 @@ export function ShareButtons({ url, title, text }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
 
   const encodedUrl = encodeURIComponent(url)
-  const encodedCta = encodeURIComponent(`${title}\n\n${text}\n\n📖 Leia o artigo completo no Evolua Blog:`)
 
-  const whatsappUrl = `https://wa.me/?text=${encodedCta}%0A${encodedUrl}`
-  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`
+  // WhatsApp: texto cativante com preview que gera curiosidade
+  const whatsappPreview = text.length > 120 ? text.slice(0, 117) + '...' : text
+  const whatsappText = encodeURIComponent(
+    `*${title}*\n\n` +
+    `${whatsappPreview}\n\n` +
+    `👇 Leia o artigo completo:`
+  )
+  const whatsappUrl = `https://wa.me/?text=${whatsappText}%0A${encodedUrl}`
+
+  // LinkedIn: post profissional com gancho
+  const linkedinText = encodeURIComponent(
+    `${title}\n\n` +
+    `${text}\n\n` +
+    `🔗 Artigo completo:`
+  )
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}&summary=${linkedinText}`
 
   async function handleCopy() {
     try {

@@ -149,22 +149,24 @@ async function createAndPublishBlog(researchData, topicInfo) {
   log('📝', 'Criando post de blog via IA...')
   const category = topicInfo.category || 'Marketing'
 
+  const currentYear = new Date().getFullYear()
   const raw = await callAI(
     [{ role: 'user', content: `Pesquisa:\n${JSON.stringify(researchData, null, 2)}\n\nCrie o post para o blog.` }],
     `Você é redatora de fonoaudiologia para o blog da Evolua (CRM para fonoaudiólogas).
+IMPORTANTE: O ano atual é ${currentYear}. NUNCA use anos anteriores (como 2024, 2023, etc.) em títulos ou conteúdo.
 Retorne JSON puro:
 {
-  "title": "Título SEO (máx 60 chars)",
+  "title": "Título SEO (máx 60 chars) — use o ano ${currentYear} se necessário",
   "slug": "slug-amigavel",
   "excerpt": "Resumo (máx 160 chars)",
-  "content_html": "Conteúdo em HTML (<p>, <h2>, <h3>, <blockquote>, <ul>). Mín. 800 palavras.",
+  "content_html": "Conteúdo em HTML (<p>, <h2>, <h3>, <blockquote>, <ul>). Mín. 800 palavras. Use ano ${currentYear}.",
   "author": "Equipe Evolua",
   "category": "Marketing|Gestão|Clínica|Carreira|Tecnologia|Fonoaudiologia",
   "cover_image": "URL Pexels (w=800&q=80)",
   "read_time": 5,
   "tags": ["tag1","tag2"]
 }
-Regras: Tom direto e acolhedor. Categoria: ${category}. NUNCA invente dados. Inclua CTA sutil para teste grátis no final.`,
+Regras: Tom direto e acolhedor. Categoria: ${category}. NUNCA invente dados. Use sempre o ano ${currentYear}. Inclua CTA sutil para teste grátis no final.`,
     { maxTokens: 8192 }
   )
 
