@@ -57,7 +57,7 @@ export function useUpdateTeleSession() {
 
 export function usePatientSummaries() {
   return useQuery<{ id: string; name: string }[]>({
-    queryKey: ['patients-summary'],
+    queryKey: ['teleconsulta', 'patients-summary'],
     queryFn: () => api.get<{ id: string; name: string }[]>('/api/patients?pageSize=200'),
     staleTime: 30_000,
   })

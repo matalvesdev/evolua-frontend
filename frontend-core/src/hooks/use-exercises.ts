@@ -25,7 +25,7 @@ export function useExercises() {
 
 export function usePatientList() {
   return useQuery<{ id: string; name: string }[]>({
-    queryKey: ['patients-summary'],
+    queryKey: ['exercises', 'patients-summary'],
     queryFn: () => api.get<{ id: string; name: string }[]>('/api/patients?pageSize=200'),
     staleTime: 30_000,
   })
