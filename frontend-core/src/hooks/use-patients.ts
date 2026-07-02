@@ -32,6 +32,14 @@ export function usePatients(params: ListPatientsParams = {}) {
   })
 }
 
+export function usePatientSummaries() {
+  return useQuery<{ id: string; name: string }[]>({
+    queryKey: ['patients', 'summary'],
+    queryFn: () => api.get<{ id: string; name: string }[]>('/api/patients?pageSize=200'),
+    staleTime: 30_000,
+  })
+}
+
 export function usePatient(id: string | undefined) {
   return useQuery<Patient>({
     queryKey: ['patients', id],

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
+export { usePatientSummaries } from '@/hooks/use-patients'
 
 export interface TeleSession {
   id: string
@@ -52,13 +53,5 @@ export function useUpdateTeleSession() {
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['teleconsulta-sessions'] })
     },
-  })
-}
-
-export function usePatientSummaries() {
-  return useQuery<{ id: string; name: string }[]>({
-    queryKey: ['teleconsulta', 'patients-summary'],
-    queryFn: () => api.get<{ id: string; name: string }[]>('/api/patients?pageSize=200'),
-    staleTime: 30_000,
   })
 }

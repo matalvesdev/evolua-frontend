@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
+export { usePatientSummaries as usePatientList } from '@/hooks/use-patients'
 
 export interface Exercise {
   id: string
@@ -20,13 +21,5 @@ export function useExercises() {
       return Array.isArray(res) ? res : (res?.data ?? [])
     },
     staleTime: 60_000,
-  })
-}
-
-export function usePatientList() {
-  return useQuery<{ id: string; name: string }[]>({
-    queryKey: ['exercises', 'patients-summary'],
-    queryFn: () => api.get<{ id: string; name: string }[]>('/api/patients?pageSize=200'),
-    staleTime: 30_000,
   })
 }
