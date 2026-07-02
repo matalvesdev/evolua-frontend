@@ -589,8 +589,8 @@ function saveOutput(ebook, infographics, carousels, socialPosts, stories, reels,
     log('💾', `  Ebook salvo em lead-magnets/`)
   }
 
-  // Infographics
-  for (const inf of infographics) {
+  // Infographics — combined HTML
+  if (infographics.length > 0) {
     writeFileSync(resolve(base, 'html/infografico.html'), buildInfographicHtml(infographics))
   }
   if (existsSync(magnetsDir)) {
