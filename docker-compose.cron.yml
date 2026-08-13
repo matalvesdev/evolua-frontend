@@ -1,35 +1,34 @@
 # Docker Compose for scheduled cron jobs
 # Runs alongside the main services to handle:
-# - Weekly content generation (Monday 07:00)
-# - Daily DB health check (03:17)
-# - Newsletter dispatch (Wednesday 10:00)
+# - Daily DB health check at 06:17 UTC (03:17 São Paulo)
+# - Newsletter dispatch on Wednesday at 13:00 UTC (10:00 São Paulo)
+#
+# Cron expressions are written in UTC (container uses UTC); the local
+# time above is informational only. Do NOT set a TZ env — it would skew
+# crond away from the expected UTC schedule.
+#
+# Content pipeline & weekly engine run via GitHub Actions (.github/workflows/content-pipeline.yml)
 #
 # Usage: docker compose -f docker-compose.cron.yml up -d
 
 services:
   cron:
-    image: alpine:3.20
+    image: node:20-alpine
     container_name: evolua-cron
     restart: unless-stopped
     volumes:
       - ./scripts:/scripts:ro
-      - ./.agents:/.agents:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - NODE_ENV=production
-      # Set in production via your secret manager
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-noreply@useevolua.com.br}
-      - GMAIL_USER=${GMAIL_USER}
-      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
-      - EMAIL_DESTINO=${EMAIL_DESTINO}
       - SENTRY_DSN=${SENTRY_DSN}
     entrypoint: |
       sh -c '
-        echo "17 3 * * * node /scripts/db-healthcheck.js" > /etc/crontabs/root
-        echo "0 10 * * 3 node /scripts/send-newsletter.js" >> /etc/crontabs/root
+        echo "17 6 * * * node /scripts/db-healthcheck.js" > /etc/crontabs/root
+        echo "0 13 * * 3 node /scripts/send-newsletter.js" >> /etc/crontabs/root
         crond -f -l 2
       '
     networks:

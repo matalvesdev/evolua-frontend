@@ -34,6 +34,7 @@ export interface CreateAudioSessionInput {
 export interface TranscriptionStatusResult {
   transcription: string
   transcriptionStatus: string
+  transcriptionError: string | null
 }
 
 export interface SoapEvolution {

@@ -23,7 +23,6 @@
     "doc": "docs"
   },
   "dependencies": {
-    "eslint": "^10.4.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-scope": "^9.1.2",
@@ -43,5 +42,10 @@
   "bugs": {
     "url": "https://github.com/matalvesdev/evolua-frontend/issues"
   },
-  "homepage": "https://github.com/matalvesdev/evolua-frontend#readme"
+  "homepage": "https://github.com/matalvesdev/evolua-frontend#readme",
+  "devDependencies": {
+    "@playwright/test": "1.60.0",
+    "esbuild": "0.28.1",
+    "eslint": "^10.8.1"
+  }
 }

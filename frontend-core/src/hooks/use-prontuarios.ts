@@ -1,42 +1,45 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
+
+export type ClinicalArea = 'linguagem' | 'voz' | 'disfagia' | 'motricidade' | 'gagueira' | 'tea'
 
 export interface Prontuario {
   id: string
-  patient: string
-  dob: string
-  area: string
+  clinicId: string
+  patientId: string
+  patientName: string
+  birthDate: string | null
+  clinicalArea: ClinicalArea
   diagnosis: string
-  created: string
-  lastSession: string
-  sessions: number
+  anamnesis: string
   scales: Record<string, string | number>
-  anamnese: string
   objectives: string[]
-  evolution: string
+  latestEvolution: string
+  sessionCount: number
+  lastSessionAt: string | null
+  createdAt: string
+  updatedAt: string
 }
+
+interface ProntuarioList {
+  data: Prontuario[]
+  pagination: { page: number; pageSize: number; total: number; totalPages: number }
+}
+
+export interface CreateProntuarioInput {
+  patientId: string
+  clinicalArea: ClinicalArea
+  diagnosis: string
+}
+
+export type UpdateProntuarioInput = Partial<Pick<Prontuario,
+  'clinicalArea' | 'diagnosis' | 'anamnesis' | 'scales' | 'objectives' | 'latestEvolution'
+>>
 
 export function useProntuarios() {
   return useQuery<Prontuario[]>({
     queryKey: ['prontuarios'],
-    queryFn: async () => {
-      const res = await api.get<{ data: Record<string, unknown>[] } | Record<string, unknown>[]>('/api/patients/records')
-      const rows = Array.isArray(res) ? res : (res?.data ?? [])
-      return rows.map((r) => ({
-        id: r.id as string,
-        patient: typeof r.patientName === 'string' ? r.patientName as string : (r.patient as { name?: string })?.name ?? '',
-        dob: '',
-        area: '',
-        diagnosis: r.title as string ?? '',
-        created: r.createdAt as string ?? '',
-        lastSession: r.createdAt as string ?? '',
-        sessions: 0,
-        scales: {},
-        anamnese: '',
-        objectives: [],
-        evolution: r.content as string ?? '',
-      }))
-    },
+    queryFn: async () => (await api.get<ProntuarioList>('/api/patients/records')).data,
     staleTime: 30_000,
   })
 }
@@ -44,7 +47,7 @@ export function useProntuarios() {
 export function useCreateProntuario() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: Partial<Prontuario>) => api.post<Prontuario>('/api/patients/records', body),
+    mutationFn: (body: CreateProntuarioInput) => api.post<{ id: string }>('/api/patients/records', body),
     onSuccess: () => { void qc.invalidateQueries({ queryKey: ['prontuarios'] }) },
   })
 }
@@ -52,8 +55,8 @@ export function useCreateProntuario() {
 export function useUpdateProntuario() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, body }: { id: string; body: Partial<Prontuario> }) =>
-      api.patch<Prontuario>(`/api/patients/records/${id}`, body),
+    mutationFn: ({ id, body }: { id: string; body: UpdateProntuarioInput }) =>
+      api.patch<{ id: string }>(`/api/patients/records/${id}`, body),
     onSuccess: () => { void qc.invalidateQueries({ queryKey: ['prontuarios'] }) },
   })
 }

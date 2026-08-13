@@ -107,37 +107,60 @@ function getTodayTopic() {
   return { topic: `${entry.pilar} para fonoaudiologas`, pilar: entry.pilar }
 }
 
-async function callAI(messages, systemPrompt, options = {}) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 60000) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    return await fetch(url, { ...options, signal: controller.signal })
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+async function callAI(messages, systemPrompt, options = {}, retries = 3) {
   const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) throw new Error('OPENROUTER_API_KEY not set')
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://useevolua.com.br',
-      'X-Title': 'Evolua Content Pipeline',
-    },
-    body: JSON.stringify({
-      model: CONFIG.ai.model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages,
-      ],
-      temperature: options.temperature ?? CONFIG.ai.temperature,
-      max_tokens: options.maxTokens ?? CONFIG.ai.maxTokens,
-    }),
-  })
-  if (!response.ok) {
-    const err = await response.text()
-    throw new Error(`AI error ${response.status}: ${err.slice(0, 300)}`)
+  let lastErr
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const response = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://useevolua.com.br',
+          'X-Title': 'Evolua Content Pipeline',
+        },
+        body: JSON.stringify({
+          model: CONFIG.ai.model,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...messages,
+          ],
+          temperature: options.temperature ?? CONFIG.ai.temperature,
+          max_tokens: options.maxTokens ?? CONFIG.ai.maxTokens,
+        }),
+      }, 60000)
+      if (!response.ok) {
+        const err = await response.text()
+        throw new Error(`AI error ${response.status}: ${err.slice(0, 300)}`)
+      }
+      const data = await response.json()
+      if (!data.choices?.[0]?.message?.content) {
+        console.error('Unexpected API response:', JSON.stringify(data).slice(0, 500))
+        return null
+      }
+      return data.choices[0].message.content
+    } catch (err) {
+      lastErr = err
+      if (attempt < retries - 1) {
+        const delay = 1000 * Math.pow(2, attempt)
+        log('AI', `Retry ${attempt + 1}/${retries} after ${delay}ms: ${err.message}`)
+        await new Promise(r => setTimeout(r, delay))
+      }
+    }
   }
-  const data = await response.json()
-  if (!data.choices?.[0]?.message?.content) {
-    console.error('Unexpected API response:', JSON.stringify(data).slice(0, 500))
-    return null
-  }
-  return data.choices[0].message.content
+  throw lastErr
 }
 
 async function research(topic) {
@@ -245,7 +268,7 @@ ${post.content_html.replace(/<[^>]+>/g, '').slice(0, 500)}...
 }
 
 async function publishToSupabase(post) {
-  log('PUBLISH', 'Publishing to Supabase...')
+  log('PUBLISH', 'Publishing to Supabase (upsert by slug)...')
   const supabaseUrl = process.env.SUPABASE_URL
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!supabaseUrl || !serviceKey) {
@@ -267,26 +290,39 @@ async function publishToSupabase(post) {
     published_at: new Date().toISOString(),
   }
 
-  const response = await fetch(`${supabaseUrl}/rest/v1/blog_posts`, {
-    method: 'POST',
-    headers: {
-      'apikey': serviceKey,
-      'Authorization': `Bearer ${serviceKey}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-    },
-    body: JSON.stringify(body),
-  })
+  let lastErr
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const response = await fetchWithTimeout(`${supabaseUrl}/rest/v1/blog_posts?on_conflict=slug`, {
+        method: 'POST',
+        headers: {
+          'apikey': serviceKey,
+          'Authorization': `Bearer ${serviceKey}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation,resolution=merge-duplicates',
+        },
+        body: JSON.stringify(body),
+      }, 30000)
 
-  if (!response.ok) {
-    const err = await response.text()
-    throw new Error(`Supabase publish failed: ${response.status} ${err.slice(0, 300)}`)
+      if (!response.ok) {
+        const err = await response.text()
+        lastErr = new Error(`Supabase publish failed: ${response.status} ${err.slice(0, 300)}`)
+      } else {
+        const result = await response.json()
+        const published = Array.isArray(result) ? result[0] : result
+        log('PUBLISH', `✅ Published: "${post.title}" (id: ${published.id})`)
+        return published
+      }
+    } catch (err) {
+      lastErr = err
+    }
+    if (attempt < 2) {
+      const delay = 1000 * Math.pow(2, attempt)
+      log('PUBLISH', `Retry publish ${attempt + 1}/3 after ${delay}ms: ${lastErr.message}`)
+      await new Promise(r => setTimeout(r, delay))
+    }
   }
-
-  const result = await response.json()
-  const published = Array.isArray(result) ? result[0] : result
-  log('PUBLISH', `✅ Published: "${post.title}" (id: ${published.id})`)
-  return published
+  throw lastErr
 }
 
 async function createSocialPosts(blogPost, research) {
@@ -424,7 +460,7 @@ async function emailSocialPosts(posts, blogPost) {
 </html>`
   }
 
-  const res = await fetch('https://api.resend.com/emails', {
+  const res = await fetchWithTimeout('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -437,7 +473,7 @@ async function emailSocialPosts(posts, blogPost) {
       html: buildHtml(posts, blogPost),
       text: `Posts Sociais — ${blogPost.title}\n\nLinkedIn:\n${posts.linkedin.post}\n\nInstagram:\n${posts.instagram.caption}\n\nThreads:\n${posts.threads.tweets.join('\n')}\n\nX:\n${posts.x.post}`,
     }),
-  })
+  }, 30000)
 
   if (!res.ok) {
     const err = await res.text()

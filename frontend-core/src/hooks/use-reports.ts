@@ -19,9 +19,19 @@ export interface Report {
   type: string
   title: string
   content: string
-  status: 'draft' | 'final'
+  status: 'draft' | 'review' | 'approved' | 'sent' | 'signed'
   createdAt: string
   updatedAt: string
+}
+
+export interface UpdateReportInput {
+  title?: string
+  content?: string
+  sections?: unknown
+  type?: ReportType
+  transcription?: string | null
+  periodStartDate?: string | null
+  periodEndDate?: string | null
 }
 
 /** Payload aceito por POST /api/reports (CreateReportSchema). */
@@ -61,8 +71,16 @@ export function useCreateReport() {
 export function useUpdateReport() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, body }: { id: string; body: Partial<Report> }) =>
+    mutationFn: ({ id, body }: { id: string; body: UpdateReportInput }) =>
       api.patch<Report>(`/api/reports/${id}`, body),
+    onSuccess: () => { void qc.invalidateQueries({ queryKey: ['reports'] }) },
+  })
+}
+
+export function useSubmitReport() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => api.post<Report>(`/api/reports/${id}/submit`, {}),
     onSuccess: () => { void qc.invalidateQueries({ queryKey: ['reports'] }) },
   })
 }

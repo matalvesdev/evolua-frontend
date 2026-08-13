@@ -5,14 +5,16 @@ import {
   useCreateProntuario,
   useUpdateProntuario,
   type Prontuario,
+  type ClinicalArea,
 } from '@/hooks/use-prontuarios'
+import { usePatients } from '@/hooks/use-patients'
 
 export const Route = createFileRoute('/dashboard/prontuario')({
   component: ProntuarioPage,
 })
 
 // ── Tipos ─────────────────────────────────────────────────────────────────────
-type Area = 'linguagem' | 'voz' | 'disfagia' | 'motricidade' | 'gagueira' | 'tea'
+type Area = ClinicalArea
 
 // ── Escalas por área ──────────────────────────────────────────────────────────
 const SCALES: Record<Area, { name: string; fields: { key: string; label: string; type: 'select' | 'number'; options?: string[] }[] }[]> = {
@@ -163,35 +165,51 @@ function ScaleForm({ area, values, onChange }: {
 
 // ── Página principal ──────────────────────────────────────────────────────────
 function ProntuarioPage() {
-  const { data: prontuarios = [] } = useProntuarios()
+  const { data: prontuarios = [], isLoading, isError } = useProntuarios()
+  const { data: patientList } = usePatients({ pageSize: 200, status: 'active' })
   const createProntuario = useCreateProntuario()
   const updateProntuario = useUpdateProntuario()
   const [selected, setSelected] = useState<Prontuario | null>(null)
   const [tab, setTab] = useState<'anamnese'|'escalas'|'evolucao'|'objetivos'>('escalas')
   const [scales, setScales] = useState<Record<string, string|number>>({})
+  const [anamnesis, setAnamnesis] = useState('')
+  const [objectives, setObjectives] = useState<string[]>([])
+  const [newObjective, setNewObjective] = useState('')
+  const [latestEvolution, setLatestEvolution] = useState('')
   const [saved, setSaved] = useState(false)
   const [showNew, setShowNew] = useState(false)
-  const [newForm, setNewForm] = useState({ patient:'', dob:'', area:'linguagem' as Area, diagnosis:'' })
+  const [newForm, setNewForm] = useState({ patientId:'', area:'linguagem' as Area, diagnosis:'' })
 
   function selectProntuario(p: Prontuario) {
-    setSelected(p); setScales(p.scales); setTab('escalas'); setSaved(false)
+    setSelected(p)
+    setScales(p.scales)
+    setAnamnesis(p.anamnesis)
+    setObjectives(p.objectives)
+    setLatestEvolution(p.latestEvolution)
+    setTab('escalas')
+    setSaved(false)
   }
 
   function save() {
     if (!selected) return
-    updateProntuario.mutate({ id: selected.id, body: { scales } })
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    updateProntuario.mutate({
+      id: selected.id,
+      body: { scales, anamnesis, objectives, latestEvolution },
+    }, {
+      onSuccess: () => {
+        setSelected((current) => current ? { ...current, scales, anamnesis, objectives, latestEvolution } : current)
+        setSaved(true)
+        setTimeout(() => setSaved(false), 2500)
+      },
+    })
   }
 
   function createNewProntuario() {
     createProntuario.mutate({
-      patient: newForm.patient,
-      dob: newForm.dob,
-      area: newForm.area,
+      patientId: newForm.patientId,
+      clinicalArea: newForm.area,
       diagnosis: newForm.diagnosis,
-    })
-    setShowNew(false)
+    }, { onSuccess: () => setShowNew(false) })
   }
 
   return (
@@ -209,13 +227,12 @@ function ProntuarioPage() {
             <div className="p-6 flex flex-col gap-4">
               <div>
                 <label className="section-label block mb-1.5">Paciente *</label>
-                <input value={newForm.patient} onChange={e => setNewForm(f=>({...f,patient:e.target.value}))} className="input w-full" placeholder="Nome completo" />
+                <select value={newForm.patientId} onChange={e => setNewForm(f=>({...f,patientId:e.target.value}))} className="input w-full">
+                  <option value="">— selecionar paciente —</option>
+                  {(patientList?.data ?? []).map(patient => <option key={patient.id} value={patient.id}>{patient.name}</option>)}
+                </select>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="section-label block mb-1.5">Data de nascimento</label>
-                  <input type="date" value={newForm.dob} onChange={e => setNewForm(f=>({...f,dob:e.target.value}))} className="input w-full" />
-                </div>
+              <div className="grid grid-cols-1 gap-4">
                 <div>
                   <label className="section-label block mb-1.5">Área</label>
                   <select value={newForm.area} onChange={e => setNewForm(f=>({...f,area:e.target.value as Area}))} className="input w-full">
@@ -231,7 +248,7 @@ function ProntuarioPage() {
               </div>
               <div className="flex gap-3 pt-2">
                 <button onClick={() => setShowNew(false)} className="flex-1 btn-outline">Cancelar</button>
-                <button onClick={createNewProntuario} className="flex-1 btn-primary">Criar Prontuário</button>
+                <button disabled={!newForm.patientId || createProntuario.isPending} onClick={createNewProntuario} className="flex-1 btn-primary disabled:opacity-50">Criar Prontuário</button>
               </div>
             </div>
           </div>
@@ -255,7 +272,7 @@ function ProntuarioPage() {
         {/* Lista de pacientes */}
         <div className="lg:col-span-1 flex flex-col gap-2">
           <p className="section-label px-1">Pacientes ({prontuarios.length})</p>
-          {prontuarios.length === 0 ? (
+          {isLoading ? <p className="text-sm text-text-secondary p-3">Carregando prontuários...</p> : isError ? <p className="text-sm text-danger p-3">Falha ao carregar prontuários.</p> : prontuarios.length === 0 ? (
             <div className="empty-state">
               <span className="material-symbols-outlined text-3xl text-text-tertiary">folder_open</span>
               <p className="text-sm text-text-secondary">Nenhum prontuário</p>
@@ -273,14 +290,14 @@ function ProntuarioPage() {
               >
                 <div className="flex items-center gap-2.5">
                   <span className={`material-symbols-outlined text-lg ${selected?.id === p.id ? 'text-neon' : 'text-text-tertiary'}`}>
-                    {AREA_ICONS[p.area as Area]}
+                    {AREA_ICONS[p.clinicalArea]}
                   </span>
                   <div className="min-w-0">
                     <p className={`text-sm font-bold truncate ${selected?.id === p.id ? 'text-white' : 'text-text-primary'}`}>
-                      {p.patient.split(' ')[0]} {p.patient.split(' ')[1] ?? ''}
+                      {p.patientName.split(' ')[0]} {p.patientName.split(' ')[1] ?? ''}
                     </p>
                     <p className={`text-xs truncate ${selected?.id === p.id ? 'text-neon/60' : 'text-text-tertiary'}`}>
-                      {AREA_LABELS[p.area as Area]} · {p.sessions} sessões
+                      {AREA_LABELS[p.clinicalArea]} · {p.sessionCount} sessões
                     </p>
                   </div>
                 </div>
@@ -305,13 +322,13 @@ function ProntuarioPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-neon/60 mb-1">Prontuário clínico</p>
-                  <h2 className="font-display font-bold text-lg text-white">{selected.patient}</h2>
+                  <h2 className="font-display font-bold text-lg text-white">{selected.patientName}</h2>
                   <p className="text-sm text-white/60 mt-0.5">{selected.diagnosis}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 text-xs text-white font-bold uppercase tracking-wide">
-                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings:'"FILL" 1' }}>{AREA_ICONS[selected.area as Area]}</span>
-                    {AREA_LABELS[selected.area as Area]}
+                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings:'"FILL" 1' }}>{AREA_ICONS[selected.clinicalArea]}</span>
+                    {AREA_LABELS[selected.clinicalArea]}
                   </span>
                 </div>
               </div>
@@ -319,20 +336,19 @@ function ProntuarioPage() {
             <div className="px-6 py-3 bg-surface-low border-b border-border-soft flex items-center gap-6 text-xs text-text-tertiary flex-wrap">
               <span className="flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-sm">cake</span>
-                {new Date(selected.dob).toLocaleDateString('pt-BR')}
-                {' '}({new Date().getFullYear() - new Date(selected.dob).getFullYear()} anos)
+                {selected.birthDate ? new Date(`${selected.birthDate}T00:00:00`).toLocaleDateString('pt-BR') : 'Não informada'}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-sm">event</span>
-                Início: {new Date(selected.created).toLocaleDateString('pt-BR')}
+                Início: {new Date(selected.createdAt).toLocaleDateString('pt-BR')}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-sm">history</span>
-                Última sessão: {new Date(selected.lastSession).toLocaleDateString('pt-BR')}
+                Última sessão: {selected.lastSessionAt ? new Date(selected.lastSessionAt).toLocaleDateString('pt-BR') : 'Nenhuma'}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-sm">bar_chart</span>
-                {selected.sessions} sessões realizadas
+                {selected.sessionCount} sessões realizadas
               </span>
             </div>
           </div>
@@ -366,7 +382,7 @@ function ProntuarioPage() {
               <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between">
                   <p className="font-display font-bold text-sm text-text-primary uppercase tracking-wide">
-                    Escalas — {AREA_LABELS[selected.area as Area]}
+                    Escalas — {AREA_LABELS[selected.clinicalArea]}
                   </p>
                   <div className="flex items-center gap-2">
                     {saved && (
@@ -375,13 +391,13 @@ function ProntuarioPage() {
                         Salvo!
                       </span>
                     )}
-                    <button onClick={save} className="btn-primary text-xs px-4 py-2">
+                    <button disabled={updateProntuario.isPending} onClick={save} className="btn-primary text-xs px-4 py-2 disabled:opacity-50">
                       Salvar avaliação
                     </button>
                   </div>
                 </div>
                 <ScaleForm
-                  area={selected.area as Area}
+                  area={selected.clinicalArea}
                   values={scales}
                   onChange={(k, v) => setScales(s => ({...s, [k]: v}))}
                 />
@@ -392,7 +408,8 @@ function ProntuarioPage() {
               <div className="flex flex-col gap-4">
                 <p className="font-display font-bold text-sm text-text-primary uppercase tracking-wide">Anamnese</p>
                 <textarea
-                  defaultValue={selected.anamnese}
+                  value={anamnesis}
+                  onChange={event => setAnamnesis(event.target.value)}
                   rows={8}
                   className="input w-full resize-none text-sm leading-relaxed"
                 />
@@ -404,20 +421,21 @@ function ProntuarioPage() {
               <div className="flex flex-col gap-4">
                 <p className="font-display font-bold text-sm text-text-primary uppercase tracking-wide">Objetivos terapêuticos</p>
                 <div className="flex flex-col gap-2">
-                  {(selected.objectives ?? []).map((obj, i) => (
+                  {objectives.map((obj, i) => (
                     <div key={i} className="flex items-center gap-3 px-4 py-3 bg-surface-low border border-border-soft">
                       <span className="flex items-center justify-center w-5 h-5 bg-neon text-dark text-[10px] font-bold rounded-full shrink-0">{i+1}</span>
                       <p className="text-sm text-text-primary flex-1">{obj}</p>
-                      <button className="text-text-tertiary hover:text-danger transition-colors">
+                      <button onClick={() => setObjectives(items => items.filter((_, index) => index !== i))} className="text-text-tertiary hover:text-danger transition-colors">
                         <span className="material-symbols-outlined text-sm">delete</span>
                       </button>
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-2">
-                  <input className="input flex-1 text-sm" placeholder="Novo objetivo..." />
-                  <button className="btn-primary px-4 py-2 text-xs">Adicionar</button>
+                  <input value={newObjective} onChange={event => setNewObjective(event.target.value)} className="input flex-1 text-sm" placeholder="Novo objetivo..." />
+                  <button onClick={() => { const value = newObjective.trim(); if (value) { setObjectives(items => [...items, value]); setNewObjective('') } }} className="btn-primary px-4 py-2 text-xs">Adicionar</button>
                 </div>
+                <button onClick={save} className="btn-primary self-start text-xs px-4 py-2">Salvar objetivos</button>
               </div>
             )}
 
@@ -426,11 +444,11 @@ function ProntuarioPage() {
                 <p className="font-display font-bold text-sm text-text-primary uppercase tracking-wide">Evolução clínica</p>
                 <div className="px-4 py-3 bg-success-surface border border-success/20 text-sm text-text-primary rounded">
                   <p className="font-bold text-success mb-1">Nota da última sessão</p>
-                  <p className="leading-relaxed">{selected.evolution}</p>
+                  <p className="leading-relaxed">{selected.latestEvolution || 'Nenhuma evolução registrada.'}</p>
                 </div>
                 <div>
                   <label className="section-label block mb-1.5">Nova nota de evolução</label>
-                  <textarea rows={5} className="input w-full resize-none text-sm leading-relaxed" placeholder="Descreva a evolução desta sessão..." />
+                  <textarea value={latestEvolution} onChange={event => setLatestEvolution(event.target.value)} rows={5} className="input w-full resize-none text-sm leading-relaxed" placeholder="Descreva a evolução desta sessão..." />
                 </div>
                 <button onClick={save} className="btn-primary self-start text-xs px-4 py-2">Salvar evolução</button>
               </div>

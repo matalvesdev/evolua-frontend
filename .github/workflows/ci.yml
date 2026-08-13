@@ -4,205 +4,235 @@ on:
   pull_request:
     branches: [main, develop]
   push:
-    branches: [main]
+    branches: [main, develop]
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 env:
   PNPM_VERSION: 9
+  NODE_VERSION: 22
 
 jobs:
-  typecheck:
+  # ─── Path detection ───────────────────────────────────────────────
+  paths:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      landing: ${{ steps.filter.outputs.landing }}
+      scripts: ${{ steps.filter.outputs.scripts }}
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend-core/**'
+              - 'pnpm-lock.yaml'
+            landing:
+              - 'landing-core/**'
+              - 'pnpm-lock.yaml'
+            scripts:
+              - 'scripts/**'
+            docs:
+              - '.doc/**'
+              - '.geos/**'
+              - 'openspec/**'
+
+  # ─── Frontend (react + vite + tanstack router) ───────────────────
+  frontend-build:
+    needs: paths
+    if: needs.paths.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
+      - name: Build (routeTree.gen.ts needed before typecheck)
+        run: pnpm -F ./frontend-core build
+      - name: TypeCheck
+        run: pnpm -F ./frontend-core typecheck
+      - name: Lint
+        run: pnpm -F ./frontend-core lint
 
-      - name: TypeCheck landing-core
-        run: pnpm -F landing-core typecheck
-
-      - name: TypeCheck frontend-core
-        run: pnpm -F frontend-core typecheck
-
-      - name: TypeCheck contracts
-        run: pnpm --filter @evolua/contracts build
-
-      - name: TypeCheck API
-        run: pnpm --filter @evolua/api build
-
-  lint:
+  # ─── Landing (react + vite, no supabase env in CI) ───────────────
+  landing-build:
+    needs: paths
+    if: needs.paths.outputs.landing == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
+      - name: "Build (skip-sitemap - no Supabase env in CI)"
+        run: pnpm -F ./landing-core build:skip-sitemap
+      - name: TypeCheck
+        run: pnpm -F ./landing-core typecheck
+      - name: Lint
+        run: pnpm -F ./landing-core lint
 
-      - name: Lint landing-core
-        run: pnpm -F landing-core lint
-
-      - name: Lint frontend-core
-        run: pnpm -F frontend-core lint
-
-      - name: Lint API (backend)
-        run: pnpm --filter @evolua/api lint
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Python deps (AI service)
-        working-directory: backend-core/apps/ai
-        run: |
-          pip install --upgrade pip
-          pip install ".[dev]"
-
-      - name: Lint AI service (ruff)
-        working-directory: backend-core/apps/ai
-        run: ruff check .
-
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.23"
-          cache-dependency-path: backend-core/apps/services/whatsapp/go.sum
-
-      - name: Vet WhatsApp service (go vet)
-        working-directory: backend-core/apps/services/whatsapp
-        run: go vet ./...
-
-      - name: Build WhatsApp service
-        working-directory: backend-core/apps/services/whatsapp
-        run: go build ./...
-
-  test-api:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: evolua_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: Generate Prisma client
-        run: pnpm -F backend-core prisma:generate
-
-      - name: Run API unit tests
-        run: pnpm --filter @evolua/api test
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/evolua_test
-          SUPABASE_URL: http://localhost:54321
-          SUPABASE_ANON_KEY: test-anon-key
-          SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
-          SUPABASE_JWT_SECRET: test-jwt-secret-thats-long-enough-16
-          CORS_ORIGINS: http://localhost:5173
-          INTERNAL_SERVICE_TOKEN: test-internal-token-8chars
-          SENTRY_DSN: https://test@sentry.io/123
-          RATE_LIMIT_MAX: "1000"
-
-  build:
-    runs-on: ubuntu-latest
-    needs: [typecheck, lint]
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: Build contracts
-        run: pnpm --filter @evolua/contracts build
-
-      - name: Build API
-        run: pnpm --filter @evolua/api build
-
-      - name: Build landing-core
-        run: pnpm -F landing-core build
-
-      - name: Build frontend-core
-        run: pnpm -F frontend-core build
-
+  # ─── E2E (after builds succeed) ─────────────────────────────────
   e2e:
+    needs: [frontend-build, landing-build]
+    if: always() && (needs.frontend-build.result == 'success' || needs.landing-build.result == 'success')
     runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
-
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
-
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-
       - name: Run E2E tests
         run: npx playwright test
         env:
           BASE_URL: http://localhost:5173
 
+  # ─── Docs & config validation ────────────────────────────────────
+  validate-docs:
+    needs: paths
+    if: needs.paths.outputs.docs == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate .doc/ structure
+        run: |
+          REQUIRED_FILES=(
+            ".doc/empresa.md"
+            ".doc/cliente.md"
+            ".doc/produto.md"
+            ".doc/tecnologia.md"
+            ".doc/operacao.md"
+            ".doc/metricas.md"
+            ".doc/roadmap.md"
+            ".doc/decisoes.md"
+            ".doc/geo-experiment.md"
+          )
+          for f in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Missing required doc: $f"
+              exit 1
+            fi
+          done
+          echo "All .doc/ files present"
+      - name: Validate .geos/geos.yaml
+        run: |
+          if [ ! -f ".geos/geos.yaml" ]; then
+            echo "::error::Missing .geos/geos.yaml"
+            exit 1
+          fi
+          # Basic YAML syntax check via node
+          node -e "
+            const fs = require('fs');
+            const yaml = fs.readFileSync('.geos/geos.yaml', 'utf8');
+            // Check required keys exist
+            const required = ['company:', 'storage:', 'knowledge:', 'approvals:'];
+            for (const key of required) {
+              if (!yaml.includes(key)) {
+                console.error('::error::Missing required key in geos.yaml: ' + key);
+                process.exit(1);
+              }
+            }
+            console.log('.geos/geos.yaml structure valid');
+          "
+      - name: Validate GEO experiment
+        run: |
+          if [ ! -f ".doc/geo-experiment.md" ]; then
+            echo "::error::Missing .doc/geo-experiment.md"
+            exit 1
+          fi
+          # Check it has baseline section
+          if ! grep -q "## Baseline" ".doc/geo-experiment.md"; then
+            echo "::error::GEO experiment missing ## Baseline section"
+            exit 1
+          fi
+          echo "GEO experiment structure valid"
+
+  # ─── Security ────────────────────────────────────────────────────
   secret-scanning:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Secret scanning (gitleaks)
+        with:
+          fetch-depth: 0
+      - name: Gitleaks secret scanning
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+
+  # ─── CI gate (required check) ────────────────────────────────────
+  # Only this job should be set as required in branch protection rules.
+  # Accepts success or skipped (path-scoped jobs skip when no changes).
+  # Fails on failure or cancelled.
+  ci-gate:
+    if: always()
+    needs:
+      - paths
+      - frontend-build
+      - landing-build
+      - e2e
+      - validate-docs
+      - secret-scanning
+      - dependency-review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate gate
+        run: |
+          echo "Checking results..."
+          echo "  paths:            ${{ needs.paths.result }}"
+          echo "  frontend-build:   ${{ needs.frontend-build.result }}"
+          echo "  landing-build:    ${{ needs.landing-build.result }}"
+          echo "  e2e:              ${{ needs.e2e.result }}"
+          echo "  validate-docs:    ${{ needs.validate-docs.result }}"
+          echo "  secret-scanning:  ${{ needs.secret-scanning.result }}"
+          echo "  dependency-review: ${{ needs.dependency-review.result }}"
+
+          if [[ "${{ needs.frontend-build.result }}" == "failure" ]] || \
+             [[ "${{ needs.frontend-build.result }}" == "cancelled" ]] || \
+             [[ "${{ needs.landing-build.result }}" == "failure" ]] || \
+             [[ "${{ needs.landing-build.result }}" == "cancelled" ]] || \
+             [[ "${{ needs.e2e.result }}" == "failure" ]] || \
+             [[ "${{ needs.e2e.result }}" == "cancelled" ]] || \
+             [[ "${{ needs.validate-docs.result }}" == "failure" ]] || \
+             [[ "${{ needs.validate-docs.result }}" == "cancelled" ]] || \
+             [[ "${{ needs.secret-scanning.result }}" == "failure" ]] || \
+             [[ "${{ needs.secret-scanning.result }}" == "cancelled" ]] || \
+             [[ "${{ needs.dependency-review.result }}" == "failure" ]] || \
+             [[ "${{ needs.dependency-review.result }}" == "cancelled" ]]; then
+            echo "::error::CI gate FAILED — one or more required jobs failed or were cancelled"
+            exit 1
+          fi
+
+          echo "CI gate PASSED"

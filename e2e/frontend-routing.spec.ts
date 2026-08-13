@@ -10,7 +10,7 @@ test.describe('Frontend — Public Routes', () => {
 
   test('cadastro page loads', async ({ page }) => {
     await page.goto('/cadastro')
-    await expect(page.locator('h1')).toBeVisible()
+    await expect(page.locator('h1').first()).toBeVisible()
   })
 
   test('password recovery page loads', async ({ page }) => {

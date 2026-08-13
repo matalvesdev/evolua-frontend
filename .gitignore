@@ -68,6 +68,13 @@ Thumbs.db
 .claude/
 .opencode/
 
+# GEOS — configuração e manifesto são versionáveis; runtime e base local não.
+.geos/.venv/
+.geos/geos-env/
+.geos/geos-repo/
+.geos/runtime-src/
+.geos/geos.db
+
 # ──────────────────────────────────────────────────────────────────────
 # Deploy
 # ──────────────────────────────────────────────────────────────────────

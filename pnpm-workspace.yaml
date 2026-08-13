@@ -1,3 +1,7 @@
 packages:
   - frontend-core
   - landing-core
+
+overrides:
+  brace-expansion: 5.0.9
+  esbuild: 0.28.1
