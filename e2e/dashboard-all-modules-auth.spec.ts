@@ -40,7 +40,9 @@ test.describe('Dashboard — All 24 Active Modules Load', () => {
       await expect(page.locator('body')).toBeVisible();
       await expect(page.locator('main')).toBeVisible({ timeout: 15_000 });
       await expect(page.getByRole('heading').first()).toBeVisible({ timeout: 15_000 });
-      await expect(page.getByText(/algo deu errado|erro inesperado|erro ao carregar|failed to fetch/i)).toHaveCount(0);
+      await expect(
+        page.getByText(/algo deu errado|erro inesperado|erro ao carregar|failed to fetch/i)
+      ).toHaveCount(0);
       expect(pageErrors, `uncaught errors in ${route.path}`).toEqual([]);
     });
   }
@@ -87,7 +89,9 @@ test.describe('Dashboard — Modules with expected title', () => {
   for (const m of modulesWithExpectedTitle) {
     test(`${m.path} has expected title`, async ({ page }) => {
       await page.goto(m.path);
-      await expect(page.getByRole('heading', { name: m.title }).first()).toBeVisible({ timeout: 10_000 });
+      await expect(page.getByRole('heading', { name: m.title }).first()).toBeVisible({
+        timeout: 10_000,
+      });
     });
   }
 });
