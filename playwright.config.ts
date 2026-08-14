@@ -15,14 +15,34 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'frontend-public',
+      testMatch: /frontend-routing\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://127.0.0.1:5173',
+      },
+    },
+    {
+      name: 'landing-public',
+      testMatch: /(landing|landing-comprehensive|seo)\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://127.0.0.1:5183',
+      },
     },
   ],
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-    cwd: 'frontend-core',
-  },
+  webServer: [
+    {
+      command: 'node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173',
+      url: 'http://127.0.0.1:5173',
+      reuseExistingServer: !process.env.CI,
+      cwd: 'frontend-core',
+    },
+    {
+      command: 'node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5183',
+      url: 'http://127.0.0.1:5183',
+      reuseExistingServer: !process.env.CI,
+      cwd: 'landing-core',
+    },
+  ],
 });

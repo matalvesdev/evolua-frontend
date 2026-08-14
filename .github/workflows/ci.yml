@@ -89,6 +89,7 @@ jobs:
     needs: [frontend-build, landing-build]
     if: always() && (needs.frontend-build.result == 'success' || needs.landing-build.result == 'success')
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
