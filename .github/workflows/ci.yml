@@ -77,7 +77,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: "Build (skip-sitemap - no Supabase env in CI)"
+      - name: 'Build (skip-sitemap - no Supabase env in CI)'
         run: pnpm -F ./landing-core build:skip-sitemap
       - name: TypeCheck
         run: pnpm -F ./landing-core typecheck
@@ -102,10 +102,6 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run E2E tests
         run: npx playwright test
-        env:
-          VITE_SUPABASE_URL: https://example.supabase.co
-          VITE_SUPABASE_ANON_KEY: ci-public-anon-key
-          VITE_API_URL: http://127.0.0.1:3000
 
   # ─── Docs & config validation ────────────────────────────────────
   validate-docs:

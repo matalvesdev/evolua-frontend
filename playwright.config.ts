@@ -37,12 +37,22 @@ export default defineConfig({
       url: 'http://127.0.0.1:5173',
       reuseExistingServer: !process.env.CI,
       cwd: 'frontend-core',
+      env: {
+        VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+        VITE_SUPABASE_ANON_KEY: 'ci-public-anon-key',
+        VITE_API_URL: 'http://127.0.0.1:3000',
+      },
     },
     {
       command: 'node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5183',
       url: 'http://127.0.0.1:5183',
       reuseExistingServer: !process.env.CI,
       cwd: 'landing-core',
+      env: {
+        VITE_SUPABASE_URL: '',
+        VITE_SUPABASE_ANON_KEY: '',
+        VITE_API_URL: 'http://127.0.0.1:3000',
+      },
     },
   ],
 });
