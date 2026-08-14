@@ -42,8 +42,8 @@ Especificação → Implementação → Review → Teste → Deploy → Monitora
 - **Database Prisma**: Supabase migrations (manual gate, `DATABASE_URL` + `DIRECT_URL`)
 - **Database SQL**: Supabase migrations SQL (ledger script, `DIRECT_URL`)
 - **Staging Supabase**: projeto isolado, schema clonado sem dados clínicos; migrations incrementais fail-closed via ledger
-- **Staging web**: preview Vercel em `develop`, protegido por automation bypass exclusivo do E2E
-- **Staging backend**: Blueprint Render em `backend-core/render.staging.yaml`; deploy depende dos hooks/URLs dos serviços provisionados
+- **Staging web**: preview Vercel em `develop`, protegido por automation bypass exclusivo do E2E; preflight exige `API_URL` de staging e impede auditoria contra backend ausente
+- **Staging backend**: Blueprint Render em `backend-core/render.staging.yaml`; preflight fail-closed exige hooks e URLs dos serviços provisionados
 - **CI gates**: Build → TypeCheck → Lint (ordem obrigatória, ver anti-patterns)
 - **CI required check**: `ci-gate` (aceita success/skipped, falha em failure/cancelled)
 - **Proteção de branches**: preparada para exigir apenas `ci-gate`, mas bloqueada pelo plano GitHub dos repositórios privados

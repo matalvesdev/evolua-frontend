@@ -23,7 +23,34 @@ env:
   NODE_VERSION: 22
 
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Validate staging deployment configuration
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          API_URL: ${{ secrets.API_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID_FRONTEND: ${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
+          VERCEL_PROJECT_ID_LANDING: ${{ secrets.VERCEL_PROJECT_ID_LANDING }}
+        run: |
+          missing=0
+          for name in SUPABASE_URL SUPABASE_ANON_KEY API_URL TEST_EMAIL TEST_PASSWORD VERCEL_AUTOMATION_BYPASS_SECRET VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID_FRONTEND VERCEL_PROJECT_ID_LANDING; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing staging secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
   frontend:
+    needs: preflight
     runs-on: ubuntu-latest
     environment: staging
     outputs:
@@ -63,6 +90,7 @@ jobs:
             --build-env VITE_API_URL=${{ secrets.API_URL }}
 
   landing:
+    needs: preflight
     runs-on: ubuntu-latest
     environment: staging
     steps:

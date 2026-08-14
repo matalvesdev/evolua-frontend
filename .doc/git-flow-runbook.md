@@ -270,6 +270,18 @@ Todos os workflows usam `permissions: contents: read` exceto:
 - Nenhum secret novo foi criado neste PR
 - Todos os secrets referenciados já existem ou dependem de configuração manual
 
+### Staging — provisionamento obrigatório
+
+Os workflows são fail-closed e não executam deploy enquanto estes valores não existirem:
+
+| Repositório | Secrets do environment `staging` |
+|-------------|-----------------------------------|
+| Frontend | `API_URL` |
+| Backend | `API_URL`, `AI_URL`, `RENDER_DEPLOY_HOOK_API`, `RENDER_DEPLOY_HOOK_AI` |
+
+As URLs e os deploy hooks devem ser copiados dos serviços de staging provisionados no Render;
+é proibido usar endpoints de produção para satisfazer o preflight.
+
 ## Deploys
 
 | Serviço | Trigger | Automático | Via |

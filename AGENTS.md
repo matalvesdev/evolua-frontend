@@ -175,7 +175,8 @@ pnpm --filter @evolua/api test
 - ❌ Disparar o baseline-adopt do ledger no MESMO push que introduz uma migration nova — ela seria adotada-sem-executar; semear o baseline ANTES via `workflow_dispatch` único, depois deixar os pushes de migration rodarem normalmente
 - ❌ Changelog público (`changelog_entries`): doc citava colunas erradas (`data_lancamento`/`destaques`); nomes reais são `data`/`itens` (ver `007_changelog.sql`); upsert por `on conflict (versao)`
 - ❌ Push direto na main sem PR — sempre usar Git Flow (main → develop → feature); ver `.doc/git-flow-runbook.md`
-- ❌ CI sem path filters — jobs irrelevantes aumentam custo e tempo; usar `dorny/paths-filter@v3` para filtrar por domínio
+- ❌ E2E de staging com `API_URL` vazio — a UI pode renderizar estados de erro e produzir falso positivo; workflows de staging devem falhar no preflight até API/AI, hooks e URLs reais estarem configurados
+- ❌ CI sem path filters — jobs irrelevantes aumentam custo e tempo; usar `dorny/paths-filter@v4` para filtrar por domínio
 - ❌ Filtros pnpm por nome de pacote em workflows — `-F frontend-core` falha porque pkg name é `system-core`; usar `-F ./frontend-core` (path)
 - ❌ Landing build completo em CI — `build` roda `generate-sitemap.mjs` que precisa de env Supabase; CI usa `build:skip-sitemap`
 - ❌ Permissions default (`write-all`) em workflows — least privilege `contents: read` exceto content-pipeline (precisa write para commits automáticos)
