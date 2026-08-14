@@ -17,7 +17,9 @@ com IA que realmente agiliza o trabalho clínico e operacional.
 
 ### Fase 2 — Growth (Atual 🔄)
 - [x] Teleconsulta
-- [x] Dashboard module audit (26 módulos)
+- [x] Dashboard module audit (24 módulos ativos; módulos obsoletos removidos)
+- [x] E2E autenticado dos 24 módulos ativos (37 cenários Playwright)
+- [x] Supabase staging isolado + migration ledger + usuário E2E
 - [x] Content Pipeline (blog automático)
 - [x] GEOS integration (growth engineering)
 - [x] GEO experiment baseline
@@ -28,6 +30,8 @@ com IA que realmente agiliza o trabalho clínico e operacional.
 - [ ] Landing page de pricing
 - [ ] Onboarding otimizado (activation rate)
 - [ ] WhatsApp pairing real (QR scaneado)
+- [ ] Provisionar serviços Render staging e registrar deploy hooks/URLs no GitHub
+- [ ] Habilitar proteção de `main`/`develop` após upgrade GitHub Pro ou abertura dos repositórios
 - [ ] Blog publicado (30 posts/mês)
 
 ### Fase 3 — Scale (Próximo 📋)

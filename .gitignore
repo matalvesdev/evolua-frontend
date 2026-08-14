@@ -56,6 +56,9 @@ yarn-debug.log*
 pnpm-debug.log*
 coverage/
 .nyc_output/
+test-results/
+playwright-report*/
+playwright/.auth/
 
 # ──────────────────────────────────────────────────────────────────────
 # IDE / sistema

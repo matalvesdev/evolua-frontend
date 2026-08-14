@@ -30,7 +30,7 @@ const SECURITY_HEADERS: Record<string, string> = {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: blob: https://static.arasaac.org https://images.pexels.com",
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
+    "connect-src 'self' http://localhost:3000 http://127.0.0.1:3000 https://*.supabase.co wss://*.supabase.co",
     "frame-ancestors 'none'",                     // reforça X-Frame-Options
     "base-uri 'self'",
     "form-action 'self'",

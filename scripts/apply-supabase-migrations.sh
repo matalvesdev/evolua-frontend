@@ -7,9 +7,8 @@
 # Como evita re-aplicar migrations já rodadas (várias NÃO são idempotentes,
 # ex.: 010_reseed.sql):
 #   - Mantém um ledger: public._supabase_sql_migrations (filename PK).
-#   - 1ª execução (ledger inexistente): ADOTA todos os arquivos atuais como
-#     baseline (registra SEM executar) — assume que o estado atual já está
-#     aplicado em produção. Encerra sem rodar nada.
+#   - 1ª execução (ledger inexistente): falha de forma segura. A adoção do
+#     estado atual só ocorre com ADOPT_EXISTING_BASELINE=true.
 #   - Execuções seguintes: aplica apenas os arquivos ainda não registrados,
 #     cada um dentro de uma única transação (file + insert no ledger atômicos).
 #
@@ -51,6 +50,11 @@ if [ "${#files[@]}" -eq 0 ]; then
 fi
 
 if [ "$ledger_existed" != "t" ]; then
+  if [ "${ADOPT_EXISTING_BASELINE:-false}" != "true" ]; then
+    echo "::error::Ledger inexistente. Bootstrap ou adoção explícita são obrigatórios." >&2
+    echo "Use ADOPT_EXISTING_BASELINE=true apenas quando o schema já estiver aplicado." >&2
+    exit 1
+  fi
   echo "Ledger inexistente — adotando ${#files[@]} migration(s) atuais como BASELINE (sem executar)."
   for f in "${files[@]}"; do
     name=$(basename "$f")

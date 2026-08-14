@@ -1,0 +1,31 @@
+name: Deploy Supabase migrations (staging)
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - 'supabase/migrations/**'
+      - 'scripts/apply-supabase-migrations.sh'
+      - '.github/workflows/deploy-supabase-staging.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-supabase-migrations-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: apply Supabase SQL migrations (staging)
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install psql
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Apply pending migrations
+        env:
+          SUPABASE_DB_URL: ${{ secrets.DIRECT_URL }}
+        run: bash scripts/apply-supabase-migrations.sh

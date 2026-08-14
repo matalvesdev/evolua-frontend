@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
 const DASHBOARD_ROUTES = [
   { path: '/dashboard', name: 'index (home)' },
@@ -25,42 +25,49 @@ const DASHBOARD_ROUTES = [
   { path: '/dashboard/tarefas', name: 'tarefas' },
   { path: '/dashboard/teleconsulta', name: 'teleconsulta' },
   { path: '/dashboard/whatsapp', name: 'whatsapp' },
-]
+];
 
-test.describe('Dashboard — All 26 Modules Load', () => {
+test.describe('Dashboard — All 24 Active Modules Load', () => {
   for (const route of DASHBOARD_ROUTES) {
     test(`${route.name} loads without crashing`, async ({ page }) => {
-      const resp = await page.goto(route.path)
-      expect(resp?.status()).toBe(200)
-      await expect(page.locator('body')).toBeVisible()
-      const title = page.locator('h1').first()
-      await expect(title).toBeAttached({ timeout: 10000 })
-    })
+      const pageErrors: string[] = [];
+      page.on('pageerror', (error) => pageErrors.push(error.message));
+
+      const resp = await page.goto(route.path);
+      expect(resp?.status()).toBe(200);
+      await expect(page).toHaveURL(new RegExp(`${route.path.replaceAll('/', '\\/')}(?:[/?#]|$)`));
+      await expect(page).not.toHaveURL(/\/entrar(?:[/?#]|$)/);
+      await expect(page.locator('body')).toBeVisible();
+      await expect(page.locator('main')).toBeVisible({ timeout: 15_000 });
+      await expect(page.locator('main').getByRole('heading').first()).toBeVisible({ timeout: 15_000 });
+      await expect(page.getByText(/algo deu errado|erro inesperado|erro ao carregar|failed to fetch/i)).toHaveCount(0);
+      expect(pageErrors, `uncaught errors in ${route.path}`).toEqual([]);
+    });
   }
-})
+});
 
 test.describe('Dashboard — Navigation Consistency', () => {
   test('sidebar navigation links are present and functional', async ({ page }) => {
-    const resp = await page.goto('/dashboard')
-    expect(resp?.status()).toBe(200)
+    const resp = await page.goto('/dashboard');
+    expect(resp?.status()).toBe(200);
 
-    const sidebarLinks = page.locator('nav a, aside a, [class*="sidebar"] a, [class*="nav"] a')
-    const linksCount = await sidebarLinks.count()
-    expect(linksCount).toBeGreaterThanOrEqual(10)
+    const sidebarLinks = page.locator('nav a, aside a, [class*="sidebar"] a, [class*="nav"] a');
+    const linksCount = await sidebarLinks.count();
+    expect(linksCount).toBeGreaterThanOrEqual(10);
 
     for (let i = 0; i < Math.min(linksCount, 5); i++) {
-      const href = await sidebarLinks.nth(i).getAttribute('href')
+      const href = await sidebarLinks.nth(i).getAttribute('href');
       if (href && href.startsWith('/dashboard/')) {
-        await sidebarLinks.nth(i).click()
-        await expect(page).toHaveURL(new RegExp(href.replace('/', '\\/')))
-        await page.goBack()
-        await expect(page).toHaveURL('/dashboard')
+        await sidebarLinks.nth(i).click();
+        await expect(page).toHaveURL(new RegExp(href.replace('/', '\\/')));
+        await page.goBack();
+        await expect(page).toHaveURL('/dashboard');
       }
     }
-  })
-})
+  });
+});
 
-test.describe('Dashboard — Modules with h1 title', () => {
+test.describe('Dashboard — Modules with expected title', () => {
   const modulesWithExpectedTitle = [
     { path: '/dashboard/agenda', title: /agenda/i },
     { path: '/dashboard/analytics', title: /analytics|analítico/i },
@@ -74,12 +81,12 @@ test.describe('Dashboard — Modules with h1 title', () => {
     { path: '/dashboard/teleconsulta', title: /teleconsulta/i },
     { path: '/dashboard/perfil', title: /perfil/i },
     { path: '/dashboard/mais', title: /mais/i },
-  ]
+  ];
 
   for (const m of modulesWithExpectedTitle) {
-    test(`${m.path} has expected h1`, async ({ page }) => {
-      await page.goto(m.path)
-      await expect(page.locator('h1').first()).toBeVisible({ timeout: 10000 })
-    })
+    test(`${m.path} has expected title`, async ({ page }) => {
+      await page.goto(m.path);
+      await expect(page.getByRole('heading', { name: m.title }).first()).toBeVisible({ timeout: 10_000 });
+    });
   }
-})
+});

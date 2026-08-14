@@ -4,6 +4,8 @@
   "private": true,
   "packageManager": "pnpm@9.15.9",
   "scripts": {
+    "e2e": "playwright test",
+    "e2e:auth": "playwright test --config=playwright.auth.config.ts",
     "content:pipeline": "node scripts/content-pipeline/pipeline.mjs",
     "content:dry-run": "node scripts/content-pipeline/pipeline.mjs --dry-run",
     "content:blog-only": "node scripts/content-pipeline/pipeline.mjs --skip-social",
