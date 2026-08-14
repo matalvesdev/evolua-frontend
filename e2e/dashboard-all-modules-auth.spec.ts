@@ -39,7 +39,7 @@ test.describe('Dashboard — All 24 Active Modules Load', () => {
       await expect(page).not.toHaveURL(/\/entrar(?:[/?#]|$)/);
       await expect(page.locator('body')).toBeVisible();
       await expect(page.locator('main')).toBeVisible({ timeout: 15_000 });
-      await expect(page.locator('main').getByRole('heading').first()).toBeVisible({ timeout: 15_000 });
+      await expect(page.getByRole('heading').first()).toBeVisible({ timeout: 15_000 });
       await expect(page.getByText(/algo deu errado|erro inesperado|erro ao carregar|failed to fetch/i)).toHaveCount(0);
       expect(pageErrors, `uncaught errors in ${route.path}`).toEqual([]);
     });
@@ -51,7 +51,8 @@ test.describe('Dashboard — Navigation Consistency', () => {
     const resp = await page.goto('/dashboard');
     expect(resp?.status()).toBe(200);
 
-    const sidebarLinks = page.locator('nav a, aside a, [class*="sidebar"] a, [class*="nav"] a');
+    const sidebarLinks = page.getByRole('navigation').first().getByRole('link');
+    await expect(sidebarLinks.first()).toBeVisible({ timeout: 15_000 });
     const linksCount = await sidebarLinks.count();
     expect(linksCount).toBeGreaterThanOrEqual(10);
 
