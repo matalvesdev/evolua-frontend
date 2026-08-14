@@ -33,7 +33,7 @@ jobs:
             echo "::error::Confirmação inválida. Digite exatamente 'DEPLOY'."
             exit 1
           fi
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install psql
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
       - name: Apply migrations
