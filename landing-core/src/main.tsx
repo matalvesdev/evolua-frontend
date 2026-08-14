@@ -1,22 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { HelmetProvider } from 'react-helmet-async'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createRouter, RouterProvider } from '@tanstack/react-router'
-import { routeTree } from './routeTree.gen'
-import { initSentry, Sentry } from './lib/sentry'
-import { initAnalytics } from './lib/analytics'
-import { CookieConsent } from './components/CookieConsent'
-import type { ReactNode } from 'react'
-import './index.css'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { routeTree } from './routeTree.gen';
+import { initSentry, Sentry } from './lib/sentry';
+import { initAnalytics } from './lib/analytics';
+import { CookieConsent } from './components/CookieConsent';
+import type { ReactNode } from 'react';
+import './index.css';
 
 const SentryBoundary = Sentry.ErrorBoundary as unknown as (props: {
-  children: ReactNode
-  fallback: ReactNode
-}) => ReactNode
+  children: ReactNode;
+  fallback: ReactNode;
+}) => ReactNode;
 
-initSentry()
-initAnalytics()
+initSentry();
+initAnalytics();
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,18 +26,19 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
-})
+});
 
 const router = createRouter({
   routeTree,
   context: { queryClient },
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 0,
-})
+  scrollRestoration: true,
+});
 
 declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
 
@@ -58,5 +59,5 @@ createRoot(document.getElementById('root')!).render(
         </QueryClientProvider>
       </HelmetProvider>
     </SentryBoundary>
-  </StrictMode>,
-)
+  </StrictMode>
+);

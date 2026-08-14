@@ -1,15 +1,15 @@
-import { Helmet } from 'react-helmet-async'
-import { SITE, buildTitle, buildCanonical } from '../../lib/seo'
-import type { SeoMeta } from '../../lib/seo'
-import { organizationJsonLd } from './jsonld'
+import { Helmet } from 'react-helmet-async';
+import { SITE, buildTitle, buildCanonical } from '../../lib/seo';
+import type { SeoMeta } from '../../lib/seo';
+import { organizationJsonLd } from './jsonld';
 
 interface SeoHeadProps extends Partial<SeoMeta> {
   /** Extra JSON-LD blocks to inject (e.g. BlogPosting, FAQPage) */
-  jsonLd?: Record<string, unknown>[]
+  jsonLd?: Record<string, unknown>[];
   /** When true, prevents default organization JSON-LD from being injected */
-  skipDefaultJsonLd?: boolean
+  skipDefaultJsonLd?: boolean;
   /** Route path used to compute canonical URL (e.g. /blog/como-crescer) */
-  path?: string
+  path?: string;
 }
 
 /**
@@ -33,26 +33,24 @@ export function SeoHead({
   skipDefaultJsonLd = false,
   noindex,
 }: SeoHeadProps) {
-  const resolvedTitle = title ? buildTitle(title) : buildTitle(SITE.name)
-  const resolvedDescription = description ?? SITE.tagline
-  const resolvedCanonical = canonical ?? (path ? buildCanonical(path) : SITE.url)
-  const resolvedOgImage = ogImage ?? SITE.defaultOgImage
-  const siteTitle = `${SITE.name} | ${SITE.tagline}`
-
-  const schemas: Record<string, unknown>[] = []
+  const resolvedTitle = title ? buildTitle(title) : buildTitle(SITE.name);
+  const resolvedDescription = description ?? SITE.tagline;
+  const resolvedCanonical = canonical ?? (path ? buildCanonical(path) : `${SITE.url}/`);
+  const resolvedOgImage = ogImage ?? SITE.defaultOgImage;
+  const schemas: Record<string, unknown>[] = [];
 
   // If this page has its own JSON-LD, include those
   if (jsonLd) {
-    schemas.push(...jsonLd)
+    schemas.push(...jsonLd);
   }
 
   // Inject Organization schema by default on all crawlable pages
   if (!skipDefaultJsonLd && !noindex) {
-    const org = organizationJsonLd()
+    const org = organizationJsonLd();
     // Check if organization is already included in jsonLd to avoid duplicates
-    const hasOrg = schemas.some((s) => (s as Record<string, unknown>)['@type'] === 'Organization')
+    const hasOrg = schemas.some((s) => (s as Record<string, unknown>)['@type'] === 'Organization');
     if (!hasOrg) {
-      schemas.push(org)
+      schemas.push(org);
     }
   }
 
@@ -68,7 +66,7 @@ export function SeoHead({
       <link rel="canonical" href={resolvedCanonical} />
 
       {/* ── Robots ── */}
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
 
       {/* ── Open Graph ── */}
       <meta property="og:title" content={resolvedTitle} />
@@ -92,9 +90,6 @@ export function SeoHead({
           {JSON.stringify(schema)}
         </script>
       ))}
-
-      {/* ── Homepage overrides ── */}
-      {resolvedTitle === siteTitle && <meta property="og:title" content={siteTitle} />}
     </Helmet>
-  )
+  );
 }
