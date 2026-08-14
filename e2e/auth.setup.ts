@@ -12,18 +12,20 @@ setup('authenticate', async ({ page }) => {
 
   const vercelBypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
   if (vercelBypassSecret) {
-    const response = await page.request.get('/', {
-      headers: {
-        'x-vercel-protection-bypass': vercelBypassSecret,
-        'x-vercel-set-bypass-cookie': 'true',
-      },
+    await page.setExtraHTTPHeaders({
+      'x-vercel-protection-bypass': vercelBypassSecret,
+      'x-vercel-set-bypass-cookie': 'true',
     });
-    if (!response.ok()) {
-      throw new Error(`Vercel automation bypass failed with HTTP ${response.status()}`);
-    }
+    await page.goto('/entrar', { waitUntil: 'domcontentloaded' });
+    await page.setExtraHTTPHeaders({});
+  } else {
+    await page.goto('/entrar');
   }
 
-  await page.goto('/entrar');
+  if (new URL(page.url()).hostname.endsWith('vercel.com')) {
+    throw new Error('Vercel automation bypass failed: preview redirected to the Vercel login page');
+  }
+
   await page.getByLabel(/e-?mail/i).fill(email);
   await page.locator('#senha').fill(password);
   await page.click('button[type="submit"]');
