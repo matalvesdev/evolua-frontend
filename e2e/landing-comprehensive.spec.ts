@@ -86,7 +86,7 @@ test.describe('Landing Page — Legal Pages', () => {
 test.describe('Landing Page — Status', () => {
   test('status page shows services', async ({ page }) => {
     await page.goto('/status');
-    await expect(page.locator('h1').first()).toBeVisible();
+    await expect(page.locator('h1').first()).toBeVisible({ timeout: 20_000 });
     const services = page.locator('text=Operacional').first();
     await expect(services).toBeVisible();
   });

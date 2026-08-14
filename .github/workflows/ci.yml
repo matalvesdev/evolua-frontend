@@ -27,7 +27,7 @@ jobs:
       docs: ${{ steps.filter.outputs.docs }}
     steps:
       - uses: actions/checkout@v7
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -103,7 +103,9 @@ jobs:
       - name: Run E2E tests
         run: npx playwright test
         env:
-          BASE_URL: http://localhost:5173
+          VITE_SUPABASE_URL: https://example.supabase.co
+          VITE_SUPABASE_ANON_KEY: ci-public-anon-key
+          VITE_API_URL: http://127.0.0.1:3000
 
   # ─── Docs & config validation ────────────────────────────────────
   validate-docs:
