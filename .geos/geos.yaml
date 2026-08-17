@@ -1,0 +1,83 @@
+# GEOS configuration for Evolua (brownfield mode).
+# Generated: 2026-08-12
+
+company:
+  name: Evolua
+  domain: useevolua.com.br
+  description: CRM AI-Native para fonoaudiólogas brasileiras
+  segment: Healthcare / SaaS / Speech Therapy
+
+storage:
+  provider: sqlite
+  mode: isolated
+  path: .geos/geos.db
+
+knowledge:
+  rag: true
+  graph: true
+  sources:
+    - path: AGENTS.md
+      type: markdown
+      source: project
+    - path: .doc/
+      type: markdown
+      source: project
+    - path: openspec/specs/
+      type: markdown
+      source: project
+    - path: docs/
+      type: markdown
+      source: project
+
+agents:
+  research: true
+  content: true
+  seo: true
+  leads: true
+  crm: true
+  analytics: true
+  social: false
+  email_nurture: false
+  academy: false
+  community: false
+
+automations:
+  daily_intelligence: false
+  content_pipeline: false
+  seo_audit: false
+
+approvals:
+  social_publish: required
+  blog_publish: required
+  newsletter_send: required
+  meeting_invite: required
+  email_send: required
+
+features:
+  rag: true
+  graph: true
+  social_publish:
+    enabled: false
+  meeting_scheduler:
+    enabled: false
+    shadow_mode: true
+  email_nurture:
+    enabled: false
+    shadow_mode: true
+  lead_scoring:
+    enabled: false
+    shadow_mode: true
+  geo_experiment:
+    enabled: true
+    baseline_date: "2026-08-12"
+    target_queries:
+      - "CRM para fonoaudiólogas"
+      - "software para clínica de fonoaudiologia"
+      - "como gerenciar consultório de fono"
+      - "automação para fonoaudióloga"
+      - "WhatsApp profissional para fono"
+    platforms:
+      - chatgpt
+      - claude
+      - gemini
+      - perplexity

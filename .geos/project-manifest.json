@@ -1,0 +1,107 @@
+{
+  "schema": "geos/project-manifest/1",
+  "mode": "BROWNFIELD",
+  "mode_confidence": "HIGH",
+  "mode_evidence": [
+    "source directories: frontend-core/src, landing-core/src",
+    "package manifests: .opencode/package.json, backend-core/package.json, frontend-core/package.json, landing-core/package.json, package.json, scripts/package.json",
+    "297 source files detected",
+    "CI/CD configuration detected",
+    "12 test files detected"
+  ],
+  "installation": "SIDECAR",
+  "capabilities": [
+    {
+      "name": "react-vite",
+      "capability": "frontend_framework",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\frontend-core\\package.json"
+      ]
+    },
+    {
+      "name": "node",
+      "capability": "language_runtime",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.opencode\\package.json"
+      ]
+    },
+    {
+      "name": "python",
+      "capability": "language_runtime",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.geos\\geos-repo\\pyproject.toml"
+      ]
+    },
+    {
+      "name": "postgres",
+      "capability": "database",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\docker-compose.yml"
+      ]
+    },
+    {
+      "name": "docker-compose",
+      "capability": "containers",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\docker-compose.yml"
+      ]
+    },
+    {
+      "name": "github-actions",
+      "capability": "ci_cd",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\ci.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\content-pipeline.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\deploy-ai.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\deploy-api.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\deploy-frontend.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\deploy-landing.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\deploy-migrations.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\deploy-supabase-migrations.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\deploy-whatsapp.yml",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\.github\\workflows\\pg-backup.yml"
+      ]
+    },
+    {
+      "name": "docs",
+      "capability": "documentation",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\docs\\analise-mercado-concorrentes.md",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\docs\\compose\\reports\\2026-07-01-landing-page-audit.md"
+      ]
+    },
+    {
+      "name": "tests",
+      "capability": "tests",
+      "confidence": "HIGH",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\node_modules\\.pnpm\\zod@4.4.3\\node_modules\\zod\\src\\v4\\mini\\tests\\apply.test.ts",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\node_modules\\.pnpm\\zod@4.4.3\\node_modules\\zod\\src\\v4\\mini\\tests\\assignability.test.ts",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\node_modules\\.pnpm\\zod@4.4.3\\node_modules\\zod\\src\\v4\\mini\\tests\\brand.test.ts",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\node_modules\\.pnpm\\zod@4.4.3\\node_modules\\zod\\src\\v4\\mini\\tests\\checks.test.ts",
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\node_modules\\.pnpm\\zod@4.4.3\\node_modules\\zod\\src\\v4\\mini\\tests\\codec.test.ts"
+      ]
+    },
+    {
+      "name": "design-system",
+      "capability": "design_system",
+      "confidence": "MEDIUM",
+      "evidence": [
+        "C:\\Users\\Mateus Alves Bassane\\Desktop\\Evolua V2\\frontend-core\\package.json"
+      ]
+    }
+  ],
+  "languages": [
+    "node",
+    "python"
+  ],
+  "repositories": [],
+  "last_audit": "2026-08-12T22:04:09.368399+00:00"
+}

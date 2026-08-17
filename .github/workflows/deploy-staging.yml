@@ -1,0 +1,141 @@
+name: Deploy web staging
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - 'frontend-core/**'
+      - 'landing-core/**'
+      - 'e2e/**'
+      - 'playwright.auth.config.ts'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/deploy-staging.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-web-staging
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 22
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Validate staging deployment configuration
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          API_URL: ${{ secrets.API_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID_FRONTEND: ${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
+          VERCEL_PROJECT_ID_LANDING: ${{ secrets.VERCEL_PROJECT_ID_LANDING }}
+        run: |
+          missing=0
+          for name in SUPABASE_URL SUPABASE_ANON_KEY API_URL TEST_EMAIL TEST_PASSWORD VERCEL_AUTOMATION_BYPASS_SECRET VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID_FRONTEND VERCEL_PROJECT_ID_LANDING; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing staging secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+  frontend:
+    needs: preflight
+    runs-on: ubuntu-latest
+    environment: staging
+    outputs:
+      url: ${{ steps.deploy.outputs['preview-url'] }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Build frontend against staging
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_API_URL: ${{ secrets.API_URL }}
+        run: pnpm -F ./frontend-core build
+      - run: pnpm -F ./frontend-core typecheck
+      - run: pnpm -F ./frontend-core lint
+      - name: Deploy Vercel preview
+        id: deploy
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_API_URL: ${{ secrets.API_URL }}
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-version: latest
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
+          working-directory: ./frontend-core
+          vercel-args: >-
+            --build-env VITE_SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+            --build-env VITE_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+            --build-env VITE_API_URL=${{ secrets.API_URL }}
+
+  landing:
+    needs: preflight
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm -F ./landing-core build:skip-sitemap
+      - run: pnpm -F ./landing-core typecheck
+      - run: pnpm -F ./landing-core lint
+      - name: Deploy Vercel preview
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-version: latest
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_LANDING }}
+          working-directory: ./landing-core
+
+  authenticated-e2e:
+    needs: frontend
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: npx playwright install --with-deps chromium
+      - name: Audit all authenticated dashboard modules
+        env:
+          BASE_URL: ${{ needs.frontend.outputs.url }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: pnpm e2e:auth
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-auth-report
+          path: playwright-report-auth/
+          if-no-files-found: ignore

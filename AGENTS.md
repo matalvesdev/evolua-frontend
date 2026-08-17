@@ -1,8 +1,27 @@
 # Evolua V2 — AI-Native Organization
 
+> Documentação institucional: leia primeiro `docs/EVOLUA_MASTER_CONTEXT.md`, depois o domínio afetado em `docs/`. Código, migrations e configuração prevalecem sobre documentação quando houver conflito; registre comportamento possivelmente incorreto como bug, não como regra de produto.
+
+## Agent Quick Context
+
+- **Produto:** SaaS vertical para fluxo de fonoaudiologia; IA assiste e a profissional decide.
+- **Segurança:** dados de paciente, prontuário, áudio e transcrição são altamente sensíveis. Preservar tenant isolation; nunca usar ID/role enviado pelo cliente como autoridade.
+- **Antes de mudar:** ler spec/domínio, inspecionar implementação/testes, fazer diff mínimo, atualizar testes e docs proporcionais ao risco.
+- **Não inventar:** diagnóstico, protocolo terapêutico, regra profissional/regulatória, compliance, cliente, métrica ou provider configurado.
+
+| Necessidade | Ler |
+| --- | --- |
+| Contexto da empresa | `docs/EVOLUA_MASTER_CONTEXT.md` |
+| Produto | `docs/03-product/` |
+| Domínio | `docs/04-domain/` |
+| Arquitetura/dados | `docs/05-architecture/`, `docs/06-data/` |
+| Segurança/privacidade | `docs/07-security-privacy/` |
+| IA | `docs/08-ai/` e `docs/ai-evals/` |
+| Engenharia | `docs/16-engineering/` |
+
 ## Organizational Philosophy
-Evolua é uma organização AI-Native inspirada na cultura operacional do Nubank, Itaú Tech e iFood.
-Operamos com excelência de classe mundial em engenharia, produto, IA, dados e experiência do cliente.
+Evolua é uma organização AI-Native que usa **GEOS** (Growth, Education & Organizational System) como framework de crescimento.
+GEOS é um framework open-source local-first de agentes de IA para growth engineering — substitui o modelo anterior de skills/org FAANG por agentes executáveis com storage persistente, workflows declarativos e aprovação humana.
 
 ### Princípios Culturais
 - Cliente no centro sempre
@@ -26,30 +45,34 @@ Operamos com excelência de classe mundial em engenharia, produto, IA, dados e e
 - Todo processo deve ser mensurável
 - Toda automação deve possuir observabilidade
 
-### Organizational Layers
-- **Executive Layer**: CEO, CTO, CPO, CMO, COO, CFO, Chief AI Officer, Chief Strategy Officer, Chief Data Officer
-- **Product & Experience Layer**: Product, UX, Design, Clinical Experience, Customer Voice
-- **Engineering Layer**: Architecture, Backend, Frontend, Mobile, AI, QA, Performance, Security, Platform, DevOps, SRE, Observability
-- **Data & AI Layer**: Data Engineering, Analytics, ML, AI Research, RAG, Prompt Engineering, AI Governance
-- **Growth & Marketing Layer**: Growth, Branding, CRM, SEO, Content, Social, Community, Performance Marketing, Market Intelligence
-- **Customer Experience Layer**: Customer Success, Support, Onboarding, Churn Prevention, NPS Intelligence
-- **Business Operations Layer**: Strategy, RevOps, Finance, Process Optimization, Automation
-- **People & Culture Layer**: Talent, People Ops, Culture, L&D, Leadership Coaching
-- **Legal, Security & Governance Layer**: Compliance, LGPD, Risk, Audit, IAM, Threat Intelligence
-- **Research & Innovation Layer**: Innovation, AI Trends, Startup Intelligence, Experimentation
-- **Platform & Infrastructure Layer**: Cloud, K8s, CI/CD, FinOps, Incident Response, DR
-- **Organizational Intelligence Layer**: Memory, Decision Intelligence, Metrics, Executive Reporting
+### GEOS Growth Engine
+GEOS opera como a camada de crescimento organizacional da Evolua:
+
+```
+SIGNALS → RESEARCH → KNOWLEDGE → STRATEGY → CONTENT → DISTRIBUTION → LEADS →
+QUALIFICATION → MEETINGS → OPPORTUNITIES → CUSTOMERS → EDUCATION → COMMUNITY →
+ANALYTICS → LARNING → (melhor conhecimento, estratégia, produto, distribuição)
+```
+
+**Configuração**: `.geos/geos.yaml` (brownfield mode)
+**Documentação**: `.doc/` (empresa, cliente, produto, tecnologia, operação, métricas, roadmap, decisões)
+**Experimento GEO**: `.doc/geo-experiment.md` (baseline + consultas-alvo + avaliação)
+
+**Domínios GEOS ativos**: Research, Content, SEO, Leads, CRM, Analytics
+**Domínios GEOS shadow**: Social, Email Nurture, Academy, Community
+**Aprovação humana**: Obrigatória em todo risco externo (publish, send, invite)
 
 ### Operating Model
 - **Specification Driven Development (SDD)**: toda feature começa com especificação completa (contexto, objetivo, regras, edge cases, tradeoffs, métricas, riscos)
-- **Harness Engineering**: pipelines reutilizáveis, automação de validações/testes/deploys/observabilidade/auditorias
+- **GEOS Workflows**: pipelines executáveis com retry, timeout, dead-letter (não mais prompts)
 - **12 Factor App, Clean Architecture, DDD, SOLID, Event-Driven Architecture**
 - **Platform Thinking**: reutilização, padronização, modularidade, contratos bem definidos
 - **Automation First**: priorizar automação operacional, de processos, testes, documentação, deploy, monitoramento
 - **AI Engineering Standards**: evaluation pipelines, validação de outputs, medição de latência/custo/precisão, detecção de drift
+- **GEO (Generative Engine Optimization)**: otimizar conteúdo para citação por LLMs (ChatGPT, Claude, Gemini)
 
 ### Communication Format
-Sempre responder utilizando:
+Sempre responder utilizar:
 - **Objetivo**
 - **Contexto**
 - **Diagnóstico**
@@ -170,6 +193,15 @@ pnpm --filter @evolua/api test
 - ❌ Não existir CI para `supabase/migrations/**` (só havia `deploy-migrations.yml` para Prisma `backend-core/prisma/**`) — migrations SQL puras (changelog, RLS, blog/RAG) ficavam aplicadas só manualmente; criado `deploy-supabase-migrations.yml` (push em `supabase/migrations/**` + `workflow_dispatch`, env `production`, usa `DIRECT_URL`)
 - ❌ Disparar o baseline-adopt do ledger no MESMO push que introduz uma migration nova — ela seria adotada-sem-executar; semear o baseline ANTES via `workflow_dispatch` único, depois deixar os pushes de migration rodarem normalmente
 - ❌ Changelog público (`changelog_entries`): doc citava colunas erradas (`data_lancamento`/`destaques`); nomes reais são `data`/`itens` (ver `007_changelog.sql`); upsert por `on conflict (versao)`
+- ❌ Push direto na main sem PR — sempre usar Git Flow (main → develop → feature); ver `.doc/git-flow-runbook.md`
+- ❌ E2E de staging com `API_URL` vazio — a UI pode renderizar estados de erro e produzir falso positivo; workflows de staging devem falhar no preflight até API/AI, hooks e URLs reais estarem configurados
+- ❌ CI sem path filters — jobs irrelevantes aumentam custo e tempo; usar `dorny/paths-filter@v4` para filtrar por domínio
+- ❌ Filtros pnpm por nome de pacote em workflows — `-F frontend-core` falha porque pkg name é `system-core`; usar `-F ./frontend-core` (path)
+- ❌ Landing build completo em CI — `build` roda `generate-sitemap.mjs` que precisa de env Supabase; CI usa `build:skip-sitemap`
+- ❌ Permissions default (`write-all`) em workflows — least privilege `contents: read` exceto content-pipeline (precisa write para commits automáticos)
+- ❌ `cancel-in-progress: true` em workflows de deploy — deploys em andamento NUNCA devem ser cancelados; só CI pode cancelar
+- ❌ Secrets inventados em workflows — só referenciar secrets que já existem no repo; criar novos requer configuração manual no GitHub Settings
+- ❌ Validação de .doc/.geos ausente no CI — documentação quebrada passa despercebida; adicionar job `validate-docs` que verifica existência e estrutura
 
 ## Blog Content Standards (obrigatório)
 
@@ -308,64 +340,53 @@ pnpm content:dry-run
 3. Gerar imagens dos carrosséis automaticamente (via DALL-E / Canva API)
 4. Integrar postagem automática no LinkedIn via API
 
-## Installed Agent Skills (187 skills)
+## GEOS Growth Engine (substitui skills/org FAANG)
 
-### Organização AI-Native (13 skills)
-**Master skill:** `organizacao-ai-native` — carrega o framework organizacional completo (filosofia, princípios, camadas, operating model, formato de resposta).
+GEOS (`github.com/matalvesdev/geos`) é o framework de crescimento organizacional da Evolua.
+Substitui completamente a camada anterior de skills organizacionais (187 skills FAANG), 203 agentes em `.opencode/agents/`, e squads em `squads/`.
 
-**Layer skills (12):**
-- `organizational-intelligence-layer` — Organizational Memory, Decision Intelligence, Metrics, Executive Reporting
-- `executive-layer` — CEO, CTO, CPO, CMO, COO, CFO, Chief AI Officer, Chief Strategy Officer, Chief Data Officer
-- `product-experience-layer` — PM, UX Research, UX Design, UX Writer, Design System, Accessibility, Clinical Experience, Customer Voice
-- `engineering-layer` — Architecture, Backend, Frontend, Mobile, AI, QA, Performance, Security, Platform, DevOps, SRE, Observability
-- `data-ai-layer` — Data Engineering, Analytics, ML, AI Research, RAG, Prompt Engineering, AI Governance
-- `growth-marketing-layer` — Growth, Branding, CRM, SEO, Content, Social, Community, Performance Marketing, Market Intelligence (now links to 6 sub-skills)
-- `customer-experience-layer` — Customer Success, Support, Onboarding, Churn Prevention, NPS Intelligence
-- `business-operations-layer` — Strategy, RevOps, Finance, Process Optimization, Automation
-- `people-culture-layer` — Talent, People Ops, Culture, L&D, Leadership Coaching
-- `legal-security-governance-layer` — Compliance, LGPD, Risk, Audit, IAM, Threat Intelligence
-- `research-innovation-layer` — Innovation, AI Trends, Startup Intelligence, Experimentation
-- `platform-infrastructure-layer` — Cloud, K8s, CI/CD, FinOps, Incident Response, DR
+### O que GEOS substituiu
+| Legado | Substituído por | Justificativa |
+|--------|----------------|---------------|
+| `.opencode/skills/faang/` (skill FAANg) | GEOS framework Python executável | Prompt-only → código executável com storage |
+| `.opencode/agents/` (203 agentes FAANG) | GEOS domain engines (12 módulos) | Agentes em markdown → agentes declarativos YAML com runtime |
+| `.agents/skills/` (22 skills organizacionais) | GEOS workflows + knowledge | Skills descritivas → pipelines com retry/timeout/dead-letter |
+| `squads/content-blog-fono/` | GEOS content engine | Squad manual → engine automatizado |
+| Skills de marketing (6 + 17 ads + 41 marketing) | GEOS Content + SEO + Social engines | 64 skills分散adas → módulos integrados |
 
-### Evolua Marketing Department (6 department skills) — NOVAS
-Skills que transformam o OpenCode em um departamento de marketing completo, orquestrado por um Marketing Director:
+### Domínios GEOS
+- **Research Engine**: QUESTION → SOURCES → SYNTHESIS → INSIGHTS
+- **Content Engine**: 18 tipos, scoring explicável, pipeline IDEA → PUBLISHED
+- **SEO Engine**: auditoria determinística (broken links, órfãos, thin content, gaps)
+- **Leads Engine**: lifecycle CAPTURED → WON/LOST, scoring ICE/RICE
+- **CRM Pipeline**: deals com stages configuráveis, atividades
+- **Analytics Engine**: ~22 métricas determinísticas + insights com evidência
+- **Knowledge Layer**: SQLite + FTS5 + RAG + Knowledge Graph
 
-| Skill | Descrição |
-|-------|-----------|
-| `evolua-marketing-director` | Master skill de marketing — coordena 6 departamentos, workflow Content Engine, qualidade, multiplicação de conteúdo |
-| `market-intelligence` | Pesquisa de mercado, VOC, concorrentes, personas, tendências, fontes (Reclame Aqui, Reddit, LinkedIn, Google Reviews) |
-| `content-studio` | Estratégia editorial, SEO (incluindo AEO/GEO), blog posts, ebooks, newsletters, lead magnets, calendário editorial |
-| `creative-studio` | Design de marca, infográficos, carrosséis, posts sociais, criativos de anúncios, motion, brand guardian |
-| `social-media` | Estratégia multiplataforma (Instagram, LinkedIn, Facebook, TikTok), copy, comunidade, repurposing |
-| `paid-media` | Google Ads, Meta Ads, LinkedIn Ads, full-funnel, creative testing, tracking, budget management (referencia `ads-skills/` táticas) |
-| `growth-optimization` | CRO, landing pages, email marketing, funis, analytics, experimentação, retenção |
+### Configuração
+- **Config**: `.geos/geos.yaml` (brownfield mode — não modifica código do produto)
+- **DB**: SQLite (`.geos/geos.db`) — local-first, zero infra
+- **Experimento GEO**: `.doc/geo-experiment.md` (baseline + consultas-alvo + avaliação)
+- **Docs**: `.doc/` (empresa, cliente, produto, tecnologia, operação, métricas, roadmap, decisões)
 
-Essas skills substituem agentes de marketing avulsos por um time coordenado. Use `evolua-marketing-director` como entry point para campanhas completas.
+### Comandos GEOS
+```bash
+geos init --mode brownfield    # Setup inicial
+geos db migrate                # Criar SQLite DB
+geos knowledge ingest .doc/    # Ingerir documentação
+geos knowledge search "query"  # Busca híbrida (FTS + RAG)
+geos workflows list            # Listar workflows disponíveis
+geos analytics collect         # Coletar métricas determinísticas
+geos cc audit                  # Health check do workspace
+geos doctor                    # Diagnóstico completo
+```
 
-### Ads Tactical Skills (17 skills) — `ads-skills/`
-Skills táticas de anúncios, referenciadas por `paid-media`. Mantidas como skills de execução detalhada.
-
-- `meta-ads-ad-copy`, `meta-ads-pixel-auditor`, `meta-ads-hook-optimizer`, `meta-ads-creative-analyzer`, `meta-ads-audience-builder`, `meta-ads-asc-auditor`
-- `google-ads-audit`, `google-ads-search-terms`, `google-ads-rsa-generator`, `google-ads-negative-keywords`, `google-ads-pmax-auditor`, `google-ads-shopping-feed`
-- `video-ad-script-writer`, `landing-page-auditor`, `ads-funnel-builder`, `ads-platform-selector`, `ads-report-generator`
-
-### Marketing (coreyhaines31/marketingskills v2.0) — 41 skills
-Full marketing stack: CRO, copywriting, SEO (audit + AI + programmatic), ads, analytics, A/B testing, email, social, video, SMS, cold email, pricing, onboarding, churn prevention, referrals, co-marketing, community, launch, paywalls, popups, signup, site-architecture, schema, ASO, lead magnets, free tools, directory submissions, revops, sales enablement, competitors, marketing-ideas, marketing-psychology, product-marketing, content-strategy, customer-research, competitor-profiling
-
-### Security (trailofbits/skills) — 74 skills
-Static analysis (CodeQL, Semgrep), fuzzing (libfuzzer, AFL++, cargo-fuzz, Jazzer), differential review, property-based testing, audit context building, constant-time analysis, insecure defaults detection, supply chain audit, vulnerability scanners (Solana, Cosmos, TON, Algorand, Substrate, Cairo), smart contract security, SARIF parsing
-
-### Error Monitoring (getsentry/sentry-skills) — 27 skills
-SDK setup (Node, Python, Fastify, React, Next.js, NestJS, Go, etc.), issue fixing, code review with Sentry context, alert creation, AI monitoring, OTEL exporter
-
-### Database (prisma/skills) — 7 skills
-CLI, Client API, database setup, driver adapter implementation, Postgres setup, v6→v7 upgrade
-
-### Anthropic (anthropics/skills) — 18 skills
-Document creation (docx, pptx, xlsx, pdf), frontend design, webapp-testing (Playwright), MCP builder, canvas design, brand guidelines, skill creator
-
-### Supabase — 2 skills
-PostgreSQL best practices (skill loaded via supabase skill)
+### Princípios GEOS
+- **Determinístico primeiro, LLM por último**: cron, FTS, scoring, dedup são código puro
+- **Aprovação humana obrigatória**: nenhuma ação externa sem supervisão
+- **Agentes especializados**: cada agente tem uma responsabilidade clara
+- **Zero infra obrigatória**: SQLite + bus em processo
+- **Spec-Driven Development**: nada é documentado sem estar implementado
 
 ## Content Engine — Weekly Content Multiplication Pipeline
 
@@ -453,3 +474,11 @@ Use the skill tool to load a skill when a task matches its description.
 - ❌ Content Engine sobrescrever blog posts — o engine é READ-ONLY para posts da semana, só gera novos ativos de multiplicação
 - ❌ Executar Engine sem OPENROUTER_API_KEY — o pipeline valida a chave antes de qualquer passo
 - ❌ Esquecer de commitar outputs do Engine — o CI commita automaticamente `scripts/content-engine/output/` e `docs/content-assets/`
+- ❌ Registrar módulos Fastify dentro de `onReady` — o root plugin já está bootado e falha com `FST_ERR_ROOT_PLG_BOOTED`; registrar módulos antes de `app.ready()` e manter um teste de boot da aplicação.
+- ❌ CSP local sem o backend de desenvolvimento em `connect-src` — o navegador bloqueia as chamadas antes da rede e produz falso `Failed to fetch`; permitir apenas `localhost:3000`/`127.0.0.1:3000` no Vite e manter a origem de produção explícita no Vercel.
+- ❌ E2E exigir `h1` em todas as telas — validar headings por papel/nome e estados funcionais; níveis `h1`/`h2` são responsabilidade da hierarquia semântica de cada layout.
+- ❌ Commitar storage state, traces ou screenshots E2E — `playwright/.auth/`, `test-results/` e `playwright-report*/` podem conter tokens e devem permanecer ignorados.
+- ❌ Definir pnpm em `packageManager` e também em `pnpm/action-setup` — versões duplicadas são rejeitadas pelo action; manter `packageManager` como fonte única.
+- ❌ Usar `raw_user_meta_data`/`user_metadata` em autorização ou RLS — o usuário pode editar esse campo; papéis devem vir de `app_metadata` (`auth.jwt() -> 'app_metadata'`) e a função deve permanecer `SECURITY INVOKER`.
+- ❌ Confiar só em RLS para tabelas públicas de projetos Supabase novos — declarar também os `GRANT` mínimos exigidos pelo Data API, sem conceder leitura de tabelas que contêm e-mails ou dados clínicos.
+- ❌ Link de descadastro contendo e-mail e `UPDATE` direto pelo cliente anon — usar token UUID opaco, resolver exclusivamente no backend com service role e nunca registrar e-mail/token nos logs.

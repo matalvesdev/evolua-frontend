@@ -21,7 +21,7 @@
  *   node scripts/daily-content-pipeline.mjs --topic "meu tema" --dry-run
  */
 
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs'
+import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, copyFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execSync } from 'node:child_process'
@@ -436,12 +436,8 @@ async function packageAndSend(slidesDir, textsDir, topic) {
 }
 
 function readdirSyncSafe(dir) {
-  try { return readFileSync ? requireFs().readdirSync(dir) : [] } catch { return [] }
+  try { return readdirSync(dir) } catch { return [] }
 }
-
-// Helper to avoid top-level await issues
-import { readFileSync as rfs, copyFileSync as cfs } from 'node:fs'
-const copyFileSync = cfs
 
 // ─── Main ─────────────────────────────────────────────────────────
 async function main() {

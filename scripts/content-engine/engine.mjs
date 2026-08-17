@@ -49,7 +49,7 @@ try {
 } catch {}
 
 const args = process.argv.slice(2)
-const CUSTOM_TOPIC = (() => {
+const CUSTOM_TOPIC = process.env.INPUT_TOPIC || (() => {
   const idx = args.indexOf('--topic')
   return idx === -1 ? null : args.slice(idx + 1).find(a => !a.startsWith('--')) || null
 })()
@@ -106,27 +106,50 @@ function safeWriteError(path, content) {
   } catch {}
 }
 
-async function callAI(messages, systemPrompt, options = {}) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 60000) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    return await fetch(url, { ...options, signal: controller.signal })
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+async function callAI(messages, systemPrompt, options = {}, retries = 3) {
   const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) throw new Error('OPENROUTER_API_KEY not set')
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://useevolua.com.br',
-      'X-Title': 'Evolua Content Engine',
-    },
-    body: JSON.stringify({
-      model: process.env.OPENROUTER_MODEL || CONFIG.ai.model,
-      messages: [{ role: 'system', content: systemPrompt }, ...messages],
-      temperature: options.temperature ?? CONFIG.ai.temperature,
-      max_tokens: options.maxTokens ?? CONFIG.ai.maxTokens,
-    }),
-  })
-  if (!res.ok) throw new Error(`AI ${res.status}: ${(await res.text()).slice(0, 300)}`)
-  const data = await res.json()
-  return data.choices?.[0]?.message?.content || null
+  let lastErr
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const res = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://useevolua.com.br',
+          'X-Title': 'Evolua Content Engine',
+        },
+        body: JSON.stringify({
+          model: process.env.OPENROUTER_MODEL || CONFIG.ai.model,
+          messages: [{ role: 'system', content: systemPrompt }, ...messages],
+          temperature: options.temperature ?? CONFIG.ai.temperature,
+          max_tokens: options.maxTokens ?? CONFIG.ai.maxTokens,
+        }),
+      }, 60000)
+      if (!res.ok) throw new Error(`AI ${res.status}: ${(await res.text()).slice(0, 300)}`)
+      const data = await res.json()
+      return data.choices?.[0]?.message?.content || null
+    } catch (err) {
+      lastErr = err
+      if (attempt < retries - 1) {
+        const delay = 1000 * Math.pow(2, attempt)
+        log('AI', `Retry ${attempt + 1}/${retries} after ${delay}ms: ${err.message}`)
+        await new Promise(r => setTimeout(r, delay))
+      }
+    }
+  }
+  throw lastErr
 }
 
 async function callAIBatch(prompt, msg, options = {}) {
@@ -858,7 +881,7 @@ async function sendEmailPackage(ebook, stats) {
 </div>
 </body></html>`
 
-  const res = await fetch('https://api.resend.com/emails', {
+  const res = await fetchWithTimeout('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -871,7 +894,7 @@ async function sendEmailPackage(ebook, stats) {
       html,
       text: `Pacote Semanal Evolua — ${localized}\n\n${ebook.title}\n${ebook.subtitle || ''}\n\nAtivos gerados: ${stats.total}\n- Ebook: ${stats.ebook}\n- Infográficos: ${stats.infographics}\n- Carrosséis: ${stats.carousels}\n- Posts: ${stats.social_posts}\n- Stories: ${stats.stories}\n- Reels: ${stats.reels}\n- Ads: ${stats.ad_creatives}\n- Landing Page: ${stats.landing_page}\n- Email Funnel: ${stats.email_funnel}`,
     }),
-  })
+  }, 30000)
   if (res.ok) log('📧', `✅ Email enviado para ${CONFIG.email.recipient}`)
   else log('📧', `⚠️ Falha no email: ${res.status}`)
 }

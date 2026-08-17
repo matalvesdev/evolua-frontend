@@ -1,76 +1,40 @@
-# Evolua CRM
+# Evolua
 
-CRM brasileiro para fonoaudiólogas com WhatsApp nativo, AI-powered content automation e billing (PIX/Cartão).
+Evolua é uma plataforma web para organizar a rotina de fonoaudiologia. O produto contém fluxos de pacientes, agenda, registros, relatórios, planos, exercícios, comunicação, billing e recursos assistidos por IA. Não substitui julgamento profissional nem faz promessas de resultado clínico.
 
-## Stack
+> Para contexto institucional, arquitetura, segurança e roadmap, comece em [docs/README.md](docs/README.md).
 
-| Layer | Tech |
-|-------|------|
-| **Frontend** | React + TanStack Router + Vite + Tailwind |
-| **Landing** | React + Vite (Vercel) |
-| **API** | Fastify + TypeScript + Zod + Prisma (Render) |
-| **AI** | FastAPI + LangChain + pgvector (Render) |
-| **WhatsApp** | Go + chi + Evolution API v2.2.3 (Render) |
-| **DB** | Postgres (Supabase) |
-| **Infra** | Terraform (AWS), Render, Vercel |
-| **Auth** | Supabase Auth (JWT ES256 via JWKS) |
+## Stack verificada
 
-## Directory Map
+| Camada | Tecnologia |
+| --- | --- |
+| App | React, TanStack Router, Vite, Tailwind |
+| Landing | React e Vite, com deploy Vercel |
+| API | Fastify, TypeScript, Zod e Prisma |
+| IA | FastAPI, LangChain e pgvector |
+| WhatsApp | Go, chi e Evolution API |
+| Dados/Auth | Postgres e Supabase Auth |
+| Deploy atual | Vercel (web), Render (API/IA), Supabase (dados) |
 
-```
-├── AGENTS.md              ← Harness engineering rules
-├── openspec/              ← Spec-driven planning (specs + changes)
-├── docs/                  ← Architecture, runbooks, editorial
-├── backend-core/          ← Monorepo (api, ai, wa, prisma)
-│   ├── apps/api/          ← Fastify (port 3000)
-│   ├── apps/ai/           ← FastAPI AI service (port 8001)
-│   └── apps/services/whatsapp/  ← Go gateway (port 8010)
-├── frontend-core/         ← App SPA (app.useevolua.com.br)
-├── landing-core/          ← Marketing site (useevolua.com.br)
-├── supabase/migrations/   ← DB migrations
-├── terraform/             ← AWS infrastructure
-├── scripts/               ← Automation & codegen
-└── .agents/               ← OpenCode agent definitions
-```
+## Estrutura
 
-## Development
+- `frontend-core/`: SPA autenticada.
+- `landing-core/`: landing e blog.
+- `backend-core/`: **repositório Git separado** com API, IA, gateway WhatsApp, Prisma e contratos.
+- `supabase/migrations/`: migrations SQL e RLS complementares.
+- `.github/workflows/`: CI, deploy, backups e conteúdo.
+- `.doc/` e `openspec/`: documentação operacional/especificações preservadas.
 
-```bash
-pnpm install               # Install all packages
-pnpm -F frontend-core dev  # Frontend dev server
-pnpm -F landing-core dev   # Landing dev server
-pnpm -F backend-core dev:api  # Fastify API
-pnpm -F backend-core prisma:generate  # Prisma client
-pnpm dev:ai                # AI service (uvicorn)
-```
+## Desenvolvimento
 
-## Deployments
+Consulte os comandos verificados no [AGENTS.md](AGENTS.md) e os manifests de cada app. O backend não faz parte do workspace pnpm raiz: execute seus comandos no contexto de `backend-core/`. Nunca copie segredos para documentação ou código; use a configuração de ambiente apropriada.
 
-- **app.useevolua.com.br** — Vercel (frontend-core)
-- **useevolua.com.br** — Vercel (landing-core)
-- **api.useevolua.com.br** — Render (backend-core/api)
-- **ai.useevolua.com.br** — Render (backend-core/ai)
+Para frontend/landing, rode build antes de typecheck/lint, pois o build gera artefatos de rota. Para detalhes de CI, deploy, ambientes e migrations, veja [Deployment](docs/05-architecture/22_DEPLOYMENT.md).
 
-## Key Features
+## Contribuição e segurança
 
-- Google OAuth sign-up/sign-in via Supabase
-- WhatsApp nativo (Evolution API) — CRM, automação, cobrança
-- IA para relatórios, marketing, biblioteca (RAG)
-- PIX/Cartão via AbacatePay + Stripe
-- Prontuário digital completo (SOAP, anamnese, exames)
-- Agenda inteligente com sincronização de calendário
-- Onboarding wizard para nova clínica
-- Newsletter + lead magnets para captação
-- Knowledge base / central de ajuda
+Leia [CONTRIBUTING.md](CONTRIBUTING.md) e [SECURITY.md](SECURITY.md). O fluxo Git é `main → develop → feature`; não faça push direto em `main`.
 
-## Principles
-
-1. Spec-driven development (OpenSpec)
-2. Harness engineering (AGENTS.md)
-3. Zod schemas as source of truth
-4. Never trust raw data — parse at boundary
-5. No `any`, no `console.log` in prod, no inline styles
-
-## License
+## Licença
 
 Privado — todos os direitos reservados.

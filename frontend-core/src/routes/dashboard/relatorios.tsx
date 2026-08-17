@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { useReports, useCreateReport, useUpdateReport, type ReportType } from '@/hooks/use-reports'
+import { useReports, useCreateReport, useUpdateReport, useSubmitReport, type ReportType } from '@/hooks/use-reports'
 import type { Report as HookReport } from '@/hooks/use-reports'
 import { usePatients } from '@/hooks/use-patients'
 import { useProfile } from '@/hooks/use-profile'
@@ -47,7 +47,7 @@ function toLocalReport(r: HookReport): Report {
     type: r.type,
     date: r.createdAt.split('T')[0],
     duration: '',
-    status: r.status === 'final' ? 'reviewed' : 'pending',
+    status: r.status === 'sent' ? 'exported' : r.status === 'approved' || r.status === 'signed' ? 'reviewed' : 'pending',
     aiGenerated: false,
     summary: r.content.slice(0, 200),
     content: r.content,
@@ -157,15 +157,15 @@ function GenerateReportModal({ onClose, onSaved }: { onClose: () => void; onSave
   const [draft, setDraft] = useState('')
 
   const patient = patients.find((p) => p.id === patientId)
-  const canGenerate = transcription.trim().length >= 10 && !generate.isPending
+  const canGenerate = Boolean(patientId) && transcription.trim().length >= 10 && !generate.isPending
   const canSave = Boolean(patientId) && draft.trim().length > 0 && !createReport.isPending
 
   async function handleGenerate() {
     if (!canGenerate) return
     const res = await generate.mutateAsync({
+      patientId,
       transcription: transcription.trim(),
       template,
-      patientName: patient?.name,
     })
     if (res.success && res.sections?.length) {
       setDraft(sectionsToText(res.sections, patient?.name))
@@ -285,18 +285,17 @@ function GenerateReportModal({ onClose, onSaved }: { onClose: () => void; onSave
 function RelatoriosPage() {
   const { data: hookReports = [] }  = useReports()
   const updateReport                = useUpdateReport()
+  const submitReport                = useSubmitReport()
   const reports                     = hookReports.map(toLocalReport)
   const [filter, setFilter]       = useState<'all'|ReportStatus>('all')
   const [search, setSearch]       = useState('')
   const [selected, setSelected]   = useState<Report | null>(null)
   const [showNew, setShowNew]     = useState(false)
 
-  function saveReport(r: Report, status: ReportStatus) {
-    // Edição de relatório existente — persiste conteúdo + status.
-    updateReport.mutate(
-      { id: r.id, body: { content: r.content, status: status === 'reviewed' ? 'final' : 'draft' } },
-      { onSuccess: () => setSelected(null) },
-    )
+  async function saveReport(r: Report, status: ReportStatus) {
+    await updateReport.mutateAsync({ id: r.id, body: { content: r.content } })
+    if (status === 'reviewed') await submitReport.mutateAsync(r.id)
+    setSelected(null)
   }
 
   const filtered = reports.filter(r => {
@@ -318,8 +317,8 @@ function RelatoriosPage() {
           report={selected}
           onClose={() => setSelected(null)}
           onSave={saveReport}
-          saving={updateReport.isPending}
-          error={updateReport.isError}
+          saving={updateReport.isPending || submitReport.isPending}
+          error={updateReport.isError || submitReport.isError}
         />
       )}
       {showNew && (

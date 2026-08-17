@@ -1,7 +1,7 @@
 # System Architecture
 
 ## Overview
-Evolua is a multi-service CRM for Brazilian speech therapists. The system comprises a Fastify API backend, React frontend, FastAPI AI service, Go WhatsApp gateway, and a Vite landing site.
+Evolua is a multi-service CRM for Brazilian speech therapists. The system comprises a Fastify API backend, React frontend, FastAPI AI service, Go WhatsApp gateway, a Vite landing site, and the GEOS growth engine.
 
 ## Services
 
@@ -25,11 +25,18 @@ Evolua is a multi-service CRM for Brazilian speech therapists. The system compri
 ### Frontend (React + TanStack Router + Vite)
 - URL: app.useevolua.com.br
 - Auth: Supabase Auth JS client
-- Routes: dashboard, billing, patients, sessions, marketing
+- Routes: dashboard, billing, patients, sessions
 
 ### Landing (React + Vite)
 - URL: useevolua.com.br
 - Content: Blog, changelog, FAQ, contact, legal pages
+
+### GEOS Growth Engine (Python — local-first)
+- Config: `.geos/geos.yaml` (brownfield mode)
+- DB: SQLite (`.geos/geos.db`)
+- Domains: Research, Content, SEO, Leads, CRM, Analytics
+- Knowledge: RAG + FTS5 + Knowledge Graph
+- Experimento GEO: `.doc/geo-experiment.md`
 
 ## Data Flow
 1. User authenticates via Supabase Auth → JWT in cookie
@@ -38,3 +45,4 @@ Evolua is a multi-service CRM for Brazilian speech therapists. The system compri
 4. AI features: API proxies to AI service (internal)
 5. WhatsApp: API communicates via Go gateway → Evolution API
 6. Billing: API communicates with AbacatePay/Stripe webhooks
+7. Growth: GEOS orchestrates content, SEO, leads, analytics (local-first)

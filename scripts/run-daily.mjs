@@ -42,7 +42,7 @@ try {
 } catch {}
 
 const args = process.argv.slice(2)
-const TOPIC = (() => {
+const TOPIC = process.env.INPUT_TOPIC || (() => {
   const idx = args.indexOf('--topic')
   return idx === -1 ? null : args.slice(idx + 1).find(a => !a.startsWith('--')) || null
 })()
@@ -86,27 +86,50 @@ function getTopic() {
   }
 }
 
-async function callAI(messages, systemPrompt, options = {}) {
+async function fetchWithTimeout(url, options = {}, timeoutMs = 60000) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    return await fetch(url, { ...options, signal: controller.signal })
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+async function callAI(messages, systemPrompt, options = {}, retries = 3) {
   const apiKey = process.env.OPENROUTER_API_KEY
   if (!apiKey) throw new Error('OPENROUTER_API_KEY not set')
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://useevolua.com.br',
-      'X-Title': 'Evolua Daily',
-    },
-    body: JSON.stringify({
-      model: process.env.OPENROUTER_MODEL || 'nvidia/nemotron-3-ultra-550b-a55b:free',
-      messages: [{ role: 'system', content: systemPrompt }, ...messages],
-      temperature: options.temperature ?? 0.7,
-      max_tokens: options.maxTokens ?? 4096,
-    }),
-  })
-  if (!res.ok) throw new Error(`AI ${res.status}: ${(await res.text()).slice(0, 300)}`)
-  const data = await res.json()
-  return data.choices?.[0]?.message?.content || null
+  let lastErr
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const res = await fetchWithTimeout('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://useevolua.com.br',
+          'X-Title': 'Evolua Daily',
+        },
+        body: JSON.stringify({
+          model: process.env.OPENROUTER_MODEL || 'nvidia/nemotron-3-ultra-550b-a55b:free',
+          messages: [{ role: 'system', content: systemPrompt }, ...messages],
+          temperature: options.temperature ?? 0.7,
+          max_tokens: options.maxTokens ?? 4096,
+        }),
+      }, 60000)
+      if (!res.ok) throw new Error(`AI ${res.status}: ${(await res.text()).slice(0, 300)}`)
+      const data = await res.json()
+      return data.choices?.[0]?.message?.content || null
+    } catch (err) {
+      lastErr = err
+      if (attempt < retries - 1) {
+        const delay = 1000 * Math.pow(2, attempt)
+        log('AI', `Retry ${attempt + 1}/${retries} after ${delay}ms: ${err.message}`)
+        await new Promise(r => setTimeout(r, delay))
+      }
+    }
+  }
+  throw lastErr
 }
 
 function extractJson(raw) {
@@ -181,36 +204,54 @@ Regras: Tom direto e acolhedor. Categoria: ${category}. NUNCA invente dados. Use
     `---\ntitle: "${post.title}"\nslug: "${slug}"\nexcerpt: "${post.excerpt}"\ncategory: "${post.category}"\nauthor: "${post.author || 'Equipe Evolua'}"\nread_time: ${post.read_time || 5}\ntags: [${(post.tags || []).map(t => `"${t}"`).join(', ')}]\ncover_image: "${post.cover_image || COVER_IMAGES[category] || COVER_IMAGES.Fonoaudiologia}"\npublished_at: "${new Date().toISOString()}"\n---\n\n${post.content_html.replace(/<[^>]+>/g, '').slice(0, 500)}...`)
   log('📝', `Rascunho salvo: ${slug}.md`)
 
-  // Publish to Supabase
+  // Publish to Supabase (idempotent upsert by slug)
   if (!DRY_RUN) {
     const supabaseUrl = process.env.SUPABASE_URL
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     if (supabaseUrl && serviceKey) {
-      log('📡', 'Publicando no Supabase...')
-      const res = await fetch(`${supabaseUrl}/rest/v1/blog_posts`, {
-        method: 'POST',
-        headers: {
-          'apikey': serviceKey,
-          'Authorization': `Bearer ${serviceKey}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=representation',
-        },
-        body: JSON.stringify({
-          title: post.title,
-          slug,
-          excerpt: post.excerpt,
-          content: post.content_html,
-          cover_image: post.cover_image || COVER_IMAGES[category] || COVER_IMAGES.Fonoaudiologia,
-          author: post.author || 'Equipe Evolua',
-          category: post.category || category,
-          read_time: post.read_time || 5,
-          featured: false,
-          status: 'published',
-          published_at: new Date().toISOString(),
-        }),
+      log('📡', 'Publicando no Supabase (upsert por slug)...')
+      const body = JSON.stringify({
+        title: post.title,
+        slug,
+        excerpt: post.excerpt,
+        content: post.content_html,
+        cover_image: post.cover_image || COVER_IMAGES[category] || COVER_IMAGES.Fonoaudiologia,
+        author: post.author || 'Equipe Evolua',
+        category: post.category || category,
+        read_time: post.read_time || 5,
+        featured: false,
+        status: 'published',
+        published_at: new Date().toISOString(),
       })
-      if (res.ok) log('📡', `✅ Publicado: "${post.title}"`)
-      else log('📡', `⚠️ Falha publish: ${res.status}`)
+      let lastErr
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const res = await fetchWithTimeout(`${supabaseUrl}/rest/v1/blog_posts?on_conflict=slug`, {
+            method: 'POST',
+            headers: {
+              'apikey': serviceKey,
+              'Authorization': `Bearer ${serviceKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=representation,resolution=merge-duplicates',
+            },
+            body,
+          }, 30000)
+          if (res.ok) {
+            log('📡', `✅ Publicado: "${post.title}"`)
+            lastErr = null
+            break
+          }
+          lastErr = new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`)
+        } catch (err) {
+          lastErr = err
+        }
+        if (attempt < 2) {
+          const delay = 1000 * Math.pow(2, attempt)
+          log('📡', `Retry publish ${attempt + 1}/3 em ${delay}ms`)
+          await new Promise(r => setTimeout(r, delay))
+        }
+      }
+      if (lastErr) log('📡', `⚠️ Falha publish: ${lastErr.message}`)
     } else {
       log('📡', '⚠️ SUPABASE_URL/SERVICE_KEY não configurados')
     }

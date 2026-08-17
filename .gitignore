@@ -56,6 +56,10 @@ yarn-debug.log*
 pnpm-debug.log*
 coverage/
 .nyc_output/
+test-results/
+playwright-report*/
+playwright/.auth/
+.playwright-cli/
 
 # ──────────────────────────────────────────────────────────────────────
 # IDE / sistema
@@ -67,6 +71,13 @@ Thumbs.db
 .kiro/
 .claude/
 .opencode/
+
+# GEOS — configuração e manifesto são versionáveis; runtime e base local não.
+.geos/.venv/
+.geos/geos-env/
+.geos/geos-repo/
+.geos/runtime-src/
+.geos/geos.db
 
 # ──────────────────────────────────────────────────────────────────────
 # Deploy

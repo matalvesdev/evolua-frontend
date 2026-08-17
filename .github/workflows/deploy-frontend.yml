@@ -9,9 +9,15 @@ on:
       - ".github/workflows/deploy-frontend.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: deploy-frontend-prod
   cancel-in-progress: false
+
+env:
+  NODE_VERSION: 22
 
 jobs:
   deploy:
@@ -20,29 +26,20 @@ jobs:
     environment:
       name: production
       url: https://app.useevolua.com.br
-
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
+      - run: pnpm install --frozen-lockfile
+      - name: Build (routeTree.gen.ts first)
         run: pnpm -F ./frontend-core build
-
       - name: TypeCheck
         run: pnpm -F ./frontend-core typecheck
-
       - name: Lint
         run: pnpm -F ./frontend-core lint
-
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v42
         with:

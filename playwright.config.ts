@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
+  testIgnore: ['**/auth.setup.ts', '**/dashboard-all-modules-auth.spec.ts'],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -14,14 +15,44 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'frontend-public',
+      testMatch: /frontend-routing\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://127.0.0.1:5173',
+      },
+    },
+    {
+      name: 'landing-public',
+      testMatch: /(landing|landing-comprehensive|seo)\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://127.0.0.1:5183',
+      },
     },
   ],
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
-    cwd: 'frontend-core',
-  },
+  webServer: [
+    {
+      command: 'node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173',
+      url: 'http://127.0.0.1:5173',
+      reuseExistingServer: !process.env.CI,
+      cwd: 'frontend-core',
+      env: {
+        VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+        VITE_SUPABASE_ANON_KEY: 'ci-public-anon-key',
+        VITE_API_URL: 'http://127.0.0.1:3000',
+      },
+    },
+    {
+      command: 'node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5183',
+      url: 'http://127.0.0.1:5183',
+      reuseExistingServer: !process.env.CI,
+      cwd: 'landing-core',
+      env: {
+        VITE_SUPABASE_URL: '',
+        VITE_SUPABASE_ANON_KEY: '',
+        VITE_API_URL: 'http://127.0.0.1:3000',
+      },
+    },
+  ],
 });

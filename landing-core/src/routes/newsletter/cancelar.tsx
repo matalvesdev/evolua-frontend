@@ -2,7 +2,6 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { SeoHead } from '../../components/seo/SeoHead'
-import { ensureSupabase } from '../../lib/supabase'
 
 export const Route = createFileRoute('/newsletter/cancelar')({
   component: CancelarInscricao,
@@ -17,21 +16,23 @@ type Status = 'loading' | 'success' | 'error'
 
 function CancelarInscricao() {
   const params = new URLSearchParams(window.location.search)
-  const email = params.get('email')
-  const [status, setStatus] = useState<Status>(() => (email ? 'loading' : 'error'))
+  const token = params.get('token')
+  const [status, setStatus] = useState<Status>(() => (token ? 'loading' : 'error'))
 
   useEffect(() => {
-    if (!email) return
+    if (!token) return
     let cancelled = false
 
     const run = async () => {
       try {
-        const client = ensureSupabase()
-        const { error } = await client
-          .from('newsletter_subscribers')
-          .update({ status: 'cancelled', unsubscribed_at: new Date().toISOString() })
-          .eq('email', email)
-        if (!cancelled) setStatus(error ? 'error' : 'success')
+        const apiUrl = import.meta.env.VITE_API_URL ?? ''
+        if (!apiUrl) throw new Error('API indisponível')
+        const response = await fetch(`${apiUrl}/api/newsletter/unsubscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        })
+        if (!cancelled) setStatus(response.ok ? 'success' : 'error')
       } catch {
         if (!cancelled) setStatus('error')
       }
@@ -41,7 +42,7 @@ function CancelarInscricao() {
     return () => {
       cancelled = true
     }
-  }, [email])
+  }, [token])
 
   const estados = {
     loading: { icon: 'progress_activity', text: 'Cancelando sua inscrição…' },

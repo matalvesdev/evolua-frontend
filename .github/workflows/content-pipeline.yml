@@ -2,9 +2,9 @@ name: Content Pipeline
 
 on:
   schedule:
-    # Daily blog + social at 06:00 BRT (09:00 UTC) — Mon-Fri
+    # Daily blog + social at 06:00 BRT (09:00 UTC) — Mon-Fri only
     - cron: '0 9 * * 1-5'
-    # Weekly content engine at 08:00 BRT (11:00 UTC) — Saturday
+    # Weekly content engine at 08:00 BRT (11:00 UTC) — Saturday only
     - cron: '0 11 * * 6'
   workflow_dispatch:
     inputs:
@@ -38,9 +38,46 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
+concurrency:
+  group: content-pipeline
+  cancel-in-progress: false
+
 jobs:
+  validate-secrets:
+    runs-on: ubuntu-latest
+    outputs:
+      ok: ${{ steps.check.outputs.ok }}
+    env:
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+    steps:
+      - name: Validate required secrets
+        id: check
+        run: |
+          missing=""
+          for secret in OPENROUTER_API_KEY SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY RESEND_API_KEY; do
+            val="${!secret}"
+            if [ -z "$val" ]; then
+              missing="$missing $secret"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing required secrets:$missing"
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+          echo "ok=true" >> "$GITHUB_OUTPUT"
+
   daily:
-    if: ${{ !inputs.run_engine_only }}
+    needs: validate-secrets
+    if: |
+      needs.validate-secrets.outputs.ok == 'true' &&
+      (github.event.schedule == '0 9 * * 1-5' || (github.event_name == 'workflow_dispatch' && !inputs.run_engine_only))
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -48,12 +85,13 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      INPUT_TOPIC: ${{ inputs.topic }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 20
 
@@ -62,48 +100,56 @@ jobs:
           npm install playwright
           npx playwright install chromium
 
-      - name: Run Daily Pipeline
+      - name: Build args safely
+        id: args
         run: |
           ARGS=""
-          [ -n "${{ github.event.inputs.topic }}" ] && ARGS="$ARGS --topic '${{ github.event.inputs.topic }}'"
-          [ "${{ github.event.inputs.skip_blog }}" = "true" ] && ARGS="$ARGS --skip-blog"
-          [ "${{ github.event.inputs.skip_visual }}" = "true" ] && ARGS="$ARGS --skip-visual"
-          [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-          node scripts/run-daily.mjs $ARGS
+          [ "${{ inputs.skip_blog }}" = "true" ] && ARGS="$ARGS --skip-blog"
+          [ "${{ inputs.skip_visual }}" = "true" ] && ARGS="$ARGS --skip-visual"
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+
+      - name: Run Daily Pipeline
+        run: node scripts/run-daily.mjs ${{ steps.args.outputs.args }}
 
       - name: Commit blog drafts
         run: |
           git config user.name "Evolua Bot"
           git config user.email "bot@useevolua.com.br"
           git add docs/content-assets/02-blog-posts/ scripts/content-pipeline/output/
-          git diff --cached --quiet || git commit -m "chore(content): daily pipeline ${{ github.event.inputs.topic || 'auto' }} [skip ci]"
+          git diff --cached --quiet || git commit -m "chore(content): daily pipeline ${INPUT_TOPIC:-auto} [skip ci]"
           git push
 
   weekly-engine:
-    if: ${{ github.event.schedule == '0 11 * * 6' || inputs.run_engine_only }}
+    needs: validate-secrets
+    if: |
+      needs.validate-secrets.outputs.ok == 'true' &&
+      (github.event.schedule == '0 11 * * 6' || inputs.run_engine_only)
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      INPUT_TOPIC: ${{ inputs.topic }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 20
 
-      - name: Run Weekly Content Engine
+      - name: Build args safely
+        id: args
         run: |
           ARGS=""
-          [ -n "${{ github.event.inputs.topic }}" ] && ARGS="$ARGS --topic '${{ github.event.inputs.topic }}'"
-          [ "${{ github.event.inputs.skip_engine }}" = "true" ] && ARGS="$ARGS --skip-email"
-          [ "${{ github.event.inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-          # On scheduled Sat runs, auto-detect topic from week's posts
-          # On manual dispatch, use custom topic if provided
-          node scripts/content-engine/engine.mjs $ARGS
+          [ "${{ inputs.skip_engine }}" = "true" ] && ARGS="$ARGS --skip-email"
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+
+      - name: Run Weekly Content Engine
+        run: node scripts/content-engine/engine.mjs ${{ steps.args.outputs.args }}
 
       - name: Commit engine outputs
         run: |

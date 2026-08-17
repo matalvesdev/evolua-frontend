@@ -1,39 +1,28 @@
-import { createRootRouteWithContext, Outlet, ScrollRestoration, useRouterState } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import type { QueryClient } from '@tanstack/react-query'
-import { SeoHead } from '../components/seo/SeoHead'
-import { Navbar } from '../components/Navbar'
-import { Footer } from '../components/Footer'
-import { InAppSupport } from '../components/KnowledgeBase'
+import { createRootRouteWithContext, Outlet, useRouterState } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import type { QueryClient } from '@tanstack/react-query';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { InAppSupport } from '../components/KnowledgeBase';
 
 interface RouterContext {
-  queryClient: QueryClient
+  queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootLayout,
-})
+});
 
-const AUTH_PATHS = ['/entrar', '/cadastro']
+const AUTH_PATHS = ['/entrar', '/cadastro'];
 
 function RootLayout() {
-  const { location } = useRouterState()
-  const isAuth = AUTH_PATHS.some((p) => location.pathname.startsWith(p))
-
-  // Default SEO for the entire app — each route overrides with its own <SeoHead>
-  const defaultSeo = (
-    <SeoHead
-      title="EVOLUA"
-      description="A plataforma feita para fonoaudiólogas extraordinárias. Agenda cheia, pacientes novos, IA e gestão em um só lugar."
-    />
-  )
+  const { location } = useRouterState();
+  const isAuth = AUTH_PATHS.some((p) => location.pathname.startsWith(p));
 
   if (isAuth) {
     return (
       <div className="bg-canvas text-ink font-body overflow-x-hidden">
-        <ScrollRestoration />
-        {defaultSeo}
         <Outlet />
         {import.meta.env.DEV && (
           <>
@@ -42,13 +31,11 @@ function RootLayout() {
           </>
         )}
       </div>
-    )
+    );
   }
 
   return (
     <div className="bg-canvas text-ink font-body overflow-x-hidden">
-      <ScrollRestoration />
-      {defaultSeo}
       <Navbar />
       <main className="pt-[58px] md:pt-[65px]">
         <Outlet />
@@ -62,5 +49,5 @@ function RootLayout() {
         </>
       )}
     </div>
-  )
+  );
 }

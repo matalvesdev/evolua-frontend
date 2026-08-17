@@ -36,7 +36,7 @@ export function useGenerateReport() {
   return useMutation<
     GenerateReportResponse,
     Error,
-    { transcription: string; template: ReportTemplate; patientName?: string }
+    { patientId: string; transcription: string; template: ReportTemplate }
   >({
     mutationFn: (body) =>
       api.post<GenerateReportResponse>('/api/ai/reports/generate', body),

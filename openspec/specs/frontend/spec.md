@@ -6,7 +6,6 @@
 - `/dashboard/sessoes` — Session management + clinical reports
 - `/dashboard/agenda` — Appointment calendar
 - `/dashboard/biblioteca` — Clinical library with AI RAG
-- `/dashboard/marketing` — Content generation dashboard
 - `/dashboard/exercicios` — Exercise library with WhatsApp sharing
 - `/dashboard/analytics` — Business analytics
 - `/billing` — Subscription management (AbacatePay + Stripe)

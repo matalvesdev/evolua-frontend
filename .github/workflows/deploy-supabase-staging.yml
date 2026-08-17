@@ -1,0 +1,40 @@
+name: Deploy Supabase migrations (staging)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Digite "STAGING" para confirmar a migration no ambiente de staging'
+        required: true
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-supabase-migrations-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: apply Supabase SQL migrations (staging)
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Validate branch and confirmation
+        run: |
+          if [ "${GITHUB_REF_NAME}" != "develop" ]; then
+            echo "::error::Migrations de staging só podem ser disparadas a partir de develop."
+            exit 1
+          fi
+          if [ "${{ github.event.inputs.confirm }}" != "STAGING" ]; then
+            echo "::error::Confirmação inválida. Digite exatamente 'STAGING'."
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+      - name: Install psql
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Apply pending migrations
+        env:
+          SUPABASE_DB_URL: ${{ secrets.DIRECT_URL }}
+        run: bash scripts/apply-supabase-migrations.sh

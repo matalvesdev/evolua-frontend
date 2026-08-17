@@ -12,6 +12,7 @@ import {
   REPORT_TEMPLATES,
   type ReportTemplate,
 } from '@/hooks/use-report-generation'
+import { type ReportType } from '@/hooks/use-reports'
 import { uploadAudioBlob } from '@/lib/storage'
 import { useProfile } from '@/hooks/use-profile'
 import { useCreateReport } from '@/hooks/use-reports'
@@ -133,7 +134,7 @@ function SessaoPage() {
   // ── Inicia gravação real ─────────────────────────────────────────────────
   async function startRecording() {
     setErrorMsg(null)
-    if (!patientId) {
+    if (!effectivePatientId) {
       setErrorMsg('Selecione um paciente antes de iniciar.')
       return
     }
@@ -208,7 +209,7 @@ function SessaoPage() {
 
     try {
       // 1. Upload pro Supabase Storage
-      const path = await uploadAudioBlob(effectivePatientId, blob, 'webm')
+      const path = await uploadAudioBlob(effectivePatientId, blob)
 
       // 2. Cria AudioSession no backend
       const created = await createSession.mutateAsync({
@@ -231,10 +232,10 @@ function SessaoPage() {
   useEffect(() => {
     if (phase !== 'processing') return
     if (!transcriptionPoll.data) return
-    const { transcriptionStatus, transcription } = transcriptionPoll.data
+    const { transcriptionStatus, transcription, transcriptionError } = transcriptionPoll.data
     if (transcriptionStatus === 'failed') {
       startTransition(() => {
-        setErrorMsg('Falha na transcrição. Tente novamente.')
+        setErrorMsg(transcriptionError || 'Falha na transcrição. Tente novamente.')
         setPhase('pre')
       })
       return
@@ -244,9 +245,9 @@ function SessaoPage() {
 
     generateReport.mutate(
       {
+        patientId: effectivePatientId,
         transcription,
         template: selectedTemplate,
-        patientName: patient?.name,
       },
       {
         onSuccess: (data) => {
@@ -268,7 +269,7 @@ function SessaoPage() {
 
   const [signing, setSigning] = useState(false)
 
-  const TEMPLATE_TO_TYPE: Record<ReportTemplate, string> = {
+  const TEMPLATE_TO_TYPE: Record<ReportTemplate, ReportType> = {
     'resumo': 'progress',
     'evolucao-mensal': 'evolution',
     'avaliacao-inicial': 'evaluation',
@@ -287,7 +288,7 @@ function SessaoPage() {
         patientName,
         therapistName: profile?.name ?? 'Terapeuta',
         therapistCrfa: profile?.crfa ?? '',
-        type: TEMPLATE_TO_TYPE[selectedTemplate] as any,
+        type: TEMPLATE_TO_TYPE[selectedTemplate],
         title: `${REPORT_TEMPLATES.find(t => t.id === selectedTemplate)?.label ?? 'Relatório'} — ${patientName} — ${today}`,
         content: draft,
       })
