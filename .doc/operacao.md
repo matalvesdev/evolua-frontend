@@ -43,7 +43,7 @@ Especificação → Implementação → Review → Teste → Deploy → Monitora
 - **Database SQL**: Supabase migrations SQL (ledger script, `DIRECT_URL`)
 - **Staging Supabase**: projeto isolado, schema clonado sem dados clínicos; migrations incrementais fail-closed via ledger
 - **Staging web**: preview Vercel em `develop`, protegido por automation bypass exclusivo do E2E; preflight exige `API_URL` de staging e impede auditoria contra backend ausente
-- **Staging backend**: Blueprint Render em `backend-core/render.staging.yaml`; preflight fail-closed exige hooks e URLs dos serviços provisionados
+- **Staging backend**: Blueprint Render em `backend-core/render.staging.yaml`; preflight fail-closed exige hooks e URLs dos serviços provisionados. O Blueprint usa `NODE_ENV=staging`, que aplica os controles de segurança de produção. `CORS_ORIGINS` e `FRONTEND_URL` devem apontar para um domínio permanente de staging — previews Vercel variáveis não devem ampliar CORS por wildcard.
 - **CI gates**: Build → TypeCheck → Lint (ordem obrigatória, ver anti-patterns)
 - **CI required check**: `ci-gate` (aceita success/skipped, falha em failure/cancelled)
 - **Proteção de branches**: preparada para exigir apenas `ci-gate`, mas bloqueada pelo plano GitHub dos repositórios privados
