@@ -5,9 +5,13 @@ on:
     - cron: '0 3 * * 0'   # Domingo 03:00 UTC
   workflow_dispatch:       # Trigger manual
 
+permissions:
+  contents: read
+
 jobs:
   backup:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v7
 
@@ -20,10 +24,12 @@ jobs:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
       - name: Upload backup to S3
-        uses: shallwefootball/s3-upload-action@v1
+        uses: aws-actions/configure-aws-credentials@v6.2.3
         with:
-          aws_key_id: ${{ secrets.PG_BACKUP_AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.PG_BACKUP_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.PG_BACKUP_BUCKET }}
-          source_dir: backups/postgres/
-          destination_dir: postgres-backup/
+          aws-access-key-id: ${{ secrets.PG_BACKUP_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.PG_BACKUP_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.PG_BACKUP_REGION }}
+      - name: Copy backup to S3
+        env:
+          BACKUP_BUCKET: ${{ secrets.PG_BACKUP_BUCKET }}
+        run: aws s3 cp backups/postgres/ "s3://${BACKUP_BUCKET}/postgres-backup/" --recursive --only-show-errors

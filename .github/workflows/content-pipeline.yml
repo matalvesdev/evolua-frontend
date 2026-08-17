@@ -38,6 +38,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
 concurrency:
   group: content-pipeline
   cancel-in-progress: false

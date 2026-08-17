@@ -95,7 +95,7 @@ async function main() {
   const limit = 1000
   while (true) {
     const subsRes = await fetchWithRetry(
-      `${SUPABASE_URL}/rest/v1/newsletter_subscribers?select=email,name&subscribed_at=not.is.null&unsubscribed_at=is.null&limit=${limit}&offset=${offset}`,
+      `${SUPABASE_URL}/rest/v1/newsletter_subscribers?select=email,name,unsubscribe_token&subscribed_at=not.is.null&unsubscribed_at=is.null&limit=${limit}&offset=${offset}`,
       { headers: supabaseHeaders }
     )
     if (!subsRes.ok) throw new Error(`Failed to fetch subscribers: ${subsRes.status}`)
@@ -114,6 +114,10 @@ async function main() {
     console.log('No subscribers — skipping')
     return
   }
+  const subscribersWithoutToken = subscribers.filter(sub => !sub.unsubscribe_token).length
+  if (subscribersWithoutToken > 0) {
+    throw new Error(`${subscribersWithoutToken} subscriber(s) are missing an unsubscribe token`)
+  }
 
   console.log(`Sending newsletter to ${subscribers.length} subscribers`)
   console.log(`Post: "${post.title}" (${post.slug})`)
@@ -129,7 +133,7 @@ async function main() {
   const sentEmails = new Set()
   for (const sub of subscribers) {
     if (sentEmails.has(sub.email)) continue // defensive: never re-send in same run
-    const unsubscribeUrl = `https://useevolua.com.br/newsletter/cancelar?email=${encodeURIComponent(sub.email)}`
+    const unsubscribeUrl = `https://useevolua.com.br/newsletter/cancelar?token=${encodeURIComponent(sub.unsubscribe_token)}`
     const htmlBody = `
       <div style="max-width:600px;margin:0 auto;font-family:sans-serif">
         <h1 style="color:#6C63FF">Fono em Foco</h1>
