@@ -245,9 +245,9 @@ function SessaoPage() {
 
     generateReport.mutate(
       {
+        patientId: effectivePatientId,
         transcription,
         template: selectedTemplate,
-        patientName: patient?.name,
       },
       {
         onSuccess: (data) => {

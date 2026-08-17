@@ -157,15 +157,15 @@ function GenerateReportModal({ onClose, onSaved }: { onClose: () => void; onSave
   const [draft, setDraft] = useState('')
 
   const patient = patients.find((p) => p.id === patientId)
-  const canGenerate = transcription.trim().length >= 10 && !generate.isPending
+  const canGenerate = Boolean(patientId) && transcription.trim().length >= 10 && !generate.isPending
   const canSave = Boolean(patientId) && draft.trim().length > 0 && !createReport.isPending
 
   async function handleGenerate() {
     if (!canGenerate) return
     const res = await generate.mutateAsync({
+      patientId,
       transcription: transcription.trim(),
       template,
-      patientName: patient?.name,
     })
     if (res.success && res.sections?.length) {
       setDraft(sectionsToText(res.sections, patient?.name))
