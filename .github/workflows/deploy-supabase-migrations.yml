@@ -7,10 +7,6 @@ on:
         description: 'Digite "DEPLOY" para confirmar'
         required: true
         default: ''
-  push:
-    branches: [main]
-    paths:
-      - 'supabase/migrations/**'
 
 permissions:
   contents: read
@@ -27,7 +23,6 @@ jobs:
       name: production
     steps:
       - name: Validate manual confirmation
-        if: github.event_name == 'workflow_dispatch'
         run: |
           if [ "${{ github.event.inputs.confirm }}" != "DEPLOY" ]; then
             echo "::error::Confirmação inválida. Digite exatamente 'DEPLOY'."
