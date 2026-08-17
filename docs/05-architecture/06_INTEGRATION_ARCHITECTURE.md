@@ -10,7 +10,7 @@ last_reviewed: 2026-08-14
 | Integração | Finalidade | Dados sensíveis | Falha/controle observado |
 | --- | --- | --- | --- |
 | Supabase | Auth, Postgres, Storage | alto | RLS/migrations; service role só server-side |
-| Evolution API | WhatsApp | alto conforme mensagem | gateway Go; HMAC configurável |
+| Evolution API | WhatsApp | alto conforme mensagem | gateway Go; HMAC no salto interno e CIDRs de origem obrigatórios em staging/produção |
 | Hugging Face/OpenRouter | IA | potencialmente muito alto | provider configurável; revisão humana necessária |
 | Resend/SMTP | email | contato e conteúdo | Resend primário, SMTP fallback |
 | AbacatePay/Stripe | billing | financeiro | secrets e webhooks configuráveis |

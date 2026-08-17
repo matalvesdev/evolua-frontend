@@ -10,12 +10,20 @@ last_reviewed: 2026-08-17
 ## Estado atual — verificado
 
 `User.role` é uma string livre com default `therapist` em
-`backend-core/prisma/schema.prisma`. Não há enum, guard ou uso server-side de
-papéis nas rotas Fastify. A API atualmente autentica a usuária e resolve o
-tenant, mas não diferencia permissões dentro da mesma clínica.
+`backend-core/prisma/schema.prisma`. O guard server-side
+`requireClinicAdministration` protege alterações de configurações, categorias
+financeiras, checkout e cancelamento de assinatura. Ele obtém `clinicId` e
+`role` da tabela `users`, nunca da claim do JWT. Em clínicas com uma única
+usuária, ela pode administrar o próprio workspace; em clínicas multiusuárias,
+somente `admin`/`owner` (case-insensitive) persistidos no banco têm esse
+privilégio.
 
-Consequência: papéis não devem ser considerados controles de acesso até que a
-matriz abaixo seja aprovada e implementada com guards, RLS e testes.
+Relatórios e prontuários persistentes usam `requireResourceOwnerOrClinicAdmin`
+para mutações: a autora pode alterar seu recurso; `admin`/`owner` pode atuar
+na clínica; recursos sem autora falham fechados para profissionais comuns em
+clínicas multiusuárias. Arquivamento de paciente e aprovação de relatório
+exigem administração. Os demais módulos clínicos ainda precisam do mesmo
+rollout gradual com testes multiusuário.
 
 ## Proposta — requer decisão de produto
 
