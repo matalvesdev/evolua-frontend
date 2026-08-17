@@ -1,6 +1,23 @@
 -- Persist onboarding progress atomically. PostgREST PATCH returns 204 even
 -- when no row matches, so PATCH-then-POST could report false success and lose
 -- completed steps under concurrent requests.
+-- Reconcile staging environments where the legacy baseline ledger was adopted
+-- before this Supabase-owned table existed.
+CREATE TABLE IF NOT EXISTS public.onboarding_progress (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  current_step text NOT NULL DEFAULT 'empresa',
+  completed_steps jsonb NOT NULL DEFAULT '[]'::jsonb,
+  data jsonb NOT NULL DEFAULT '{}'::jsonb,
+  completed boolean NOT NULL DEFAULT false,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (user_id)
+);
+
+CREATE INDEX IF NOT EXISTS onboarding_progress_user_idx
+  ON public.onboarding_progress (user_id);
+
 CREATE OR REPLACE FUNCTION public.advance_onboarding_progress(
   p_user_id uuid,
   p_step_id text,
