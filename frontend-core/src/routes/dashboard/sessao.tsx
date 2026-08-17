@@ -209,7 +209,7 @@ function SessaoPage() {
 
     try {
       // 1. Upload pro Supabase Storage
-      const path = await uploadAudioBlob(effectivePatientId, blob, 'webm')
+      const path = await uploadAudioBlob(effectivePatientId, blob)
 
       // 2. Cria AudioSession no backend
       const created = await createSession.mutateAsync({
