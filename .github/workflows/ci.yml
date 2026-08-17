@@ -219,9 +219,13 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/dependency-review-action@v5
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
-          fail-on-severity: moderate
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level moderate
 
   # ─── CI gate (required check) ────────────────────────────────────
   # Only this job should be set as required in branch protection rules.
