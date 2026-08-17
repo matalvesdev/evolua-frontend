@@ -1,5 +1,24 @@
 # Evolua V2 — AI-Native Organization
 
+> Documentação institucional: leia primeiro `docs/EVOLUA_MASTER_CONTEXT.md`, depois o domínio afetado em `docs/`. Código, migrations e configuração prevalecem sobre documentação quando houver conflito; registre comportamento possivelmente incorreto como bug, não como regra de produto.
+
+## Agent Quick Context
+
+- **Produto:** SaaS vertical para fluxo de fonoaudiologia; IA assiste e a profissional decide.
+- **Segurança:** dados de paciente, prontuário, áudio e transcrição são altamente sensíveis. Preservar tenant isolation; nunca usar ID/role enviado pelo cliente como autoridade.
+- **Antes de mudar:** ler spec/domínio, inspecionar implementação/testes, fazer diff mínimo, atualizar testes e docs proporcionais ao risco.
+- **Não inventar:** diagnóstico, protocolo terapêutico, regra profissional/regulatória, compliance, cliente, métrica ou provider configurado.
+
+| Necessidade | Ler |
+| --- | --- |
+| Contexto da empresa | `docs/EVOLUA_MASTER_CONTEXT.md` |
+| Produto | `docs/03-product/` |
+| Domínio | `docs/04-domain/` |
+| Arquitetura/dados | `docs/05-architecture/`, `docs/06-data/` |
+| Segurança/privacidade | `docs/07-security-privacy/` |
+| IA | `docs/08-ai/` e `docs/ai-evals/` |
+| Engenharia | `docs/16-engineering/` |
+
 ## Organizational Philosophy
 Evolua é uma organização AI-Native que usa **GEOS** (Growth, Education & Organizational System) como framework de crescimento.
 GEOS é um framework open-source local-first de agentes de IA para growth engineering — substitui o modelo anterior de skills/org FAANG por agentes executáveis com storage persistente, workflows declarativos e aprovação humana.
@@ -460,3 +479,6 @@ Use the skill tool to load a skill when a task matches its description.
 - ❌ E2E exigir `h1` em todas as telas — validar headings por papel/nome e estados funcionais; níveis `h1`/`h2` são responsabilidade da hierarquia semântica de cada layout.
 - ❌ Commitar storage state, traces ou screenshots E2E — `playwright/.auth/`, `test-results/` e `playwright-report*/` podem conter tokens e devem permanecer ignorados.
 - ❌ Definir pnpm em `packageManager` e também em `pnpm/action-setup` — versões duplicadas são rejeitadas pelo action; manter `packageManager` como fonte única.
+- ❌ Usar `raw_user_meta_data`/`user_metadata` em autorização ou RLS — o usuário pode editar esse campo; papéis devem vir de `app_metadata` (`auth.jwt() -> 'app_metadata'`) e a função deve permanecer `SECURITY INVOKER`.
+- ❌ Confiar só em RLS para tabelas públicas de projetos Supabase novos — declarar também os `GRANT` mínimos exigidos pelo Data API, sem conceder leitura de tabelas que contêm e-mails ou dados clínicos.
+- ❌ Link de descadastro contendo e-mail e `UPDATE` direto pelo cliente anon — usar token UUID opaco, resolver exclusivamente no backend com service role e nunca registrar e-mail/token nos logs.
