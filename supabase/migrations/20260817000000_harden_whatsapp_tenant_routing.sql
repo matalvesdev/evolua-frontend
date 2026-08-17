@@ -13,12 +13,22 @@ CREATE TABLE IF NOT EXISTS public.whatsapp_connections (
 CREATE INDEX IF NOT EXISTS whatsapp_connections_clinic_active_idx
   ON public.whatsapp_connections (clinic_id, is_active);
 
-ALTER TABLE public.leads ADD COLUMN IF NOT EXISTS clinic_id uuid;
-ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS leads_clinic_id_fkey;
-ALTER TABLE public.leads ADD CONSTRAINT leads_clinic_id_fkey
-  FOREIGN KEY (clinic_id) REFERENCES public.clinics(id) ON DELETE SET NULL;
-CREATE INDEX IF NOT EXISTS leads_clinic_created_idx
-  ON public.leads (clinic_id, created_at DESC);
+-- Some staging environments predate the optional lead-capture module. Do not
+-- prevent tenant isolation for WhatsApp from being deployed there; lead routing
+-- remains unavailable until that module's base table is installed.
+DO $$
+BEGIN
+  IF to_regclass('public.leads') IS NULL THEN
+    RAISE NOTICE 'Skipping leads tenant routing: public.leads is not installed';
+  ELSE
+    ALTER TABLE public.leads ADD COLUMN IF NOT EXISTS clinic_id uuid;
+    ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS leads_clinic_id_fkey;
+    ALTER TABLE public.leads ADD CONSTRAINT leads_clinic_id_fkey
+      FOREIGN KEY (clinic_id) REFERENCES public.clinics(id) ON DELETE SET NULL;
+    CREATE INDEX IF NOT EXISTS leads_clinic_created_idx
+      ON public.leads (clinic_id, created_at DESC);
+  END IF;
+END $$;
 
 -- NULL remains valid for legacy/outbound records, but every provider message ID
 -- may be recorded once only. This makes inbound handling race-safe.
