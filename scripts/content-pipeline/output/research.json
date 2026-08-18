@@ -1,35 +1,45 @@
 {
-  "topic": "marketing digital ético para fonoaudiólogas",
+  "topic": "Gestão de Clínica para Fonoaudiólogas no Brasil",
   "keywords": [
-    "marketing digital",
-    "fonoaudiologia ética",
-    "redes sociais",
-    "atendimento online",
-    "branding pessoal"
+    "gestão de consultório fonoaudiologia",
+    "software para clínica fonoaudiologia",
+    "marketing para fonoaudiólogas",
+    "precificação de sessões fonoaudiologia",
+    "agendamento online saúde",
+    "gestão financeira consultório",
+    "captação de pacientes fonoaudiologia",
+    "compliance LGPD saúde",
+    "fluxo de caixa clínica",
+    "telefonoaudiologia gestão"
   ],
-  "target_audience": "fonoaudiólogas e profissionais da saúde que desejam aprimorar sua presença online de forma ética",
+  "target_audience": "Fonoaudiólogas empreendedoras, donas de clínicas próprias ou em sociedade, recém-formadas que desejam abrir consultório e profissionais que migram de CLT para pessoa jurídica (PJ), majoritariamente mulheres entre 25 e 55 anos.",
   "pain_points": [
-    "dificuldade em atrair pacientes através das redes sociais",
-    "preocupação com a privacidade e ética na divulgação de serviços",
-    "falta de conhecimento sobre estratégias de marketing digital"
+    "Dificuldade em precificar atendimentos (convênios vs. particular) e entender custos fixos/variáveis.",
+    "Sobrecarga administrativa (agendamento, confirmação, prontuário, financeiro) tirando tempo do atendimento clínico.",
+    "Inadimplência e falta de controle de fluxo de caixa/indicadores financeiros (DRE, ponto de equilíbrio).",
+    "Dependência excessiva de convênios com baixos honorários e burocracia de glosas/autorizações.",
+    "Dificuldade em atrair e reter pacientes particulares (marketing ético segundo CFFa).",
+    "Gestão de equipe (secretárias, outras fonoaudiólogas) e delegação de tarefas.",
+    "Conformidade com LGPD (dados sensíveis de saúde) e normas do CFFa (Resolução 600/2023 sobre publicidade).",
+    "Implementação e gestão de Telefonoaudiologia de forma regulamentada e rentável."
   ],
   "data_points": [
-    "87% dos profissionais de saúde acreditam que a presença online é essencial para o crescimento da carreira",
-    "60% das fonoaudiólogas não têm uma estratégia definida de marketing digital"
+    "O Brasil possui mais de 55 mil fonoaudiólogos ativos (CFFa, dados aproximados 2023/2024), sendo a vasta maioria mulheres.",
+    "Segundo pesquisas de mercado (ex: Feegow, Doctoralia, SimDoctor), a taxa de no-show (faltas) em clínicas de fonoaudiologia gira em torno de 20-30% sem confirmação ativa.",
+    "A Resolução CFFa nº 600/2023 atualizou o Código de Ética permitindo anúncio de especialidades e uso de redes sociais com regras estritas (vedada a promessa de cura, fotos de 'antes/depois', sensacionalismo).",
+    "A Tabela CBHPM (referência para particular) e as tabelas de operadoras (Bradesco, SulAmérica, Unimed, Amil) apresentam defasagem histórica; muitas clínicas operam com honorários 40-60% abaixo do custo ideal calculado por hora cadeira.",
+    "O uso de PEP (Prontuário Eletrônico do Paciente) certificado SBIS/CFM é obrigatório para emissão de notas fiscais e validade jurídica, mas muitas ainda usam papel ou planilhas.",
+    "Crescimento de 300% na busca por 'fonoaudióloga particular' no Google nos últimos 3 anos (Google Trends Brasil), indicando migração do convênio para particular.",
+    "Custos fixos médios de um consultório simples (aluguel, condominio, energia, internet, software, contador) variam entre R$ 5.000 e R$ 15.000/mês nas capitais."
   ],
-  "competitors_coverage": "Concorrentes costumam cobrir o tema com dicas práticas de marketing digital, estratégias de engajamento em redes sociais e a importância da ética na comunicação com pacientes.",
   "angle_suggestions": [
-    "Como construir uma marca pessoal autêntica e ética nas redes sociais",
-    "Estratégias de marketing digital que respeitam a privacidade do paciente"
-  ],
-  "faq": [
-    {
-      "q": "O que é marketing digital ético para fonoaudiólogas?",
-      "a": "É um conjunto de práticas de marketing que visa promover serviços de fonoaudiologia de maneira transparente e respeitosa, priorizando a ética e o bem-estar do paciente."
-    },
-    {
-      "q": "Como posso atrair mais pacientes utilizando marketing digital?",
-      "a": "Utilizando estratégias de conteúdo informativo, como blogs e vídeos, além de criar uma presença ativa nas redes sociais, sempre respeitando as diretrizes éticas."
-    }
+    "Da Clínica ao Negócio: Passo a passo para estruturar a PJ (Simples Nacional vs. Lucro Presumido), calcular 'Hora Cadeira' e formar preço de venda ético e lucrativo.",
+    "Automação Ética: Como usar WhatsApp Business API, agendamento online e lembretes automáticos para reduzir no-show em 50% sem ferir o Código de Ética.",
+    "Marketing de Autoridade no Instagram/TikTok para Fono: Estratégias de conteúdo educativo (educação em saúde) que convertem seguidores em pacientes particulares respeitando a Res. 600/2023.",
+    "Gestão Financeira Visual: Dashboard simples (Planilha/Notion/Software) para acompanhar MRR (Receita Recorrente Mensal), Churn de pacientes, Ticket Médio e CAC (Custo de Aquisição de Cliente).",
+    "Desmame de Convênios: Estratégia de transição segura de 12 meses para reduzir dependência de operadoras de baixo reembolso e aumentar a fatia particular/convênios de melhor pagamento.",
+    "Contratação e Carreira: Modelo de contratação (CLT vs. PJ/Parceria) para fonoaudiólogas associadas, comissão justa, metas de ocupação de agenda e plano de carreira para reter talentos.",
+    "LGPD na Prática: Checklist de adequação para clínicas pequenas (termo de consentimento, política de privacidade no site, backup criptografado, treinamento de secretária).",
+    "Telefonoaudiologia Híbrida: Protocolos de anamnese, conduta e cobrança para atendimento remoto regulamentado (Res. CFFa 580/2020 e atualizações), integrando ao presencial."
   ]
 }
