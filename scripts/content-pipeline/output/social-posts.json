@@ -1,64 +1,63 @@
 {
   "linkedin": {
-    "post": "Gerir uma clínica de fonoaudiologia em 2026 exige muito mais do que competência clínica: exige visão de negócio. 🎯\n\nAinda vejo muitas fonoaudiólogas empreendedoras reféns do \"caos operacional\": agenda furada, precificação baseada no \"mercado\" (e não nos custos reais), ausência de métricas e riscos jurídicos com a LGPD.\n\nO ponto de virada não é trabalhar mais, é gerir melhor. No novo artigo, detalho os 4 pilares para sair do vermelho e escalar com ética:\n\n1️⃣ **Precificação por Hora Cadeira:** Pare de chutar valores. Calcule seu custo fixo/hora + margem desejada. É a única forma de garantir lucro real por atendimento.\n2️⃣ **Gestão de No-Show:** Falta não é azar, é processo falho. Confirmação ativa, lista de espera automatizada e política de cancelamento clara reduzem ociosidade em até 30%.\n3️⃣ **Marketing Ético (CFFA Res. 601):** Atraia pacientes certos com autoridade técnica, não promessas de cura. Conteúdo educativo constrói fila de espera qualificada.\n4️⃣ **LGPD como Ativo de Confiança:** Termos de consentimento claros, backup criptografado e DPO definido protegem seu maior ativo: a reputação.\n\n2026 será o ano da profissionalização do setor. Quem trata a clínica como empresa, lucra como empresária.\n\n🔗 Leia o guia completo no link da bio/banner.\n\n#FonoaudiologiaEmpreendedora #GestaoDeClinica #SaudeFinanceira #Fonoaudiologia #EmpreendedorismoNaSaude #LGPD #Precificacao #NoShow",
+    "post": "A tecnologia na Fonoaudiologia deixou de ser diferencial para virar pré-requisito de sobrevivência clínica em 2026. Mas a pressa em modernizar tem levado muitas colegas a armadilhas caras: prontuários que não atendem LGPD, assinaturas em dólar que explodem com a variação cambial e IAs de voz que geram retrabalho por falta de validação clínica.\n\nNo novo guia, separamos o joio do trigo em 3 pilares:\n\n1️⃣ Prontuário Eletrônico: Fuja de \"gratuitos\" que vendem dados. Exija criptografia ponta a ponta, termo de uso claro e backup no Brasil.\n2️⃣ Apps de Terapia: Priorize os que permitem exportar relatórios em PDF/CSV para o prontuário principal. Ecossistema fechado = retrabalho.\n3️⃣ IA para Voz: Ferramentas de análise acústica são poderosas, mas não substituem a escuta clínica. Use como *biomarcador auxiliar*, não como laudo automático.\n\nA conformidade não é burocracia, é proteção do seu ativo mais valioso: a confiança do paciente.\n\nQuero saber nos comentários: qual ferramenta te deu mais dor de cabeça em 2024/25 e por quê?",
     "hashtags": [
-      "#FonoaudiologiaEmpreendedora",
+      "#Fonoaudiologia2026",
+      "#SaudeDigital",
+      "#LGPDnaSaude",
+      "#ProntuarioEletronico",
+      "#IAnaSaude",
       "#GestaoDeClinica",
-      "#SaudeFinanceira",
-      "#Fonoaudiologia",
-      "#EmpreendedorismoNaSaude",
-      "#LGPD",
-      "#Precificacao",
-      "#NoShow"
+      "#Fonoaudióloga"
     ]
   },
   "instagram": {
     "carrossel_slides": [
       {
         "slide": 1,
-        "texto": "GESTÃO DE CLÍNICA DE FONO 2026\n\nDO CAOS AO CONTROLE FINANCEIRO 📉➡️📈\n\nChega de trabalhar muito e lucrar pouco. Swipe para ver os 4 pilares da virada de chave. 👉"
+        "texto": "TECNOLOGIA PARA FONO EM 2026\n\nO guia prático para não cair em ciladas (LGPD, Dólar & Retrabalho) 🛑📱"
       },
       {
         "slide": 2,
-        "texto": "PILAR 1: PRECIFICAÇÃO POR HORA CADEIRA ⏱️💰\n\nNão chute seu preço. CALCULE.\n\nFórmula: (Custos Fixos Mensais ÷ Horas Produtivas) + Variáveis + Margem de Lucro.\n\n❌ \"O mercado cobra X\"\n✅ \"Meu custo/hora é Y, meu preço é Z\"\n\nSaber seu número muda tudo."
+        "texto": "ARMADILHA 1: PRONTUÁRIO \"GRÁTIS\" 🆓\n\nSe você não paga pelo produto, VOCÊ é o produto. Dados de pacientes vendidos? Multa LGPD na certa.\n\n✅ Exija: Criptografia, servidor no Brasil, Termo de Consentimento integrado."
       },
       {
         "slide": 3,
-        "texto": "PILAR 2: ZERAR O NO-SHOT 🚫📅\n\nFalta não é azar, é FALHA DE PROCESSO.\n\n✅ Confirmação ativa (WhatsApp/Email) 48h + 2h antes.\n✅ Lista de espera automatizada (preenche buracos na hora).\n✅ Política de cancelamento clara no contrato.\n\nMeta: Ociosidade < 10%."
+        "texto": "ARMADILHA 2: ASSINATURA EM DÓLAR 💵\n\nCâmbio a R$ 5,50 hoje, R$ 6,20 amanhã. Seu custo fixo virou variável.\n\n✅ Busque: Ferramentas nacionais com suporte em PT-BR e cobrança em Reais."
       },
       {
         "slide": 4,
-        "texto": "PILAR 3: MARKETING ÉTICO E AUTORIDADE 🎓🤝\n\nCFFA Res. 601: Proibido prometer cura, usar \"antes/depois\" sensacionalista ou sensacionalismo.\n\n✅ Eduque o paciente (ex: \"Sinais de atraso de fala\").\n✅ Mostre bastidores humanizados.\n✅ Depoimentos com autorização por escrito.\n\nAutoridade atrai, ética fideliza."
+        "texto": "ARMADILHA 3: IA QUE SUBSTITUI O CLÍNICO 🤖\n\nApp dá laudo automático de voz? Perigo. A IA lê frequência, não contexto de vida.\n\n✅ Use IA como: Biomarcador auxiliar + Triagem + Evolução quantitativa."
       },
       {
         "slide": 5,
-        "texto": "PILAR 4: LGPD COMO DIFERENCIAL COMPETITIVO 🔒🛡️\n\nProntuário digital seguro ≠ Planilha no Drive.\n\n✅ Termo de Consentimento Livre e Esclarecido (digital).\n✅ Criptografia de ponta a ponta.\n✅ Nomeie um DPO (pode ser você com capacitação).\n\nSegurança de dados = Confiança = Indicação."
+        "texto": "CHECKLIST DA COMPRA SEGURA ✅\n\n1. LGPD nativa (não \"em adaptação\")\n2. Integração via API (zera retrabalho)\n3. Suporte humano no Brasil\n4. Trial real (não demo gravada)\n\n👇 Link do Guia Completo na Bio!"
       }
     ],
-    "caption": "A transição de 'fono que atende' para 'empresária da saúde' dá frio na barriga, mas é o único caminho para sustentabilidade em 2026. 🌱\n\nNão precisa implementar tudo hoje. Escolha UM pilar para começar esta semana.\n\nQual é o seu maior gargalo hoje? Comenta aqui: 1-Preço, 2-Faltas, 3-Marketing, 4-LGPD. 👇\n\n📖 Artigo completo no link da bio!\n\nSalve este carrossel para consultar na hora de planejar o mês. 📌\n\n#fonoaudiologia #fonoempreendedora #gestaoesaude #clinicafona #precificacaofono #noshow #marketingetico #lgpdnahealth #empreendedorismofeminino #donadeclinica",
+    "caption": "Amigas fonos, vamos falar sério? 👩‍⚕️💻\n\nEu sei que a agenda tá cheia, a fila de espera não para e a última coisa que você quer é perder hora configurando software que não fala a sua língua — nem a do CFP/CREFONO.\n\nPor isso montei o **Guia Atualizado 2026: Tecnologia para Fonoaudiólogas**. Não é lista de \"melhores apps\", é **critério de decisão**.\n\n🎯 O que você leva:\n→ Como validar LGPD *antes* de assinar contrato\n→ Planilha de custo real (BRL vs USD) ao ano\n→ Lista de IAs de voz validadas por literatura\n→ Perguntas que o vendedor *odeia* que você faça\n\nSalva esse carrossel 📌 para consultar na hora da renovação de contratos.\n\nComenta aqui: **Qual ferramenta você usa hoje e daria nota 10?** Bora trocar indicação de verdade nos comentários! 👇\n\n#fonoaudiologia #fonoaudiologa #tecnologianasaude #lgpd #prontuarioeletronico #ia #inteligenciaartificial #gestaoesaude #consultoriointeligente #fono2026 #carreiraemfono #dicasdefono",
     "hashtags": [
       "#fonoaudiologia",
-      "#fonoempreendedora",
+      "#fonoaudiologa",
+      "#tecnologianasaude",
+      "#lgpd",
+      "#prontuarioeletronico",
+      "#ia",
+      "#inteligenciaartificial",
       "#gestaoesaude",
-      "#clinicafona",
-      "#precificacaofono",
-      "#noshow",
-      "#marketingetico",
-      "#lgpdnahealth",
-      "#empreendedorismofeminino",
-      "#donadeclinica"
+      "#consultoriointeligente",
+      "#fono2026"
     ]
   },
   "threads": {
     "tweets": [
-      "Thread: Como transformar sua clínica de fono no caos financeiro em negócio lucrativo em 2026. 🧵👇\n\n1/5\nA maioria de nós sai da faculdade sabendo avaliar disfagia, motricidade oral, voz. Zero aulas sobre: fluxo de caixa, CAC, LTV, hora cadeira, LGPD. Resultado? Clínica lotada, conta no vermelho.",
-      "2/5\nPILAR 1: PRECIFICAÇÃO POR HORA CADEIRA ⏱️\nPare de copiar o preço da concorrente. Ela tem outro aluguel, outra folha, outro custo de material.\n\nCalcule: (Custos Fixos Totais / Horas Produtivas Reais) = Custo/Hora.\nAdicione sua margem. Pronto. Esse é seu piso inegociável.",
-      "3/5\nPILAR 2: NO-SHOT É VAZAMENTO DE DINHEIRO 💸\nUma agenda com 20% de furo = 20% de prejuízo direto.\nSolução não é \"ligar pra confirmar\". É SISTEMA:\n- Automação 48h + 2h (WhatsApp API).\n- Lista de espera ativa (quem cancela, avisa o próximo na fila automaticamente).\n- Contrato com política de aviso prévio (24h/48h).",
-      "4/5\nPILAR 3: MARKETING ÉTICO (CFFA Res. 601) 🎓\nNão pode: \"Curo gagueira em 10 sessões\", fotos de \"antes/depois\" de paciente, sorteio de avaliação.\nPode (e deve): Educar. \"Seu filho não aponta aos 12 meses?\". Mostrar bastidores. Depoimentos COM autorização escrita. Autoridade técnica vende mais que promessa.",
-      "5/5\nPILAR 4: LGPD NÃO É BUROCRACIA, É ATIVO 🔒\nProntuário no Google Drive pessoal? Risco altíssimo.\nInvista em software com criptografia, assinatura digital de termo de consentimento e backup automático.\nPaciente confia dados sensíveis (voz, audição, desenvolvimento). Vazar isso fecha sua porta. Fim da thread. Leia o artigo completo no blog! 🔗"
+      "1/5 A tecnologia na Fono virou commodity. Todo mundo tem app, prontuário, IA. Mas em 2026, a diferença entre uma clínica escalável e um caos operacional não é *ter* ferramenta, é *escolher* a certa. Thread sobre as 3 armadilhas que vi derrubarem colegas este ano. 🧵👇",
+      "2/5 🪤 ARMADILHA DO \"GRÁTIS\" (LGPD)\nProntuário grátis? App de terapia sem custo? Leia os Termos. Muitos monetizam vendendo dados anonimizados (ou não) para big pharma/convênios. Em 2026, a ANPD multa o *controlador* (você).\nRegra de ouro: Se não tem DPO nomeado e servidor no BR, não assina.",
+      "3/5 💸 ARMADILHA DO DÓLAR\nAssinou uma IA de voz gringa por $29/mês? Com IOF + spread + variação cambial, isso vira R$ 200+ instáveis no seu fluxo de caixa.\nFerramentas nacionais (como Vocalize, FonoApp, Dr. Consulta APIs) cobram em BRL, emitem NFe e têm suporte no fuso horário de Brasília.",
+      "4/5 🤖 ARMADILHA DA IA \"MÉDICA\"\nApps que dão \"laudo automático de disfonia\" baseados só em fundamental frequency e jitter.\nPerigo: Voz é biopsicossocial. IA não ouve o medo da paciente de perder o emprego, não vê o refluxo não tratado.\nUse IA para *medir* (obiettivo), você decide o *conduta* (subjetivo).",
+      "5/5 O GUIA 2026 SAIU 📄\nCompilei checklist de contratação, planilha de TCO (Custo Total de Propriedade) em Reais e matriz de decisão: Comprar vs Assinar vs Desenvolver.\nLink no perfil. Me conta: qual ferramenta te fez perder dinheiro/tempo em 2024? Vamos montar uma lista negra colaborativa nos replies 👇"
     ]
   },
   "x": {
-    "post": "Clínica de fono lotada mas conta no vermelho? 📉\nO erro não é clínico, é gestão.\n2026: Hora Cadeira (precificação real), No-Show <10% (automação), Marketing Ético (autoridade), LGPD (confiança).\nTrate sua clínica como negócio. Lucro é consequência. 💼🎯 #FonoEmpreendedora #GestaoSaude"
+    "post": "Fono em 2026: Prontuário grátis vende seus dados (LGPD), IA gringa explode custo em dólar (IOF/Câmbio) e app de laudo automático te processa por erro clínico. Pare de testar, comece a selecionar. Guia de decisão 2026 na bio. 🛡️🇧🇷 #Fonoaudiologia #HealthTech #LGPD"
   }
 }

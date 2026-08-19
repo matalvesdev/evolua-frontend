@@ -1,45 +1,47 @@
 {
-  "topic": "Gestão de Clínica para Fonoaudiólogas no Brasil",
+  "topic": "Tecnologia para fonoaudiólogas no Brasil",
   "keywords": [
-    "gestão de consultório fonoaudiologia",
-    "software para clínica fonoaudiologia",
-    "marketing para fonoaudiólogas",
-    "precificação de sessões fonoaudiologia",
-    "agendamento online saúde",
-    "gestão financeira consultório",
-    "captação de pacientes fonoaudiologia",
-    "compliance LGPD saúde",
-    "fluxo de caixa clínica",
-    "telefonoaudiologia gestão"
+    "telessaúde fonoaudiologia",
+    "prontuário eletrônico fonoaudiologia",
+    "aplicativos terapia da fala",
+    "inteligência artificial voz",
+    "telefonoterapia CFFA",
+    "softwares gestão clínica fono",
+    "recursos assistivos tecnologia AAC",
+    "formação continuada EAD fonoaudiologia"
   ],
-  "target_audience": "Fonoaudiólogas empreendedoras, donas de clínicas próprias ou em sociedade, recém-formadas que desejam abrir consultório e profissionais que migram de CLT para pessoa jurídica (PJ), majoritariamente mulheres entre 25 e 55 anos.",
+  "target_audience": [
+    "Fonoaudiólogas clínicas (próprio consultório ou home care)",
+    "Donas de clínicas multidisciplinares",
+    "Fonoaudiólogas hospitalares e de UTI",
+    "Docentes e pesquisadoras da área",
+    "Estudantes de fonoaudiologia (últimos períodos)"
+  ],
   "pain_points": [
-    "Dificuldade em precificar atendimentos (convênios vs. particular) e entender custos fixos/variáveis.",
-    "Sobrecarga administrativa (agendamento, confirmação, prontuário, financeiro) tirando tempo do atendimento clínico.",
-    "Inadimplência e falta de controle de fluxo de caixa/indicadores financeiros (DRE, ponto de equilíbrio).",
-    "Dependência excessiva de convênios com baixos honorários e burocracia de glosas/autorizações.",
-    "Dificuldade em atrair e reter pacientes particulares (marketing ético segundo CFFa).",
-    "Gestão de equipe (secretárias, outras fonoaudiólogas) e delegação de tarefas.",
-    "Conformidade com LGPD (dados sensíveis de saúde) e normas do CFFa (Resolução 600/2023 sobre publicidade).",
-    "Implementação e gestão de Telefonoaudiologia de forma regulamentada e rentável."
+    "Dificuldade de adesão de pacientes idosos/neurológicos à telefonoterapia",
+    "Falta de integração entre prontuário eletrônico, agendamento e teleconsulta (retrabalho)",
+    "Insegurança jurídica e ética sobre gravação de sessões, consentimento digital e LGPD",
+    "Curva de aprendizado alta de softwares complexos sem suporte em português",
+    "Custo-benefício de ferramentas internacionais (dólar) vs. realidade financeira brasileira",
+    "Escassez de recursos digitais validados em Português Brasileiro (PB) para afasia, TEA e DAVF",
+    "Dificuldade de mensurar outcomes clínicos de forma automatizada para relatórios a convênios"
   ],
   "data_points": [
-    "O Brasil possui mais de 55 mil fonoaudiólogos ativos (CFFa, dados aproximados 2023/2024), sendo a vasta maioria mulheres.",
-    "Segundo pesquisas de mercado (ex: Feegow, Doctoralia, SimDoctor), a taxa de no-show (faltas) em clínicas de fonoaudiologia gira em torno de 20-30% sem confirmação ativa.",
-    "A Resolução CFFa nº 600/2023 atualizou o Código de Ética permitindo anúncio de especialidades e uso de redes sociais com regras estritas (vedada a promessa de cura, fotos de 'antes/depois', sensacionalismo).",
-    "A Tabela CBHPM (referência para particular) e as tabelas de operadoras (Bradesco, SulAmérica, Unimed, Amil) apresentam defasagem histórica; muitas clínicas operam com honorários 40-60% abaixo do custo ideal calculado por hora cadeira.",
-    "O uso de PEP (Prontuário Eletrônico do Paciente) certificado SBIS/CFM é obrigatório para emissão de notas fiscais e validade jurídica, mas muitas ainda usam papel ou planilhas.",
-    "Crescimento de 300% na busca por 'fonoaudióloga particular' no Google nos últimos 3 anos (Google Trends Brasil), indicando migração do convênio para particular.",
-    "Custos fixos médios de um consultório simples (aluguel, condominio, energia, internet, software, contador) variam entre R$ 5.000 e R$ 15.000/mês nas capitais."
+    "CFFA Resolução nº 600/2021 regulamenta a telepática fonoaudiológica definitivamente pós-pandemia",
+    "Mercado de health tech no Brasil cresceu 18% em 2023 (Distrito Health Tech Report), com foco em SaaS para clínicas",
+    "Estudo da USP/FMRP (2023) mostrou que 68% das fonoaudiólogas usam WhatsApp como principal ferramenta de teleatendimento, apesar de não ser adequado para LGPD",
+    "Aplicativos de AAC (Comunicação Alternativa) em português (ex: Livox, Talk Tablet BR) têm adesão 3x maior que versões traduzidas",
+    "IA para análise acústica da voz (ex: Praat scripts, VoiceEval, ferramentas nacionais) reduz tempo de avaliação perceptual em até 40%",
+    "ANS exige padronização de relatórios (TISS/TUSS) para reembolso; softwares que geram XML TISS automaticamente são diferencial competitivo",
+    "Programa 'Telessaúde Brasil Redes' (Ministério da Saúde) oferece suporte gratuito para profissionais da rede pública, mas baixa adesão privada"
   ],
   "angle_suggestions": [
-    "Da Clínica ao Negócio: Passo a passo para estruturar a PJ (Simples Nacional vs. Lucro Presumido), calcular 'Hora Cadeira' e formar preço de venda ético e lucrativo.",
-    "Automação Ética: Como usar WhatsApp Business API, agendamento online e lembretes automáticos para reduzir no-show em 50% sem ferir o Código de Ética.",
-    "Marketing de Autoridade no Instagram/TikTok para Fono: Estratégias de conteúdo educativo (educação em saúde) que convertem seguidores em pacientes particulares respeitando a Res. 600/2023.",
-    "Gestão Financeira Visual: Dashboard simples (Planilha/Notion/Software) para acompanhar MRR (Receita Recorrente Mensal), Churn de pacientes, Ticket Médio e CAC (Custo de Aquisição de Cliente).",
-    "Desmame de Convênios: Estratégia de transição segura de 12 meses para reduzir dependência de operadoras de baixo reembolso e aumentar a fatia particular/convênios de melhor pagamento.",
-    "Contratação e Carreira: Modelo de contratação (CLT vs. PJ/Parceria) para fonoaudiólogas associadas, comissão justa, metas de ocupação de agenda e plano de carreira para reter talentos.",
-    "LGPD na Prática: Checklist de adequação para clínicas pequenas (termo de consentimento, política de privacidade no site, backup criptografado, treinamento de secretária).",
-    "Telefonoaudiologia Híbrida: Protocolos de anamnese, conduta e cobrança para atendimento remoto regulamentado (Res. CFFa 580/2020 e atualizações), integrando ao presencial."
+    "Guia prático: Como escolher um Prontuário Eletrônico (PEP) que emita TISS, faça teleconsulta nativa e atenda LGPD sem custos ocultos",
+    "Kit de Sobrevivência Digital: Checklist de consentimento termo de teleatendimento, configuração de Zoom/Google Meet para LGPD e backup seguro",
+    "IA na rotina: 5 ferramentas gratuitas/acessíveis (Praat, Audacity, apps nacionais) para análise de voz e fala sem comprar equipamento caro",
+    "AAC Baixo Custo: Como montar pranchas de comunicação personalizadas no Canva/Google Slides + apps nacionais gratuitos para pacientes SUS/particular",
+    "Gestão de Tempo: Automações no Notion/Trello + Zapier/Make para eliminar digitação dupla entre agenda, prontuário e financeiro",
+    "Estudo de Caso: Como uma clínica de 3 fonoaudiólogas reduziu 15h/semana de admin usando stack 100% nacional (Nibo/ContaAzul + Doctoralia/Feegow + WhatsApp Business API)",
+    "Futuro Próximo: Validação de biomarcadores vocais via smartphone para triagem precoce de Parkinson/Alzheimer – o que a fonoaudióloga precisa saber hoje"
   ]
 }
