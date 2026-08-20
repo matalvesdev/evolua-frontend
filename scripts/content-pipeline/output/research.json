@@ -1,47 +1,42 @@
 {
-  "topic": "Tecnologia para fonoaudiólogas no Brasil",
+  "topic": "Clínica para fonoaudiólogas no Brasil: gestão, estrutura e crescimento profissional",
   "keywords": [
-    "telessaúde fonoaudiologia",
-    "prontuário eletrônico fonoaudiologia",
-    "aplicativos terapia da fala",
-    "inteligência artificial voz",
-    "telefonoterapia CFFA",
-    "softwares gestão clínica fono",
-    "recursos assistivos tecnologia AAC",
-    "formação continuada EAD fonoaudiologia"
+    "abertura de clínica fonoaudiologia",
+    "gestão de consultório fonoaudiologia",
+    "marketing para fonoaudiólogas",
+    "precificação sessões fonoaudiologia",
+    "documentação clínica CFFA",
+    "equipamentos consultório fonoaudiologia",
+    "telefonoaudiologia regulamentação",
+    "plano de carreira fonoaudióloga empreendedora"
   ],
-  "target_audience": [
-    "Fonoaudiólogas clínicas (próprio consultório ou home care)",
-    "Donas de clínicas multidisciplinares",
-    "Fonoaudiólogas hospitalares e de UTI",
-    "Docentes e pesquisadoras da área",
-    "Estudantes de fonoaudiologia (últimos períodos)"
-  ],
+  "target_audience": "Fonoaudiólogas brasileiras (recém-formadas ou experientes) que desejam abrir, estruturar ou escalar clínica/consultório próprio, incluindo profissionais que atuam em home care, teleatendimento ou espaços compartilhados (coworking de saúde).",
   "pain_points": [
-    "Dificuldade de adesão de pacientes idosos/neurológicos à telefonoterapia",
-    "Falta de integração entre prontuário eletrônico, agendamento e teleconsulta (retrabalho)",
-    "Insegurança jurídica e ética sobre gravação de sessões, consentimento digital e LGPD",
-    "Curva de aprendizado alta de softwares complexos sem suporte em português",
-    "Custo-benefício de ferramentas internacionais (dólar) vs. realidade financeira brasileira",
-    "Escassez de recursos digitais validados em Português Brasileiro (PB) para afasia, TEA e DAVF",
-    "Dificuldade de mensurar outcomes clínicos de forma automatizada para relatórios a convênios"
+    "Insegurança jurídica e burocrática para abertura de CNPJ (MEI vs. LTDA vs. Simples Nacional) e alvarás sanitários (VISA/ANVISA).",
+    "Dificuldade em precificar atendimentos (particular vs. convênio) sem subir preços ou desvalorizar a profissão.",
+    "Gestão de agenda, prontuário eletrônico (LGPD) e fluxo de caixa sem formação em administração.",
+    "Captação e fidelização de pacientes sem depender apenas de indicação 'boca a boca' ou convênios com baixos honorários.",
+    "Isolamento profissional e falta de mentoria para decisões estratégicas (contratação, expansão, nichos).",
+    "Conformidade com Resoluções CFFa (publicidade ética, teleatendimento, prontuário, responsabilidade técnica).",
+    "Burnout por acúmulo de funções clínicas + administrativas + marketing."
   ],
   "data_points": [
-    "CFFA Resolução nº 600/2021 regulamenta a telepática fonoaudiológica definitivamente pós-pandemia",
-    "Mercado de health tech no Brasil cresceu 18% em 2023 (Distrito Health Tech Report), com foco em SaaS para clínicas",
-    "Estudo da USP/FMRP (2023) mostrou que 68% das fonoaudiólogas usam WhatsApp como principal ferramenta de teleatendimento, apesar de não ser adequado para LGPD",
-    "Aplicativos de AAC (Comunicação Alternativa) em português (ex: Livox, Talk Tablet BR) têm adesão 3x maior que versões traduzidas",
-    "IA para análise acústica da voz (ex: Praat scripts, VoiceEval, ferramentas nacionais) reduz tempo de avaliação perceptual em até 40%",
-    "ANS exige padronização de relatórios (TISS/TUSS) para reembolso; softwares que geram XML TISS automaticamente são diferencial competitivo",
-    "Programa 'Telessaúde Brasil Redes' (Ministério da Saúde) oferece suporte gratuito para profissionais da rede pública, mas baixa adesão privada"
+    "Brasil tem ~60 mil fonoaudiólogos ativos (CFFa 2024); ~72% são mulheres; maioria atende em consultório próprio ou clínica multidisciplinar.",
+    "Tabela CBHPM 2024: honorários de convênio variam R$ 45–R$ 120/sessão; particular gira em R$ 150–R$ 350 (grandes capitais).",
+    "Crescimento de 38% no teleatendimento fonoaudiológico pós-2020 (Res. CFFa 612/2020 e 650/2022).",
+    "Custo médio inicial consultório simples: R$ 30–60 mil (aluguel, reforma, equipamentos, mobiliário, software, marketing).",
+    "Taxa de insucesso de clínicas de saúde no 1º ano: ~25% (SEBRAE); principais causas: fluxo de caixa e gestão.",
+    "LGPD: multas até 2% do faturamento (teto R$ 50 mi) por vazamento de prontuários; exigência de DPO para clínicas maiores.",
+    "Nichos em alta: disfagia neonatal/adulto, voz profissional, TEA/neurodivergência, envelhecimento ativo, saúde vocal corporativa."
   ],
   "angle_suggestions": [
-    "Guia prático: Como escolher um Prontuário Eletrônico (PEP) que emita TISS, faça teleconsulta nativa e atenda LGPD sem custos ocultos",
-    "Kit de Sobrevivência Digital: Checklist de consentimento termo de teleatendimento, configuração de Zoom/Google Meet para LGPD e backup seguro",
-    "IA na rotina: 5 ferramentas gratuitas/acessíveis (Praat, Audacity, apps nacionais) para análise de voz e fala sem comprar equipamento caro",
-    "AAC Baixo Custo: Como montar pranchas de comunicação personalizadas no Canva/Google Slides + apps nacionais gratuitos para pacientes SUS/particular",
-    "Gestão de Tempo: Automações no Notion/Trello + Zapier/Make para eliminar digitação dupla entre agenda, prontuário e financeiro",
-    "Estudo de Caso: Como uma clínica de 3 fonoaudiólogas reduziu 15h/semana de admin usando stack 100% nacional (Nibo/ContaAzul + Doctoralia/Feegow + WhatsApp Business API)",
-    "Futuro Próximo: Validação de biomarcadores vocais via smartphone para triagem precoce de Parkinson/Alzheimer – o que a fonoaudióloga precisa saber hoje"
+    "Roteiro prático 'Do zero à primeira consulta': checklist legal (CNPJ, VISA, CFFa, CRM), financeiro (precificação, fluxo de caixa) e operacional (software, agenda, contratos).",
+    "Estudo de caso: fonoaudióloga que migrou 100% convênio → 70% particular em 12 meses usando marketing de conteúdo ético + nicho (ex. voz trans, disfagia oncológica).",
+    "Comparativo ferramentas: prontuários eletrônicos (Doctoralia, Feegow, ZenFisio, iClinic) com foco em LGPD, teleconsulta integrada e custo-benefício para microclínicas.",
+    "Guia de 'Coworking de saúde vs. sala própria vs. home care vs. teleatendimento': custos, prós/contras, perfil de paciente e escalabilidade.",
+    "Série 'Finanças para fono': planilha de precificação baseada em custos fixos/variáveis + margem de lucro + reserva de férias/13º + impostos (Simples Nacional anexo III/V).",
+    "Entrevista com advogada especializada em direito sanitário e contadora de profissionais de saúde: armadilhas no contrato social, responsabilidade técnica, publicidade permitida (Res. CFFa 617/2023).",
+    "Checklist de equipamentos por especialidade (audiometria, videolaringoscopia, eletromiografia, materiais TEA, recursos voz) com fornecedores nacionais e opções de locação.",
+    "Estratégia de captação B2B: saúde vocal para call centers, escolas, rádios/TVs; programas de prevenção de disfagia em ILPIs; parcerias com pediatras/otorrinolaringologistas."
   ]
 }
