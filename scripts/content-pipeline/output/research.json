@@ -1,42 +1,45 @@
 {
-  "topic": "Clínica para fonoaudiólogas no Brasil: gestão, estrutura e crescimento profissional",
+  "topic": "Carreira para fonoaudiólogas no Brasil",
   "keywords": [
-    "abertura de clínica fonoaudiologia",
-    "gestão de consultório fonoaudiologia",
+    "mercado de trabalho fonoaudiologia",
+    "salário fonoaudióloga Brasil",
+    "especializações fonoaudiologia reconhecidas CFFa",
+    "empreendedorismo fonoaudiologia consultório próprio",
+    "concursos públicos fonoaudiologia",
     "marketing para fonoaudiólogas",
-    "precificação sessões fonoaudiologia",
-    "documentação clínica CFFA",
-    "equipamentos consultório fonoaudiologia",
-    "telefonoaudiologia regulamentação",
-    "plano de carreira fonoaudióloga empreendedora"
+    "burnout fonoaudiologia",
+    "carreira hospitalar fonoaudiologia",
+    "telefonoterapia regulamentação",
+    "networking fonoaudiologia"
   ],
-  "target_audience": "Fonoaudiólogas brasileiras (recém-formadas ou experientes) que desejam abrir, estruturar ou escalar clínica/consultório próprio, incluindo profissionais que atuam em home care, teleatendimento ou espaços compartilhados (coworking de saúde).",
+  "target_audience": "Fonoaudiólogas formadas, recém-formadas, estudantes do último ano e profissionais em transição de carreira no Brasil, majoritariamente mulheres (cerca de 95% da categoria), que buscam crescimento financeiro, reconhecimento profissional e equilíbrio entre vida pessoal e trabalho.",
   "pain_points": [
-    "Insegurança jurídica e burocrática para abertura de CNPJ (MEI vs. LTDA vs. Simples Nacional) e alvarás sanitários (VISA/ANVISA).",
-    "Dificuldade em precificar atendimentos (particular vs. convênio) sem subir preços ou desvalorizar a profissão.",
-    "Gestão de agenda, prontuário eletrônico (LGPD) e fluxo de caixa sem formação em administração.",
-    "Captação e fidelização de pacientes sem depender apenas de indicação 'boca a boca' ou convênios com baixos honorários.",
-    "Isolamento profissional e falta de mentoria para decisões estratégicas (contratação, expansão, nichos).",
-    "Conformidade com Resoluções CFFa (publicidade ética, teleatendimento, prontuário, responsabilidade técnica).",
-    "Burnout por acúmulo de funções clínicas + administrativas + marketing."
+    "Baixa remuneração inicial em contratos CLT (especialmente em escolas e clínicas conveniadas).",
+    "Dificuldade na gestão de consultório próprio (precificação, captação de pacientes, burocracia tributária).",
+    "Saturação do mercado em grandes centros urbanos vs. escassez de profissionais no interior.",
+    "Desgaste físico e emocional (burnout) por alta demanda, jornadas extensas e falta de suporte multiprofissional.",
+    "Desvalorização profissional por parte de outros profissionais de saúde e gestores (visão reducionista de 'professora de fala').",
+    "Complexidade burocrática para credenciamento em convênios e reajustes de tabela (TUSS/CBHPM).",
+    "Falta de mentoria estruturada para transição da clínica para áreas como saúde ocupacional, estética, voz profissional ou docência.",
+    "Insegurança jurídica na teleatendimento e uso de redes sociais para captação (Código de Ética CFFa)."
   ],
   "data_points": [
-    "Brasil tem ~60 mil fonoaudiólogos ativos (CFFa 2024); ~72% são mulheres; maioria atende em consultório próprio ou clínica multidisciplinar.",
-    "Tabela CBHPM 2024: honorários de convênio variam R$ 45–R$ 120/sessão; particular gira em R$ 150–R$ 350 (grandes capitais).",
-    "Crescimento de 38% no teleatendimento fonoaudiológico pós-2020 (Res. CFFa 612/2020 e 650/2022).",
-    "Custo médio inicial consultório simples: R$ 30–60 mil (aluguel, reforma, equipamentos, mobiliário, software, marketing).",
-    "Taxa de insucesso de clínicas de saúde no 1º ano: ~25% (SEBRAE); principais causas: fluxo de caixa e gestão.",
-    "LGPD: multas até 2% do faturamento (teto R$ 50 mi) por vazamento de prontuários; exigência de DPO para clínicas maiores.",
-    "Nichos em alta: disfagia neonatal/adulto, voz profissional, TEA/neurodivergência, envelhecimento ativo, saúde vocal corporativa."
+    "O CFFa registra mais de 60 mil fonoaudiólogos ativos no Brasil (dados 2023/2024), com crescimento médio de 5% ao ano no número de inscritos.",
+    "Piso salarial varia por estado/região; convenções coletivas (ex: Sindicato SP) estabelecem piso ~R$ 3.500 - R$ 4.500 para 30h/semana, mas vagas de entrada muitas vezes pagam R$ 2.500 - R$ 3.000.",
+    "Pesquisa Catho/Indeed (2023): Média salarial nacional gira em torno de R$ 3.800 - R$ 5.200; especialistas em Disfagia Hospitalar e Voz Profissional podem ultrapassar R$ 8.000 - R$ 12.000 em cargos sêniores.",
+    "Resolução CFFa nº 600/2021 regulamenta a Telefonoterapia, exigindo registro no CRFa de origem e do paciente, consentimento termo livre e esclarecido.",
+    "Áreas com maior déficit de profissionais (segundo Ministério da Saúde/CNES): Atenção Básica (NASF/eMulti), Saúde Indígena, Saúde do Trabalhador (SESMT) e UTI Neonatal/Pediátrica no interior.",
+    "Estudo ABF (Associação Brasileira de Fonoaudiologia) aponta que ~40% atuam em consultório privado, ~30% em saúde suplementar/convênios, ~20% no SUS e ~10% em educação/empresas.",
+    "Tributação: Simples Nacional (Anexo III ou V) costuma ser mais vantajoso para faturamento até R$ 4,8 mi/ano; alíquota efetiva inicial ~6% a 15,5% + ISS municipal."
   ],
   "angle_suggestions": [
-    "Roteiro prático 'Do zero à primeira consulta': checklist legal (CNPJ, VISA, CFFa, CRM), financeiro (precificação, fluxo de caixa) e operacional (software, agenda, contratos).",
-    "Estudo de caso: fonoaudióloga que migrou 100% convênio → 70% particular em 12 meses usando marketing de conteúdo ético + nicho (ex. voz trans, disfagia oncológica).",
-    "Comparativo ferramentas: prontuários eletrônicos (Doctoralia, Feegow, ZenFisio, iClinic) com foco em LGPD, teleconsulta integrada e custo-benefício para microclínicas.",
-    "Guia de 'Coworking de saúde vs. sala própria vs. home care vs. teleatendimento': custos, prós/contras, perfil de paciente e escalabilidade.",
-    "Série 'Finanças para fono': planilha de precificação baseada em custos fixos/variáveis + margem de lucro + reserva de férias/13º + impostos (Simples Nacional anexo III/V).",
-    "Entrevista com advogada especializada em direito sanitário e contadora de profissionais de saúde: armadilhas no contrato social, responsabilidade técnica, publicidade permitida (Res. CFFa 617/2023).",
-    "Checklist de equipamentos por especialidade (audiometria, videolaringoscopia, eletromiografia, materiais TEA, recursos voz) com fornecedores nacionais e opções de locação.",
-    "Estratégia de captação B2B: saúde vocal para call centers, escolas, rádios/TVs; programas de prevenção de disfagia em ILPIs; parcerias com pediatras/otorrinolaringologistas."
+    "Guia prático: 'Do zero ao consultório lotado' – passos burocráticos (CNPJ, alvará, CRFa), precificação baseada em custos/hora e funil de captação ética (Google Meu Negócio, indicação médica, Instagram educativo).",
+    "Radiografia das 5 especializações mais rentáveis e com menor saturação em 2024/2025 (ex: Fonoaudiologia do Trabalho, Estética Orofacial, Disfagia Neonatal, Voz Cantada/Profissional, Neurofuncional Adulto).",
+    "Estratégias de renda diversificada: CLT (estabilidade/benefícios) + Plantões hospitalares (hora extra valorizada) + Consultório particular (autonomia/teto salarial) + Produtos digitais (cursos para pais/professores, mentoria).",
+    "Como negociar honorários com convênios: análise de custos fixos/variáveis, uso da CBHPM/TUSS como referência, modelo de carta de descredenciamento estratégico e migração para particular/convênio reembolso.",
+    "Saúde mental e longevidade na carreira: ergonomia vocal/cervical, gestão de agenda para evitar 'buracos', supervisão clínica em grupo (intervisão), sinais de burnout e transição para gestão/docência/pesquisa.",
+    "Carreira no Setor Público: roteiro de editais (EBSERH, Prefeituras, Secretarias Estaduais/Municipais, Tribunais), análise de cargos (nível superior), benefícios (Gratificação de Desempenho, Adicional de Insalubridade) e concorrência real.",
+    "Marca Pessoal Ética no Digital: como produzir conteúdo educativo (Reels/Stories) sem ferir Resolução CFFa nº 580/2019 (Publicidade), construindo autoridade para atrair pacientes privados e convites para palestras/cursos.",
+    "Fonoaudiologia Baseada em Evidência (FBE) como diferencial competitivo: como ler artigos, aplicar protocolos validados (ex: DTTC, LSVT LOUD, SOS Approach) e documentar outcomes para justificar valor da sessão a convênios/pacientes."
   ]
 }
