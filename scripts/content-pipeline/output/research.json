@@ -1,45 +1,42 @@
 {
-  "topic": "Carreira para fonoaudiólogas no Brasil",
+  "topic": "Gestão de Clínica para Fonoaudiólogas no Brasil",
   "keywords": [
-    "mercado de trabalho fonoaudiologia",
-    "salário fonoaudióloga Brasil",
-    "especializações fonoaudiologia reconhecidas CFFa",
-    "empreendedorismo fonoaudiologia consultório próprio",
-    "concursos públicos fonoaudiologia",
+    "gestão de consultório fonoaudiologia",
     "marketing para fonoaudiólogas",
-    "burnout fonoaudiologia",
-    "carreira hospitalar fonoaudiologia",
-    "telefonoterapia regulamentação",
-    "networking fonoaudiologia"
+    "software para clínica fonoaudiologia",
+    "precificação de sessões fonoaudiologia",
+    "captação de pacientes fonoaudiologia",
+    "gestão financeira consultório saúde",
+    "agendamento online fonoaudiologia",
+    "compliance CFFA LGPD"
   ],
-  "target_audience": "Fonoaudiólogas formadas, recém-formadas, estudantes do último ano e profissionais em transição de carreira no Brasil, majoritariamente mulheres (cerca de 95% da categoria), que buscam crescimento financeiro, reconhecimento profissional e equilíbrio entre vida pessoal e trabalho.",
+  "target_audience": "Fonoaudiólogas empreendedoras, donas de clínicas próprias ou em sociedade, recém-formadas que desejam abrir consultório e profissionais que migram de CLT para pessoa jurídica (PJ), majoritariamente mulheres entre 25 e 50 anos.",
   "pain_points": [
-    "Baixa remuneração inicial em contratos CLT (especialmente em escolas e clínicas conveniadas).",
-    "Dificuldade na gestão de consultório próprio (precificação, captação de pacientes, burocracia tributária).",
-    "Saturação do mercado em grandes centros urbanos vs. escassez de profissionais no interior.",
-    "Desgaste físico e emocional (burnout) por alta demanda, jornadas extensas e falta de suporte multiprofissional.",
-    "Desvalorização profissional por parte de outros profissionais de saúde e gestores (visão reducionista de 'professora de fala').",
-    "Complexidade burocrática para credenciamento em convênios e reajustes de tabela (TUSS/CBHPM).",
-    "Falta de mentoria estruturada para transição da clínica para áreas como saúde ocupacional, estética, voz profissional ou docência.",
-    "Insegurança jurídica na teleatendimento e uso de redes sociais para captação (Código de Ética CFFa)."
+    "Dificuldade em precificar atendimentos (convênios vs. particular) e calcular hora/técnica corretamente.",
+    "Sobrecarga administrativa (agendamento, confirmação, glosas, emissão de notas, fluxo de caixa) tirando tempo do atendimento clínico.",
+    "Dependência de poucos convênios com tabelas defasadas e alta taxa de glosas/rejeições de guias (TISS).",
+    "Falta de estratégia de marketing ético (respeitando Resolução CFFA nº 600/2023) para captação de pacientes particulares.",
+    "Gestão de equipe multiprofissional (contratação CLT vs. PJ, divisão de salas, rateio de custos).",
+    "Inadequação à LGPD (termo de consentimento, prontuário eletrônico seguro, backup).",
+    "Dificuldade em escalar o negócio: sair da operação 'eu faço tudo' para gestão estratégica."
   ],
   "data_points": [
-    "O CFFa registra mais de 60 mil fonoaudiólogos ativos no Brasil (dados 2023/2024), com crescimento médio de 5% ao ano no número de inscritos.",
-    "Piso salarial varia por estado/região; convenções coletivas (ex: Sindicato SP) estabelecem piso ~R$ 3.500 - R$ 4.500 para 30h/semana, mas vagas de entrada muitas vezes pagam R$ 2.500 - R$ 3.000.",
-    "Pesquisa Catho/Indeed (2023): Média salarial nacional gira em torno de R$ 3.800 - R$ 5.200; especialistas em Disfagia Hospitalar e Voz Profissional podem ultrapassar R$ 8.000 - R$ 12.000 em cargos sêniores.",
-    "Resolução CFFa nº 600/2021 regulamenta a Telefonoterapia, exigindo registro no CRFa de origem e do paciente, consentimento termo livre e esclarecido.",
-    "Áreas com maior déficit de profissionais (segundo Ministério da Saúde/CNES): Atenção Básica (NASF/eMulti), Saúde Indígena, Saúde do Trabalhador (SESMT) e UTI Neonatal/Pediátrica no interior.",
-    "Estudo ABF (Associação Brasileira de Fonoaudiologia) aponta que ~40% atuam em consultório privado, ~30% em saúde suplementar/convênios, ~20% no SUS e ~10% em educação/empresas.",
-    "Tributação: Simples Nacional (Anexo III ou V) costuma ser mais vantajoso para faturamento até R$ 4,8 mi/ano; alíquota efetiva inicial ~6% a 15,5% + ISS municipal."
+    "O Brasil possui mais de 60 mil fonoaudiólogos ativos (dados CFFa), sendo a vasta maioria mulheres.",
+    "Segundo Sebrae, ~60% dos consultórios de saúde fecham nos primeiros 5 anos por falhas na gestão financeira/administrativa.",
+    "A tabela TUSS (Terminologia Unificada da Saúde Suplementar) é atualizada periodicamente pela ANS; fonoaudiologia possui códigos específicos para avaliação, terapia e procedimentos especiais (ex: motricidade orofacial, voz, audiologia).",
+    "Resolução CFFa nº 600/2023 atualizou o Código de Ética e as regras de publicidade, permitindo anúncios em redes sociais com restrições (vedado sensacionalismo, garantia de cura, fotos de 'antes/depois' de pacientes).",
+    "A LGPD (Lei 13.709/2018) exige que prontuários sejam guardados por 20 anos (Res. CFFA 580/2020) e que haja DPO (Encarregado de Dados) nomeado, mesmo para microempresas.",
+    "Softwares de gestão (PEP/EMR) integrados ao TISS/ANS e com prescrição digital/assinatura ICP-Brasil reduzem em até 40% o tempo administrativo (estimativa de mercado).",
+    "Modelos de sociedade simples (S/S) ou SLU (Sociedade Limitada Unipessoal) são os mais comuns para enquadramento no Simples Nacional (Anexo III ou V, dependendo da folha de pagamento - Fator R)."
   ],
   "angle_suggestions": [
-    "Guia prático: 'Do zero ao consultório lotado' – passos burocráticos (CNPJ, alvará, CRFa), precificação baseada em custos/hora e funil de captação ética (Google Meu Negócio, indicação médica, Instagram educativo).",
-    "Radiografia das 5 especializações mais rentáveis e com menor saturação em 2024/2025 (ex: Fonoaudiologia do Trabalho, Estética Orofacial, Disfagia Neonatal, Voz Cantada/Profissional, Neurofuncional Adulto).",
-    "Estratégias de renda diversificada: CLT (estabilidade/benefícios) + Plantões hospitalares (hora extra valorizada) + Consultório particular (autonomia/teto salarial) + Produtos digitais (cursos para pais/professores, mentoria).",
-    "Como negociar honorários com convênios: análise de custos fixos/variáveis, uso da CBHPM/TUSS como referência, modelo de carta de descredenciamento estratégico e migração para particular/convênio reembolso.",
-    "Saúde mental e longevidade na carreira: ergonomia vocal/cervical, gestão de agenda para evitar 'buracos', supervisão clínica em grupo (intervisão), sinais de burnout e transição para gestão/docência/pesquisa.",
-    "Carreira no Setor Público: roteiro de editais (EBSERH, Prefeituras, Secretarias Estaduais/Municipais, Tribunais), análise de cargos (nível superior), benefícios (Gratificação de Desempenho, Adicional de Insalubridade) e concorrência real.",
-    "Marca Pessoal Ética no Digital: como produzir conteúdo educativo (Reels/Stories) sem ferir Resolução CFFa nº 580/2019 (Publicidade), construindo autoridade para atrair pacientes privados e convites para palestras/cursos.",
-    "Fonoaudiologia Baseada em Evidência (FBE) como diferencial competitivo: como ler artigos, aplicar protocolos validados (ex: DTTC, LSVT LOUD, SOS Approach) e documentar outcomes para justificar valor da sessão a convênios/pacientes."
+    "Da Clínica ao Negócio: Roteiro prático para fonoaudióloga sair do plantão e estruturar PJ com Simples Nacional (Fator R).",
+    "Precificação Sem Culpa: Como calcular a hora-técnica real, negociar com convênios e montar pacotes particulares atrativos.",
+    "Marketing Ético que Atrai: Estratégias de conteúdo (Instagram/LinkedIn/Google Meu Negócio) 100% alinhadas à Res. CFFa 600/2023.",
+    "Fim das Glosas: Checklist de faturamento TISS para fonoaudiologia (códigos TUSS corretos, documentação clínica que sustenta a guia).",
+    "LGPD na Prática: Modelo de termo de consentimento, contrato de prestação de serviços e política de privacidade prontos para usar.",
+    "Gestão de Agenda Inteligente: Reduzir 'no-show' (faltas) com automação de WhatsApp, lista de espera ativa e política de cancelamento clara.",
+    "Contratação Segura: CLT vs. PJ (RPA/Simples) para fonos associadas — riscos trabalhistas e modelo de contrato de parceria.",
+    "Indicadores de Saúde do Negócio: KPIs essenciais (Ticket Médio, Taxa de Ocupação, LTV do Paciente, CAC) e dashboard simples no Google Sheets/Notion."
   ]
 }
