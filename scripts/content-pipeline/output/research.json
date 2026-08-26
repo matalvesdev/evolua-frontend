@@ -1,42 +1,56 @@
 {
-  "topic": "Gestão de Clínica para Fonoaudiólogas no Brasil",
+  "topic": "Tecnologia para fonoaudiólogas no Brasil",
   "keywords": [
-    "gestão de consultório fonoaudiologia",
-    "marketing para fonoaudiólogas",
-    "software para clínica fonoaudiologia",
-    "precificação de sessões fonoaudiologia",
-    "captação de pacientes fonoaudiologia",
-    "gestão financeira consultório saúde",
-    "agendamento online fonoaudiologia",
-    "compliance CFFA LGPD"
+    "telefonoterapia",
+    "prontuário eletrônico fonoaudiologia",
+    "aplicativos fonoaudiologia",
+    "inteligência artificial voz",
+    "realidade virtual reabilitação",
+    "telessaúde CFFa",
+    "softwares gestão clínica fono",
+    "dispositivos AAC tecnologia assistiva",
+    "biofeedback vocal",
+    "formação continuada EAD fono"
   ],
-  "target_audience": "Fonoaudiólogas empreendedoras, donas de clínicas próprias ou em sociedade, recém-formadas que desejam abrir consultório e profissionais que migram de CLT para pessoa jurídica (PJ), majoritariamente mulheres entre 25 e 50 anos.",
+  "target_audience": [
+    "Fonoaudiólogas clínicas (próprio consultório ou clínicas multidisciplinares)",
+    "Fonoaudiólogas hospitalares e de UTI",
+    "Fonoaudiólogas escolares e educacionais",
+    "Estudantes de fonoaudiologia (últimos períodos)",
+    "Gestoras de clínicas e policlínicas de fonoaudiologia",
+    "Fonoaudiólogas pesquisadoras e docentes"
+  ],
   "pain_points": [
-    "Dificuldade em precificar atendimentos (convênios vs. particular) e calcular hora/técnica corretamente.",
-    "Sobrecarga administrativa (agendamento, confirmação, glosas, emissão de notas, fluxo de caixa) tirando tempo do atendimento clínico.",
-    "Dependência de poucos convênios com tabelas defasadas e alta taxa de glosas/rejeições de guias (TISS).",
-    "Falta de estratégia de marketing ético (respeitando Resolução CFFA nº 600/2023) para captação de pacientes particulares.",
-    "Gestão de equipe multiprofissional (contratação CLT vs. PJ, divisão de salas, rateio de custos).",
-    "Inadequação à LGPD (termo de consentimento, prontuário eletrônico seguro, backup).",
-    "Dificuldade em escalar o negócio: sair da operação 'eu faço tudo' para gestão estratégica."
+    "Dificuldade de adesão de pacientes (especialmente idosos e crianças) à telefonoterapia",
+    "Falta de padronização e interoperabilidade entre prontuários eletrônicos e sistemas de gestão (PIX, convênios, TISS)",
+    "Curva de aprendizado íngreme de novos softwares e hardwares (AAC, biofeedback, RV) sem suporte técnico adequado",
+    "Insegurança jurídica e ética sobre gravação de sessões, LGPD e prescrição digital (assinatura ICP-Brasil vs. assinatura eletrônica simples)",
+    "Custo-benefício questionável de equipamentos de alta tecnologia (ex: eye-tracking, RV imersiva) para clínicas de pequeno porte",
+    "Falta de validação científica e regulamentação (ANVISA/CFFa) para muitos apps e ferramentas de IA disponíveis no mercado",
+    "Dificuldade de engajamento no home exercise program (exercícios de casa) sem gamificação ou monitoramento remoto eficaz",
+    "Exclusão digital de parcela da população atendida pelo SUS e convênios populares"
   ],
   "data_points": [
-    "O Brasil possui mais de 60 mil fonoaudiólogos ativos (dados CFFa), sendo a vasta maioria mulheres.",
-    "Segundo Sebrae, ~60% dos consultórios de saúde fecham nos primeiros 5 anos por falhas na gestão financeira/administrativa.",
-    "A tabela TUSS (Terminologia Unificada da Saúde Suplementar) é atualizada periodicamente pela ANS; fonoaudiologia possui códigos específicos para avaliação, terapia e procedimentos especiais (ex: motricidade orofacial, voz, audiologia).",
-    "Resolução CFFa nº 600/2023 atualizou o Código de Ética e as regras de publicidade, permitindo anúncios em redes sociais com restrições (vedado sensacionalismo, garantia de cura, fotos de 'antes/depois' de pacientes).",
-    "A LGPD (Lei 13.709/2018) exige que prontuários sejam guardados por 20 anos (Res. CFFA 580/2020) e que haja DPO (Encarregado de Dados) nomeado, mesmo para microempresas.",
-    "Softwares de gestão (PEP/EMR) integrados ao TISS/ANS e com prescrição digital/assinatura ICP-Brasil reduzem em até 40% o tempo administrativo (estimativa de mercado).",
-    "Modelos de sociedade simples (S/S) ou SLU (Sociedade Limitada Unipessoal) são os mais comuns para enquadramento no Simples Nacional (Anexo III ou V, dependendo da folha de pagamento - Fator R)."
+    "Resolução CFFa nº 626/2021: Regulamenta a Telefonoterapia como modalidade permanente de atuação.",
+    "Lei nº 14.510/2022: Dispõe sobre a telessaúde no Brasil, impactando diretamente a prática fonoaudiológica remota.",
+    "Crescimento de 300% nas consultas de fonoterapia via teleatendimento entre 2019 e 2023 (dados CFFa/ANS).",
+    "Mercado brasileiro de Health Techs focado em reabilitação cresceu 18% ao ano (CAGR 2022-2027) segundo Distrito Dataminer.",
+    "Aprox. 60% dos fonoaudiólogos brasileiros atuam como autônomos ou MEI (Censo CFFa/IBGE), limitando investimento em infraestrutura tech robusta.",
+    "ANVISA classifica softwares de decisão clínica (CDS) e apps terapêuticos digitais (DTx) como 'Software como Dispositivo Médico (SaMD)', exigindo registro para alegações terapêuticas.",
+    "Estudos nacionais mostram eficácia da realidade virtual na reabilitação de disfagia e voz, mas acesso restrito a centros universitários e grandes hospitais.",
+    "LGPD (Lei 13.709/2018): Multas por vazamento de dados de prontuário vocal/imagem podem chegar a 2% do faturamento (limitado a R$ 50 mi).",
+    "Expansão de Comunicação Alternativa e Ampliada (CAA) baseada em eye-tracking e IA generativa para geração de vocabulário preditivo em Português Brasileiro."
   ],
   "angle_suggestions": [
-    "Da Clínica ao Negócio: Roteiro prático para fonoaudióloga sair do plantão e estruturar PJ com Simples Nacional (Fator R).",
-    "Precificação Sem Culpa: Como calcular a hora-técnica real, negociar com convênios e montar pacotes particulares atrativos.",
-    "Marketing Ético que Atrai: Estratégias de conteúdo (Instagram/LinkedIn/Google Meu Negócio) 100% alinhadas à Res. CFFa 600/2023.",
-    "Fim das Glosas: Checklist de faturamento TISS para fonoaudiologia (códigos TUSS corretos, documentação clínica que sustenta a guia).",
-    "LGPD na Prática: Modelo de termo de consentimento, contrato de prestação de serviços e política de privacidade prontos para usar.",
-    "Gestão de Agenda Inteligente: Reduzir 'no-show' (faltas) com automação de WhatsApp, lista de espera ativa e política de cancelamento clara.",
-    "Contratação Segura: CLT vs. PJ (RPA/Simples) para fonos associadas — riscos trabalhistas e modelo de contrato de parceria.",
-    "Indicadores de Saúde do Negócio: KPIs essenciais (Ticket Médio, Taxa de Ocupação, LTV do Paciente, CAC) e dashboard simples no Google Sheets/Notion."
+    "Guia Prático de Conformidade: LGPD + CFFa + ANS para prontuário digital e teleatendimento (checklist acionável).",
+    "ROI da Tecnologia: Calculadora de custo-hora de equipamentos (biofeedback, RV, tablets AAC) vs. valor de mercado da sessão e pacotes.",
+    "Curadoria de Apps Validados: Lista comentada de aplicativos com evidência científica brasileira (PubMed/SciELO/Lilacs) para: voz, fluência, linguagem, disfagia, motricidade orofacial.",
+    "Fluxo de Trabalho 'Phygital': Como integrar atendimento presencial + exercícios digitais gamificados (home program) + telemonitoramento assíncrono.",
+    "Tecnologia Assistiva de Baixo Custo: Soluções open source, impressão 3D de pranchas/símbolos e adaptação de tablets para CAA no SUS/Clínica Escola.",
+    "IA Generativa na Prática Clínica: Uso ético de LLMs para elaboração de relatórios, planejamento terapêutico, material educativo para pais e anamnese estruturada.",
+    "Capacitação Continuada: Mapeamento de cursos de extensão, especializações e certificações em Saúde Digital/Fonoaudiologia Digital reconhecidos pelo MEC/CFFa.",
+    "Acessibilidade Digital: Como tornar seu site, agendamento online e teleconsulta acessíveis para pacientes surdos (Libras), baixa visão e deficiência intelectual.",
+    "Gestão de Reputação Digital: Automação de avaliações Google/Doctoralia, funil de captação via conteúdo educativo (Instagram/YouTube) ético (Res. CFFa 600/2023).",
+    "Futuro Próximo: Telereabilitação com sensores vestíveis (wearables) para biofeedback domiciliar de voz/respiração/deglutição e reembolso por operadoras."
   ]
 }
