@@ -1,0 +1,23 @@
+STORY 1 - Chega de Papelada
+Texto na tela: Chega de papelada. Seu prontuário em 30s.
+CTA: TESTE GRÁTIS → useevolua.com.br/testar
+---
+STORY 2 - WhatsApp Nativo
+Texto: Agenda + cobrança no WhatsApp.
+CTA: SABER MAIS
+---
+STORY 3 - Economia de Tempo
+Texto: +5h/semana devolvidas. Foco no paciente.
+CTA: QUERO ECONOMIZAR
+---
+STORY 4 - Case Dra. Carla
+Texto: "Nunca mais perdi paciente por falta de contato"
+CTA: VER CASE
+---
+STORY 5 - 7 Dias Grátis
+Texto: 7 dias grátis. Sem cartão. Configure em 5 min.
+CTA: COMEÇAR AGORA
+---
+STORY 6 - Prova Social
+Texto: +300 fonoaudiólogas já usam.
+CTA: QUERO PARTICIPAR

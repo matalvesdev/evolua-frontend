@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#E0DFEF;display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px}
-.ad{width:1200px;height:628px;display:flex;position:relative;overflow:hidden;border-radius:2px;flex-shrink:0;font-family:'Inter',system-ui,sans-serif}
-.bg-primary{background:#8B5CF6}.bg-deep{background:#0A0A14}.bg-surface{background:#FFFFFF}.bg-canvas{background:#F5F3FF}
+.ad{width:1200px;height:628px;display:flex;position:relative;overflow:hidden;border-radius:2px;flex-shrink:0}
+.bg-primary{background:#6C63FF}.bg-deep{background:#2D2B55}.bg-surface{background:#FFFFFF}.bg-canvas{background:#F8F8FF}
 .ad-content{display:flex;flex-direction:column;justify-content:center;padding:48px 56px;height:100%;position:relative;z-index:1}
 .ad-row{display:flex;gap:32px;align-items:center;height:100%}
 .ad-icon{flex-shrink:0;font-size:56px;width:100px;text-align:center}
 .ad-text{flex:1}
-h1{font-weight:700;font-size:40px;line-height:1.15;letter-spacing:-0.03em;margin-bottom:8px}
-h1.neon{color:#C4F135}h1.dark{color:#0A0A14}h1.white{color:#FFFFFF}
-p{font-weight:400;font-size:18px;line-height:1.5;color:#4A4A6A;max-width:700px}
-p.light{color:rgba(255,255,255,0.8)}p.white{color:#0A0A14}
-.cta{display:inline-block;background:#C4F135;color:#0A0A14;font-weight:700;font-size:16px;padding:14px 40px;border-radius:2px;margin-top:20px;letter-spacing:0.02em}
-.logo{position:absolute;bottom:24px;right:36px;font-weight:700;font-size:16px;letter-spacing:-0.02em;text-transform:lowercase}
-.logo.neon{color:#C4F135}.logo.primary{color:#8B5CF6}.logo.muted{color:rgba(139,92,246,0.4)}
-.url{font-weight:400;font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:40px;line-height:1.15;letter-spacing:-0.03em;margin-bottom:8px}
+h1.neon{color:#C4F135}h1.dark{color:#1A1A2E}h1.white{color:#FFFFFF}
+p{font-family:'DM Sans',sans-serif;font-weight:400;font-size:18px;line-height:1.5;color:#4A4A6A;max-width:700px}
+p.light{color:rgba(255,255,255,0.8)}p.white{color:#1A1A2E}
+.cta{display:inline-block;background:#C4F135;color:#1A1A2E;font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;padding:14px 40px;border-radius:2px;margin-top:20px;letter-spacing:0.02em}
+.cta.outline{background:transparent;border:2px solid #C4F135;color:#C4F135}
+.logo{position:absolute;bottom:24px;right:36px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;letter-spacing:-0.02em;text-transform:lowercase}
+.logo.neon{color:#C4F135}.logo.primary{color:#6C63FF}.logo.grey{color:#9D97F5}
+.url{font-family:'DM Sans',sans-serif;font-weight:400;font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px}
 .split{display:flex;height:100%;width:100%}
 .split-left,.split-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:48px 40px}
-.split-left{background:#0A0A14;color:#fff}
-.split-right{background:#F5F3FF}
+.split-left{background:#2D2B55;color:#fff}
+.split-right{background:#F8F8FF}
 .bullets{list-style:none;margin-top:12px}
-.bullets li{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-weight:400;font-size:15px;color:#4A4A6A}
-.badge-top{font-weight:700;font-size:10px;letter-spacing:0.3em;color:#9D97F5;text-transform:uppercase;margin-bottom:8px}
+.bullets li{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-family:'DM Sans',sans-serif;font-weight:400;font-size:15px;color:#4A4A6A}
+.stat-row{display:flex;gap:24px;margin-top:16px}
+.stat{text-align:center}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:#C4F135}
+.stat-label{font-family:'DM Sans',sans-serif;font-weight:400;font-size:12px;color:rgba(255,255,255,0.5);text-transform:uppercase}
+.badge-top{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:10px;letter-spacing:0.3em;color:#9D97F5;text-transform:uppercase;margin-bottom:8px}
 </style></head><body>
 
-<!-- GOOGLE 1: Marketing Ético -->
+<!-- GOOGLE 1: CRM para Fono -->
 <div class="ad bg-primary">
   <div class="ad-content">
     <div style="display:flex;gap:32px;align-items:center">
-      <div style="font-size:56px">🌟</div>
+      <div style="font-size:56px">📋</div>
       <div>
-        <div class="badge-top" style="color:rgba(255,255,255,0.5)">MARKETING DIGITAL ÉTICO</div>
-        <h1 style="color:#FFFFFF">Marketing para Fono<br>com Responsabilidade</h1>
-        <p class="light">Construa sua presença online com ética e atraia pacientes que valorizam seu trabalho.</p>
-        <div class="cta">QUERO SABER MAIS</div>
+        <div class="badge-top">CRM ESPECIALIZADO</div>
+        <h1 style="color:#FFFFFF">CRM para Fonoaudiólogas</h1>
+        <p class="light">Prontuário com IA, WhatsApp integrado e gestão financeira. Teste grátis por 7 dias.</p>
+        <div class="cta">TESTAR GRÁTIS</div>
         <div class="url">useevolua.com.br</div>
       </div>
     </div>
@@ -44,18 +49,18 @@ p.light{color:rgba(255,255,255,0.8)}p.white{color:#0A0A14}
   </div>
 </div>
 
-<!-- GOOGLE 2: Presença Online -->
+<!-- GOOGLE 2: Prontuário Digital -->
 <div class="ad bg-surface">
   <div class="ad-row" style="padding:48px 56px;height:100%">
     <div class="ad-icon">📱</div>
     <div class="ad-text">
-      <div class="badge-top" style="color:#8B5CF6">AUTORIDADE DIGITAL</div>
-      <h1 style="color:#0A0A14">Presença online<br>que gera confiança</h1>
-      <p>Conteúdo educativo, transparência e respeito ao paciente. O marketing que sua clínica merece.</p>
+      <div class="badge-top" style="color:#6C63FF">PRONTUÁRIO DIGITAL</div>
+      <h1 style="color:#1A1A2E">Prontuário em<br>30 segundos</h1>
+      <p>Enquanto você atende, a IA documenta tudo. Laudo pronto em 2 cliques.</p>
       <ul class="bullets">
-        <li>✓ Conteúdo baseado em evidências</li>
-        <li>✓ Respeito ao Código de Ética</li>
-        <li>✓ CRFa sempre visível</li>
+        <li>✓ Sem papelada</li>
+        <li>✓ WhatsApp nativo</li>
+        <li>✓ Cobrança automática</li>
       </ul>
       <div class="cta" style="margin-top:12px">COMEÇAR AGORA</div>
     </div>
@@ -63,52 +68,56 @@ p.light{color:rgba(255,255,255,0.8)}p.white{color:#0A0A14}
   <div class="logo primary">evolua</div>
 </div>
 
-<!-- GOOGLE 3: O que é permitido -->
+<!-- GOOGLE 3: Gestão Financeira -->
 <div class="ad bg-deep">
   <div class="ad-content">
     <div style="display:flex;gap:32px;align-items:center">
-      <div style="font-size:56px">✅</div>
+      <div style="font-size:56px">📊</div>
       <div>
-        <h1 class="neon">O que o CFFA<br>permite postar</h1>
-        <p class="light">Educação, especialidades, depoimentos autorizados e ambiente de trabalho. Comunicação ética é permitida — e necessária.</p>
-        <div class="cta">GUIA COMPLETO</div>
+        <h1 class="neon">60% fecham em 5 anos</h1>
+        <p class="light">Não seja estatística. Gestão financeira inteligente com o Evolua.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="stat-num">R$120</div><div class="stat-label">Sessão Média</div></div>
+          <div class="stat"><div class="stat-num">80%</div><div class="stat-label">Menos Burocracia</div></div>
+        </div>
+        <div class="cta" style="margin-top:16px">QUERO SABER MAIS</div>
       </div>
     </div>
     <div class="logo neon">evolua</div>
   </div>
 </div>
 
-<!-- GOOGLE 4: Autoridade -->
+<!-- GOOGLE 4: WhatsApp + Agenda -->
 <div class="ad bg-canvas">
   <div class="split">
     <div class="split-left">
-      <div style="font-size:56px;margin-bottom:16px">🏅</div>
-      <h1 style="color:#C4F135">Autoridade<br>> Propaganda</h1>
-      <p style="color:rgba(255,255,255,0.7);font-size:16px">Eduque, gere confiança, converta naturalmente</p>
+      <div style="font-size:56px;margin-bottom:16px">💬</div>
+      <h1 style="color:#C4F135">WhatsApp<br>integrado</h1>
+      <p style="color:rgba(255,255,255,0.7);font-size:16px">Agenda, cobrança e lembretes automáticos</p>
     </div>
     <div class="split-right">
-      <h2 style="font-weight:700;font-size:28px;color:#0A0A14;margin-bottom:16px">Como aplicar</h2>
+      <h2 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:28px;color:#1A1A2E;margin-bottom:16px">Tudo que você precisa</h2>
       <ul class="bullets">
-        <li><span style="color:#8B5CF6;font-weight:700">✓</span> Publique conteúdo educativo</li>
-        <li><span style="color:#8B5CF6;font-weight:700">✓</span> Mostre sua especialidade</li>
-        <li><span style="color:#8B5CF6;font-weight:700">✓</span> Interaja com sua comunidade</li>
-        <li><span style="color:#8B5CF6;font-weight:700">✓</span> Seja consistente</li>
+        <li><span style="color:#6C63FF;font-weight:700">✓</span> Lembrete automático</li>
+        <li><span style="color:#6C63FF;font-weight:700">✓</span> Cobrança por PIX</li>
+        <li><span style="color:#6C63FF;font-weight:700">✓</span> Prontuário compartilhado</li>
+        <li><span style="color:#6C63FF;font-weight:700">✓</span> Confirmação de presença</li>
       </ul>
-      <div class="cta" style="margin-top:16px">TESTE GRÁTIS</div>
+      <div class="cta" style="margin-top:16px">SABER MAIS</div>
     </div>
   </div>
   <div class="logo primary" style="bottom:20px;right:24px">evolua</div>
 </div>
 
-<!-- GOOGLE 5: CTA -->
+<!-- GOOGLE 5: Teleconsulta -->
 <div class="ad bg-primary">
   <div class="ad-content">
     <div style="display:flex;gap:32px;align-items:center">
-      <div style="font-size:56px">🚀</div>
+      <div style="font-size:56px">📹</div>
       <div>
-        <h1 style="color:#FFFFFF">Pronta para<br>crescer?</h1>
-        <p class="light">A Evolua te ajuda a gerenciar sua clínica enquanto você constrói sua presença digital.</p>
-        <div class="cta">TESTE GRÁTIS →</div>
+        <h1 style="color:#FFFFFF">Teleconsulta<br>nativa e segura</h1>
+        <p class="light">Atenda de qualquer lugar com videochamada integrada, agendamento sincronizado e prontuário compartilhado.</p>
+        <div class="cta">QUERO CONHECER</div>
       </div>
     </div>
     <div class="logo neon">evolua</div>

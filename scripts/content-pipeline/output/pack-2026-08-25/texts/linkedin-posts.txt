@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Posts — Evolua · Julho 2026</title>
+ ...
+
+(Conteúdos dos posts em formato visual nas PNGs anexadas)

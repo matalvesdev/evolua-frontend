@@ -1,35 +1,45 @@
 {
-  "topic": "marketing digital ético para fonoaudiólogas",
+  "topic": "Clínica para fonoaudiólogas: gestão, estruturação e crescimento no Brasil",
   "keywords": [
-    "marketing digital",
-    "fonoaudiologia ética",
-    "redes sociais",
-    "atendimento online",
-    "branding pessoal"
+    "gestão de clínica fonoaudiologia",
+    "abrir consultório fonoaudiologia",
+    "marketing para fonoaudiólogas",
+    "precificação sessões fonoaudiologia",
+    "software gestão clínica fono",
+    "captação pacientes fonoaudiologia",
+    "regularização CREFONO vigilância sanitária",
+    "telefonologia regulamentação Brasil"
   ],
-  "target_audience": "fonoaudiólogas e profissionais da saúde que desejam aprimorar sua presença online de forma ética",
+  "target_audience": "Fonoaudiólogas (recém-formadas ou experientes) que desejam abrir, estruturar ou escalar a própria clínica/consultório particular no Brasil, incluindo sócias de clínicas multidisciplinares.",
   "pain_points": [
-    "dificuldade em atrair pacientes através das redes sociais",
-    "preocupação com a privacidade e ética na divulgação de serviços",
-    "falta de conhecimento sobre estratégias de marketing digital"
+    "Dificuldade em precificar atendimentos (particular vs convênio) de forma sustentável e ética.",
+    "Burocracia excessiva para abertura (CNES, Vigilância Sanitária, CREFONO, Alvará, Corpo de Bombeiros).",
+    "Dependência exclusiva de convênios com baixos honorários e glosas frequentes.",
+    "Falta de tempo para gestão administrativa/financeira enquanto atende (papel de 'dona do negócio' vs 'clínica').",
+    "Dificuldade em captar e fidelizar pacientes particulares (marketing ético segundo Resolução CFFa nº 600/2023).",
+    "Gestão de agenda e taxa de no-show (faltas) impactando faturamento.",
+    "Contratação e gestão de equipe (secretárias, outras fonoaudiólogas, estagiárias) com CLT ou PJ.",
+    "Insegurança jurídica sobre contratos, LGPD, prontuário eletrônico e responsabilidade civil."
   ],
   "data_points": [
-    "87% dos profissionais de saúde acreditam que a presença online é essencial para o crescimento da carreira",
-    "60% das fonoaudiólogas não têm uma estratégia definida de marketing digital"
+    "Brasil tem ~60 mil fonoaudiólogas ativas (Dados CFFa 2023/2024), maioria mulheres.",
+    "Maioria atua como autônoma/PJ em consultório próprio ou aluguel de sala/hora.",
+    "Tabela CBHPM (referência particular) costuma ser 3 a 5x superior a tabelas de operadoras (ex: UNIMED, Bradesco, Amil).",
+    "Resolução CFFa nº 600/2023 flexibilizou publicidade: permite redes sociais, site, depoimentos (com autorização), fotos de 'antes/depois' (vedado sensacionalismo).",
+    "Telefonologia regulamentada (Res. CFFa 580/2020 e 601/2022) exige registro de responsável técnico no CREFONO da jurisdição do paciente.",
+    "Softwares de gestão (Nexodata, Doctoralia, Feegow, SimDoctor, HiDoctor) integram prontuário, teleconsulta, financeiro e WhatsApp.",
+    "Custo médio inicial para consultório simples (aluguel sala, reforma, equipamentos básicos, burocracia): R$ 30k a R$ 80k (variável por região).",
+    "Taxa de no-show média no Brasil gira em torno de 20-30% sem estratégia de confirmação ativa.",
+    "Crescimento de clínicas multidisciplinares (TEA, Neuro, Voz, Disfagia) demandando fonoaudiólogas especialistas."
   ],
-  "competitors_coverage": "Concorrentes costumam cobrir o tema com dicas práticas de marketing digital, estratégias de engajamento em redes sociais e a importância da ética na comunicação com pacientes.",
   "angle_suggestions": [
-    "Como construir uma marca pessoal autêntica e ética nas redes sociais",
-    "Estratégias de marketing digital que respeitam a privacidade do paciente"
-  ],
-  "faq": [
-    {
-      "q": "O que é marketing digital ético para fonoaudiólogas?",
-      "a": "É um conjunto de práticas de marketing que visa promover serviços de fonoaudiologia de maneira transparente e respeitosa, priorizando a ética e o bem-estar do paciente."
-    },
-    {
-      "q": "Como posso atrair mais pacientes utilizando marketing digital?",
-      "a": "Utilizando estratégias de conteúdo informativo, como blogs e vídeos, além de criar uma presença ativa nas redes sociais, sempre respeitando as diretrizes éticas."
-    }
+    "Guia passo a passo 'Do zero à clínica lucrativa': checklists de burocracia, equipamentos mínimos por especialidade e fluxo de caixa inicial.",
+    "Precificação estratégica: como montar tabela particular baseada em custo/hora + valor percebido + mercado, e negociar reajustes com convênios.",
+    "Marketing Ético na Prática: cases de fonoaudiólogas que lotaram agenda particular usando Instagram/LinkedIn dentro das regras do CFFa (autorização de imagem, conteúdo educativo).",
+    "Gestão do Tempo Clínico x Gestão do Negócio: ferramentas de automação (agendamento online, lembrete WhatsApp, prontuário por voz) para recuperar 10h/semana.",
+    "Modelos de Sociedade e Contratação: PJ vs CLT, divisão de honorários (fee split), contrato de prestação de serviços entre fonoaudiólogas e clínica.",
+    "Especialização como Diferencial Competitivo: nichos de alta demanda e ticket médio alto (Disfagia neonatal/adulto, Voz profissional, TEA/AAC, Motricidade Orofacial, Audiologia ocupacional).",
+    "Tecnologia e LGPD: escolha de prontuário eletrônico (PEP), backup em nuvem, termo de consentimento digital e segurança da informação para clínicas pequenas.",
+    "Indicadores de Saúde Financeira da Clínica: ticket médio, taxa de ocupação da agenda, LTV (Lifetime Value) do paciente, CAC (Custo de Aquisição) e ponto de equilíbrio."
   ]
 }

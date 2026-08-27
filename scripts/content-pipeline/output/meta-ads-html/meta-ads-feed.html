@@ -1,99 +1,109 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#E0DFEF;display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px}
-.ad{width:1080px;height:1080px;position:relative;overflow:hidden;border-radius:2px;flex-shrink:0;font-family:'Inter',system-ui,sans-serif}
-.bg-primary{background:#8B5CF6}.bg-deep{background:#0A0A14}.bg-surface{background:#FFFFFF}.bg-canvas{background:#F5F3FF}
+.ad{width:1080px;height:1080px;position:relative;overflow:hidden;border-radius:2px;flex-shrink:0}
+.bg-primary{background:#6C63FF}.bg-deep{background:#2D2B55}.bg-surface{background:#FFFFFF}.bg-canvas{background:#F8F8FF}
 .ad-content{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;height:100%;padding:80px 64px;position:relative}
 .ad-content.left{align-items:flex-start;text-align:left}
-h1{font-weight:800;font-size:56px;line-height:1.1;letter-spacing:-0.04em;color:#FFFFFF;margin-bottom:16px;max-width:900px}
-h1.dark{color:#0A0A14}h1.neon{color:#C4F135}
-h2{font-weight:700;font-size:44px;line-height:1.15;letter-spacing:-0.03em;margin-bottom:12px;color:#0A0A14}
-.sub{font-weight:400;font-size:24px;color:rgba(255,255,255,0.8);line-height:1.5;max-width:800px}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:56px;line-height:1.1;letter-spacing:-0.04em;color:#FFFFFF;margin-bottom:16px;max-width:900px}
+h1.dark{color:#1A1A2E}
+h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:44px;line-height:1.15;letter-spacing:-0.03em;margin-bottom:12px}
+.sub{font-family:'DM Sans',sans-serif;font-weight:400;font-size:24px;color:rgba(255,255,255,0.8);line-height:1.5;max-width:800px}
 .sub.dark{color:#4A4A6A}
-.cta{display:inline-block;background:#C4F135;color:#0A0A14;font-weight:700;font-size:20px;padding:18px 56px;border-radius:2px;margin-top:40px;letter-spacing:0.02em}
-.logo-bottom{position:absolute;bottom:40px;right:48px;font-weight:700;font-size:20px;letter-spacing:-0.02em;text-transform:lowercase}
-.logo-neon{color:#C4F135}.logo-primary{color:#8B5CF6}.logo-muted{color:rgba(139,92,246,0.4)}
-.top-badge{font-weight:700;font-size:12px;letter-spacing:0.3em;color:#8B5CF6;text-transform:uppercase;margin-bottom:12px}
+.cta{display:inline-block;background:#C4F135;color:#1A1A2E;font-family:'DM Sans',sans-serif;font-weight:700;font-size:20px;padding:18px 56px;border-radius:2px;margin-top:40px;letter-spacing:0.02em}
+.logo-bottom{position:absolute;bottom:40px;right:48px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;letter-spacing:-0.02em;text-transform:lowercase}
+.logo-neon{color:#C4F135}.logo-purple{color:#9D97F5}.logo-primary{color:#6C63FF}
+.top-badge{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.3em;color:#6C63FF;text-transform:uppercase;margin-bottom:12px}
 .top-badge.light{color:#9D97F5}
 .icon-big{font-size:72px;margin-bottom:24px}
-.neon-line{width:60px;height:3px;background:#C4F135;margin:20px auto}
-.neon-line.left{margin:20px 0}
+.accent-line{width:60px;height:3px;background:#C4F135;margin:20px auto}
+.accent-line.left{margin:20px 0}
 .bullets{list-style:none;margin-top:20px}
-.bullets li{display:flex;align-items:center;gap:12px;margin-bottom:12px;font-weight:400;font-size:20px;color:rgba(255,255,255,0.85);text-align:left}
+.bullets li{display:flex;align-items:center;gap:12px;margin-bottom:12px;font-family:'DM Sans',sans-serif;font-weight:400;font-size:20px;color:rgba(255,255,255,0.85);text-align:left}
 .bullets li.dark{color:#4A4A6A}
 .bullet-dot{width:10px;height:10px;background:#C4F135;flex-shrink:0}
 .split{display:flex;height:100%}
 .split-left,.split-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 48px}
-.split-left{background:#0A0A14;color:#fff}
-.split-right{background:#F5F3FF}
+.split-left{background:#2D2B55;color:#fff}
+.split-right{background:#F8F8FF}
 </style></head><body>
 
-<!-- FEED 1: Capa Marketing Ético -->
+<!-- FEED 1: Chega de papelada -->
 <div class="ad bg-primary">
   <div class="ad-content">
-    <div class="icon-big">🌟</div>
-    <h1>Marketing Digital<br>Ético para Fono</h1>
-    <div class="sub">Construa autoridade com conteúdo de valor. Respeite o paciente. Cresça com responsabilidade.</div>
-    <div class="neon-line"></div>
-    <div class="cta">QUERO SABER MAIS</div>
-    <div class="logo-bottom logo-neon">evolua</div>
-  </div>
-</div>
-
-<!-- FEED 2: Presença Online -->
-<div class="ad bg-surface">
-  <div class="ad-content left">
-    <div class="top-badge">📱 PRESENÇA ONLINE</div>
-    <h2 style="color:#0A0A14">87% dos profissionais<br>de saúde acreditam</h2>
-    <div class="sub dark" style="font-size:20px">Que a presença online é essencial para o crescimento. O marketing digital ético é a chave para construir uma marca pessoal autêntica.</div>
-    <ul class="bullets" style="margin-top:16px">
-      <li class="dark"><span class="bullet-dot"></span> Conteúdo educativo baseado em evidências</li>
-      <li class="dark"><span class="bullet-dot"></span> Transparência sobre seus serviços</li>
-      <li class="dark"><span class="bullet-dot"></span> Respeito à privacidade do paciente</li>
-    </ul>
-    <div class="cta" style="margin-top:32px">COMEÇAR GRÁTIS</div>
-    <div class="logo-bottom logo-primary">evolua</div>
-  </div>
-</div>
-
-<!-- FEED 3: Autoridade > Propaganda -->
-<div class="ad bg-deep">
-  <div class="ad-content">
-    <h1 class="neon">Autoridade<br>> Propaganda</h1>
-    <div class="neon-line"></div>
-    <div class="sub">Paciente informado valoriza a especialidade, não o preço. Eduque primeiro, converta naturalmente.</div>
+    <div class="icon-big">📋</div>
+    <h1>Chega de papelada</h1>
+    <div class="sub">Seu prontuário em 30 segundos com IA. Enquanto você atende, o Evolua documenta tudo.</div>
     <div class="cta">TESTAR GRÁTIS</div>
     <div class="logo-bottom logo-neon">evolua</div>
   </div>
 </div>
 
-<!-- FEED 4: O que é permitido -->
-<div class="ad bg-canvas">
+<!-- FEED 2: CRM feito para fono -->
+<div class="ad bg-surface">
   <div class="ad-content left">
-    <div class="top-badge">✅ PERMITIDO PELO CFFA</div>
-    <h2 style="color:#0A0A14">O que você pode<br>postar com segurança</h2>
-    <div class="sub dark" style="font-size:20px">A Resolução CFFa 600/2023 autoriza a comunicação responsável.</div>
-    <ul class="bullets" style="margin-top:16px">
-      <li class="dark"><span class="bullet-dot"></span> Posts educativos sobre fonoaudiologia</li>
-      <li class="dark"><span class="bullet-dot"></span> Divulgar especialidades registradas</li>
-      <li class="dark"><span class="bullet-dot"></span> Depoimentos com autorização por escrito</li>
+    <div class="top-badge">📱 CRM ESPECIALIZADO</div>
+    <h2 style="color:#1A1A2E">CRM feito para<br>fonoaudiólogas</h2>
+    <div class="sub dark" style="font-size:20px">Prontuário, agenda, WhatsApp, cobrança e teleconsulta em um só lugar. Não é genérico — é feito para você.</div>
+    <ul class="bullets">
+      <li class="dark"><span class="bullet-dot"></span> Prontuário inteligente com IA</li>
+      <li class="dark"><span class="bullet-dot"></span> WhatsApp nativo integrado</li>
+      <li class="dark"><span class="bullet-dot"></span> Cobrança por PIX e cartão</li>
     </ul>
-    <div class="cta">GUIA COMPLETO</div>
+    <div class="cta" style="margin-top:32px">QUERO CONHECER</div>
     <div class="logo-bottom logo-primary">evolua</div>
   </div>
 </div>
 
-<!-- FEED 5: CTA Evolua -->
+<!-- FEED 3: 60% fecham -->
+<div class="ad bg-deep">
+  <div class="ad-content">
+    <h1>60% dos consultórios<br>fecham em 5 anos</h1>
+    <div class="accent-line"></div>
+    <div class="sub">Você não precisa ser estatística. Gestão financeira é o que separa consultórios que crescem dos que fecham.</div>
+    <div class="cta">COMEÇAR GRÁTIS</div>
+    <div class="logo-bottom logo-neon">evolua</div>
+  </div>
+</div>
+
+<!-- FEED 4: WhatsApp integrado -->
+<div class="ad bg-canvas">
+  <div class="ad-content left">
+    <div class="top-badge">💬 WHATSAPP NATIVO</div>
+    <h2 style="color:#1A1A2E">Seu consultório<br>no WhatsApp</h2>
+    <div class="sub dark" style="font-size:20px">Agenda, lembrete, cobrança e prontuário direto no WhatsApp dos seus pacientes. Tudo automatizado.</div>
+    <div class="cta">SABER MAIS</div>
+    <div class="logo-bottom logo-primary">evolua</div>
+  </div>
+</div>
+
+<!-- FEED 5: Prontuário com IA -->
 <div class="ad bg-primary">
   <div class="ad-content">
-    <div class="icon-big">🚀</div>
-    <h1>Pronta para<br>crescer?</h1>
-    <div class="sub">A Evolua te ajuda a gerenciar sua clínica enquanto você constrói sua presença digital. Teste grátis.</div>
-    <div class="cta">TESTE GRÁTIS →</div>
+    <div class="icon-big">🤖</div>
+    <h1>Prontuário em<br>30 segundos</h1>
+    <div class="sub">Enquanto você foca no paciente, o Evolua documenta tudo. Laudos, evoluções e relatórios automáticos.</div>
+    <div class="cta">TESTE GRÁTIS</div>
     <div class="logo-bottom logo-neon">evolua</div>
+  </div>
+</div>
+
+<!-- FEED 6: Teleconsulta -->
+<div class="ad bg-surface">
+  <div class="ad-content left">
+    <div class="top-badge">📹 TELECONSULTA</div>
+    <h2 style="color:#1A1A2E">Teleconsulta nativa<br>sem complicação</h2>
+    <div class="sub dark" style="font-size:20px">Atenda pacientes de qualquer lugar com videochamada integrada, agendamento sincronizado e prontuário compartilhado.</div>
+    <ul class="bullets">
+      <li class="dark"><span class="bullet-dot"></span> -40% de faltas</li>
+      <li class="dark"><span class="bullet-dot"></span> Alcance outras cidades</li>
+      <li class="dark"><span class="bullet-dot"></span> LGPD completa</li>
+    </ul>
+    <div class="cta" style="margin-top:24px">QUERO CONHECER</div>
+    <div class="logo-bottom logo-primary">evolua</div>
   </div>
 </div>
 

@@ -1,103 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#E0DFEF;display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px}
-.slide{width:1080px;height:1080px;position:relative;overflow:hidden;border-radius:2px;flex-shrink:0;font-family:'Inter',system-ui,sans-serif}
-.bg-deep{background:#0A0A14}.bg-primary{background:#8B5CF6}.bg-surface{background:#FFFFFF}.bg-canvas{background:#F5F3FF}
+.slide{width:1080px;height:1080px;position:relative;overflow:hidden;border-radius:2px;flex-shrink:0}
+.bg-canvas{background:#F8F8FF}.bg-surface{background:#FFFFFF}.bg-primary{background:#6C63FF}.bg-deep{background:#2D2B55}
 .inner{display:flex;flex-direction:column;padding:72px 64px;height:100%;position:relative}
 .inner.center{justify-content:center;align-items:center;text-align:center}
-h1{font-weight:800;font-size:64px;line-height:1.1;letter-spacing:-0.04em;max-width:800px}
-h1.white{color:#FFFFFF}h1.neon{color:#C4F135}h1.dark{color:#0A0A14}
-h2{font-weight:700;font-size:44px;line-height:1.15;letter-spacing:-0.03em;margin-bottom:16px;color:#0A0A14}
-p{font-weight:400;font-size:20px;line-height:1.6;color:#4A4A6A;max-width:720px}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:64px;line-height:1.1;letter-spacing:-0.04em;max-width:800px}
+h1.dark{color:#1A1A2E}h1.white{color:#FFFFFF}h1.neon{color:#C4F135}
+h2{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:44px;line-height:1.15;letter-spacing:-0.03em;margin-bottom:16px;color:#1A1A2E}
+p{font-family:'DM Sans',sans-serif;font-weight:400;font-size:20px;line-height:1.6;color:#4A4A6A;max-width:720px}
 p.light{color:rgba(255,255,255,0.8)}
-.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(139,92,246,0.12);color:#8B5CF6;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;padding:8px 16px;margin-bottom:20px;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:#EAE8FF;color:#5650D4;font-family:'DM Sans',sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;padding:8px 16px;margin-bottom:20px;position:relative;z-index:1}
 .badge.light{background:rgba(255,255,255,0.12);color:#C4F135}
-.neon-line{width:60px;height:4px;background:#C4F135;margin-bottom:24px}
-.logo-pos{position:absolute;bottom:36px;right:48px;font-weight:700;font-size:18px;letter-spacing:-0.02em;text-transform:lowercase}
-.logo-neon{color:#C4F135}.logo-primary{color:#8B5CF6}.logo-muted{color:rgba(139,92,246,0.4)}
-.slide-card{background:#F5F3FF;border:1px solid #E0DFEF;padding:24px 32px;margin-top:24px;z-index:1;position:relative}
-.slide-card p{font-size:18px;color:#0A0A14;font-weight:500}
-.item-list{list-style:none;margin-top:20px;position:relative;z-index:1}
-.item-list li{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
-.item-icon{width:36px;height:36px;background:#8B5CF6;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
-.item-text{font-weight:400;font-size:18px;color:#4A4A6A;line-height:1.5}
-.item-text strong{color:#0A0A14}
-.cta-btn{display:inline-block;background:#C4F135;color:#0A0A14;font-weight:700;font-size:18px;padding:18px 56px;border-radius:2px;margin-top:40px;letter-spacing:0.02em;text-decoration:none}
-.cta-url{font-weight:400;font-size:14px;margin-top:16px}
-.arrow-swipe{font-weight:700;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;margin-top:48px}
-.icon-big{font-size:72px;margin-bottom:24px}
-.checklist{margin-top:20px;position:relative;z-index:1}
-.checklist li{display:flex;align-items:center;gap:12px;margin-bottom:12px;font-weight:400;font-size:18px;color:#0A0A14;line-height:1.5}
-.check-dot{width:8px;height:8px;background:#C4F135;flex-shrink:0}
+.number-bg{position:absolute;top:20px;right:40px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:200px;line-height:1;letter-spacing:-0.06em;opacity:0.06;color:#6C63FF;pointer-events:none;user-select:none}
+.code-bar{width:60px;height:4px;background:#6C63FF;margin-bottom:24px}
+.code-bar.neon{background:#C4F135}
+.card{background:#EAE8FF;border:1px solid #E0DFEF;padding:24px 32px;margin-top:24px;z-index:1;position:relative}
+.card p{font-size:18px;color:#1A1A2E;font-weight:500}
+.card p .highlight{color:#6C63FF;font-weight:700}
 .steps{list-style:none;margin-top:24px;position:relative;z-index:1}
 .steps li{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px}
-.step-num{width:36px;height:36px;background:#8B5CF6;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
-.step-text{font-weight:400;font-size:18px;color:#4A4A6A;line-height:1.5}
-.step-text strong{color:#0A0A14}
+.step-num{width:36px;height:36px;background:#6C63FF;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;flex-shrink:0}
+.step-text{font-family:'DM Sans',sans-serif;font-weight:400;font-size:18px;color:#4A4A6A;line-height:1.5}
+.step-text strong{color:#1A1A2E}
+.cta-btn{display:inline-block;background:#C4F135;color:#1A1A2E;font-family:'DM Sans',sans-serif;font-weight:700;font-size:18px;padding:18px 56px;border-radius:2px;margin-top:40px;letter-spacing:0.02em;text-decoration:none}
+.cta-url{font-family:'DM Sans',sans-serif;font-weight:400;font-size:14px;color:rgba(255,255,255,0.4);margin-top:16px}
+.logo-pos{position:absolute;bottom:36px;right:48px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:-0.02em;text-transform:lowercase}
+.logo-neon{color:#C4F135}.logo-primary{color:#6C63FF}.logo-grey{color:#9D97F5}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;position:relative;z-index:1}
+.grid-item{background:#F8F8FF;border:1px solid #E0DFEF;padding:20px}
+.grid-item h3{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:16px;color:#1A1A2E;margin-bottom:4px}
+.grid-item p{font-size:14px;color:#8888AA}
+.arrow-down{text-align:center;font-size:32px;color:#6C63FF;margin:12px 0;position:relative;z-index:1}
+.stats-row{display:flex;gap:24px;margin-top:24px;position:relative;z-index:1}
+.stat{text-align:center}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:36px;color:#C4F135}
+.stat-label{font-family:'DM Sans',sans-serif;font-weight:400;font-size:14px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em}
 </style></head><body>
 
 <!-- SLIDE 1: Capa -->
 <div class="slide bg-primary">
   <div class="inner center">
-    <div class="icon-big">🌟</div>
-    <h1 class="white">Atraia mais<br>Pacientes</h1>
-    <h1 class="neon" style="font-size:48px;margin-top:4px">com Marketing Digital Ético</h1>
-    <div class="neon-line" style="margin:24px auto"></div>
-    <p class="light" style="text-align:center">Construa sua presença online com ética,<br>autenticidade e responsabilidade profissional.</p>
-    <div class="arrow-swipe" style="color:rgba(255,255,255,0.5)">⟶ Deslize</div>
+    <div style="font-size:72px;margin-bottom:24px">📋</div>
+    <h1 class="white">5 Passos para<br>Transformar <span style="color:#C4F135">Sua Clínica</span></h1>
+    <div class="code-bar neon" style="margin:24px auto"></div>
+    <p class="light" style="text-align:center">Estratégias práticas de gestão para crescer com tecnologia</p>
+    <div style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.3em;color:#9D97F5;text-transform:uppercase;margin-top:48px">⟶ Deslize</div>
     <div class="logo-pos logo-neon">evolua</div>
   </div>
 </div>
 
-<!-- SLIDE 2: O que é Marketing Digital Ético -->
+<!-- SLIDE 2: Diagnóstico Financeiro -->
 <div class="slide bg-surface">
   <div class="inner">
-    <div class="badge">🤝 O QUE É MARKETING DIGITAL ÉTICO</div>
-    <h2>Promova seu trabalho<br>sem ferir o Código</h2>
-    <p>Marketing ético na fonoaudiologia é sobre educar, não sobre vender. É construir autoridade com transparência.</p>
-    <div class="slide-card">
-      <p style="font-size:15px;line-height:1.7">
-      ✅ Conteúdo educativo baseado em evidências<br>
-      ✅ Divulgação de especialidades registradas no CFFa<br>
-      ✅ Transparência sobre seus serviços e limitações<br>
-      ✅ Respeito à privacidade e ao sigilo do paciente<br>
-      ✅ Construção de autoridade, não de dependência
-      </p>
+    <div class="number-bg">01</div>
+    <div class="badge">💰 Passo 1</div>
+    <h2>Diagnóstico Financeiro</h2>
+    <p>Antes de crescer, entenda seus números. Custo por paciente, ticket médio, inadimplência.</p>
+    <div class="card">
+      <p>📊 <span class="highlight">60%</span> dos consultórios não sabem seu custo por paciente</p>
+    </div>
+    <div style="margin-top:32px;position:relative;z-index:1;width:100%">
+      <div style="width:100%;height:12px;background:#EAE8FF;position:relative">
+        <div style="width:60%;height:100%;background:linear-gradient(90deg,#6C63FF,#8B85FF);position:relative"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;color:#4A4A6A">
+        <span>Sem controle financeiro</span>
+        <span>60%</span>
+      </div>
     </div>
     <div class="logo-pos logo-primary">evolua</div>
   </div>
 </div>
 
-<!-- SLIDE 3: Construa sua Marca Pessoal -->
+<!-- SLIDE 3: Marketing Digital Ético -->
 <div class="slide bg-canvas">
   <div class="inner">
-    <div class="badge">💼 SUA MARCA PESSOAL</div>
-    <h2>Autenticidade é<br>seu maior diferencial</h2>
-    <p>Pacientes escolhem profissionais que transmitem confiança e conhecimento.</p>
-    <ul class="steps">
-      <li><span class="step-num">1</span><span class="step-text"><strong>Proposta de valor clara</strong> — Defina qual problema você resolve e para quem</span></li>
-      <li><span class="step-num">2</span><span class="step-text"><strong>Conteúdo educativo</strong> — Publique dicas, mitos e verdades sobre fonoaudiologia</span></li>
-      <li><span class="step-num">3</span><span class="step-text"><strong>Interaja genuinamente</strong> — Responda dúvidas, engaje com sua comunidade</span></li>
-      <li><span class="step-num">4</span><span class="step-text"><strong>Seja consistente</strong> — Presença regular gera reconhecimento e confiança</span></li>
-    </ul>
+    <div class="number-bg">02</div>
+    <div class="badge">⚖️ Passo 2</div>
+    <h2>Marketing Digital Ético</h2>
+    <p>Promova seu trabalho dentro das regras do CFFA e atraia pacientes com conteúdo de valor.</p>
+    <div class="grid-2">
+      <div class="grid-item">
+        <h3>✅ Permitido</h3>
+        <p>Conteúdo educativo • Cases autorizados • Especialidades</p>
+      </div>
+      <div class="grid-item">
+        <h3>❌ Vedado</h3>
+        <p>Prometer cura • Sensacionalismo • Mercantilização</p>
+      </div>
+    </div>
+    <div style="margin-top:12px;position:relative;z-index:1;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:#8888AA">Resolução CFFA 600/2021</div>
     <div class="logo-pos logo-primary">evolua</div>
   </div>
 </div>
 
-<!-- SLIDE 4: Dicas Práticas -->
+<!-- SLIDE 4: Automação + CRM -->
 <div class="slide bg-deep">
   <div class="inner">
-    <div class="badge light">📚 DICAS PRÁTICAS</div>
-    <h1 class="neon" style="font-size:44px;margin-bottom:12px">Como aplicar<br>no dia a dia</h1>
-    <p class="light">Estratégias simples para começar hoje mesmo.</p>
-    <ul class="item-list">
-      <li><span class="item-icon">📱</span><span class="item-text"><strong>Instagram</strong> — Carrosséis educativos sobre temas que seus pacientes mais perguntam</span></li>
-      <li><span class="item-icon">📝</span><span class="item-text"><strong>Blog</strong> — Artigos aprofundados que mostram sua autoridade no assunto</span></li>
-      <li><span class="item-icon">💬</span><span class="item-text"><strong>WhatsApp</strong> — Atendimento humanizado que gera confiança antes da primeira consulta</span></li>
-      <li><span class="item-icon">📊</span><span class="item-text"><strong>Resultado</strong> — Pacientes que chegam pelo conteúdo já vêm pré-qualificados</span></li>
+    <div class="badge light">🤖 Passo 3 + 4</div>
+    <h1 class="neon" style="font-size:44px;margin-bottom:12px">Automatização<br>+ CRM Especializado</h1>
+    <p class="light">Menos tarefa manual, mais tempo para o que importa.</p>
+    <ul class="steps">
+      <li><span class="step-num">1</span><span class="step-text"><strong>Agenda automática</strong> com lembrete no WhatsApp e confirmação de presença</span></li>
+      <li><span class="step-num">2</span><span class="step-text"><strong>Prontuário inteligente</strong> preenchido por IA em 30 segundos</span></li>
+      <li><span class="step-num">3</span><span class="step-text"><strong>Cobrança unificada</strong> por PIX e cartão com controle de inadimplência</span></li>
+      <li><span class="step-num">4</span><span class="step-text"><strong>Relatórios automáticos</strong> financeiros e de produção clínica</span></li>
     </ul>
     <div class="logo-pos logo-neon">evolua</div>
   </div>
@@ -106,11 +117,11 @@ p.light{color:rgba(255,255,255,0.8)}
 <!-- SLIDE 5: CTA Final -->
 <div class="slide bg-primary">
   <div class="inner center">
-    <div class="icon-big">🚀</div>
-    <h1 class="white">Pronta para<br>crescer?</h1>
-    <p class="light" style="text-align:center;margin-bottom:8px">A Evolua te ajuda a gerenciar sua clínica enquanto<br>você constrói sua presença digital.</p>
-    <div class="cta-btn">TESTE GRÁTIS →</div>
-    <div class="cta-url" style="color:rgba(255,255,255,0.4)">useevolua.com.br</div>
+    <div style="font-size:72px;margin-bottom:20px">🚀</div>
+    <h1 class="white">Comece Hoje</h1>
+    <p class="light" style="text-align:center;margin-bottom:8px">Teste grátis por 7 dias. Sem compromisso.<br>Configure em 5 minutos.</p>
+    <div class="cta-btn">QUERO TESTAR GRÁTIS</div>
+    <div class="cta-url">useevolua.com.br</div>
     <div class="logo-pos logo-neon">evolua</div>
   </div>
 </div>
