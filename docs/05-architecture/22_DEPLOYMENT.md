@@ -13,7 +13,9 @@ Vercel hospeda frontend e landing; Render hospeda API e IA; Supabase hospeda dad
 
 ## Operação segura
 
-Deploy: mudança → CI → review → deploy → health check → observar → rollback. Não cancelar deploys em andamento por concorrência. Migrations SQL usam ledger para evitar reexecução histórica e conexão direta para DDL, conforme runbook existente em `AGENTS.md`. A `DIRECT_URL` local observada aponta para `sa-east-1` e não deve ser usada para staging.
+Deploy: mudança → CI → review → deploy → health check → observar → rollback. Não cancelar deploys em andamento por concorrência. Migrations SQL usam ledger para evitar reexecução histórica e conexão direta para DDL, conforme runbook existente em `AGENTS.md`. A `DIRECT_URL` local observada aponta para `sa-east-1` e não deve ser usada para staging. No Supabase Auth de staging, o `Site URL` e a allowlist usam exclusivamente o alias permanente do frontend; magic links só podem ser emitidos após essa configuração ser verificada, e callbacks com fragmentos de sessão não podem aparecer em logs ou evidências de QA.
+
+Em 2026-08-27, um redirect de magic link foi rejeitado pela configuração padrão e enviou uma sessão de staging para `localhost`. A contenção executada foi: logout global, rotação e revogação imediata da signing key anterior, reinício da API para limpar o cache JWKS e confirmação de `401` para o token comprometido. Nenhum dado, usuário ou segredo de produção foi envolvido. O incidente originou a configuração permanente acima e deve ser usado como teste de regressão operacional.
 
 ## Pendência de configuração
 
