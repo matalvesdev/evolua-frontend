@@ -729,7 +729,7 @@ export function QuickActions() {
       <ModalBiblioteca   open={activeModal === 'biblioteca'}    onClose={close} />
       <ModalTarefas      open={activeModal === 'tarefas'}       onClose={close} />
 
-      <div className="card p-0 overflow-hidden border border-border-soft flex flex-col h-full">
+      <div className="card p-0 overflow-hidden flex flex-col h-full">
 
         {/* ── ROW 1: CTA + próxima sessão ──────────────────── */}
         <div className="flex flex-col sm:flex-row items-stretch">
@@ -737,13 +737,12 @@ export function QuickActions() {
             to="/dashboard/sessao"
             className="group relative flex-shrink-0 flex items-center gap-4 px-6 py-5 bg-dark hover:bg-dark-raised transition-all"
           >
-            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-neon" />
-            <div className="flex items-center justify-center w-11 h-11 bg-neon/10 border border-neon/20 rounded-md flex-shrink-0">
+            <div className="flex items-center justify-center w-11 h-11 bg-white/10 border border-white/10 rounded-[12px] flex-shrink-0">
               <span className="material-symbols-outlined text-neon text-2xl" style={{ fontVariationSettings: '"FILL" 1' }}>mic</span>
             </div>
             <div className="min-w-0">
-              <p className="font-display font-bold text-sm uppercase tracking-wide text-neon leading-tight">Iniciar Sessão</p>
-              <p className="text-xs text-white/40 mt-0.5">IA grava, transcreve e gera o relatório</p>
+              <p className="font-display font-semibold text-sm text-white leading-tight">Iniciar sessão</p>
+              <p className="text-xs text-white/50 mt-0.5">IA grava, transcreve e gera o relatório</p>
             </div>
             <span className="material-symbols-outlined text-neon/40 group-hover:text-neon transition-colors ml-2">arrow_forward</span>
           </Link>
@@ -776,30 +775,30 @@ export function QuickActions() {
         </div>
 
         {/* ── ROW 2: Toolbar de ações ───────────────────────── */}
-        <div className="flex items-center overflow-x-auto no-scrollbar bg-surface-low border-t border-border-soft">
+        <div className="flex items-stretch overflow-x-auto no-scrollbar bg-surface border-t border-border-soft">
           {ACTIONS.map(({ id, icon, label, badge }) => (
             <button
               key={id}
               onClick={() => setActiveModal(id)}
-              className="group relative flex flex-col items-center justify-center gap-1.5 px-4 py-3 flex-shrink-0 hover:bg-surface transition-colors border-r border-border-soft last:border-r-0"
+              className="group relative flex items-center justify-center gap-2.5 px-4 py-3.5 flex-shrink-0 hover:bg-surface-low transition-colors border-r border-border-soft last:border-r-0"
             >
-              <div className="relative">
-                <span className="material-symbols-outlined text-text-tertiary group-hover:text-olive transition-colors text-xl" style={{ fontVariationSettings: '"FILL" 0' }}>
+              <div className="icon-tile !w-8 !h-8 !rounded-[9px] relative">
+                <span className="material-symbols-outlined text-white text-base" style={{ fontVariationSettings: '"FILL" 0' }}>
                   {icon}
                 </span>
                 {badge && (
-                  <span className="absolute -top-1.5 -right-2.5 text-[8px] font-bold uppercase bg-neon-surface text-olive px-1 py-px rounded-sm leading-none">
+                  <span className="absolute -top-1.5 -right-2 text-[8px] font-bold uppercase bg-neon text-dark px-1 py-px rounded-full leading-none">
                     {badge}
                   </span>
                 )}
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary group-hover:text-olive transition-colors whitespace-nowrap leading-none">
+              <span className="text-xs font-medium text-text-secondary group-hover:text-text-primary transition-colors whitespace-nowrap leading-none">
                 {label}
               </span>
             </button>
           ))}
           <div className="flex-1" />
-          <Link to="/dashboard/mais" className="flex-shrink-0 flex items-center gap-1 px-4 py-3 text-[10px] font-bold uppercase tracking-wide text-text-tertiary hover:text-olive transition-colors border-l border-border-soft">
+          <Link to="/dashboard/mais" className="flex-shrink-0 flex items-center gap-1 px-4 py-3 text-xs font-medium text-text-tertiary hover:text-text-primary transition-colors border-l border-border-soft">
             <span className="material-symbols-outlined text-sm">apps</span>
             Tudo
           </Link>

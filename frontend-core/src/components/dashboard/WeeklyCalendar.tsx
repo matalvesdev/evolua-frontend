@@ -81,22 +81,19 @@ export function WeeklyCalendar() {
   }
 
   return (
-    <div className="glass card flex flex-col gap-5 h-full">
+    <div className="card flex flex-col gap-5 h-full">
 
       {/* ── Header ── */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span
-            className="material-symbols-outlined text-lg p-1.5 rounded-lg bg-info-surface text-info"
-            style={{ fontVariationSettings: '"FILL" 1' }}
-          >
+          <span className="icon-tile material-symbols-outlined text-lg" style={{ fontVariationSettings: '"FILL" 1' }}>
             calendar_month
           </span>
-          <h3 className="font-display font-bold text-text-primary">Minha Agenda</h3>
+          <h3 className="font-display font-semibold text-text-primary">Minha agenda</h3>
         </div>
 
         {/* Navegação de semana */}
-        <div className="flex items-center gap-0.5 glass-light border border-border rounded-full px-2 py-1">
+        <div className="flex items-center gap-0.5 bg-surface-low border border-border-soft rounded-full px-2 py-1">
           <button onClick={() => shift(-1)} className="btn-ghost p-0.5 rounded-full">
             <span className="material-symbols-outlined text-base">chevron_left</span>
           </button>
@@ -123,26 +120,26 @@ export function WeeklyCalendar() {
               onClick={() => setSelectedDay(d)}
               className={`flex flex-col items-center gap-1.5 py-2.5 transition-all ${
                 isToday
-                  ? 'bg-dark text-neon shadow-[var(--shadow-dark)]'
+                  ? 'bg-neon text-dark shadow-[var(--shadow-card)] rounded-[12px]'
                   : isSelected
-                  ? 'bg-neon-surface text-olive border border-border-neon'
+                  ? 'bg-surface-low text-text-primary border border-border rounded-[12px]'
                   : isWeekend
-                  ? 'opacity-40 hover:opacity-70 hover:bg-surface-overlay'
-                  : 'hover:bg-surface-overlay text-text-secondary'
+                  ? 'opacity-40 hover:opacity-70 hover:bg-surface-low rounded-[12px]'
+                  : 'hover:bg-surface-low text-text-secondary rounded-[12px]'
               }`}
             >
               <span className={`text-[10px] font-bold uppercase ${
-                isToday ? 'text-neon/60' : 'text-text-tertiary'
+                isToday ? 'text-dark/60' : 'text-text-tertiary'
               }`}>
                 {isToday ? 'HOJE' : DAY_LABELS[d.getDay()]}
               </span>
               <span className={`text-base font-bold ${
-                isToday ? 'text-neon' : isSelected ? 'text-olive' : 'text-text-primary'
+                isToday ? 'text-dark' : isSelected ? 'text-text-primary' : 'text-text-primary'
               }`}>
                 {d.getDate()}
               </span>
               {hasDot && (
-                <span className={`w-1.5 h-1.5 rounded-full ${isToday ? 'bg-neon' : 'bg-olive'}`} />
+                <span className={`w-1.5 h-1.5 rounded-full ${isToday ? 'bg-dark' : 'bg-olive'}`} />
               )}
             </button>
           )

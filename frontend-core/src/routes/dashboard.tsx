@@ -26,11 +26,12 @@ export const Route = createFileRoute('/dashboard')({
 function DashboardError({ error, reset }: { error: Error; reset: () => void }) {
   Sentry.captureException(error)
   return (
-    <div className="min-h-screen flex bg-canvas">
-      <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        <Header />
-        <main className="flex-1 flex items-center justify-center p-6">
+    <div className="dashboard-stage">
+      <div className="dashboard-shell">
+        <Sidebar />
+        <div className="flex-1 flex flex-col min-w-0 min-h-0">
+          <Header />
+          <main className="dashboard-main flex-1 flex items-center justify-center p-6">
           <div className="max-w-md w-full bg-surface border-2 border-outline-variant p-8 space-y-6">
             <div className="space-y-2">
               <h1 className="font-display text-2xl text-deep">Algo deu errado</h1>
@@ -59,7 +60,8 @@ function DashboardError({ error, reset }: { error: Error; reset: () => void }) {
               </Link>
             </div>
           </div>
-        </main>
+          </main>
+        </div>
       </div>
       <MobileNav />
     </div>
@@ -91,7 +93,7 @@ function QuickNotesFAB() {
     <>
       {/* Painel de notas */}
       {open && (
-        <div className="fixed bottom-20 right-5 md:bottom-6 md:right-6 z-50 w-80 bg-surface border border-border-soft shadow-[var(--shadow-dark)] flex flex-col overflow-hidden">
+        <div className="fixed bottom-20 right-5 md:bottom-8 md:right-8 z-50 w-80 rounded-[18px] bg-surface border border-border-soft shadow-[var(--shadow-dark)] flex flex-col overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 bg-dark border-b border-dark-border">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-sm text-neon" style={{ fontVariationSettings:'"FILL" 1' }}>sticky_note_2</span>
@@ -127,7 +129,10 @@ function QuickNotesFAB() {
             autoFocus
           />
           <div className="px-4 py-2 border-t border-border-soft flex items-center justify-between text-[10px] text-text-tertiary">
-            <span title="Notas limpas automaticamente ao fechar o navegador">🔒 Sessão apenas · {notes.length} chars</span>
+            <span className="inline-flex items-center gap-1" title="Notas limpas automaticamente ao fechar o navegador">
+              <span className="material-symbols-outlined text-[12px]">lock</span>
+              Sessão apenas · {notes.length} chars
+            </span>
             <button onClick={() => save('')} className="hover:text-danger transition-colors">Limpar</button>
           </div>
         </div>
@@ -136,7 +141,7 @@ function QuickNotesFAB() {
       {/* FAB */}
       <button
         onClick={() => setOpen(o => !o)}
-        className="fixed bottom-20 right-5 md:bottom-6 md:right-6 z-40 w-12 h-12 bg-dark text-neon shadow-[var(--shadow-dark)] flex items-center justify-center hover:opacity-90 transition-opacity"
+        className="fixed bottom-20 right-5 md:bottom-8 md:right-8 z-40 w-12 h-12 rounded-[14px] bg-dark text-neon shadow-[var(--shadow-dark)] flex items-center justify-center hover:opacity-90 transition-opacity"
         style={{ transform: open ? 'translateY(-312px)' : 'none', transition: 'transform 0.2s ease' }}
         aria-label="Notas rápidas"
         title="Notas rápidas (não use para dados de pacientes)"
@@ -203,14 +208,16 @@ function OnboardingBanner() {
 // ── Layout principal ──────────────────────────────────────────────────────────
 function DashboardLayout() {
   return (
-    <div className="min-h-screen flex bg-canvas">
-      <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        <Header />
-        <OnboardingBanner />
-        <main className="flex-1 overflow-y-auto pb-24 md:pb-0 bg-canvas">
-          <Outlet />
-        </main>
+    <div className="dashboard-stage">
+      <div className="dashboard-shell">
+        <Sidebar />
+        <div className="flex-1 flex flex-col min-w-0 min-h-0">
+          <Header />
+          <OnboardingBanner />
+          <main className="dashboard-main flex-1 overflow-y-auto pb-24 md:pb-0">
+            <Outlet />
+          </main>
+        </div>
       </div>
       <MobileNav />
       <QuickNotesFAB />

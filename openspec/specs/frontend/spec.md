@@ -17,3 +17,16 @@
 - **IA integration**: ✅ Biblioteca, Marketing, QuickActions, Analytics wired to API
 - **WhatsApp sharing**: ✅ Exercise prescription via `/api/messages/batch`
 - **ErrorBoundary**: ✅ Sentry integrated
+
+## Dashboard Visual System
+
+- The dashboard MUST use the shared shell, tokens, navigation and surface patterns
+  documented in `docs/03-product/21_DASHBOARD_VISUAL_SYSTEM.md`.
+- Desktop MUST render the application as a light rounded shell over a warm neutral stage;
+  mobile MUST use the full viewport without the decorative outer frame.
+- Active navigation MUST use the Evolua neon color and MUST remain identifiable without
+  relying on a thin side indicator.
+- Dashboard KPI summaries SHOULD use one horizontal scan band on desktop and MUST remain
+  usable through responsive wrapping or horizontal scrolling on narrow viewports.
+- Visual redesigns MUST preserve existing data hooks and loading, error and empty states.
+- No clinical, financial or operational value may be invented to fill the layout.

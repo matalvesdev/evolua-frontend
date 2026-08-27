@@ -247,21 +247,13 @@ export function Header() {
     <>
       {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
 
-      <header className="sticky top-0 z-40 bg-surface border-b border-border-soft shrink-0">
-        <div className="flex items-center gap-3 px-4 sm:px-6 h-[57px]">
+      <header className="sticky top-0 z-40 bg-canvas shrink-0">
+        <div className="flex items-center gap-3 px-4 sm:px-6 h-[68px]">
 
           {/* ── Breadcrumb / título ── */}
           <div className="flex items-center gap-2 flex-1 min-w-0">
-            {meta.parent && (
-              <>
-                <Link to="/dashboard" className="hidden sm:block text-xs text-text-tertiary hover:text-text-secondary transition-colors shrink-0">
-                  {meta.parent}
-                </Link>
-                <span className="hidden sm:block text-text-tertiary text-xs shrink-0">/</span>
-              </>
-            )}
             <div className="flex items-center gap-2 min-w-0">
-              <h2 className="font-display font-bold text-sm text-text-primary tracking-wide truncate uppercase">
+              <h2 className="font-display font-medium text-lg text-text-primary tracking-[-0.02em] truncate">
                 {meta.title}
               </h2>
             </div>
@@ -270,7 +262,7 @@ export function Header() {
           {/* ── Busca: botão que abre command palette ── */}
           <button
             onClick={() => setPaletteOpen(true)}
-            className="hidden sm:flex items-center gap-2.5 pl-3 pr-2 py-1.5 bg-surface-low border border-border-soft hover:border-border text-text-tertiary transition-colors text-xs min-w-[140px] lg:min-w-[200px]"
+            className="hidden sm:flex items-center gap-2.5 pl-3.5 pr-2 py-2 rounded-[12px] bg-surface border border-border-soft hover:border-border text-text-tertiary transition-colors text-xs min-w-[160px] lg:min-w-[224px] shadow-[0_1px_2px_rgba(32,33,31,.04)]"
           >
             <span className="material-symbols-outlined text-base">search</span>
             <span className="flex-1 text-left">Buscar...</span>
@@ -282,7 +274,7 @@ export function Header() {
           {/* Busca mobile */}
           <button
             onClick={() => setPaletteOpen(true)}
-            className="sm:hidden p-2 text-text-secondary hover:text-text-primary transition-colors"
+            className="sm:hidden control-tile"
             aria-label="Buscar"
           >
             <span className="material-symbols-outlined text-xl">search</span>
@@ -297,7 +289,7 @@ export function Header() {
           {/* ── CTA: Iniciar Sessão ── */}
           <Link
             to="/dashboard/sessao"
-            className="hidden sm:flex items-center gap-1.5 px-3 py-2 bg-dark text-neon text-xs font-display font-bold uppercase tracking-wide hover:opacity-90 transition-opacity"
+            className="hidden sm:flex items-center gap-1.5 px-4 py-2.5 rounded-[12px] bg-dark text-white text-xs font-display font-semibold hover:bg-dark-raised transition-colors shadow-[var(--shadow-card)]"
           >
             <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: '"FILL" 1' }}>mic</span>
             <span className="hidden md:block">Sessão</span>
@@ -307,7 +299,7 @@ export function Header() {
           <div ref={notifRef} className="relative">
             <button
               onClick={() => { setNotifOpen(o => !o); setProfileOpen(false) }}
-              className="relative p-2 text-text-secondary hover:text-text-primary transition-colors"
+              className="control-tile relative"
               aria-label="Notificações"
             >
               <span className="material-symbols-outlined text-xl">notifications</span>
@@ -320,7 +312,7 @@ export function Header() {
             </button>
 
             {notifOpen && (
-              <div className="absolute top-full right-0 mt-2 w-80 bg-surface border border-border-soft shadow-[var(--shadow-dark)] z-50 overflow-hidden">
+              <div className="absolute top-full right-0 mt-2 w-80 rounded-[18px] bg-surface border border-border-soft shadow-[var(--shadow-dark)] z-50 overflow-hidden">
                 <div className="px-4 py-3 border-b border-border-soft flex items-center justify-between">
                   <p className="font-display font-bold text-sm text-text-primary">Notificações</p>
                   <div className="flex items-center gap-3">
@@ -371,13 +363,13 @@ export function Header() {
           </div>
 
           {/* Divisor */}
-          <div className="w-px h-5 bg-border-soft" />
+          <div className="hidden sm:block w-px h-5 bg-border-soft" />
 
           {/* ── Perfil ── */}
           <div ref={profileRef} className="relative">
             <button
               onClick={() => { setProfileOpen(o => !o); setNotifOpen(false) }}
-              className="flex items-center gap-2 py-1 pl-1 pr-2 hover:bg-surface-low transition-colors"
+              className="flex items-center gap-2 py-1 pl-1 pr-2 rounded-[12px] hover:bg-surface-low transition-colors"
             >
               <div className="avatar w-7 h-7 text-xs">{initial}</div>
               <div className="hidden lg:flex flex-col items-start leading-none gap-0.5">
@@ -390,7 +382,7 @@ export function Header() {
             </button>
 
             {profileOpen && (
-              <div className="absolute top-full right-0 mt-2 w-56 bg-surface border border-border-soft shadow-[var(--shadow-dark)] overflow-hidden z-50">
+              <div className="absolute top-full right-0 mt-2 w-56 rounded-[18px] bg-surface border border-border-soft shadow-[var(--shadow-dark)] overflow-hidden z-50">
                 <div className="px-4 py-3 border-b border-border-soft">
                   <div className="flex items-center gap-3">
                     <div className="avatar w-9 h-9 text-sm">{initial}</div>

@@ -489,7 +489,7 @@ function AgendaPage() {
 
   if (apptQuery.isLoading) {
     return (
-      <div className="flex flex-col gap-6 p-6">
+      <div className="dashboard-content">
         <div className="flex items-center gap-3">
           <div className="w-4 h-4 border-2 border-olive border-t-transparent rounded-full animate-spin" />
           <span className="text-sm text-text-tertiary">Carregando agenda...</span>
@@ -500,7 +500,7 @@ function AgendaPage() {
 
   if (apptQuery.isError) {
     return (
-      <div className="flex flex-col gap-6 p-6">
+      <div className="dashboard-content">
         <div className="card p-6">
           <div className="flex flex-col items-center gap-3 text-center">
             <span className="material-symbols-outlined text-3xl text-error">error</span>
@@ -514,7 +514,7 @@ function AgendaPage() {
   }
 
   return (
-    <div className="flex flex-col gap-0 p-6">
+    <div className="dashboard-content flex flex-col gap-0">
       {showModal && (
         <NewAppointmentModal
           onClose={() => { setShowModal(false); setErrorMsg(null) }}
@@ -541,10 +541,11 @@ function AgendaPage() {
       </div>
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="font-display font-bold text-2xl uppercase tracking-wider text-text-primary">Agenda</h1>
-          <p className="text-sm text-text-secondary mt-0.5">
+      <div className="page-header">
+        <div className="page-header__main">
+          <p className="page-header__eyebrow">Rotina clínica</p>
+          <h1 className="page-header__title">Agenda</h1>
+          <p className="page-header__sub">
             {events.filter(e => e.status !== 'cancelled').length} sessões ativas
             {gcal.status === 'connected' && (
               <span className="ml-2 inline-flex items-center gap-1 text-success">
@@ -554,8 +555,8 @@ function AgendaPage() {
             )}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="flex border border-border-soft overflow-hidden">
+        <div className="page-header__actions w-full sm:w-auto flex-wrap">
+          <div className="dashboard-toolbar !p-1">
             {(['week','month'] as const).map(v => (
               <button key={v} onClick={() => setView(v)}
                 className={`px-4 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${
@@ -569,24 +570,24 @@ function AgendaPage() {
             className="btn-outline text-xs px-3 py-2">
             Hoje
           </button>
-          <button onClick={() => setShowModal(true)} className="btn-primary flex items-center gap-2">
+          <button onClick={() => setShowModal(true)} className="btn-primary flex flex-1 sm:flex-none items-center gap-2 whitespace-nowrap">
             <span className="material-symbols-outlined text-sm">add</span>
             Novo Agendamento
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
         {/* ── Calendário ── */}
-        <div className="lg:col-span-2 flex flex-col gap-4">
+        <div className="xl:col-span-2 flex flex-col gap-4">
 
           {/* Navegação mês */}
-          <div className="card p-4 flex items-center justify-between">
+          <div className="card p-4 flex items-center justify-between rounded-[18px]">
             <button onClick={prevMonth} className="p-1 hover:bg-surface-low transition-colors">
               <span className="material-symbols-outlined text-text-tertiary">chevron_left</span>
             </button>
-            <h2 className="font-display font-bold text-sm uppercase tracking-widest text-text-primary">
+            <h2 className="dashboard-panel-title">
               {MONTHS[month]} {year}
             </h2>
             <button onClick={nextMonth} className="p-1 hover:bg-surface-low transition-colors">
@@ -822,17 +823,19 @@ function AgendaPage() {
           </div>
 
           {/* Stats do dia */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="metric-band grid-cols-2">
             {[
               { label:'Concluídas', value: selectedEvents.filter(e=>e.status==='completed').length, icon:'task_alt',    color:'text-success' },
               { label:'Confirmadas', value: selectedEvents.filter(e=>e.status==='confirmed').length, icon:'check_circle', color:'text-info' },
               { label:'Aguardando', value: selectedEvents.filter(e=>e.status==='scheduled').length, icon:'schedule',    color:'text-warning' },
               { label:'Canceladas', value: selectedEvents.filter(e=>e.status==='cancelled').length, icon:'cancel',      color:'text-danger' },
             ].map(stat => (
-              <div key={stat.label} className="card p-3 flex flex-col gap-1">
-                <span className={`material-symbols-outlined text-lg ${stat.color}`}>{stat.icon}</span>
-                <p className="font-display font-bold text-xl text-text-primary">{stat.value}</p>
-                <p className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">{stat.label}</p>
+              <div key={stat.label} className="metric-band__item !p-3">
+                <span className={`metric-band__icon material-symbols-outlined text-lg ${stat.color}`}>{stat.icon}</span>
+                <div>
+                  <p className="font-display font-bold text-xl text-text-primary">{stat.value}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">{stat.label}</p>
+                </div>
               </div>
             ))}
           </div>

@@ -1,5 +1,5 @@
 /* ── Google Fonts ───────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Space+Grotesk:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 @import "tailwindcss";
@@ -15,25 +15,26 @@
 
 @theme {
   /* ── Paleta v5.0 — primitivas oficiais ──────────────────*/
-  --color-canvas-base:    #F8F8FF;
-  --color-lavender:       #EAE8FF;
-  --color-lavender-mid:   #C5C1FF;
+  --color-stage:          #DAD9D4;
+  --color-canvas-base:    #F7F7F4;
+  --color-lavender:       #EFEDF9;
+  --color-lavender-mid:   #D9D5F5;
   --color-lavender-deep:  #9D97F5;
   --color-primary-base:   #6C63FF;
   --color-primary-dark:   #5650D4;
   --color-primary-light:  #8B85FF;
-  --color-deep:           #2D2B55;
-  --color-deep-mid:       #3D3A6B;
-  --color-deep-light:     #514E85;
-  --color-ink:            #1A1A2E;
-  --color-ink-soft:       #4A4A6A;
-  --color-muted:          #8888AA;
+  --color-deep:           #3D3E3C;
+  --color-deep-mid:       #4A4B48;
+  --color-deep-light:     #5A5C57;
+  --color-ink:            #20211F;
+  --color-ink-soft:       #62645F;
+  --color-muted:          #92948E;
 
   /* ── Escala v-*  (compat: usada por componentes legados) ──
      Mapeada para a família Lavender→Primary→Deep.            */
-  --color-v-950: #1A1A2E;   /* ink — fundos escuros máximos    */
-  --color-v-900: #2D2B55;   /* deep — fundos escuros padrão    */
-  --color-v-800: #3D3A6B;   /* deep-mid — destaques            */
+  --color-v-950: #20211F;   /* ink — fundos escuros máximos    */
+  --color-v-900: #3D3E3C;   /* deep — fundos escuros padrão    */
+  --color-v-800: #4A4B48;   /* deep-mid — destaques            */
   --color-v-700: #5650D4;   /* primary-dark — hover de CTA     */
   --color-v-600: #6C63FF;   /* primary — CTA principal         */
   --color-v-500: #8B85FF;   /* primary-light                   */
@@ -59,28 +60,28 @@
   /* ── Surfaces — alias semântico ────────────────────────
      "dark" = superfície escura usada em CTAs, indicators,
      painéis de marca. Equivale a deep #2D2B55.              */
-  --color-dark:         #2D2B55;
-  --color-dark-raised:  #3D3A6B;
+  --color-dark:         #3D3E3C;
+  --color-dark-raised:  #4A4B48;
   --color-dark-border:  rgba(255,255,255,.08);
 
   /* ── Canvas & Surface (light) ──────────────────────────*/
-  --color-canvas:          #F8F8FF;
+  --color-canvas:          #F7F7F4;
   --color-surface:         #FFFFFF;
-  --color-surface-low:     #F0EFF9;
-  --color-surface-high:    #EAE8FF;
+  --color-surface-low:     #F0F0EC;
+  --color-surface-high:    #E8E8E2;
   --color-surface-overlay: rgba(255,255,255,.78);
 
   /* ── Border ────────────────────────────────────────────*/
-  --color-border:        #E0DFEF;
-  --color-border-soft:   rgba(26,26,46,.06);
+  --color-border:        #DEDED8;
+  --color-border-soft:   rgba(32,33,31,.07);
   --color-border-neon:   rgba(196,241,53,.30);
   --color-border-brand:  rgba(108,99,255,.30);
-  --color-border-bright: #C5C1FF;
+  --color-border-bright: #CACAC2;
 
   /* ── Text (em superfície clara) ────────────────────────*/
-  --color-text-primary:   #1A1A2E;   /* ink — títulos, dados  */
-  --color-text-secondary: #4A4A6A;   /* ink-soft              */
-  --color-text-tertiary:  #8888AA;   /* muted                 */
+  --color-text-primary:   #20211F;   /* ink — títulos, dados  */
+  --color-text-secondary: #62645F;   /* ink-soft              */
+  --color-text-tertiary:  #92948E;   /* muted                 */
   --color-text-inverse:   #FFFFFF;
   --color-text-brand:     #6C63FF;
   --color-text-neon:      #C4F135;
@@ -90,41 +91,41 @@
   --color-on-primary:               #FFFFFF;
   --color-primary-container:        #EAE8FF;
   --color-on-primary-container:     #2D2B55;
-  --color-on-primary-fixed:         #1A1A2E;
+  --color-on-primary-fixed:         #20211F;
   --color-primary-fixed:            #6C63FF;
   --color-primary-fixed-dim:        #5650D4;
-  --color-on-surface:               #1A1A2E;
-  --color-on-surface-variant:       #4A4A6A;
-  --color-outline-variant:          #E0DFEF;
-  --color-outline:                  #C5C1FF;
+  --color-on-surface:               #20211F;
+  --color-on-surface-variant:       #62645F;
+  --color-outline-variant:          #DEDED8;
+  --color-outline:                  #CACAC2;
   --color-surface-container:        #FFFFFF;
-  --color-surface-container-low:    #F8F8FF;
-  --color-surface-container-high:   #F0EFF9;
+  --color-surface-container-low:    #F7F7F4;
+  --color-surface-container-high:   #F0F0EC;
   --color-surface-container-lowest: #FFFFFF;
-  --color-surface-container-highest:#EAE8FF;
+  --color-surface-container-highest:#E8E8E2;
   --color-error:                    #ba1a1a;
   --color-error-container:          #ffdad6;
   --color-on-error-container:       #93000a;
-  --color-inverse-surface:          #2D2B55;
-  --color-inverse-on-surface:       #F8F8FF;
+  --color-inverse-surface:          #3D3E3C;
+  --color-inverse-on-surface:       #F7F7F4;
 
   /* ── Aliases dashboard compat ──────────────────────────*/
   --color-brand:          #6C63FF;
-  --color-brand-dark:     #2D2B55;
+  --color-brand-dark:     #3D3E3C;
   --color-brand-light:    #8B85FF;
-  --color-brand-muted:    #8888AA;
+  --color-brand-muted:    #92948E;
   --color-brand-surface:  #EAE8FF;
   --color-brand-glow:     rgba(108,99,255,.20);
 
   /* ── Acento olive (compat — ícones em fundos claros) ───
      Usado em depoimentos, FAB, banners. Mapeado para deep. */
-  --color-olive:          #2D2B55;
+  --color-olive:          #53671D;
 
   /* ── Silver (dividers neutros) ────────────────────────*/
-  --color-silver:         #E0DFEF;
+  --color-silver:         #DEDED8;
 
   /* ── Preto/branco absoluto ─────────────────────────────*/
-  --color-black:  #1A1A2E;
+  --color-black:  #20211F;
   --color-white:  #FFFFFF;
 
   /* ── Semantic ──────────────────────────────────────────*/
@@ -139,8 +140,8 @@
 
   /* ── Typography ────────────────────────────────────────*/
   --font-sans:     'DM Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-display:  'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-headline: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-display:  'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-headline: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-body:     'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-label:    'DM Sans', ui-sans-serif, system-ui, sans-serif;
 
@@ -150,17 +151,17 @@
   /* ── Border radius ──────────────────────────────────────
      Brand v5: estética geométrica — radius mínimo           */
   --radius-xs:   0.125rem;  /* 2px   — estética geométrica   */
-  --radius-sm:   0.25rem;   /* 4px   — badges, chips         */
-  --radius-md:   0.375rem;  /* 6px   — botões, inputs        */
-  --radius-lg:   0.5rem;    /* 8px   — cards menores         */
-  --radius-xl:   0.75rem;   /* 12px  — cards principais      */
-  --radius-2xl:  1rem;
-  --radius-3xl:  1.5rem;
+  --radius-sm:   0.5rem;    /* 8px   — badges, chips         */
+  --radius-md:   0.625rem;  /* 10px  — botões, inputs        */
+  --radius-lg:   1.125rem;  /* 18px  — cards menores         */
+  --radius-xl:   1.25rem;   /* 20px  — cards principais      */
+  --radius-2xl:  1.5rem;
+  --radius-3xl:  1.75rem;
 
   /* ── Shadows (ajustadas para fundos claros) ────────────*/
   --shadow-neon:  0 4px 20px rgba(196,241,53,.30);
-  --shadow-card:  0 1px 3px rgba(26,26,46,.06), 0 4px 12px rgba(26,26,46,.04);
-  --shadow-dark:  0 8px 28px rgba(26,26,46,.12), 0 2px 8px rgba(26,26,46,.06);
+  --shadow-card:  0 1px 2px rgba(32,33,31,.05), 0 8px 18px rgba(32,33,31,.06);
+  --shadow-dark:  0 12px 32px rgba(32,33,31,.16), 0 2px 8px rgba(32,33,31,.08);
   --shadow-brand: 0 4px 20px rgba(108,99,255,.25);
   --shadow-glass: 0 2px 16px rgba(26,26,46,.08);
 }
@@ -179,16 +180,19 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: var(--color-canvas);
+  background: var(--color-stage);
   color: var(--color-text-primary);
   overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5 {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
+  text-wrap: balance;
 }
+
+p { text-wrap: pretty; }
 
 ::selection {
   background: rgba(108,99,255,.20);
@@ -261,11 +265,11 @@ h1, h2, h3, h4, h5 {
 
 /* Nav item ativo — deep escuro com neon (igual landing) */
 .nav-active {
-  background: var(--color-dark);
-  color: var(--color-neon);
+  background: var(--color-neon);
+  color: var(--color-dark);
 }
 .nav-active .material-symbols-outlined {
-  color: var(--color-neon);
+  color: var(--color-dark);
 }
 
 /* CTA pill — deep com neon (igual landing) */
@@ -292,7 +296,7 @@ h1, h2, h3, h4, h5 {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.75rem;
-  border-radius: var(--radius-md);
+  border-radius: 999px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.875rem;
@@ -321,7 +325,7 @@ h1, h2, h3, h4, h5 {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
+  border-radius: 999px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.875rem;
@@ -364,7 +368,7 @@ h1, h2, h3, h4, h5 {
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   box-shadow: var(--shadow-card);
 }
 
@@ -433,7 +437,7 @@ h1, h2, h3, h4, h5 {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   background: rgba(108,99,255,.10);
   color: var(--color-primary);
   font-family: var(--font-display);
@@ -652,7 +656,7 @@ h1, h2, h3, h4, h5 {
   font-weight: 700;
   color: var(--color-text-primary);
   letter-spacing: -0.02em;
-  text-transform: uppercase;
+  text-transform: none;
   line-height: 1.1;
   margin: 0;
 }
@@ -741,4 +745,140 @@ h1, h2, h3, h4, h5 {
 .bk-btn-neon:focus-visible,
 [class*="bg-dark"]:focus-visible {
   outline-color: var(--color-neon);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DASHBOARD SHELL v6 — referência operacional Dribbble
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.dashboard-stage {
+  min-height: 100vh;
+  padding: 16px;
+  background: var(--color-stage);
+}
+
+.dashboard-shell {
+  display: flex;
+  min-height: calc(100vh - 32px);
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
+  background: var(--color-canvas);
+  border: 1px solid rgba(32,33,31,.10);
+  border-radius: 28px;
+  box-shadow: 0 18px 48px rgba(32,33,31,.12), 0 2px 8px rgba(32,33,31,.06);
+}
+
+.dashboard-main {
+  background: var(--color-canvas);
+}
+
+.dashboard-content {
+  width: min(100%, 1600px);
+  margin-inline: auto;
+  padding: 24px;
+}
+
+.icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border-radius: 11px;
+  background: var(--color-dark);
+  color: white;
+  box-shadow: inset 0 1px rgba(255,255,255,.16), 0 4px 10px rgba(32,33,31,.14);
+}
+
+.control-tile {
+  display: inline-flex;
+  min-width: 40px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-low);
+  border: 1px solid var(--color-border-soft);
+  transition: color .15s ease, background .15s ease, transform .15s ease;
+}
+
+.control-tile:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  transform: translateY(-1px);
+}
+
+.dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 16px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.metric-band {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 18px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.metric-band__item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-right: 1px solid var(--color-border-soft);
+}
+
+.metric-band__item:last-child { border-right: 0; }
+
+.metric-band__icon {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: var(--color-dark);
+  color: var(--color-neon);
+}
+
+.dashboard-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 767px) {
+  .dashboard-stage { padding: 0; }
+  .dashboard-shell {
+    min-height: 100vh;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .dashboard-content { padding: 18px 16px 104px; }
+  .dashboard-toolbar { align-items: stretch; }
+  .metric-band__item { border-right: 0; border-bottom: 1px solid var(--color-border-soft); }
+  .metric-band__item:last-child { border-bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
 }
