@@ -193,9 +193,9 @@ Jobs como `frontend-build`, `landing-build`, `e2e` são **path-scoped**: quando 
 | `ci.yml` (PR/push develop) | Todos (com filter por job) |
 | `deploy-frontend.yml` | `frontend-core/**`, `pnpm-lock.yaml` |
 | `deploy-landing.yml` | `landing-core/**`, `pnpm-lock.yaml` |
-| Backend `deploy-production.yml` | `apps/api/**`, `contracts/**`, `prisma/**` no repositório backend |
-| `deploy-ai.yml` | `backend-core/apps/ai/**` |
-| `deploy-whatsapp.yml` | `backend-core/apps/services/whatsapp/**` |
+| Backend `deploy-production.yml` | `apps/api/**`, `apps/ai/**`, `contracts/**`, `prisma/**` no repositório backend |
+| Backend `deploy-staging.yml` | push em `develop` no repositório backend; deploy + validação de commit da API e IA |
+| `deploy-whatsapp.yml` | gateway WhatsApp quando mantido no repositório responsável |
 | `deploy-migrations.yml` | `backend-core/prisma/migrations/**` |
 | `deploy-supabase-migrations.yml` | `supabase/migrations/**` |
 
