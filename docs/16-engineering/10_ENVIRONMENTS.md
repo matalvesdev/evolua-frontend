@@ -13,4 +13,6 @@ CI/deploy existentes incluem build/typecheck/lint por path, deploy Vercel/Render
 
 API e serviço de IA expõem `GET /version` com metadados públicos mínimos. Os gates de Render devem comparar os 12 primeiros caracteres de `RENDER_GIT_COMMIT` ao SHA do workflow, além de consultar `/readyz`; saúde isolada não comprova que o novo artefato entrou no ar.
 
+Na API, `NODE_ENV` explícito continua sendo a autoridade para `staging`, `production` e `test`. Quando o Render fornece `RENDER=true` mas omite `NODE_ENV`, o runtime deve assumir `production` para manter Swagger, CSP, HSTS e demais controles fail-closed.
+
 Feature flags são úteis apenas para rollout/kill switch temporário: nome, owner, alvo, expiração e cleanup obrigatório. Não há prova de framework de flags atual.

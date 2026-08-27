@@ -204,6 +204,7 @@ pnpm --filter @evolua/api test
 - ❌ Validação de .doc/.geos ausente no CI — documentação quebrada passa despercebida; adicionar job `validate-docs` que verifica existência e estrutura
 - ❌ Gate de deploy validar somente `/readyz` — uma instância antiga saudável gera falso positivo; API e IA devem expor `/version` e o workflow deve comparar o `RENDER_GIT_COMMIT` abreviado ao SHA esperado
 - ❌ Workflow web tentar migrar ou implantar `backend-core` — backend é repositório separado e deve ser dono de migrations, build, testes e deploy da API/IA
+- ❌ Confiar que o Blueprint garante `NODE_ENV=production` no serviço Render já existente — `/version` revelou produção em modo development; quando `RENDER=true` e `NODE_ENV` estiver ausente, a API deve falhar fechada para `production`
 
 ## Blog Content Standards (obrigatório)
 
