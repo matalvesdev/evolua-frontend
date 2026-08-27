@@ -17,7 +17,7 @@ export function MobileNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface border-t border-border-soft"
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-surface/95 backdrop-blur-xl border-t border-border-soft shadow-[0_-8px_24px_rgba(32,33,31,.08)]"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="flex items-center justify-around px-1">
@@ -30,7 +30,7 @@ export function MobileNav() {
               <Link
                 key={to}
                 to={to}
-                className="flex flex-col items-center justify-center gap-0.5 px-5 py-3 bg-dark text-neon -mt-3 mb-0.5 shadow-[var(--shadow-dark)] shrink-0"
+                className="flex flex-col items-center justify-center gap-0.5 px-5 py-3 rounded-[14px] bg-dark text-neon -mt-3 mb-0.5 shadow-[var(--shadow-dark)] shrink-0"
               >
                 <span
                   className="material-symbols-outlined text-xl text-neon"
@@ -53,7 +53,7 @@ export function MobileNav() {
             >
               {/* Indicador superior */}
               {active && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-dark" />
+                <span className="absolute top-1 left-1/2 -translate-x-1/2 w-8 h-[3px] rounded-full bg-neon" />
               )}
               <span
                 className="material-symbols-outlined text-xl"

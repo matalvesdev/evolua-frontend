@@ -18,12 +18,6 @@ interface Reminder {
   actionTo: string
 }
 
-const URGENCY_LEFT: Record<Reminder['urgency'], string> = {
-  high:   'bg-danger',
-  medium: 'bg-warning',
-  low:    'bg-success',
-}
-
 const URGENCY_LABEL: Record<Reminder['urgency'], string> = {
   high:   'Urgente',
   medium: 'Atenção',
@@ -134,9 +128,9 @@ export function SmartReminders() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-border-soft">
         <div className="flex items-center gap-2.5">
-          <div className={`flex items-center justify-center w-8 h-8 rounded-md ${highCount > 0 ? 'bg-danger-surface' : 'bg-success-surface'}`}>
+          <div className="icon-tile !w-8 !h-8 !rounded-[9px]">
             <span
-              className={`material-symbols-outlined text-base ${highCount > 0 ? 'text-danger' : 'text-success'}`}
+              className="material-symbols-outlined text-base text-white"
               style={{ fontVariationSettings: '"FILL" 1' }}
             >
               {highCount > 0 ? 'notifications_active' : 'notifications'}
@@ -166,9 +160,6 @@ export function SmartReminders() {
               to={r.actionTo}
               className="flex items-center gap-3 px-5 py-3 hover:bg-surface-low transition-colors group"
             >
-              {/* Barra lateral de urgência */}
-              <div className={`w-[3px] self-stretch rounded-full flex-shrink-0 ${URGENCY_LEFT[r.urgency]}`} />
-
               {/* Ícone */}
               <div className={`w-7 h-7 flex-shrink-0 flex items-center justify-center rounded-md ${r.iconCls}`}>
                 <span

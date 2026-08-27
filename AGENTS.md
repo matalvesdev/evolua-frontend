@@ -475,7 +475,7 @@ Use the skill tool to load a skill when a task matches its description.
 - ❌ Executar Engine sem OPENROUTER_API_KEY — o pipeline valida a chave antes de qualquer passo
 - ❌ Esquecer de commitar outputs do Engine — o CI commita automaticamente `scripts/content-engine/output/` e `docs/content-assets/`
 - ❌ Registrar módulos Fastify dentro de `onReady` — o root plugin já está bootado e falha com `FST_ERR_ROOT_PLG_BOOTED`; registrar módulos antes de `app.ready()` e manter um teste de boot da aplicação.
-- ❌ CSP local sem o backend de desenvolvimento em `connect-src` — o navegador bloqueia as chamadas antes da rede e produz falso `Failed to fetch`; permitir apenas `localhost:3000`/`127.0.0.1:3000` no Vite e manter a origem de produção explícita no Vercel.
+- ❌ CSP local/preview sem o backend selecionado em `connect-src` — o navegador bloqueia as chamadas antes da rede e produz falso `Failed to fetch`; manter `localhost:3000`/`127.0.0.1:3000` e derivar somente a origem explícita de `VITE_API_URL` no Vite, mantendo a origem de produção explícita também no Vercel.
 - ❌ E2E exigir `h1` em todas as telas — validar headings por papel/nome e estados funcionais; níveis `h1`/`h2` são responsabilidade da hierarquia semântica de cada layout.
 - ❌ Commitar storage state, traces ou screenshots E2E — `playwright/.auth/`, `test-results/` e `playwright-report*/` podem conter tokens e devem permanecer ignorados.
 - ❌ Definir pnpm em `packageManager` e também em `pnpm/action-setup` — versões duplicadas são rejeitadas pelo action; manter `packageManager` como fonte única.

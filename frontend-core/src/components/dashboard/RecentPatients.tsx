@@ -65,17 +65,17 @@ export function RecentPatients() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-border-soft">
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center justify-center w-8 h-8 bg-neon-surface rounded-md">
+          <div className="icon-tile !w-8 !h-8 !rounded-[9px]">
             <span
-              className="material-symbols-outlined text-olive text-base"
+              className="material-symbols-outlined text-white text-base"
               style={{ fontVariationSettings: '"FILL" 1' }}
             >
               groups
             </span>
           </div>
           <div>
-            <h3 className="font-display font-bold text-sm text-text-primary uppercase tracking-wide leading-none">
-              Pacientes Ativos
+            <h3 className="font-display font-semibold text-sm text-text-primary leading-none">
+              Pacientes ativos
             </h3>
             <p className="text-[10px] text-text-tertiary mt-0.5">{patients.length} em acompanhamento</p>
           </div>

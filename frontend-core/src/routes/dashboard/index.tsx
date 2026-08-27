@@ -36,7 +36,7 @@ function DashboardHome() {
   })
 
   return (
-    <div className="p-5 sm:p-6 lg:p-8 max-w-[1600px] mx-auto space-y-5">
+    <div className="dashboard-content space-y-4">
 
       {/*
         ╔══════════════════════════════════════════════════════╗
@@ -55,11 +55,11 @@ function DashboardHome() {
           olho começa a varredura F                           */}
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-text-tertiary capitalize">
+          <p className="text-xs font-medium text-text-tertiary capitalize">
             {today}
           </p>
-          <h1 className="font-display font-bold text-xl text-text-primary leading-tight mt-0.5">
-            {getGreeting()}, <span className="text-olive">{firstName}</span>
+          <h1 className="font-display font-medium text-2xl text-text-primary leading-tight mt-0.5 tracking-[-0.03em]">
+            {getGreeting()}, <span>{firstName}</span>
           </h1>
         </div>
         <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-success-surface border border-success/20 rounded-full">
@@ -117,22 +117,21 @@ function DashboardHome() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
         {/* Card: Postagens recentes do blog */}
-        <div className="lg:col-span-8 card p-0 overflow-hidden border border-border-soft">
+        <div className="lg:col-span-8 card p-0 overflow-hidden">
           {/* Header */}
-          <div className="relative px-6 py-4 bg-dark flex items-center gap-4">
-            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-neon" />
-            <div className="flex items-center justify-center w-10 h-10 bg-neon/10 border border-neon/20 rounded-md flex-shrink-0">
-              <span className="material-symbols-outlined text-neon text-xl" style={{ fontVariationSettings: '"FILL" 1' }}>article</span>
+          <div className="px-5 py-4 bg-surface flex items-center gap-3 border-b border-border-soft">
+            <div className="icon-tile">
+              <span className="material-symbols-outlined text-white text-lg" style={{ fontVariationSettings: '"FILL" 1' }}>article</span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-display font-bold text-sm uppercase tracking-wide text-neon leading-tight">Blog Evolua</p>
-              <p className="text-xs text-white/40 mt-0.5">Conteúdo clínico e de negócios para fonoaudiólogos</p>
+              <p className="font-display font-semibold text-sm text-text-primary leading-tight">Blog Evolua</p>
+              <p className="text-xs text-text-tertiary mt-0.5">Conteúdo clínico e de negócios para fonoaudiólogos</p>
             </div>
             <a
               href="https://evolua.com.br/blog"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-neon/10 border border-neon/20 rounded text-xs font-bold text-neon uppercase tracking-wide hover:bg-neon/20 transition-colors"
+              className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-[10px] bg-surface-low border border-border-soft text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-high transition-colors"
             >
               <span className="material-symbols-outlined text-sm">open_in_new</span>
               Ver todos

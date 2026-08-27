@@ -76,8 +76,8 @@ export function TaskList() {
       {/* ── Header ── */}
       <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-border-soft">
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center justify-center w-8 h-8 bg-success-surface rounded-md">
-            <span className="material-symbols-outlined text-success text-base" style={{ fontVariationSettings: '"FILL" 1' }}>
+          <div className="icon-tile !w-8 !h-8 !rounded-[9px]">
+            <span className="material-symbols-outlined text-white text-base" style={{ fontVariationSettings: '"FILL" 1' }}>
               checklist
             </span>
           </div>
@@ -94,7 +94,7 @@ export function TaskList() {
         <div className="flex items-center gap-2">
           <button
             onClick={startAdding}
-            className="flex items-center gap-1 px-2.5 py-1.5 bg-dark text-neon rounded text-[10px] font-bold uppercase tracking-wide hover:bg-dark-raised transition-colors"
+            className="flex items-center gap-1 px-3 py-2 bg-dark text-white rounded-[10px] text-[10px] font-semibold hover:bg-dark-raised transition-colors"
           >
             <span className="material-symbols-outlined text-sm">add</span>
             Nova

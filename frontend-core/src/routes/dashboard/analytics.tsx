@@ -16,13 +16,13 @@ type NoReturnEntry = { name: string; area: string; days: number }
 // ── KPI card ──────────────────────────────────────────────────────────────────
 function KPI({ icon, label, value, sub, color }: { icon: string; label: string; value: string; sub: string; color: string }) {
   return (
-    <div className="card p-5 flex flex-col gap-3">
-      <div className={`flex items-center gap-2 text-xs font-bold uppercase tracking-wide ${color}`}>
-        <span className="material-symbols-outlined text-base" style={{ fontVariationSettings:'"FILL" 1' }}>{icon}</span>
-        {label}
+    <div className="metric-band__item">
+      <span className={`metric-band__icon material-symbols-outlined text-base ${color}`} style={{ fontVariationSettings:'"FILL" 1' }}>{icon}</span>
+      <div className="min-w-0">
+        <p className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary truncate">{label}</p>
+        <p className="font-display font-bold text-2xl text-text-primary">{value}</p>
+        <p className="text-xs text-text-tertiary truncate">{sub}</p>
       </div>
-      <p className="font-display font-bold text-3xl text-text-primary">{value}</p>
-      <p className="text-xs text-text-tertiary">{sub}</p>
     </div>
   )
 }
@@ -38,7 +38,7 @@ function AnalyticsPage() {
 
   if (error) {
     return (
-      <div className="flex flex-col gap-6 p-6">
+      <div className="dashboard-content">
         <div className="card p-8 text-center">
           <span className="material-symbols-outlined text-4xl text-error">error</span>
           <p className="text-sm text-text-secondary mt-2">Erro ao carregar analytics</p>
@@ -55,15 +55,16 @@ function AnalyticsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="dashboard-content flex flex-col gap-5">
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-display font-bold text-2xl uppercase tracking-wider text-text-primary">Analytics</h1>
-          <p className="text-sm text-text-secondary mt-0.5">Indicadores clínicos e operacionais da clínica</p>
+      <div className="page-header mb-0">
+        <div className="page-header__main">
+          <p className="page-header__eyebrow">Visão da operação</p>
+          <h1 className="page-header__title">Analytics</h1>
+          <p className="page-header__sub">Indicadores clínicos e operacionais da clínica</p>
         </div>
-        <div className="flex border border-border-soft overflow-hidden">
+        <div className="dashboard-toolbar !p-1">
           {(['7d','30d','90d','12m'] as const).map(p => (
             <button key={p} onClick={() => setPeriod(p)}
               className={`px-4 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${
@@ -76,7 +77,7 @@ function AnalyticsPage() {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="metric-band grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <KPI icon="group"    label="Pacientes ativos"   value={isLoading ? '…' : String(analytics?.activePatients ?? '—')}   sub={isLoading ? 'carregando' : analytics?.activePatients ? 'no período' : 'sem dados'}   color="text-info"    />
         <KPI icon="event"    label="Sessões realizadas" value={isLoading ? '…' : String(analytics?.sessionCount ?? '—')}   sub={isLoading ? 'carregando' : analytics?.sessionCount ? 'no período' : 'sem dados'}   color="text-success" />
         <KPI icon="payments" label="Receita do mês"     value={isLoading ? '…' : analytics?.monthlyRevenue ? `R$${analytics.monthlyRevenue}` : '—'}   sub={isLoading ? 'carregando' : analytics?.monthlyRevenue ? 'faturamento' : 'sem dados'}   color="text-olive"   />
@@ -89,7 +90,7 @@ function AnalyticsPage() {
         {/* Sessões por mês */}
         <div className="lg:col-span-2 card p-5 flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">Sessões por mês</p>
+            <p className="dashboard-panel-title">Sessões por mês</p>
             <p className="text-xs text-text-tertiary">últimos 7 meses</p>
           </div>
           {MONTHLY.length === 0 ? (
@@ -116,7 +117,7 @@ function AnalyticsPage() {
 
         {/* Distribuição por área */}
         <div className="card p-5 flex flex-col gap-4">
-          <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">Por área</p>
+          <p className="dashboard-panel-title">Por área</p>
           {SESSION_BY_AREA.length === 0 ? (
             <p className="text-sm text-text-secondary">Sem dados disponíveis</p>
           ) : (
@@ -141,7 +142,7 @@ function AnalyticsPage() {
 
         {/* Adesão */}
         <div className="card p-5 flex flex-col gap-4">
-          <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">Adesão por faixa etária</p>
+          <p className="dashboard-panel-title">Adesão por faixa etária</p>
           {ADHERENCE_BY_AGE.length === 0 ? (
             <p className="text-sm text-text-secondary">Sem dados disponíveis</p>
           ) : (
@@ -168,7 +169,7 @@ function AnalyticsPage() {
         <div className="card p-0 overflow-hidden">
           <div className="px-5 py-4 border-b border-border-soft flex items-center justify-between">
             <div>
-              <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">Sem retorno há +30 dias</p>
+              <p className="dashboard-panel-title">Sem retorno há +30 dias</p>
               <p className="text-xs text-text-tertiary mt-0.5">Requer atenção</p>
             </div>
             <span className="badge badge-danger">{NO_RETURN_PATIENTS.length}</span>
@@ -203,7 +204,7 @@ function AnalyticsPage() {
       {/* Receita mensal */}
       <div className="card p-5 flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <p className="font-display font-bold text-sm uppercase tracking-wide text-text-primary">Receita mensal (R$)</p>
+          <p className="dashboard-panel-title">Receita mensal (R$)</p>
           {MONTHLY.length > 0 && (
             <span className="flex items-center gap-1 text-xs font-bold text-success">
               <span className="material-symbols-outlined text-sm">trending_up</span>
