@@ -193,7 +193,7 @@ Jobs como `frontend-build`, `landing-build`, `e2e` são **path-scoped**: quando 
 | `ci.yml` (PR/push develop) | Todos (com filter por job) |
 | `deploy-frontend.yml` | `frontend-core/**`, `pnpm-lock.yaml` |
 | `deploy-landing.yml` | `landing-core/**`, `pnpm-lock.yaml` |
-| `deploy-api.yml` | `backend-core/apps/api/**`, `contracts/**`, `prisma/**` |
+| Backend `deploy-production.yml` | `apps/api/**`, `contracts/**`, `prisma/**` no repositório backend |
 | `deploy-ai.yml` | `backend-core/apps/ai/**` |
 | `deploy-whatsapp.yml` | `backend-core/apps/services/whatsapp/**` |
 | `deploy-migrations.yml` | `backend-core/prisma/migrations/**` |
@@ -288,7 +288,7 @@ As URLs e os deploy hooks devem ser copiados dos serviços de staging provisiona
 |---------|---------|-----------|-----|
 | Frontend (Vercel) | Push main + frontend-core/* | ✅ | `amondnet/vercel-action@v42` |
 | Landing (Vercel) | Push main + landing-core/* | ✅ | `amondnet/vercel-action@v42` |
-| API (Render) | Push main + backend-core/apps/api/* | ✅ | Deploy hook |
+| API (Render) | Push main no repositório backend | ✅ | Auto deploy Render + gate próprio de migrations/readiness |
 | AI (Render) | Push main + backend-core/apps/ai/* | ✅ | Deploy hook |
 | WhatsApp (EC2) | Push main + whatsapp/* | ✅ | SSH + docker-compose |
 | Prisma migrations | Push main + prisma/migrations/* | ✅ | `prisma migrate deploy` |
