@@ -1,33 +1,10 @@
-import { Link } from '@tanstack/react-router'
 import { useDashboardStats } from '@/hooks/use-dashboard'
-
-// Sparkline mini — 7 barras representando os últimos 7 dias
-function Spark({ values, color }: { values: number[]; color: string }) {
-  if (values.length === 0) return null
-  const max = Math.max(...values, 1)
-  return (
-    <div className="flex items-end gap-[2px] h-6">
-      {values.map((v, i) => (
-        <div
-          key={i}
-          className={`w-[3px] rounded-full transition-all ${color}`}
-          style={{ height: `${Math.round((v / max) * 100)}%`, minHeight: 2 }}
-        />
-      ))}
-    </div>
-  )
-}
-
-// Sparklines — serão substituídos por dados reais do backend (stats.sparklines)
-const SPARK_SESSIONS:  number[] = []
-const SPARK_PATIENTS:  number[] = []
-const SPARK_REPORTS:   number[] = []
 
 export function StatsGrid() {
   const { data: stats } = useDashboardStats()
 
-  const sessionsToday = stats?.todayPendingCount ?? 0
-  const sessionsWeek  = stats?.weekAppointmentsCount ?? 0
+  const sessionsToday  = stats?.todayPendingCount ?? 0
+  const sessionsWeek   = stats?.weekAppointmentsCount ?? 0
   const activePatients = stats?.activePatientsCount ?? 0
   const pendingReports = stats?.pendingReportsCount ?? 0
   const revenue = stats?.monthRevenue
@@ -35,120 +12,76 @@ export function StatsGrid() {
     : 'R$\u00a0—'
   const revenueGrowth = stats?.monthRevenueGrowth ?? null
 
+  const metrics = [
+    {
+      label: 'Receita do mês',
+      value: revenue,
+      detail: revenueGrowth === null
+        ? 'Sem comparação disponível'
+        : `${revenueGrowth >= 0 ? '+' : ''}${revenueGrowth}% vs. mês anterior`,
+      icon: 'payments',
+      detailClass: revenueGrowth !== null && revenueGrowth < 0 ? 'text-danger' : 'text-success',
+    },
+    {
+      label: 'Sessões hoje',
+      value: sessionsToday === 0 ? '—' : String(sessionsToday),
+      detail: sessionsToday === 1 ? 'sessão pendente' : 'sessões pendentes',
+      icon: 'today',
+      detailClass: 'text-text-tertiary',
+    },
+    {
+      label: 'Agenda da semana',
+      value: sessionsWeek === 0 ? '—' : String(sessionsWeek),
+      detail: sessionsWeek === 1 ? 'sessão agendada' : 'sessões agendadas',
+      icon: 'calendar_month',
+      detailClass: 'text-text-tertiary',
+    },
+    {
+      label: 'Pacientes ativos',
+      value: activePatients === 0 ? '—' : String(activePatients),
+      detail: 'em acompanhamento',
+      icon: 'groups',
+      detailClass: 'text-text-tertiary',
+    },
+    {
+      label: 'Relatórios IA',
+      value: String(pendingReports),
+      detail: pendingReports === 0 ? 'todos revisados' : `${pendingReports} aguardando revisão`,
+      icon: 'rate_review',
+      detailClass: pendingReports === 0 ? 'text-success' : 'text-warning',
+    },
+  ]
+
   return (
-    <div className="grid grid-cols-12 gap-4">
-
-      {/* ── HERO STAT: Receita do mês ── 4 colunas */}
-      <div className="col-span-12 sm:col-span-6 lg:col-span-4 card bg-dark border-0 flex flex-col justify-between gap-4 relative overflow-hidden min-h-[130px]">
-        {/* Glow decorativo */}
-        <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-neon/10 blur-2xl pointer-events-none" />
-
-        <div className="flex items-start justify-between relative z-10">
-          <span className="section-label text-white/40 tracking-widest">Receita do Mês</span>
-          <span
-            className="material-symbols-outlined text-neon/70 text-lg"
-            style={{ fontVariationSettings: '"FILL" 1' }}
+    <section className="card p-0 overflow-hidden" aria-label="Indicadores do consultório">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5">
+        {metrics.map((metric, index) => (
+          <article
+            key={metric.label}
+            className={`flex min-h-[104px] items-center gap-3 px-4 py-4 xl:px-5 ${
+              index < metrics.length - 1 ? 'border-b xl:border-b-0 xl:border-r border-border-soft' : ''
+            }`}
           >
-            payments
-          </span>
-        </div>
-
-        <div className="relative z-10">
-          <p className="font-display font-bold text-4xl text-white leading-none tracking-tight">
-            {revenue}
-          </p>
-          {revenueGrowth !== null && (
-            <div className={`flex items-center gap-1 mt-2 text-xs font-semibold ${revenueGrowth >= 0 ? 'text-neon' : 'text-danger'}`}>
-              <span className="material-symbols-outlined text-sm">
-                {revenueGrowth >= 0 ? 'trending_up' : 'trending_down'}
+            <div className="icon-tile">
+              <span
+                className="material-symbols-outlined text-lg"
+                style={{ fontVariationSettings: '"FILL" 1, "wght" 400' }}
+              >
+                {metric.icon}
               </span>
-              {revenueGrowth >= 0 ? '+' : ''}{revenueGrowth}% vs mês passado
             </div>
-          )}
-        </div>
-
-        <Link
-          to="/dashboard/financeiro"
-          className="relative z-10 text-[10px] font-bold uppercase tracking-widest text-neon/60 hover:text-neon transition-colors self-start"
-        >
-          Ver financeiro →
-        </Link>
+            <div className="min-w-0">
+              <p className="text-[11px] text-text-tertiary leading-tight">{metric.label}</p>
+              <p className="mt-1 font-display text-[22px] font-medium leading-none tracking-[-0.035em] text-text-primary tabular-nums">
+                {metric.value}
+              </p>
+              <p className={`mt-1.5 text-[10px] font-medium leading-tight ${metric.detailClass}`}>
+                {metric.detail}
+              </p>
+            </div>
+          </article>
+        ))}
       </div>
-
-      {/* ── Sessões hoje ── */}
-      <div className="col-span-6 sm:col-span-3 lg:col-span-2 card flex flex-col gap-3 justify-between">
-        <div className="flex items-center justify-between">
-          <span className="section-label">Hoje</span>
-          <span
-            className="material-symbols-outlined text-base text-info bg-info-surface p-1.5 rounded-md"
-            style={{ fontVariationSettings: '"FILL" 1' }}
-          >
-            today
-          </span>
-        </div>
-        <p className="font-display font-bold text-3xl text-text-primary leading-none">
-          {sessionsToday === 0 ? '—' : sessionsToday}
-          <span className="text-sm font-sans font-normal text-text-tertiary ml-1">sessões</span>
-        </p>
-        <Spark values={SPARK_SESSIONS} color="bg-info" />
-      </div>
-
-      {/* ── Sessões na semana ── */}
-      <div className="col-span-6 sm:col-span-3 lg:col-span-2 card flex flex-col gap-3 justify-between">
-        <div className="flex items-center justify-between">
-          <span className="section-label">Semana</span>
-          <span
-            className="material-symbols-outlined text-base text-olive bg-neon-surface p-1.5 rounded-md"
-            style={{ fontVariationSettings: '"FILL" 1' }}
-          >
-            calendar_month
-          </span>
-        </div>
-        <p className="font-display font-bold text-3xl text-text-primary leading-none">
-          {sessionsWeek === 0 ? '—' : sessionsWeek}
-          <span className="text-sm font-sans font-normal text-text-tertiary ml-1">sessões</span>
-        </p>
-        <Spark values={SPARK_SESSIONS} color="bg-neon" />
-      </div>
-
-      {/* ── Pacientes ativos ── */}
-      <div className="col-span-6 sm:col-span-3 lg:col-span-2 card flex flex-col gap-3 justify-between">
-        <div className="flex items-center justify-between">
-          <span className="section-label">Pacientes</span>
-          <span
-            className="material-symbols-outlined text-base text-olive bg-neon-surface p-1.5 rounded-md"
-            style={{ fontVariationSettings: '"FILL" 1' }}
-          >
-            groups
-          </span>
-        </div>
-        <p className="font-display font-bold text-3xl text-text-primary leading-none">
-          {activePatients === 0 ? '—' : activePatients}
-          <span className="text-sm font-sans font-normal text-text-tertiary ml-1">ativos</span>
-        </p>
-        <Spark values={SPARK_PATIENTS} color="bg-olive" />
-      </div>
-
-      {/* ── Relatórios IA pendentes ── */}
-      <div className="col-span-6 sm:col-span-3 lg:col-span-2 card flex flex-col gap-3 justify-between">
-        <div className="flex items-center justify-between">
-          <span className="section-label">Relatórios IA</span>
-          <span
-            className="material-symbols-outlined text-base text-olive bg-neon-surface p-1.5 rounded-md"
-            style={{ fontVariationSettings: '"FILL" 1' }}
-          >
-            auto_awesome
-          </span>
-        </div>
-        <p className="font-display font-bold text-3xl text-text-primary leading-none">
-          {pendingReports === 0 ? '0' : pendingReports}
-          <span className="text-sm font-sans font-normal text-text-tertiary ml-1">
-            {pendingReports === 0 ? 'revisados' : 'pendentes'}
-          </span>
-        </p>
-        <Spark values={SPARK_REPORTS} color={pendingReports > 0 ? 'bg-warning' : 'bg-success'} />
-      </div>
-
-    </div>
+    </section>
   )
 }

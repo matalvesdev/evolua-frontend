@@ -259,7 +259,7 @@ function PacientesPage() {
   })
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="dashboard-content space-y-5">
       {selected && <PatientDrawer patient={selected} onClose={() => setSelected(null)} />}
       {showNew   && <NewPatientModal
         onClose={() => setShowNew(false)}
@@ -278,21 +278,22 @@ function PacientesPage() {
       />}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display font-bold text-2xl text-text-primary uppercase tracking-tight">Pacientes</h1>
-          <p className="text-sm text-text-secondary mt-0.5">
+      <div className="page-header mb-0">
+        <div className="page-header__main">
+          <p className="page-header__eyebrow">Cuidado contínuo</p>
+          <h1 className="page-header__title">Pacientes</h1>
+          <p className="page-header__sub">
             {isLoading ? 'Carregando…' : error ? 'Backend indisponível' : `${patients.length} pacientes cadastrados`}
           </p>
         </div>
-        <button onClick={() => setShowNew(true)} className="cta-dark flex items-center gap-2 px-4 py-2 rounded-md font-display font-bold text-sm uppercase tracking-wide transition-all">
+        <button onClick={() => setShowNew(true)} className="cta-dark flex items-center gap-2 px-4 py-2.5 rounded-xl font-display font-bold text-sm transition-all">
           <span className="material-symbols-outlined text-base">person_add</span>
           Novo Paciente
         </button>
       </div>
 
       {/* Filters + Search */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="dashboard-toolbar flex-col sm:flex-row">
         <div className="relative flex-1">
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary text-[13px] leading-none">search</span>
           <input className="input pl-9 text-sm" placeholder="Buscar por nome ou diagnóstico…" value={search} onChange={e => setSearch(e.target.value)} />
@@ -318,14 +319,14 @@ function PacientesPage() {
       </div>
 
       {/* Stats bar */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="metric-band grid-cols-1 sm:grid-cols-3">
         {[
           { label: 'Total',      value: patients.length,                                       icon: 'group' },
           { label: 'Ativos',     value: patients.filter(p => p.status === 'ativo').length,     icon: 'check_circle' },
           { label: 'Aguardando', value: patients.filter(p => p.status === 'aguardando').length,icon: 'schedule' },
         ].map(s => (
-          <div key={s.label} className="card flex items-center gap-3 py-3">
-            <span className="material-symbols-outlined text-olive text-xl">{s.icon}</span>
+          <div key={s.label} className="metric-band__item">
+            <span className="metric-band__icon material-symbols-outlined text-xl">{s.icon}</span>
             <div>
               <p className="font-display font-bold text-xl text-text-primary">{s.value}</p>
               <p className="text-xs text-text-tertiary uppercase tracking-wide">{s.label}</p>

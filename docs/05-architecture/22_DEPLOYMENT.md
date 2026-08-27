@@ -2,18 +2,20 @@
 title: "Deployment, Confiabilidade e Escala"
 status: active
 owner: "Engineering"
-last_reviewed: 2026-08-17
+last_reviewed: 2026-08-27
 ---
 
 # Deployment, Confiabilidade e Escala
 
 ## Current State
 
-Vercel hospeda frontend e landing; Render hospeda API e IA; Supabase hospeda dados/auth. Workflows GitHub cobrem CI, deploys, migrations, staging, conteúdo e backup. O domínio padrão da IA no Render está operacional segundo `AGENTS.md`; `ai.useevolua.com.br` possui pendência de DNS. Em 2026-08-17, os secrets E2E do environment `staging` foram confirmados por nome, sem leitura de valores. O workflow `deploy-supabase-migrations-staging.yml` executa somente por despacho manual a partir de `develop`, exige confirmação explícita e usa `DIRECT_URL` do environment de staging.
+Vercel hospeda frontend e landing; Render hospeda API e IA; Supabase hospeda dados/auth. Workflows GitHub cobrem CI, deploys, migrations, staging, conteúdo e backup. O domínio padrão da IA no Render está operacional segundo `AGENTS.md`; `ai.useevolua.com.br` possui pendência de DNS. Em 2026-08-27, o ambiente isolado de staging foi validado de ponta a ponta: Supabase `ca-central-1`, API e IA no Render, aliases permanentes na Vercel e E2E autenticado. Os secrets foram confirmados por nome, sem registrar valores. O workflow `deploy-supabase-migrations-staging.yml` executa somente por despacho manual a partir de `develop`, exige confirmação explícita e usa `DIRECT_URL` do environment de staging.
 
 ## Operação segura
 
-Deploy: mudança → CI → review → deploy → health check → observar → rollback. Não cancelar deploys em andamento por concorrência. Migrations SQL usam ledger para evitar reexecução histórica e conexão direta para DDL, conforme runbook existente em `AGENTS.md`. A `DIRECT_URL` local observada aponta para `sa-east-1` e não deve ser usada para staging.
+Deploy: mudança → CI → review → deploy → health check → observar → rollback. Não cancelar deploys em andamento por concorrência. Migrations SQL usam ledger para evitar reexecução histórica e conexão direta para DDL, conforme runbook existente em `AGENTS.md`. A `DIRECT_URL` local observada aponta para `sa-east-1` e não deve ser usada para staging. No Supabase Auth de staging, o `Site URL` e a allowlist usam exclusivamente o alias permanente do frontend; magic links só podem ser emitidos após essa configuração ser verificada, e callbacks com fragmentos de sessão não podem aparecer em logs ou evidências de QA.
+
+Em 2026-08-27, um redirect de magic link foi rejeitado pela configuração padrão e enviou uma sessão de staging para `localhost`. A contenção executada foi: logout global, rotação e revogação imediata da signing key anterior, reinício da API para limpar o cache JWKS e confirmação de `401` para o token comprometido. Nenhum dado, usuário ou segredo de produção foi envolvido. O incidente originou a configuração permanente acima e deve ser usado como teste de regressão operacional.
 
 ## Pendência de configuração
 

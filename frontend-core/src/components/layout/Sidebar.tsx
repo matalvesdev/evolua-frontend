@@ -1,5 +1,6 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { useState } from 'react'
+import { Logo } from '@/components/Logo'
 
 // ── Grupos de navegação ───────────────────────────────────────────────────────
 const NAV_GROUPS = [
@@ -60,44 +61,37 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`hidden md:flex flex-col h-screen sticky top-0 bg-surface border-r border-border-soft transition-all duration-300 shrink-0 ${
-        collapsed ? 'w-[60px]' : 'w-56'
+      className={`hidden md:flex flex-col h-full bg-canvas border-r border-border-soft transition-all duration-300 shrink-0 ${
+        collapsed ? 'w-[72px]' : 'w-60'
       }`}
     >
       {/* ── Logo ── */}
-      <div className={`flex items-center border-b border-border-soft shrink-0 h-[57px] ${collapsed ? 'justify-center px-0' : 'px-4 gap-2.5'}`}>
-        <span
-          className="material-symbols-outlined text-primary shrink-0"
-          style={{ fontSize: '24px', fontVariationSettings: '"FILL" 1, "wght" 600' }}
-          aria-label="Evolua"
-        >
-          graphic_eq
-        </span>
-        {!collapsed && (
-          <span className="font-display font-bold text-sm tracking-[0.12em] text-primary uppercase flex-1 leading-none">
-            EVOLUA
-          </span>
+      <div className={`flex items-center shrink-0 h-[68px] ${collapsed ? 'justify-center px-0' : 'px-5 gap-2.5'}`}>
+        {collapsed ? (
+          <span className="material-symbols-outlined text-dark" style={{ fontVariationSettings: '"FILL" 1, "wght" 600' }}>graphic_eq</span>
+        ) : (
+          <Logo variant="mono-ink" size="sm" className="flex-1" />
         )}
         {!collapsed && (
-          <button onClick={() => setCollapsed(true)} className="btn-ghost p-1 shrink-0" title="Recolher menu">
-            <span className="material-symbols-outlined text-base text-text-secondary">chevron_left</span>
+          <button onClick={() => setCollapsed(true)} className="control-tile !min-w-8 !min-h-8 w-8 h-8 shrink-0" title="Recolher menu">
+            <span className="material-symbols-outlined text-base">left_panel_close</span>
           </button>
         )}
       </div>
 
       {/* Botão expandir collapsed */}
       {collapsed && (
-        <button onClick={() => setCollapsed(false)} className="btn-ghost p-2 mx-auto mt-2" title="Expandir menu">
-          <span className="material-symbols-outlined text-base text-text-secondary">chevron_right</span>
+        <button onClick={() => setCollapsed(false)} className="control-tile w-10 h-10 mx-auto mt-2" title="Expandir menu">
+          <span className="material-symbols-outlined text-base">left_panel_open</span>
         </button>
       )}
 
       {/* ── Nav grupos ── */}
-      <nav className="flex-1 flex flex-col py-3 overflow-y-auto no-scrollbar">
+      <nav className="flex-1 flex flex-col px-3 py-3 overflow-y-auto no-scrollbar">
         {NAV_GROUPS.map(group => (
-          <div key={group.label} className="flex flex-col gap-px mb-3">
+          <div key={group.label} className="flex flex-col gap-1 mb-4">
             {!collapsed && (
-              <p className="section-label px-4 mb-1">{group.label}</p>
+              <p className="px-2 mb-1 text-[11px] font-medium text-text-tertiary">{group.label}</p>
             )}
             {group.items.map(({ to, icon, label }) => {
               const active = isActive(to)
@@ -107,26 +101,23 @@ export function Sidebar() {
                   to={to}
                   title={collapsed ? label : undefined}
                   className={`relative flex items-center gap-3 transition-all duration-150 group ${
-                    collapsed ? 'justify-center px-0 py-3 mx-2' : 'px-4 py-2'
+                    collapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
                   } ${
                     active
-                      ? 'bg-surface-low text-text-primary'
-                      : 'text-text-tertiary hover:bg-surface-low hover:text-text-secondary'
+                      ? 'nav-active rounded-[10px] shadow-[inset_0_1px_rgba(255,255,255,.28)]'
+                      : 'text-text-secondary rounded-[10px] hover:bg-surface-low hover:text-text-primary'
                   }`}
                 >
-                  {active && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-dark" />
-                  )}
                   <span
                     className={`material-symbols-outlined text-lg shrink-0 transition-colors ${
-                      active ? 'text-dark' : 'text-text-tertiary group-hover:text-text-secondary'
+                      active ? 'text-dark' : 'text-text-secondary group-hover:text-text-primary'
                     }`}
                     style={{ fontVariationSettings: active ? '"FILL" 1' : '"FILL" 0' }}
                   >
                     {icon}
                   </span>
                   {!collapsed && (
-                    <span className={`text-xs leading-none ${active ? 'font-semibold text-text-primary' : 'font-medium'}`}>
+                    <span className={`text-[13px] leading-none ${active ? 'font-semibold text-dark' : 'font-medium'}`}>
                       {label}
                     </span>
                   )}
@@ -138,9 +129,9 @@ export function Sidebar() {
       </nav>
 
       {/* ── Nav bottom ── */}
-      <div className="border-t border-border-soft py-3 flex flex-col gap-px">
+      <div className="px-3 pb-4 pt-2 flex flex-col gap-1">
         {!collapsed && (
-          <p className="section-label px-4 mb-1">Conta</p>
+          <p className="px-2 mb-1 text-[11px] font-medium text-text-tertiary">Conta</p>
         )}
         {NAV_BOTTOM.map(({ to, icon, label }) => {
           const active = isActive(to)
@@ -150,26 +141,23 @@ export function Sidebar() {
               to={to}
               title={collapsed ? label : undefined}
               className={`relative flex items-center gap-3 transition-all duration-150 group ${
-                collapsed ? 'justify-center px-0 py-3 mx-2' : 'px-4 py-2.5'
+                collapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
               } ${
                 active
-                  ? 'bg-surface-low text-text-primary'
-                  : 'text-text-tertiary hover:bg-surface-low hover:text-text-secondary'
+                  ? 'nav-active rounded-[10px]'
+                  : 'text-text-secondary rounded-[10px] hover:bg-surface-low hover:text-text-primary'
               }`}
             >
-              {active && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-dark" />
-              )}
               <span
                 className={`material-symbols-outlined text-lg shrink-0 ${
-                  active ? 'text-dark' : 'text-text-tertiary group-hover:text-text-secondary'
+                  active ? 'text-dark' : 'text-text-secondary group-hover:text-text-primary'
                 }`}
                 style={{ fontVariationSettings: active ? '"FILL" 1' : '"FILL" 0' }}
               >
                 {icon}
               </span>
               {!collapsed && (
-                <span className={`text-xs leading-none ${active ? 'font-semibold text-text-primary' : 'font-medium'}`}>
+                <span className={`text-[13px] leading-none ${active ? 'font-semibold text-dark' : 'font-medium'}`}>
                   {label}
                 </span>
               )}

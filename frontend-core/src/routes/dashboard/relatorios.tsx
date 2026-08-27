@@ -311,7 +311,7 @@ function RelatoriosPage() {
   const exported = reports.filter(r => r.status === 'exported').length
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="dashboard-content flex flex-col gap-5">
       {selected && (
         <ReportDrawer
           report={selected}
@@ -329,10 +329,11 @@ function RelatoriosPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="font-display font-bold text-2xl uppercase tracking-wider text-text-primary">Relatórios</h1>
-          <p className="text-sm text-text-secondary mt-0.5">{reports.length} relatórios gerados este mês</p>
+      <div className="page-header mb-0">
+        <div className="page-header__main">
+          <p className="page-header__eyebrow">Documentação assistida</p>
+          <h1 className="page-header__title">Relatórios</h1>
+          <p className="page-header__sub">{reports.length} relatórios gerados este mês</p>
         </div>
         <button onClick={() => setShowNew(true)} className="btn-primary flex items-center gap-2 self-start sm:self-auto">
           <span className="material-symbols-outlined text-sm">add</span>
@@ -341,23 +342,25 @@ function RelatoriosPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="metric-band grid-cols-2 sm:grid-cols-4">
         {[
           { label:'Total',             value: reports.length,      icon:'description',  color:'text-text-primary' },
           { label:'Aguardando revisão',value: pending,             icon:'rate_review',  color:'text-warning' },
           { label:'Revisados',         value: reviewed,            icon:'check_circle', color:'text-info' },
           { label:'Exportados',        value: exported,            icon:'task_alt',     color:'text-success' },
         ].map(s => (
-          <div key={s.label} className="card p-4 flex flex-col gap-1 cursor-pointer hover:bg-surface-low transition-colors" onClick={() => { if(s.label !== 'Total') setFilter(s.label === 'Aguardando revisão' ? 'pending' : s.label === 'Revisados' ? 'reviewed' : 'exported') }}>
-            <span className={`material-symbols-outlined ${s.color}`} style={{fontVariationSettings:'"FILL" 1'}}>{s.icon}</span>
-            <p className={`font-display font-bold text-2xl ${s.color}`}>{s.value}</p>
-            <p className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">{s.label}</p>
+          <div key={s.label} className="metric-band__item cursor-pointer hover:bg-surface-low transition-colors" onClick={() => { if(s.label !== 'Total') setFilter(s.label === 'Aguardando revisão' ? 'pending' : s.label === 'Revisados' ? 'reviewed' : 'exported') }}>
+            <span className={`metric-band__icon material-symbols-outlined ${s.color}`} style={{fontVariationSettings:'"FILL" 1'}}>{s.icon}</span>
+            <div>
+              <p className={`font-display font-bold text-2xl ${s.color}`}>{s.value}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wide text-text-tertiary">{s.label}</p>
+            </div>
           </div>
         ))}
       </div>
 
       {/* Filtros */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="dashboard-toolbar flex-col sm:flex-row">
         <div className="relative flex-1">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-tertiary text-[13px] leading-none">search</span>
           <input
@@ -367,10 +370,10 @@ function RelatoriosPage() {
             className="input w-full pl-9"
           />
         </div>
-        <div className="flex rounded border border-border-soft overflow-hidden flex-shrink-0">
+        <div className="flex rounded border border-border-soft overflow-x-auto flex-shrink-0">
           {([['all','Todos'],['pending','Pendentes'],['reviewed','Revisados'],['exported','Exportados']] as const).map(([v, l]) => (
             <button key={v} onClick={() => setFilter(v)}
-              className={`px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${
+              className={`shrink-0 px-3 py-2 text-xs font-bold uppercase tracking-wide transition-colors ${
                 filter === v ? 'bg-dark text-neon' : 'bg-surface text-text-tertiary hover:text-text-primary'
               }`}>
               {l}

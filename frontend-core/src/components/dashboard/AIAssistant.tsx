@@ -63,7 +63,7 @@ export function AIAssistant() {
       {/* ── Header ────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-border-soft">
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center justify-center w-8 h-8 bg-dark rounded-md">
+          <div className="icon-tile !w-8 !h-8 !rounded-[9px]">
             <span
               className="material-symbols-outlined text-neon text-base"
               style={{ fontVariationSettings: '"FILL" 1' }}
@@ -82,14 +82,14 @@ export function AIAssistant() {
       </div>
 
       {/* ── Card hero contextual ──────────────────────────── */}
-      <div className="relative bg-dark flex flex-col gap-3 px-5 py-4 overflow-hidden">
+      <div className="relative bg-surface flex flex-col gap-3 px-5 py-5 overflow-hidden border-b border-border-soft">
         {/* Glow decorativo */}
-        <div className="absolute -bottom-6 -right-6 w-28 h-28 rounded-full bg-neon/10 blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-12 right-0 w-48 h-28 rounded-full bg-neon/20 blur-3xl pointer-events-none" />
 
         <span className={`badge w-fit text-[9px] ${hero.tagCls}`}>{hero.tag}</span>
 
         <div className="flex items-start gap-3 relative z-10">
-          <div className="w-9 h-9 flex-shrink-0 flex items-center justify-center bg-neon/10 border border-neon/20 rounded-md mt-0.5">
+          <div className="w-9 h-9 flex-shrink-0 flex items-center justify-center bg-neon-surface border border-border-neon rounded-[10px] mt-0.5">
             <span
               className="material-symbols-outlined text-neon text-lg"
               style={{ fontVariationSettings: '"FILL" 1' }}
@@ -98,8 +98,8 @@ export function AIAssistant() {
             </span>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-display font-bold text-white text-sm leading-snug">{hero.title}</p>
-            <p className="text-xs text-white/50 mt-1 leading-relaxed">{hero.body}</p>
+            <p className="font-display font-semibold text-text-primary text-sm leading-snug">{hero.title}</p>
+            <p className="text-xs text-text-secondary mt-1 leading-relaxed">{hero.body}</p>
           </div>
         </div>
 
