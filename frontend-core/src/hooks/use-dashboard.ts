@@ -80,15 +80,18 @@ export function usePendingTasks() {
   })
 }
 
+export interface AnalyticsSeries {
+  labels: string[]
+  values: number[]
+}
+
 export interface DashboardAnalytics {
-  activePatients: number
-  sessionCount: number
-  monthlyRevenue: number
-  adherenceRate: number
-  sessionByArea: { area: string; pct: number; color: string }[]
-  monthly: { month: string; sessions: number; revenue?: number }[]
-  adherenceByAge: { group: string; pct: number }[]
-  noReturnPatients: { name: string; area: string; days: number }[]
+  revenue: AnalyticsSeries
+  appointments: AnalyticsSeries
+  newPatients: AnalyticsSeries
+  topProcedures: { name: string; count: number }[]
+  cancellationRate: number
+  noShowRate: number
 }
 
 export function useDashboardAnalytics(period: string) {
@@ -98,4 +101,3 @@ export function useDashboardAnalytics(period: string) {
     staleTime: 60_000,
   })
 }
-

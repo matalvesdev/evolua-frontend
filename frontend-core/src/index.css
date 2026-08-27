@@ -771,6 +771,30 @@ p { text-wrap: pretty; }
   background: var(--color-canvas);
 }
 
+/* Dashboard CTAs follow the Dribbble operational pattern: deep surface + neon.
+   Brand purple remains available outside the authenticated clinical shell. */
+.dashboard-stage .btn-primary,
+.dashboard-stage .bk-btn-primary {
+  background: var(--color-dark);
+  color: var(--color-neon);
+  box-shadow: var(--shadow-dark);
+}
+
+.dashboard-stage .btn-primary:hover:not(:disabled),
+.dashboard-stage .bk-btn-primary:hover:not(:disabled) {
+  background: var(--color-dark-raised);
+  box-shadow: var(--shadow-neon);
+}
+
+.dashboard-stage .page-header__eyebrow {
+  color: var(--color-olive);
+}
+
+.dashboard-stage .empty-state__icon {
+  background: var(--color-neon-surface);
+  color: var(--color-olive);
+}
+
 .dashboard-content {
   width: min(100%, 1600px);
   margin-inline: auto;
