@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     outputs:
-      url: ${{ steps.deploy.outputs['preview-url'] }}
+      url: ${{ steps.alias.outputs.url }}
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -88,6 +88,17 @@ jobs:
             --build-env VITE_SUPABASE_URL=${{ secrets.SUPABASE_URL }}
             --build-env VITE_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
             --build-env VITE_API_URL=${{ secrets.API_URL }}
+      - name: Point stable frontend staging alias
+        id: alias
+        env:
+          PREVIEW_URL: ${{ steps.deploy.outputs['preview-url'] }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: |
+          npx vercel@latest alias set "$PREVIEW_URL" evolua-frontend-staging.vercel.app \
+            --token "$VERCEL_TOKEN" \
+            --scope "$VERCEL_ORG_ID"
+          echo "url=https://evolua-frontend-staging.vercel.app" >> "$GITHUB_OUTPUT"
 
   landing:
     needs: preflight
@@ -105,6 +116,7 @@ jobs:
       - run: pnpm -F ./landing-core typecheck
       - run: pnpm -F ./landing-core lint
       - name: Deploy Vercel preview
+        id: deploy
         uses: amondnet/vercel-action@v42
         with:
           vercel-version: latest
@@ -112,6 +124,15 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_LANDING }}
           working-directory: ./landing-core
+      - name: Point stable landing staging alias
+        env:
+          PREVIEW_URL: ${{ steps.deploy.outputs['preview-url'] }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: |
+          npx vercel@latest alias set "$PREVIEW_URL" evolua-landing-staging.vercel.app \
+            --token "$VERCEL_TOKEN" \
+            --scope "$VERCEL_ORG_ID"
 
   authenticated-e2e:
     needs: frontend

@@ -13,7 +13,7 @@
   - **CI gate**: `ci-gate` job (if always, needs all jobs, accepts success/skipped, fails on failure/cancelled) — only required check
   - **Backend CI**: `backend-core` is a separate repo with its own CI — not in this monorepo checkout
   - **Deploys**: `deploy-frontend.yml`, `deploy-landing.yml`, `deploy-api.yml`, `deploy-ai.yml`, `deploy-whatsapp.yml`
-  - **Staging web**: `deploy-staging.yml` — previews Vercel protegidos + Playwright autenticado com automation bypass
+  - **Staging web**: `deploy-staging.yml` — previews Vercel protegidos, aliases permanentes de staging e Playwright autenticado com automation bypass
   - **Staging backend**: workflow e Blueprint vivem no repositório separado `backend-core`
   - **Database**: `deploy-migrations.yml` (Prisma), `deploy-supabase-migrations.yml` (SQL + ledger)
   - **Content**: `content-pipeline.yml` — daily blog + social (Resend email)
@@ -31,7 +31,7 @@
 
 ## Current Gaps
 - **Terraform state remote**: Code ready in `terraform/bootstrap/`, apply not done
-- **Render staging**: Blueprint pronto e fail-closed; criação dos serviços, URLs e deploy hooks depende de provisionamento autenticado no Render
+- **Render staging**: Blueprint provisionado e fail-closed; API e IA usam deploy hooks/URLs registrados no environment `staging` do GitHub
 - **GitHub branch protection**: configuração bloqueada para repositórios privados no plano atual (GitHub Pro ou repositório público necessário)
 - **AI custom domain**: `ai.useevolua.com.br` ainda não possui DNS; o serviço responde pela URL padrão do Render
 - **WhatsApp not paired**: Evolution instance exists, QR never scanned

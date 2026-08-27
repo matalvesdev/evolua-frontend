@@ -483,3 +483,4 @@ Use the skill tool to load a skill when a task matches its description.
 - ❌ Usar `raw_user_meta_data`/`user_metadata` em autorização ou RLS — o usuário pode editar esse campo; papéis devem vir de `app_metadata` (`auth.jwt() -> 'app_metadata'`) e a função deve permanecer `SECURITY INVOKER`.
 - ❌ Confiar só em RLS para tabelas públicas de projetos Supabase novos — declarar também os `GRANT` mínimos exigidos pelo Data API, sem conceder leitura de tabelas que contêm e-mails ou dados clínicos.
 - ❌ Link de descadastro contendo e-mail e `UPDATE` direto pelo cliente anon — usar token UUID opaco, resolver exclusivamente no backend com service role e nunca registrar e-mail/token nos logs.
+- ❌ Usar alias Vercel presumido ou preview aleatório em `CORS_ORIGINS` de staging — criar aliases explícitos (`evolua-frontend-staging.vercel.app`/`evolua-landing-staging.vercel.app`) e movê-los no workflow após cada deploy; manter CORS exato, sem wildcard.

@@ -42,8 +42,8 @@ Especificação → Implementação → Review → Teste → Deploy → Monitora
 - **Database Prisma**: Supabase migrations (manual gate, `DATABASE_URL` + `DIRECT_URL`)
 - **Database SQL**: Supabase migrations SQL (ledger script, `DIRECT_URL`)
 - **Staging Supabase**: projeto isolado, schema clonado sem dados clínicos; migrations incrementais fail-closed via ledger
-- **Staging web**: preview Vercel em `develop`, protegido por automation bypass exclusivo do E2E; preflight exige `API_URL` de staging e impede auditoria contra backend ausente
-- **Staging backend**: Blueprint Render em `backend-core/render.staging.yaml`; preflight fail-closed exige hooks e URLs dos serviços provisionados. O Blueprint usa `NODE_ENV=staging`, que aplica os controles de segurança de produção. `CORS_ORIGINS` e `FRONTEND_URL` devem apontar para um domínio permanente de staging — previews Vercel variáveis não devem ampliar CORS por wildcard.
+- **Staging web**: previews Vercel em `develop`, protegidos por automation bypass exclusivo do E2E; cada deploy atualiza os aliases permanentes `evolua-frontend-staging.vercel.app` e `evolua-landing-staging.vercel.app`. O preflight exige `API_URL` de staging e impede auditoria contra backend ausente.
+- **Staging backend**: serviços `evolua-api-staging` e `evolua-ai-staging` provisionados pelo Blueprint `backend-core/render.staging.yaml`, com deploy hooks e URLs registrados no environment `staging` do GitHub. O Blueprint usa `NODE_ENV=staging`, que aplica os controles de segurança de produção. `CORS_ORIGINS` autoriza apenas os aliases permanentes de staging — previews Vercel variáveis não ampliam CORS por wildcard.
 - **CI gates**: Build → TypeCheck → Lint (ordem obrigatória, ver anti-patterns)
 - **CI required check**: `ci-gate` (aceita success/skipped, falha em failure/cancelled)
 - **Proteção de branches**: preparada para exigir apenas `ci-gate`, mas bloqueada pelo plano GitHub dos repositórios privados

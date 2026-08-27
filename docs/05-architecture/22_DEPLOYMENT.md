@@ -2,14 +2,14 @@
 title: "Deployment, Confiabilidade e Escala"
 status: active
 owner: "Engineering"
-last_reviewed: 2026-08-17
+last_reviewed: 2026-08-27
 ---
 
 # Deployment, Confiabilidade e Escala
 
 ## Current State
 
-Vercel hospeda frontend e landing; Render hospeda API e IA; Supabase hospeda dados/auth. Workflows GitHub cobrem CI, deploys, migrations, staging, conteúdo e backup. O domínio padrão da IA no Render está operacional segundo `AGENTS.md`; `ai.useevolua.com.br` possui pendência de DNS. Em 2026-08-17, os secrets E2E do environment `staging` foram confirmados por nome, sem leitura de valores. O workflow `deploy-supabase-migrations-staging.yml` executa somente por despacho manual a partir de `develop`, exige confirmação explícita e usa `DIRECT_URL` do environment de staging.
+Vercel hospeda frontend e landing; Render hospeda API e IA; Supabase hospeda dados/auth. Workflows GitHub cobrem CI, deploys, migrations, staging, conteúdo e backup. O domínio padrão da IA no Render está operacional segundo `AGENTS.md`; `ai.useevolua.com.br` possui pendência de DNS. Em 2026-08-27, o ambiente isolado de staging foi validado de ponta a ponta: Supabase `ca-central-1`, API e IA no Render, aliases permanentes na Vercel e E2E autenticado. Os secrets foram confirmados por nome, sem registrar valores. O workflow `deploy-supabase-migrations-staging.yml` executa somente por despacho manual a partir de `develop`, exige confirmação explícita e usa `DIRECT_URL` do environment de staging.
 
 ## Operação segura
 
