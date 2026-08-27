@@ -30,7 +30,7 @@ com IA que realmente agiliza o trabalho clínico e operacional.
 - [ ] Landing page de pricing
 - [ ] Onboarding otimizado (activation rate)
 - [ ] WhatsApp pairing real (QR scaneado)
-- [ ] Provisionar serviços Render staging e registrar deploy hooks/URLs no GitHub
+- [x] Provisionar serviços Render staging e registrar deploy hooks/URLs no GitHub
 - [ ] Habilitar proteção de `main`/`develop` após upgrade GitHub Pro ou abertura dos repositórios
 - [ ] Blog publicado (30 posts/mês)
 
