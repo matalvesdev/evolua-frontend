@@ -1,56 +1,45 @@
 {
-  "topic": "Tecnologia para fonoaudiólogas no Brasil",
+  "topic": "Clínica para fonoaudiólogas: gestão, estruturação e crescimento no Brasil",
   "keywords": [
-    "telefonoterapia",
-    "prontuário eletrônico fonoaudiologia",
-    "aplicativos fonoaudiologia",
-    "inteligência artificial voz",
-    "realidade virtual reabilitação",
-    "telessaúde CFFa",
-    "softwares gestão clínica fono",
-    "dispositivos AAC tecnologia assistiva",
-    "biofeedback vocal",
-    "formação continuada EAD fono"
+    "gestão de clínica fonoaudiologia",
+    "abrir consultório fonoaudiologia",
+    "marketing para fonoaudiólogas",
+    "precificação sessões fonoaudiologia",
+    "software gestão clínica fono",
+    "captação pacientes fonoaudiologia",
+    "regularização CREFONO vigilância sanitária",
+    "telefonologia regulamentação Brasil"
   ],
-  "target_audience": [
-    "Fonoaudiólogas clínicas (próprio consultório ou clínicas multidisciplinares)",
-    "Fonoaudiólogas hospitalares e de UTI",
-    "Fonoaudiólogas escolares e educacionais",
-    "Estudantes de fonoaudiologia (últimos períodos)",
-    "Gestoras de clínicas e policlínicas de fonoaudiologia",
-    "Fonoaudiólogas pesquisadoras e docentes"
-  ],
+  "target_audience": "Fonoaudiólogas (recém-formadas ou experientes) que desejam abrir, estruturar ou escalar a própria clínica/consultório particular no Brasil, incluindo sócias de clínicas multidisciplinares.",
   "pain_points": [
-    "Dificuldade de adesão de pacientes (especialmente idosos e crianças) à telefonoterapia",
-    "Falta de padronização e interoperabilidade entre prontuários eletrônicos e sistemas de gestão (PIX, convênios, TISS)",
-    "Curva de aprendizado íngreme de novos softwares e hardwares (AAC, biofeedback, RV) sem suporte técnico adequado",
-    "Insegurança jurídica e ética sobre gravação de sessões, LGPD e prescrição digital (assinatura ICP-Brasil vs. assinatura eletrônica simples)",
-    "Custo-benefício questionável de equipamentos de alta tecnologia (ex: eye-tracking, RV imersiva) para clínicas de pequeno porte",
-    "Falta de validação científica e regulamentação (ANVISA/CFFa) para muitos apps e ferramentas de IA disponíveis no mercado",
-    "Dificuldade de engajamento no home exercise program (exercícios de casa) sem gamificação ou monitoramento remoto eficaz",
-    "Exclusão digital de parcela da população atendida pelo SUS e convênios populares"
+    "Dificuldade em precificar atendimentos (particular vs convênio) de forma sustentável e ética.",
+    "Burocracia excessiva para abertura (CNES, Vigilância Sanitária, CREFONO, Alvará, Corpo de Bombeiros).",
+    "Dependência exclusiva de convênios com baixos honorários e glosas frequentes.",
+    "Falta de tempo para gestão administrativa/financeira enquanto atende (papel de 'dona do negócio' vs 'clínica').",
+    "Dificuldade em captar e fidelizar pacientes particulares (marketing ético segundo Resolução CFFa nº 600/2023).",
+    "Gestão de agenda e taxa de no-show (faltas) impactando faturamento.",
+    "Contratação e gestão de equipe (secretárias, outras fonoaudiólogas, estagiárias) com CLT ou PJ.",
+    "Insegurança jurídica sobre contratos, LGPD, prontuário eletrônico e responsabilidade civil."
   ],
   "data_points": [
-    "Resolução CFFa nº 626/2021: Regulamenta a Telefonoterapia como modalidade permanente de atuação.",
-    "Lei nº 14.510/2022: Dispõe sobre a telessaúde no Brasil, impactando diretamente a prática fonoaudiológica remota.",
-    "Crescimento de 300% nas consultas de fonoterapia via teleatendimento entre 2019 e 2023 (dados CFFa/ANS).",
-    "Mercado brasileiro de Health Techs focado em reabilitação cresceu 18% ao ano (CAGR 2022-2027) segundo Distrito Dataminer.",
-    "Aprox. 60% dos fonoaudiólogos brasileiros atuam como autônomos ou MEI (Censo CFFa/IBGE), limitando investimento em infraestrutura tech robusta.",
-    "ANVISA classifica softwares de decisão clínica (CDS) e apps terapêuticos digitais (DTx) como 'Software como Dispositivo Médico (SaMD)', exigindo registro para alegações terapêuticas.",
-    "Estudos nacionais mostram eficácia da realidade virtual na reabilitação de disfagia e voz, mas acesso restrito a centros universitários e grandes hospitais.",
-    "LGPD (Lei 13.709/2018): Multas por vazamento de dados de prontuário vocal/imagem podem chegar a 2% do faturamento (limitado a R$ 50 mi).",
-    "Expansão de Comunicação Alternativa e Ampliada (CAA) baseada em eye-tracking e IA generativa para geração de vocabulário preditivo em Português Brasileiro."
+    "Brasil tem ~60 mil fonoaudiólogas ativas (Dados CFFa 2023/2024), maioria mulheres.",
+    "Maioria atua como autônoma/PJ em consultório próprio ou aluguel de sala/hora.",
+    "Tabela CBHPM (referência particular) costuma ser 3 a 5x superior a tabelas de operadoras (ex: UNIMED, Bradesco, Amil).",
+    "Resolução CFFa nº 600/2023 flexibilizou publicidade: permite redes sociais, site, depoimentos (com autorização), fotos de 'antes/depois' (vedado sensacionalismo).",
+    "Telefonologia regulamentada (Res. CFFa 580/2020 e 601/2022) exige registro de responsável técnico no CREFONO da jurisdição do paciente.",
+    "Softwares de gestão (Nexodata, Doctoralia, Feegow, SimDoctor, HiDoctor) integram prontuário, teleconsulta, financeiro e WhatsApp.",
+    "Custo médio inicial para consultório simples (aluguel sala, reforma, equipamentos básicos, burocracia): R$ 30k a R$ 80k (variável por região).",
+    "Taxa de no-show média no Brasil gira em torno de 20-30% sem estratégia de confirmação ativa.",
+    "Crescimento de clínicas multidisciplinares (TEA, Neuro, Voz, Disfagia) demandando fonoaudiólogas especialistas."
   ],
   "angle_suggestions": [
-    "Guia Prático de Conformidade: LGPD + CFFa + ANS para prontuário digital e teleatendimento (checklist acionável).",
-    "ROI da Tecnologia: Calculadora de custo-hora de equipamentos (biofeedback, RV, tablets AAC) vs. valor de mercado da sessão e pacotes.",
-    "Curadoria de Apps Validados: Lista comentada de aplicativos com evidência científica brasileira (PubMed/SciELO/Lilacs) para: voz, fluência, linguagem, disfagia, motricidade orofacial.",
-    "Fluxo de Trabalho 'Phygital': Como integrar atendimento presencial + exercícios digitais gamificados (home program) + telemonitoramento assíncrono.",
-    "Tecnologia Assistiva de Baixo Custo: Soluções open source, impressão 3D de pranchas/símbolos e adaptação de tablets para CAA no SUS/Clínica Escola.",
-    "IA Generativa na Prática Clínica: Uso ético de LLMs para elaboração de relatórios, planejamento terapêutico, material educativo para pais e anamnese estruturada.",
-    "Capacitação Continuada: Mapeamento de cursos de extensão, especializações e certificações em Saúde Digital/Fonoaudiologia Digital reconhecidos pelo MEC/CFFa.",
-    "Acessibilidade Digital: Como tornar seu site, agendamento online e teleconsulta acessíveis para pacientes surdos (Libras), baixa visão e deficiência intelectual.",
-    "Gestão de Reputação Digital: Automação de avaliações Google/Doctoralia, funil de captação via conteúdo educativo (Instagram/YouTube) ético (Res. CFFa 600/2023).",
-    "Futuro Próximo: Telereabilitação com sensores vestíveis (wearables) para biofeedback domiciliar de voz/respiração/deglutição e reembolso por operadoras."
+    "Guia passo a passo 'Do zero à clínica lucrativa': checklists de burocracia, equipamentos mínimos por especialidade e fluxo de caixa inicial.",
+    "Precificação estratégica: como montar tabela particular baseada em custo/hora + valor percebido + mercado, e negociar reajustes com convênios.",
+    "Marketing Ético na Prática: cases de fonoaudiólogas que lotaram agenda particular usando Instagram/LinkedIn dentro das regras do CFFa (autorização de imagem, conteúdo educativo).",
+    "Gestão do Tempo Clínico x Gestão do Negócio: ferramentas de automação (agendamento online, lembrete WhatsApp, prontuário por voz) para recuperar 10h/semana.",
+    "Modelos de Sociedade e Contratação: PJ vs CLT, divisão de honorários (fee split), contrato de prestação de serviços entre fonoaudiólogas e clínica.",
+    "Especialização como Diferencial Competitivo: nichos de alta demanda e ticket médio alto (Disfagia neonatal/adulto, Voz profissional, TEA/AAC, Motricidade Orofacial, Audiologia ocupacional).",
+    "Tecnologia e LGPD: escolha de prontuário eletrônico (PEP), backup em nuvem, termo de consentimento digital e segurança da informação para clínicas pequenas.",
+    "Indicadores de Saúde Financeira da Clínica: ticket médio, taxa de ocupação da agenda, LTV (Lifetime Value) do paciente, CAC (Custo de Aquisição) e ponto de equilíbrio."
   ]
 }
