@@ -202,6 +202,8 @@ pnpm --filter @evolua/api test
 - ❌ `cancel-in-progress: true` em workflows de deploy — deploys em andamento NUNCA devem ser cancelados; só CI pode cancelar
 - ❌ Secrets inventados em workflows — só referenciar secrets que já existem no repo; criar novos requer configuração manual no GitHub Settings
 - ❌ Validação de .doc/.geos ausente no CI — documentação quebrada passa despercebida; adicionar job `validate-docs` que verifica existência e estrutura
+- ❌ Gate de deploy validar somente `/readyz` — uma instância antiga saudável gera falso positivo; API e IA devem expor `/version` e o workflow deve comparar o `RENDER_GIT_COMMIT` abreviado ao SHA esperado
+- ❌ Workflow web tentar migrar ou implantar `backend-core` — backend é repositório separado e deve ser dono de migrations, build, testes e deploy da API/IA
 
 ## Blog Content Standards (obrigatório)
 

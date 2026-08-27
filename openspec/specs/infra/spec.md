@@ -3,8 +3,8 @@
 ## Infrastructure
 - **Frontend**: Vercel (app.useevolua.com.br) — auto-deploy from main via `amondnet/vercel-action@v42`
 - **Landing**: Vercel (useevolua.com.br) — auto-deploy from main via `amondnet/vercel-action@v42`
-- **API**: Render web service (api.useevolua.com.br) — auto-deploy from main via deploy hook; novos recursos declarados em `virginia`
-- **AI Service**: Render web service (ai.useevolua.com.br) — auto-deploy from main via deploy hook; novos recursos declarados em `virginia`
+- **API**: Render web service (api.useevolua.com.br) — código e deploy pertencem ao repositório backend; novos recursos declarados em `virginia`
+- **AI Service**: Render web service (URL padrão `evolua-ai.onrender.com`) — código e deploy pertencem ao repositório backend; novos recursos declarados em `virginia`
 - **WhatsApp Gateway**: EC2 (go + chi) — auto-deploy from main via SSH + docker-compose
 - **Database**: Supabase Postgres — produção em `sa-east-1` e staging isolado em `ca-central-1`; Prisma migrations + SQL migrations via ledger
 - **Terraform**: AWS infra (state remote S3 + DynamoDB pending)
@@ -12,7 +12,8 @@
   - **CI**: `ci.yml` — path filters per domain (`dorny/paths-filter@v4`), Build → TypeCheck → Lint order
   - **CI gate**: `ci-gate` job (if always, needs all jobs, accepts success/skipped, fails on failure/cancelled) — only required check
   - **Backend CI**: `backend-core` is a separate repo with its own CI — not in this monorepo checkout
-  - **Deploys**: `deploy-frontend.yml`, `deploy-landing.yml`, `deploy-api.yml`, `deploy-ai.yml`, `deploy-whatsapp.yml`
+  - **Deploys web**: `deploy-frontend.yml` e `deploy-landing.yml` neste repositório
+  - **Deploys backend**: `deploy-production.yml` e `deploy-staging.yml` no repositório backend; API e IA expõem `/version` e o gate compara o `RENDER_GIT_COMMIT` abreviado ao SHA esperado
   - **Staging web**: `deploy-staging.yml` — previews Vercel protegidos, aliases permanentes de staging e Playwright autenticado com automation bypass
   - **Staging backend**: workflow e Blueprint vivem no repositório separado `backend-core`
   - **Database**: `deploy-migrations.yml` (Prisma), `deploy-supabase-migrations.yml` (SQL + ledger)
@@ -37,3 +38,8 @@
 - **WhatsApp not paired**: Evolution instance exists, QR never scanned
 - **HMAC webhook**: Not enforced in production
 - **Credential rotation**: Not executed (documented in CREDENTIAL-ROTATION.md)
+
+## Runtime identity contract
+- `GET /version` é público na API e na IA e retorna apenas `service`, `version`, `commit` abreviado e `environment`.
+- Readiness comprova saúde; `/version` comprova que o artefato esperado foi realmente implantado.
+- Workflows de deploy não podem declarar sucesso verificando somente uma instância antiga ainda saudável.
