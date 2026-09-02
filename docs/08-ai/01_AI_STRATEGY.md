@@ -9,7 +9,7 @@ last_reviewed: 2026-08-17
 
 ## Current State — VERIFIED
 
-O serviço `backend-core/apps/ai` é FastAPI. A configuração declara Hugging Face Router, Zephyr-7B para chat, `multilingual-e5-small` para embedding, Whisper Large v3 para ASR, OpenRouter para geração de conteúdo e Postgres como base. Routers de biblioteca/RAG e geração clínica existem. A API Fastify intermedeia recursos de IA e aplica limites em rotas. Avaliações/datasheets ASR/RAG já existem em `docs/ai-evals/`.
+O serviço `backend-core/apps/ai` é FastAPI. OpenRouter é o provider operacional para geração clínica/conteúdo e transcrição de áudio; Hugging Face Router permanece reservado à geração de embeddings do RAG. Postgres/pgvector é a base de conhecimento. Routers de biblioteca/RAG e geração clínica existem. A API Fastify intermedeia recursos de IA e aplica limites em rotas. Avaliações/datasheets ASR/RAG já existem em `docs/ai-evals/`.
 
 ## Princípio e casos seguros
 
