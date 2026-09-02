@@ -4,9 +4,10 @@ const baseUrl = process.env.AI_STAGING_URL;
 const token = process.env.AI_INTERNAL_SERVICE_TOKEN;
 const userId = process.env.AI_SMOKE_USER_ID;
 const audioUrl = process.env.AI_SMOKE_AUDIO_URL;
+const audioSessionId = process.env.AI_SMOKE_AUDIO_SESSION_ID;
 
-if (!baseUrl || !token || !userId || !audioUrl) {
-  console.error('Required: AI_STAGING_URL, AI_INTERNAL_SERVICE_TOKEN, AI_SMOKE_USER_ID, AI_SMOKE_AUDIO_URL');
+if (!baseUrl || !token || !userId || !audioUrl || !audioSessionId) {
+  console.error('Required: AI_STAGING_URL, AI_INTERNAL_SERVICE_TOKEN, AI_SMOKE_USER_ID, AI_SMOKE_AUDIO_URL, AI_SMOKE_AUDIO_SESSION_ID');
   process.exit(2);
 }
 
@@ -17,7 +18,7 @@ const response = await fetch(`${baseUrl.replace(/\/$/, '')}/clinical/transcribe`
     'x-internal-token': token,
     'x-user-id': userId,
   },
-  body: JSON.stringify({ audio_url: audioUrl, language: 'pt' }),
+  body: JSON.stringify({ audio_session_id: audioSessionId, audio_url: audioUrl, language: 'pt' }),
   signal: AbortSignal.timeout(90_000),
 });
 
