@@ -1,0 +1,37 @@
+groups:
+  - name: evolua-api
+    rules:
+      - alert: EvoluaApiHighErrorRate
+        expr: |
+          sum(rate(evolua_api_http_requests_total{status=~"5.."}[5m]))
+            / clamp_min(sum(rate(evolua_api_http_requests_total[5m])), 0.001) > 0.05
+        for: 10m
+        labels:
+          severity: critical
+          service: api
+        annotations:
+          summary: "Taxa de erro 5xx elevada na API Evolua"
+          description: "A API apresenta mais de 5% de respostas 5xx por 10 minutos."
+
+      - alert: EvoluaApiHighLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le) (rate(evolua_api_http_request_duration_seconds_bucket[5m]))) > 2
+        for: 10m
+        labels:
+          severity: warning
+          service: api
+        annotations:
+          summary: "Latência p95 elevada na API Evolua"
+          description: "O p95 de requisições está acima de 2 segundos por 10 minutos."
+
+      - alert: EvoluaTranscriptionFailures
+        expr: |
+          increase(evolua_api_transcription_attempts_total{outcome="failed"}[15m]) > 3
+        for: 5m
+        labels:
+          severity: critical
+          service: transcription
+        annotations:
+          summary: "Falhas de transcrição detectadas"
+          description: "Mais de três falhas de transcrição ocorreram nos últimos 15 minutos."
