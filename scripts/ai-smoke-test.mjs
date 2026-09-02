@@ -25,8 +25,8 @@ const response = await fetch(`${baseUrl.replace(/\/$/, '')}/clinical/transcribe`
 const body = await response.json().catch(() => ({}));
 if (!response.ok) {
   console.error(`transcription failed: HTTP ${response.status}`);
-  process.exit(1);
+  process.exitCode = 1;
+} else {
+  const transcription = typeof body.transcription === 'string' ? body.transcription : '';
+  console.log(`transcription smoke test passed (chars=${transcription.length})`);
 }
-
-const transcription = typeof body.transcription === 'string' ? body.transcription : '';
-console.log(`transcription smoke test passed (chars=${transcription.length})`);
