@@ -6,9 +6,10 @@
 - `GET /rag/library` — RAG query over clinical library
 
 ## Model Configuration
-- **Chat**: zephyr-7b-beta via Hugging Face Inference API
-- **Transcription**: Whisper (Hugging Face or Render)
-- **Fallback chain**: Render API → HF Inference API (if cold start 502)
+- **Clinical/content generation**: OpenRouter, configured through `OPENROUTER_CLINICAL_MODEL`/`OPENROUTER_DEFAULT_MODEL`
+- **Transcription**: OpenRouter audio-capable model configured through `OPENROUTER_TRANSCRIPTION_MODEL`
+- **Embeddings/RAG**: Hugging Face Router, reserved for embedding generation
+- **Provider failure**: return a safe error; do not silently switch providers for clinical inference or transcription
 
 ## GEOS Intelligence Layer
 - **Knowledge**: Ingestão de docs do projeto via GEOS (SQLite + FTS5 + RAG)
