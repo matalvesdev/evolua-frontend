@@ -1,0 +1,17 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+    {"type":"timeseries","title":"Request rate","gridPos":{"h":8,"w":12,"x":0,"y":0},"targets":[{"expr":"sum(rate(evolua_api_http_requests_total[5m]))","legendFormat":"req/s"}]},
+    {"type":"timeseries","title":"HTTP 5xx rate","gridPos":{"h":8,"w":12,"x":12,"y":0},"targets":[{"expr":"sum(rate(evolua_api_http_requests_total{status=~\"5..\"}[5m]))","legendFormat":"5xx/s"}]},
+    {"type":"timeseries","title":"Latency p95","gridPos":{"h":8,"w":12,"x":0,"y":8},"targets":[{"expr":"histogram_quantile(0.95,sum by (le)(rate(evolua_api_http_request_duration_seconds_bucket[5m])))","legendFormat":"p95 seconds"}]},
+    {"type":"timeseries","title":"Transcription outcomes","gridPos":{"h":8,"w":12,"x":12,"y":8},"targets":[{"expr":"sum by (outcome)(rate(evolua_api_transcription_attempts_total[5m]))","legendFormat":"{{outcome}}"}]}
+  ],
+  "schemaVersion": 39,
+  "title": "Evolua API & Transcription",
+  "tags": ["evolua","api","openrouter","transcription"],
+  "time": {"from":"now-6h","to":"now"},
+  "timezone": "browser",
+  "version": 1
+}
