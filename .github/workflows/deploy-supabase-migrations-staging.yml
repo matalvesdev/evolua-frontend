@@ -43,6 +43,6 @@ jobs:
           # IPv4 Session Pooler on port 5432 until IPv4 is enabled. The
           # password remains in the masked DIRECT_URL secret.
           SUPABASE_DB_URL="${SUPABASE_DB_URL/db.oxvpzmjppftnfxrbwppy.supabase.co/aws-0-ca-central-1.pooler.supabase.com}"
-          SUPABASE_DB_URL="${SUPABASE_DB_URL/postgres@/postgres.oxvpzmjppftnfxrbwppy@}"
+          SUPABASE_DB_URL="$(printf '%s' "$SUPABASE_DB_URL" | sed 's#^postgresql://postgres:#postgresql://postgres.oxvpzmjppftnfxrbwppy:#')"
           export SUPABASE_DB_URL
           bash scripts/apply-supabase-migrations.sh
