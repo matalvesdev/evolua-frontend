@@ -38,4 +38,10 @@ jobs:
       - name: Apply migrations incrementally
         env:
           SUPABASE_DB_URL: ${{ secrets.DIRECT_URL }}
-        run: bash scripts/apply-supabase-migrations.sh
+        run: |
+          # STAGING ONLY: direct database DNS is IPv6-only. Use Supabase's
+          # IPv4 Session Pooler on port 5432 until IPv4 is enabled. The
+          # password remains in the masked DIRECT_URL secret.
+          SUPABASE_DB_URL="${SUPABASE_DB_URL/db.oxvpzmjppftnfxrbwppy.supabase.co/aws-0-ca-central-1.pooler.supabase.com}"
+          export SUPABASE_DB_URL
+          bash scripts/apply-supabase-migrations.sh
